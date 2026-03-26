@@ -64,7 +64,7 @@ features:
       [3GPP-6].
     release: 26.04 (v1.0)
     primary_test_type:
-    - e2e
+      - e2e
     comment: Option to test basic conformance against viavi O-CU
   - id: MVP-ARCH-INTF-8
     source: ATIS-MVP
@@ -982,7 +982,7 @@ features:
     primary_test_type: []
     comment: 'This is a UDP traffic with different radio conditions and measure RRC
       Release due to reasons other than inactivity and radio link
-  
+
       failures (RLF), is this single or multi UE?'
   - id: MVP-PERF-RET-2
     source: ATIS-MVP
