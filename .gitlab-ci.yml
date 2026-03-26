@@ -3,7 +3,7 @@ validate-features-yaml:
   image: python:3.11-slim
   script:
     - pip install --quiet pyyaml jsonschema
-    - python3 scripts/validate_features.py
+    - python3 scripts/validate_features.py --schema features/features.schema --data ./features/features.yaml
 
 build-features-report:
   stage: build
