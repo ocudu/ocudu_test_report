@@ -77,15 +77,15 @@ validate-features-yaml:
     - pip install --quiet pyyaml jsonschema
     - python3 scripts/validate_features.py --schema features/features.schema --data ./features/features.yaml
 
-build-features-report:
+build-feature-list:
   stage: build
   image: python:3.11-slim
   rules:
     - if: $ON_MR
   script:
     - pip install --quiet pyyaml
-    - python3 scripts/render_report.py --data features/features.yaml --output features_report.html
+    - python3 scripts/render_report.py --data features/features.yaml --output feature_list.html
   artifacts:
     paths:
-      - features_report.html
-    expose_as: "Features Report"
+      - feature_list.html
+    expose_as: "Feature List"
