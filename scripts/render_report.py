@@ -20,33 +20,33 @@ DEFAULT_DATA_FILE = "features.yaml"
 DEFAULT_OUTPUT_FILE = "features_report.html"
 
 TEST_TYPE_COLORS = {
-    "unit":        "#4e9af1",
+    "unit": "#4e9af1",
     "integration": "#f1a94e",
-    "e2e":         "#6bcb77",
+    "e2e": "#6bcb77",
 }
 SCOPE_COLORS = {
-    "CU/DU":                                "#a78bfa",
-    "Unspecified":                          "#94a3b8",
-    "Entire RAN Product":                   "#38bdf8",
+    "CU/DU": "#a78bfa",
+    "Unspecified": "#94a3b8",
+    "Entire RAN Product": "#38bdf8",
     "Platform/deployment/auxiliary component": "#fb923c",
 }
 
 
-def load_features(path: str) -> list[dict]:
+def _load_features(path: str) -> list[dict]:
     with open(path, "r", encoding="utf-8") as f:
         data = yaml.safe_load(f)
-    return data["features"]
+    return data["features"]  # type: ignore
 
 
-def badge(text: str, color: str) -> str:
+def _badge(text: str, color: str) -> str:
     return (
         f'<span style="background:{color};color:#fff;padding:2px 8px;'
-        f'border-radius:12px;font-size:0.78rem;font-weight:600;'
+        f"border-radius:12px;font-size:0.78rem;font-weight:600;"
         f'white-space:nowrap">{text}</span>'
     )
 
 
-def bar_chart(counts: dict[str, int], colors: dict[str, str], total: int) -> str:
+def _bar_chart(counts: dict[str, int], colors: dict[str, str], total: int) -> str:
     if total == 0:
         return ""
     rows = ""
@@ -65,11 +65,11 @@ def bar_chart(counts: dict[str, int], colors: dict[str, str], total: int) -> str
     return rows
 
 
-def render(features: list[dict]) -> str:
+def _render(features: list[dict]) -> str:
     total = len(features)
-    release_counts  = Counter(f["release"]           for f in features)
-    scope_counts    = Counter(f["scope"]              for f in features)
-    source_counts   = Counter(f["source"]             for f in features)
+    release_counts = Counter(f["release"] for f in features)
+    scope_counts = Counter(f["scope"] for f in features)
+    source_counts = Counter(f["source"] for f in features)
     test_type_counts: Counter = Counter()
     for f in features:
         for t in f.get("primary_test_type", []):
@@ -102,30 +102,24 @@ def render(features: list[dict]) -> str:
         </div>"""
 
     charts = (
-        chart_section("By test type",
-            bar_chart(test_type_counts, TEST_TYPE_COLORS, sum(test_type_counts.values())))
-        + chart_section("By scope",
-            bar_chart(scope_counts, SCOPE_COLORS, total))
-        + chart_section("By release",
-            bar_chart(release_counts, {r: "#38bdf8" for r in release_counts}, total))
+        chart_section("By test type", _bar_chart(test_type_counts, TEST_TYPE_COLORS, sum(test_type_counts.values())))
+        + chart_section("By scope", _bar_chart(scope_counts, SCOPE_COLORS, total))
+        + chart_section("By release", _bar_chart(release_counts, {r: "#38bdf8" for r in release_counts}, total))
     )
 
     # ── feature rows ─────────────────────────────────────────────────────────
     rows = ""
     for f in features:
-        test_badges = " ".join(
-            badge(t, TEST_TYPE_COLORS.get(t, "#64748b"))
-            for t in f.get("primary_test_type", [])
-        )
+        test_badges = " ".join(_badge(t, TEST_TYPE_COLORS.get(t, "#64748b")) for t in f.get("primary_test_type", []))
         scope_color = SCOPE_COLORS.get(f.get("scope", ""), "#64748b")
         rows += f"""
         <tr>
           <td style="font-family:monospace;font-size:0.82rem;color:#93c5fd;
                      white-space:nowrap">{f['id']}</td>
-          <td>{badge(f.get('source',''), '#475569')}</td>
-          <td>{badge(f.get('scope',''), scope_color)}</td>
+          <td>{_badge(f.get('source',''), '#475569')}</td>
+          <td>{_badge(f.get('scope',''), scope_color)}</td>
           <td style="color:#e2e8f0;font-size:0.88rem">{f.get('description','')}</td>
-          <td style="white-space:nowrap">{badge(f.get('release',''), '#0284c7')}</td>
+          <td style="white-space:nowrap">{_badge(f.get('release',''), '#0284c7')}</td>
           <td style="white-space:nowrap">{test_badges}</td>
           <td style="color:#94a3b8;font-size:0.82rem">{f.get('comment','')}</td>
         </tr>"""
@@ -192,18 +186,19 @@ def render(features: list[dict]) -> str:
 
 
 def main() -> None:
+    """Entrypoint"""
     parser = argparse.ArgumentParser(description="Render features.yaml to HTML.")
-    parser.add_argument("--data",   default=DEFAULT_DATA_FILE,   help="Input YAML file")
+    parser.add_argument("--data", default=DEFAULT_DATA_FILE, help="Input YAML file")
     parser.add_argument("--output", default=DEFAULT_OUTPUT_FILE, help="Output HTML file")
     args = parser.parse_args()
 
     try:
-        features = load_features(args.data)
+        features = _load_features(args.data)
     except FileNotFoundError:
         print(f"ERROR: file not found: {args.data}", file=sys.stderr)
         sys.exit(2)
 
-    html = render(features)
+    html = _render(features)
     Path(args.output).write_text(html, encoding="utf-8")
     print(f"Report written to {args.output}")
 

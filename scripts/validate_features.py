@@ -12,7 +12,6 @@ Exit codes:
 """
 
 import argparse
-import json
 import sys
 
 try:
@@ -22,7 +21,6 @@ except ImportError:
     sys.exit(2)
 
 try:
-    import jsonschema
     from jsonschema import Draft7Validator
 except ImportError:
     print("ERROR: jsonschema is required. Install with: pip install jsonschema", file=sys.stderr)
@@ -57,22 +55,20 @@ def validate(data_path: str, schema_path: str) -> list[str]:
 
     validator = Draft7Validator(schema)
     errors = sorted(validator.iter_errors(data), key=lambda e: list(e.path))
-    return [
-        f"  [{' -> '.join(str(p) for p in err.path) or '/'}] {err.message}"
-        for err in errors
-    ]
+    return [f"  [{' -> '.join(str(p) for p in err.path) or '/'}] {err.message}" for err in errors]
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(
-        description="Validate features.yaml against its JSON Schema."
-    )
+    """Entrypoint"""
+    parser = argparse.ArgumentParser(description="Validate features.yaml against its JSON Schema.")
     parser.add_argument(
-        "--data", default=DEFAULT_DATA_FILE,
+        "--data",
+        default=DEFAULT_DATA_FILE,
         help=f"Path to features YAML/JSON file (default: {DEFAULT_DATA_FILE})",
     )
     parser.add_argument(
-        "--schema", default=DEFAULT_SCHEMA_FILE,
+        "--schema",
+        default=DEFAULT_SCHEMA_FILE,
         help=f"Path to JSON Schema file (default: {DEFAULT_SCHEMA_FILE})",
     )
     args = parser.parse_args()
