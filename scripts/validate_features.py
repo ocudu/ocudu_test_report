@@ -55,7 +55,15 @@ def validate(data_path: str, schema_path: str) -> list[str]:
 
     validator = Draft7Validator(schema)
     errors = sorted(validator.iter_errors(data), key=lambda e: list(e.path))
-    return [f"  [{' -> '.join(str(p) for p in err.path) or '/'}] {err.message}" for err in errors]
+    messages = []
+    for err in errors:
+        path = list(err.path)
+        feature_id = ""
+        if len(path) >= 2 and path[0] == "features" and isinstance(path[1], int):
+            feature_id = data["features"][path[1]].get("id", "")
+        id_part = f" (id: {feature_id})" if feature_id else ""
+        messages.append(f"  [{' -> '.join(str(p) for p in path) or '/'}]{id_part} {err.message}")
+    return messages
 
 
 def main() -> None:
