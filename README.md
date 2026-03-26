@@ -17,12 +17,14 @@ scripts/
 ## Usage
 
 **Validate:**
+
 ```bash
 pip install pyyaml jsonschema
 python3 scripts/validate_features.py --schema features/features.schema --data features/features.yaml
 ```
 
 **Render report:**
+
 ```bash
 pip install pyyaml
 python3 scripts/render_report.py --data features/features.yaml --output features_report.html
@@ -48,7 +50,6 @@ Two GitLab CI jobs run automatically on every push:
 | `release` | enum | Target release (e.g. `v26.04`) |
 | `primary_test_type` | array | One or more of `unit`, `integration`, `e2e` |
 | `comment` | string | Notes on implementation or test status |
-
 
 ## License
 
