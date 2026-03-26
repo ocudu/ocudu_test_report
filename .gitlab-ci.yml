@@ -1,6 +1,63 @@
+# SPDX-FileCopyrightText: Copyright (C) 2021-2026 Software Radio Systems Limited
+# SPDX-License-Identifier: BSD-3-Clause-Open-MPI
+
+spec:
+  inputs:
+    ocudu_path:
+      type: string
+      default: ocudu/ocudu
+      description: "OCUDU repository path."
+    ocudu_ref:
+      type: string
+      default: dev
+      description: "OCUDU reference branch or tag."
+    ocudu_oran_apps_path:
+      type: string
+      default: ocudu/ocudu_elements/ocudu_oran_apps
+      description: "OCUDU ORAN Apps reference branch or tag."
+---
+include:
+  - project: $[[ inputs.ocudu_path ]]
+    ref: $[[ inputs.ocudu_ref ]]
+    file: .gitlab/ci-shared/workflow.yml
+  - project: $[[ inputs.ocudu_path ]]
+    ref: $[[ inputs.ocudu_ref ]]
+    file: .gitlab/ci-shared/static.yml
+  - project: $[[ inputs.ocudu_path ]]
+    ref: $[[ inputs.ocudu_ref ]]
+    file: .gitlab/ci-shared/gitlab_settings/.gitlab-ci.yml
+    inputs:
+      ocudu_path: $[[ inputs.ocudu_path ]]
+      ocudu_ref: $[[ inputs.ocudu_ref ]]
+
+stages:
+  - ci
+  - static
+  - build
+
+headers:
+  stage: ci
+  extends: .headers
+
+yaml lint:
+  stage: static
+  image: python:3.12-alpine
+  before_script:
+    - pip install "yamllint<2"
+  script:
+    - yamllint -f colored -c .yamllint .
+  rules:
+    - if: $ON_MR
+      changes:
+        paths:
+          - "**/*.yml"
+          - "**/*.yaml"
+
 validate-features-yaml:
-  stage: test
+  stage: static
   image: python:3.11-slim
+  rules:
+    - if: $ON_MR
   script:
     - pip install --quiet pyyaml jsonschema
     - python3 scripts/validate_features.py --schema features/features.schema --data ./features/features.yaml
@@ -8,6 +65,8 @@ validate-features-yaml:
 build-features-report:
   stage: build
   image: python:3.11-slim
+  rules:
+    - if: $ON_MR
   script:
     - pip install --quiet pyyaml
     - python3 scripts/render_report.py --data features/features.yaml --output features_report.html
