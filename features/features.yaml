@@ -1,0 +1,22 @@
+{
+  "features": [
+    {
+      "id": "MVP-FUNC-SMO-17-1-f",
+      "source": "ATIS-MVP",
+      "scope": "Unspecified",
+      "description": "shall support appropriate data to be ingested by the SMO to enable the following use cases via rApps: f) RACH Optimization",
+      "release": "v26.04",
+      "primary_test_type": ["unit", "integration", "e2e"],
+      "comment": "baseline support present over metrics interface and O1 configuration management, actual KPI and control knobs to be specified"
+    },
+    {
+      "id": "MVP-FUNC-SMO-17-1-g",
+      "source": "ATIS-MVP",
+      "scope": "CU/DU",
+      "description": "shall support appropriate data to be ingested by the SMO to enable the following use cases via rApps: g) Load Balancing",
+      "release": "v26.04",
+      "primary_test_type": ["integration", "e2e"],
+      "comment": "handover statistics and neighbor cell load metrics available via O1 performance management"
+    }
+  ]
+}
