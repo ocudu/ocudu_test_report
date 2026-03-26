@@ -13,6 +13,7 @@ Exit codes:
 
 import argparse
 import sys
+from typing import Any
 
 try:
     import yaml
@@ -31,7 +32,7 @@ DEFAULT_DATA_FILE = "features.yaml"
 DEFAULT_SCHEMA_FILE = "features.schema"
 
 
-def load_file(path: str) -> object:
+def load_file(path: str) -> Any:
     """Load a YAML or JSON file (JSON is valid YAML)."""
     with open(path, "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
