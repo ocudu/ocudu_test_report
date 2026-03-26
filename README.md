@@ -30,14 +30,36 @@ pip install pyyaml
 python3 scripts/render_report.py --data features/features.yaml --output features_report.html
 ```
 
-## CI
+**gitlab_fetch.py:**
 
-Two GitLab CI jobs run automatically on every push:
+Downloads XUnit XML files from GitLab job or pipeline artifact zips and saves them under a local directory, one subfolder per `--suite`.
 
-| Job | Stage | What it does |
-|-----|-------|--------------|
-| `validate-features-yaml` | test | Validates `features.yaml` against the schema |
-| `build-features-report` | build | Renders the HTML report and exposes it as a CI artifact |
+```bash
+python gitlab_fetch.py --suite "NAME=URL" [--suite "NAME2=URL2" ...] [-o OUTPUT_DIR]
+```
+
+| Argument | Default | Description |
+|---|---|---|
+| `--suite NAME=URL` | required, repeatable | Suite label and GitLab job or pipeline URL |
+| `-o / --output-dir` | `./artifacts` | Root folder where files are saved |
+
+**xunit_report.py:**
+
+Reads the artifact folder produced by `gitlab_fetch.py` and renders a single self-contained HTML file.
+
+```bash
+python xunit_report.py --dir FOLDER [-o OUTPUT] [--link URL] [--favicon URL]
+```
+
+| Argument | Default | Description |
+|---|---|---|
+| `--dir FOLDER` | required | Root artifacts folder (each subfolder → one suite) |
+| `-o / --output` | `report.html` | Output HTML file |
+| `--link URL` | — | GitLab branch/tag/pipeline URL shown in the report header |
+| `--favicon URL` | ocudu favicon | Favicon URL embedded in the HTML |
+
+Suite names are derived from subfolder names with underscores replaced by spaces.
+If a `_url.txt` file is present in a subfolder the suite header will include a link to the original GitLab job/pipeline.
 
 ## Feature fields
 

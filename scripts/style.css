@@ -1,0 +1,395 @@
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2021-2026 Software Radio Systems Limited
+ * SPDX-License-Identifier: BSD-3-Clause-Open-MPI
+ */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  background: #f1f5f9;
+  color: #1e293b;
+  padding: 24px;
+}
+
+/* ── Report header ─────────────────────────────────────────── */
+
+.report-header {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 20px;
+  background: #fff;
+  border-radius: 8px;
+  padding: 16px 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  align-items: center;
+}
+
+.header-logo {
+  height: 40px;
+  width: 120px;
+  background-image: url(https://srs.io/wp-content/uploads/ocudu_color.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.header-title {
+  flex: 1;
+}
+
+.header-title h1 {
+  font-size: 1.4em;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.header-link {
+  color: #3b82f6;
+  font-size: 0.9em;
+  text-decoration: none;
+}
+
+.header-link:hover {
+  text-decoration: underline;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 1.6em;
+  font-weight: 700;
+}
+
+.stat-value.passed {
+  color: #22c55e;
+}
+
+.stat-value.failed {
+  color: #ef4444;
+}
+
+.stat-value.skipped {
+  color: #94a3b8;
+}
+
+.stat-label {
+  font-size: 0.75em;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Feature block ────────────────────────────────────────── */
+
+.feature {
+  margin-bottom: 12px;
+  border: 2px solid #cbd5e1;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.feature:nth-child(odd)>.feature-summary {
+  background: #e6e8f4;
+}
+
+.feature:nth-child(even)>.feature-summary {
+  background: #e5f0fb;
+}
+
+.feature-summary {
+  cursor: pointer;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-left: 5px solid #22c55e;
+}
+
+.feature-summary.fail {
+  border-left-color: #ef4444;
+}
+
+.feature-title {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.feature-id {
+  font-weight: 700;
+  font-size: 0.95em;
+  white-space: nowrap;
+}
+
+.feature-desc {
+  flex: 1;
+  font-size: 0.82em;
+  color: #475569;
+}
+
+.feature-counts {
+  font-size: 0.85em;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.feature>.suite {
+  margin: 0;
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+  border-top: 1px solid #cbd5e1;
+  border-bottom: none;
+}
+
+/* ── Suite block ───────────────────────────────────────────── */
+
+.suite {
+  margin-bottom: 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.suite:nth-child(odd)>.suite-summary {
+  background: #f1f5f9;
+}
+
+.suite:nth-child(even)>.suite-summary {
+  background: #f8fafc;
+}
+
+.suite-summary {
+  cursor: pointer;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-left: 4px solid #22c55e;
+}
+
+.suite-summary.fail {
+  border-left-color: #ef4444;
+}
+
+.suite-name {
+  font-weight: 600;
+  flex: 1;
+}
+
+.suite-link {
+  font-size: 0.85em;
+  margin-right: 10px;
+  text-decoration: none;
+  opacity: 0.7;
+  display: flex;
+  align-items: center;
+}
+
+.suite-link img {
+  display: block;
+}
+
+.suite-link:hover {
+  opacity: 1;
+}
+
+.suite-counts {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.count-failed {
+  color: #ef4444;
+}
+
+.count-skipped {
+  color: #94a3b8;
+}
+
+/* ── Test case rows ────────────────────────────────────────── */
+
+.tc-detail,
+.tc-row {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.tc-row {
+  padding: 7px 14px 7px 28px;
+  display: flex;
+  align-items: center;
+}
+
+.tc-detail.even>summary,
+.tc-row.even {
+  background: #fff;
+}
+
+.tc-detail.odd>summary,
+.tc-row.odd {
+  background: #f8fafc;
+}
+
+.tc-name {
+  flex: 1;
+  font-size: 0.9em;
+}
+
+.tc-duration {
+  color: #64748b;
+  font-size: 0.82em;
+  margin-right: 8px;
+}
+
+.tc-detail-body {
+  padding: 8px 28px 12px 42px;
+  background: #f2f3f5;
+}
+
+/* ── Labels ────────────────────────────────────────────────── */
+
+.labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.labels-title {
+  font-size: 0.78em;
+  color: #1d64c8;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  align-self: center;
+}
+
+.label-chip {
+  background: #e2e8f0;
+  color: #475569;
+  border-radius: 3px;
+  padding: 1px 7px;
+  font-size: 0.78em;
+}
+
+/* ── Status badges ─────────────────────────────────────────── */
+
+.badge {
+  border-radius: 3px;
+  padding: 1px 7px;
+  font-size: 0.75em;
+  font-weight: 600;
+  color: #fff;
+}
+
+.badge.passed {
+  background: #22c55e;
+}
+
+.badge.failed {
+  background: #ef4444;
+}
+
+.badge.error {
+  background: #f97316;
+}
+
+.badge.skipped {
+  background: #94a3b8;
+}
+
+/* ── Output blocks ─────────────────────────────────────────── */
+
+.msg-failure {
+  background: #fff1f2;
+  border-left: 3px solid #ef4444;
+  padding: 8px;
+  margin: 4px 0;
+  overflow: auto;
+  font-size: 0.82em;
+  white-space: pre-wrap;
+}
+
+.system-out {
+  background: #f1f5f9;
+  padding: 8px;
+  overflow: auto;
+  font-size: 0.8em;
+  max-height: 400px;
+  white-space: pre-wrap;
+}
+
+.system-err {
+  background: #fff7ed;
+  border-left: 3px solid #f97316;
+  padding: 8px;
+  overflow: auto;
+  font-size: 0.8em;
+  max-height: 200px;
+  white-space: pre-wrap;
+}
+
+/* ── details/summary collapse arrow ───────────────────────── */
+
+details>summary::-webkit-details-marker {
+  display: none;
+}
+
+details>summary::before {
+  content: "▶";
+  font-size: 0.7em;
+  color: #94a3b8;
+  margin-right: 6px;
+  display: inline-block;
+  transition: transform 0.15s;
+}
+
+details[open]>summary::before {
+  transform: rotate(90deg);
+}
+
+/* ── Print / PDF ────────────────────────────────────────────── */
+
+@media print {
+  body {
+    background: #fff;
+    padding: 8px;
+  }
+
+  details {
+    display: block !important;
+  }
+
+  details>summary {
+    list-style: none;
+  }
+
+  .tc-name {
+    white-space: normal;
+    word-break: break-word;
+    overflow: visible;
+  }
+
+  .tc-row {
+    flex-wrap: wrap;
+  }
+
+  .suite-link {
+    display: none;
+  }
+
+  pre {
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: none !important;
+    font-size: 0.7em;
+  }
+}
