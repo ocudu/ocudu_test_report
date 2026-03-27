@@ -223,7 +223,7 @@ def _render_testcase(tc: TestCase, idx: int) -> str:
     return f'<div class="tc-row {parity}">{header}</div>'
 
 
-def _render_suite(name: str, testcases: list, url: str = "") -> str:
+def _render_suite(name: str, testcases: list, url: str = "", description: str = "") -> str:
     total = len(testcases)
     passed = sum(1 for tc in testcases if tc.status == Status.PASSED)
     failed = sum(1 for tc in testcases if tc.status in (Status.FAILED, Status.ERROR))
@@ -246,9 +246,11 @@ def _render_suite(name: str, testcases: list, url: str = "") -> str:
         if url
         else ""
     )
+    desc_html = f'<span class="suite-desc">{html.escape(description)}</span>' if description else ""
     summary = (
         f'<summary class="suite-summary {fail_class}">'
         f'<span class="suite-name">{html.escape(name)}</span>'
+        f"{desc_html}"
         f'<span class="suite-counts">{counts} &nbsp; ⏱ {_fmt_duration(duration)}</span>'
         f"{link_html}"
         f"</summary>"
@@ -380,7 +382,9 @@ def _render_suite_toplevel(suite_name: str, sg: SuiteGroup) -> str:
         f"{link_html}"
         f"</summary>"
     )
-    feature_blocks = "".join(_render_suite(fid, tcs) for fid, (_desc, tcs) in sorted(sg.features.items()))
+    feature_blocks = "".join(
+        _render_suite(fid, tcs, description=desc) for fid, (desc, tcs) in sorted(sg.features.items())
+    )
     return f'<details class="feature">{summary}{feature_blocks}</details>'
 
 
@@ -514,9 +518,11 @@ def main():
         parser.error(f"Not a directory: {root}")
     suites = parse_dir(root)
 
-    features = None
+    features = {}
     with (Path(__file__).parent.parent / "features" / "features.yaml").open(encoding="utf-8") as f:
-        features = _parse_features(yaml.safe_load(f))
+        features.update(_parse_features(yaml.safe_load(f)))
+    with (Path(__file__).parent / "levels.yaml").open(encoding="utf-8") as f:
+        features.update(_parse_features(yaml.safe_load(f)))
 
     output = Path(args.output)
     output.write_text(
