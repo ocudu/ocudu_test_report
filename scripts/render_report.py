@@ -30,6 +30,14 @@ SCOPE_COLORS = {
     "Entire RAN Product": "#38bdf8",
     "Platform/deployment/auxiliary component": "#fb923c",
 }
+TYPE_COLORS = {
+    "Architecture": "#818cf8",
+    "Functional":   "#34d399",
+    "Performance":  "#f59e0b",
+    "Security":     "#f87171",
+    "O-Cloud":      "#38bdf8",
+    "Management":   "#a78bfa",
+}
 
 
 def _load_features(path: str) -> list[dict]:
@@ -70,6 +78,7 @@ def _render(features: list[dict]) -> str:
     release_counts = Counter(f["release"] for f in features)
     scope_counts = Counter(f["scope"] for f in features)
     source_counts = Counter(f["source"] for f in features)
+    type_counts = Counter(f.get("type", "") for f in features if f.get("type"))
     test_type_counts: Counter = Counter()
     for f in features:
         for t in f.get("primary_test_type", []):
@@ -84,12 +93,26 @@ def _render(features: list[dict]) -> str:
           <div style="font-size:0.8rem;color:#94a3b8;margin-top:4px">{label}</div>
         </div>"""
 
+    def type_card(label: str, count: int) -> str:
+        color = TYPE_COLORS.get(label, "#64748b")
+        return f"""
+        <div style="background:#1e293b;border-radius:10px;padding:16px 20px;
+                    min-width:140px;border-left:4px solid {color}">
+          <div style="font-size:1.6rem;font-weight:700;color:#f1f5f9">{count}</div>
+          <div style="font-size:0.8rem;color:#94a3b8;margin-top:4px">{label}</div>
+        </div>"""
+
     cards = (
         card(str(total), "Features")
         + card(str(len(release_counts)), "Releases")
         + card(str(len(scope_counts)), "Scopes")
         + card(str(len(source_counts)), "Sources")
         + card(str(sum(test_type_counts.values())), "Test type refs")
+    )
+
+    type_cards = "".join(
+        type_card(label, count)
+        for label, count in sorted(type_counts.items(), key=lambda x: -x[1])
     )
 
     # ── charts ───────────────────────────────────────────────────────────────
@@ -102,7 +125,8 @@ def _render(features: list[dict]) -> str:
         </div>"""
 
     charts = (
-        chart_section("By test type", _bar_chart(test_type_counts, TEST_TYPE_COLORS, sum(test_type_counts.values())))
+        chart_section("By type", _bar_chart(type_counts, TYPE_COLORS, total))
+        + chart_section("By test type", _bar_chart(test_type_counts, TEST_TYPE_COLORS, sum(test_type_counts.values())))
         + chart_section("By scope", _bar_chart(scope_counts, SCOPE_COLORS, total))
         + chart_section("By release", _bar_chart(release_counts, {r: "#38bdf8" for r in release_counts}, total))
     )
@@ -112,11 +136,14 @@ def _render(features: list[dict]) -> str:
     for f in features:
         test_badges = " ".join(_badge(t, TEST_TYPE_COLORS.get(t, "#64748b")) for t in f.get("primary_test_type", []))
         scope_color = SCOPE_COLORS.get(f.get("scope", ""), "#64748b")
+        feat_type = f.get("type", "")
+        type_color = TYPE_COLORS.get(feat_type, "#64748b")
         rows += f"""
         <tr>
           <td style="font-family:monospace;font-size:0.82rem;color:#93c5fd;
                      white-space:nowrap">{f['id']}</td>
           <td>{_badge(f.get('source',''), '#475569')}</td>
+          <td style="white-space:nowrap">{_badge(feat_type, type_color)}</td>
           <td>{_badge(f.get('scope',''), scope_color)}</td>
           <td style="color:#e2e8f0;font-size:0.88rem">{f.get('description','')}</td>
           <td style="white-space:nowrap">{_badge(f.get('release',''), '#0284c7')}</td>
@@ -163,6 +190,11 @@ def _render(features: list[dict]) -> str:
     {cards}
   </div>
 
+  <h2>By Type</h2>
+  <div style="display:flex;flex-wrap:wrap;gap:12px">
+    {type_cards}
+  </div>
+
   <h2>Distribution</h2>
   <div style="display:flex;flex-wrap:wrap;gap:16px">
     {charts}
@@ -173,7 +205,7 @@ def _render(features: list[dict]) -> str:
     <table>
       <thead>
         <tr>
-          <th>ID</th><th>Source</th><th>Scope</th><th>Description</th>
+          <th>ID</th><th>Source</th><th>Type</th><th>Scope</th><th>Description</th>
           <th>Release</th><th>Test types</th><th>Comment</th>
         </tr>
       </thead>
