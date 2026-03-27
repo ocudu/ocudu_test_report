@@ -1608,266 +1608,266 @@ features:
     primary_test_type: []
     comment: ''
   - id: DU-GEN-1
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support Type A DL/UL Transmission Type'
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-URLLC-2
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support Type B DL/UL Transmission Type (low latency)'
     release: unspecified
     primary_test_type: []
     comment: ''
   - id: DU-URLLC-3
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support Self-contained subframes (Low Latency)'
     release: unspecified
     primary_test_type: []
     comment: ''
   - id: DU-URLLC-4
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support slot aggregation'
     release: unspecified
     primary_test_type: []
     comment: ''
   - id: DU-MM-1
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support Code Block Groups (CGB)'
     release: unspecified
     primary_test_type: []
     comment: ''
   - id: CU-GEN-1
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support Emergency Broadcast signalling (SIB6, SIB7 and SIB8)'
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: CU-GEN-2
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support SIB on Demand'
     release: unspecified
     primary_test_type: []
     comment: ''
   - id: CU-GEN-3
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support Reestablishment to the same cell and different cell in the same CU-CP'
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-GEN-2-a
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support contention based and contention free Random Access'
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-GEN-2-b
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support contention based and contention free Random Access'
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-GEN-3
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support intraslot frequency hopping PUCCH'
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-PHY-1
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: .. shall support PUCCH Format 0, 1, 2, 3 and 4
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-PHY-2
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support the following DCI formats: 0_0, 0_1, 1_0, 1_1'
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-PHY-3
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support Additional PUCCH DMRS for Format 3 and 4'
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-PHY-4
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support Tracking RS (TRS)'
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-GEN-4
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support resource allocation Type 0'
     release: unspecified
     primary_test_type: []
     comment: ''
   - id: DU-GEN-5
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support resource allocation Type 1'
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-GEN-6
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support dynamic PDCCH aggregation level adaptation '
     release: 26.04.1 (v1.1)
     primary_test_type: []
     comment: ''
   - id: DU-GEN-7
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support dynamic PDSCH MCS adaptation based on BLER target'
     release: 26.04.1 (v1.1)
     primary_test_type: []
     comment: ''
   - id: DU-GEN-8
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support dynamic PUSCH MCS adaptation based on BLER target'
     release: 26.04.1 (v1.1)
     primary_test_type: []
     comment: ''
   - id: DU-PHY-5
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support PDSCH DMRS Type A'
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-PHY-6
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support PUSCH DMRS Type A'
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-PHY-7
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support DFT-S-OFDM'
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-PHY-8
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support PDSCH VRB mapping'
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-PHY-9
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support PTRS in PDSCH'
     release: unspecified
     primary_test_type: []
     comment: ''
   - id: DU-PHY-10
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support PTRS in PUSCH'
     release: unspecified
     primary_test_type: []
     comment: ''
   - id: DU-GEN-9
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support Measurement Gaps (for inter-frequency mobility)'
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-GEN-10
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support eDRX'
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-QOS-1
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support GBR bearer and non-GBR service differentiation'
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-QOS-2
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support UE-AMBR'
     release: 26.04.1 (v1.1)
     primary_test_type: []
     comment: ''
   - id: DU-QOS-3
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '...  shall support packet delay budget and packet error loss rate handling'
     release: 26.04.1 (v1.1)
     primary_test_type: []
     comment: ''
   - id: DU-QOS-4
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support Diffserv Code Point Marking (DSCP)'
     release: 26.04.1 (v1.1)
     primary_test_type: []
     comment: ''
   - id: DU-QOS-5
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: .. shall support standardised 5QI 1-9 and mission critical 5QI 65-70
     release: 26.04.1 (v1.1)
     primary_test_type: []
     comment: ''
   - id: CU-GEN-4
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support SCTP Multi-homing'
     release: 26.10 (v2.1)
     primary_test_type: []
     comment: ''
   - id: CU-GEN-5
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support periodic measurement reporting '
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: CU-GEN-6
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support event-based measurment reporting for events A1-A6'
     release: 26.04.1 (v1.1)
     primary_test_type: []
     comment: ''
   - id: CU-GEN-7
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support NAS Tracking Area Update'
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: CU-GEN-8
-    source: SRS defined
+    source: OCUDU defined
     scope: Unspecified
     description: '... shall support NAS Tracking Area Update'
     release: unspecified

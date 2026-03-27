@@ -28,8 +28,7 @@ $defs:
         type: string
         enum:
           - "ATIS-MVP"
-          - "Customer defined"
-          - "SRS defined"
+          - "OCUDU defined"
       scope:
         type: string
         enum:
