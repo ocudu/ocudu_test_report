@@ -31,6 +31,18 @@ spec:
       type: string
       default: ""
       description: "Suite 5 — NAME=URL. Optional."
+    suite_6:
+      type: string
+      default: ""
+      description: "Suite 6 — NAME=URL. Optional."
+    suite_7:
+      type: string
+      default: ""
+      description: "Suite 7 — NAME=URL. Optional."
+    suite_8:
+      type: string
+      default: ""
+      description: "Suite 7 — NAME=URL. Optional."
     report_link:
       type: string
       default: ""
@@ -113,6 +125,9 @@ generate-report:
     SUITE_3: "$[[ inputs.suite_3 ]]"
     SUITE_4: "$[[ inputs.suite_4 ]]"
     SUITE_5: "$[[ inputs.suite_5 ]]"
+    SUITE_6: "$[[ inputs.suite_6 ]]"
+    SUITE_7: "$[[ inputs.suite_7 ]]"
+    SUITE_8: "$[[ inputs.suite_8 ]]"
     REPORT_LINK: "$[[ inputs.report_link ]]"
     REPORT_LAYOUT: "$[[ inputs.report_layout ]]"
   script:
@@ -120,7 +135,7 @@ generate-report:
     - pip install -r requirements.txt
     - |
       SUITE_ARGS=()
-      for s in "$SUITE_1" "$SUITE_2" "$SUITE_3" "$SUITE_4" "$SUITE_5"; do
+      for s in "$SUITE_1" "$SUITE_2" "$SUITE_3" "$SUITE_4" "$SUITE_5" "$SUITE_6" "$SUITE_7" "$SUITE_8"; do
         [ -n "${s// }" ] && SUITE_ARGS+=(--suite "$s")
       done
     - python3 gitlab_fetch.py "${SUITE_ARGS[@]}" -o artifacts/
