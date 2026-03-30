@@ -450,7 +450,7 @@ def render_html(
 
     if features and layout == "suites":
         by_suite = _group_by_suites(suites, features)
-        body = "".join(_render_suite_toplevel(name, sg) for name, sg in sorted(by_suite.items()))
+        body = "".join(_render_suite_toplevel(s.name, by_suite[s.name]) for s in suites if s.name in by_suite)
     elif features:
         grouped = _group_by_features(suites, features)
         body = "".join(_render_feature(fid, fg.description, fg.suites) for fid, fg in sorted(grouped.items()))
@@ -477,8 +477,20 @@ def render_html(
 
 def parse_dir(root: Path) -> list:
     """Return one Suite per immediate subdirectory of root, merging all XML files inside."""
+    order_file = root / "_order.txt"
+    if order_file.exists():
+        order = [ln.strip() for ln in order_file.read_text(encoding="utf-8").splitlines() if ln.strip()]
+    else:
+        order = None
+
+    subdirs = [p for p in root.iterdir() if p.is_dir()]
+    if order:
+        subdirs.sort(key=lambda p: order.index(p.name) if p.name in order else len(order))
+    else:
+        subdirs.sort()
+
     suites = []
-    for subdir in sorted(p for p in root.iterdir() if p.is_dir()):
+    for subdir in subdirs:
         name = subdir.name.replace("_", " ")
         url_file = subdir / "_url.txt"
         url = url_file.read_text(encoding="utf-8").strip() if url_file.exists() else ""

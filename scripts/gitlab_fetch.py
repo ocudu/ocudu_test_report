@@ -134,6 +134,7 @@ def main():  # pylint: disable=too-many-locals
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
     all_saved: list[tuple[str, Path]] = []
+    suite_order: list[str] = []
 
     for entry in args.suite:
         if "=" not in entry:
@@ -150,6 +151,7 @@ def main():  # pylint: disable=too-many-locals
         suite_dir = args.output_dir / _safe_name(name)
         suite_dir.mkdir(parents=True, exist_ok=True)
         (suite_dir / "_url.txt").write_text(url, encoding="utf-8")
+        suite_order.append(_safe_name(name))
 
         if kind == "job":
             print(f"'{name}' — job {id_}")
@@ -166,6 +168,8 @@ def main():  # pylint: disable=too-many-locals
             for job in jobs:
                 saved = _fetch_job(client, job["id"], job["name"], suite_dir)
                 all_saved.extend(saved)
+
+    (args.output_dir / "_order.txt").write_text("\n".join(suite_order), encoding="utf-8")
 
     if not all_saved:
         print("\nNo XUnit files downloaded.")
