@@ -269,7 +269,7 @@ def _render_feature(fid: str, description: str, suites: dict) -> str:
     skipped = sum(1 for tc in all_tcs if tc.status == Status.SKIPPED)
     duration = sum(tc.duration for tc in all_tcs)
 
-    fail_class = "fail" if failed else ""
+    fail_class = "fail" if (failed or total == 0) else ""
     counts = f"✓ {passed}/{total} passed"
     if failed:
         counts += f' &nbsp; <span class="count-failed">✗ {failed} failed</span>'
@@ -293,6 +293,7 @@ class FeatureDef:
 
     description: str
     labels: set = field(default_factory=set)
+    release: str = ""
 
 
 @dataclass
@@ -315,7 +316,7 @@ def _parse_features(raw: dict) -> dict[str, FeatureDef]:
         key = item["id"]
         description = item["description"]
         parts = [p.strip() for p in str(key).split("|")]
-        result[parts[0]] = FeatureDef(description=description or "", labels=set(parts))
+        result[parts[0]] = FeatureDef(description=description or "", labels=set(parts), release=item.get("release", ""))
     return result
 
 
@@ -388,10 +389,15 @@ def _render_suite_toplevel(suite_name: str, sg: SuiteGroup) -> str:
     return f'<details class="feature">{summary}{feature_blocks}</details>'
 
 
-def _group_by_features(suites: list, features: dict[str, FeatureDef]) -> dict[str, FeatureGroup]:
+def _group_by_features(
+    suites: list, features: dict[str, FeatureDef], always_keep: Optional[set] = None
+) -> dict[str, FeatureGroup]:
     """Return {display_name: FeatureGroup}, tests with no matching label go under Others.
 
     features must already be parsed by _parse_features.
+    always_keep: set of feature IDs to include even if they have no tests.
+    Features not in always_keep only appear when they have at least one test.
+    Others only appears when it has tests.
     """
     alias_map = {alias: name for name, fd in features.items() for alias in fd.labels}
 
@@ -406,6 +412,8 @@ def _group_by_features(suites: list, features: dict[str, FeatureDef]) -> dict[st
                     grouped[fid].suites[suite.name] = (suite.url, [])
                 grouped[fid].suites[suite.name][1].append(tc)
 
+    if always_keep is not None:
+        return {fid: fg for fid, fg in grouped.items() if fid in always_keep or fg.suites}
     return {fid: fg for fid, fg in grouped.items() if fg.suites}
 
 
@@ -416,8 +424,9 @@ def _header_link_or_duration(link: str, duration: float) -> str:
     return f"⏱ {_fmt_duration(duration)}"
 
 
+# pylint: disable=too-many-locals
 def render_html(
-    suites: list, features: Optional[dict] = None, favicon: str = "", link: str = "", layout: str = "features"
+    suites: list, features: Optional[dict] = None, favicon: str = "", link: str = "", release: str = ""
 ) -> str:
     """Render the full HTML report from a list of Suite objects."""
     total = sum(s.total for s in suites)
@@ -448,12 +457,13 @@ def render_html(
         f"</div>"
     )
 
-    if features and layout == "suites":
+    if release and features:
+        release_ids = {name for name, fd in features.items() if fd.release == release}
+        grouped = _group_by_features(suites, features, always_keep=release_ids)
+        body = "".join(_render_feature(fid, fg.description, fg.suites) for fid, fg in sorted(grouped.items()))
+    elif features:
         by_suite = _group_by_suites(suites, features)
         body = "".join(_render_suite_toplevel(s.name, by_suite[s.name]) for s in suites if s.name in by_suite)
-    elif features:
-        grouped = _group_by_features(suites, features)
-        body = "".join(_render_feature(fid, fg.description, fg.suites) for fid, fg in sorted(grouped.items()))
     else:
         body = "".join(_render_suite(s.name, s.testcases, s.url) for s in suites)
 
@@ -518,10 +528,11 @@ def main():
     )
     parser.add_argument("--link", default="", metavar="URL", help="Gitlab Link")
     parser.add_argument(
-        "--layout",
-        choices=["features", "suites"],
-        default="features",
-        help="Report layout: 'features' (features→suites→tests) or 'suites' (suites→features→tests)",
+        "--release",
+        default="",
+        metavar="RELEASE",
+        help="Show all features with this release value (e.g. '26.04 (v1.0)') plus an 'others' group. "
+        "If not specified, uses suites layout.",
     )
     args = parser.parse_args()
 
@@ -530,15 +541,20 @@ def main():
         parser.error(f"Not a directory: {root}")
     suites = parse_dir(root)
 
-    features = {}
+    features_yaml: dict[str, FeatureDef] = {}
     with (Path(__file__).parent.parent / "features" / "features.yaml").open(encoding="utf-8") as f:
-        features.update(_parse_features(yaml.safe_load(f)))
+        features_yaml.update(_parse_features(yaml.safe_load(f)))
+    levels: dict[str, FeatureDef] = {}
     with (Path(__file__).parent / "levels.yaml").open(encoding="utf-8") as f:
-        features.update(_parse_features(yaml.safe_load(f)))
+        levels.update(_parse_features(yaml.safe_load(f)))
+
+    # In release mode only features.yaml entries (filtered by release) are feature groups;
+    # levels and other releases feed into "others". In suites mode all definitions are used.
+    features = features_yaml if args.release else {**features_yaml, **levels}
 
     output = Path(args.output)
     output.write_text(
-        render_html(suites, features=features, favicon=args.favicon, link=args.link, layout=args.layout),
+        render_html(suites, features=features, favicon=args.favicon, link=args.link, release=args.release),
         encoding="utf-8",
     )
     total = sum(s.total for s in suites)

@@ -22,7 +22,7 @@ features:
     description: "Viavi RU Emulation"
   - id: s72
     description: "Amarisoft s72 BETA"
-  - id: zmq|zmq_ntn|zmq_2x2_mimo|zmq_valgrind|zmq_mme|zmq_ric|zmq_srsue|zmq_single_ue
+  - id: zmq|zmq_ntn|zmq_2x2_mimo|zmq_valgrind|zmq_mme|zmq_ric|zmq_srsue|zmq_single_ue|zmq_1000|zmq_2mme
     description: "ZMQ"
   - id: gnb|test_mode|test_mode_not_crash|test_mode_many_ues|
     description: "GNB"

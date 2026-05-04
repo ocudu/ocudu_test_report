@@ -48,7 +48,7 @@ python gitlab_fetch.py --suite "NAME=URL" [--suite "NAME2=URL2" ...] [-o OUTPUT_
 Reads the artifact folder produced by `gitlab_fetch.py` and renders a single self-contained HTML file.
 
 ```bash
-python xunit_report.py --dir FOLDER [-o OUTPUT] [--link URL] [--favicon URL]
+python xunit_report.py --dir FOLDER [-o OUTPUT] [--link URL] [--favicon URL] [--release RELEASE]
 ```
 
 | Argument | Default | Description |
@@ -57,9 +57,15 @@ python xunit_report.py --dir FOLDER [-o OUTPUT] [--link URL] [--favicon URL]
 | `-o / --output` | `report.html` | Output HTML file |
 | `--link URL` | — | GitLab branch/tag/pipeline URL shown in the report header |
 | `--favicon URL` | ocudu favicon | Favicon URL embedded in the HTML |
+| `--release RELEASE` | — | Filter by release (e.g. `26.04 (v1.0)`). See below. |
 
 Suite names are derived from subfolder names with underscores replaced by spaces.
 If a `_url.txt` file is present in a subfolder the suite header will include a link to the original GitLab job/pipeline.
+
+**Layouts:**
+
+- **Suites layout** (default, no `--release`): top level is suites, features nested inside. Both `features.yaml` and `levels.yaml` are used to classify tests.
+- **Release layout** (`--release RELEASE`): top level is features. Only features from `features.yaml` whose `release` field matches the given value are shown — all of them appear, even those with no tests yet. Tests not matched by any of those features are collected under an **others** group. Labels from `levels.yaml` or features belonging to other releases do not create their own groups.
 
 ## Feature fields
 
