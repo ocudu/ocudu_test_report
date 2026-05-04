@@ -450,17 +450,59 @@ features:
     release: 27.10 (v2.3)
     primary_test_type: []
     comment: ''
-  - id: MVP-FUNC-MOB-1
+  - id: MVP-FUNC-MOB-1-a
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support Intra-band mobility within supported FR1 and FR2 bands for the following scenarios:'
+    description: .. shall support Intra-band mobility within supported FR1 and FR2 bands for Intra-cell handover for key regeneration
     release: 27.10 (v2.3)
     primary_test_type: []
     comment: Inter-band mobility might require two different DUs, hence Inter-DU test cases
-  - id: MVP-FUNC-MOB-2
+  - id: MVP-FUNC-MOB-1-b
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support Inter-band mobility such as between supported FR1 bands, between supported FR1 and FR2 bands, and between supported FR2 bands for the following scenarios:'
+    description: .. shall support Intra-band mobility within supported FR1 and FR2 bands for Inter-RU handover
+    release: 27.10 (v2.3)
+    primary_test_type: []
+    comment: Inter-band mobility might require two different DUs, hence Inter-DU test cases
+  - id: MVP-FUNC-MOB-1-c
+    source: ATIS-MVP
+    scope: Unspecified
+    description: .. shall support Intra-band mobility within supported FR1 and FR2 bands for Intra-DU handover
+    release: 27.10 (v2.3)
+    primary_test_type: []
+    comment: Inter-band mobility might require two different DUs, hence Inter-DU test cases
+  - id: MVP-FUNC-MOB-1-d
+    source: ATIS-MVP
+    scope: Unspecified
+    description: .. shall support Inter-CU handover with same CU-UP
+    release: 27.10 (v2.3)
+    primary_test_type: []
+    comment: Inter-band mobility might require two different DUs, hence Inter-DU test cases
+  - id: MVP-FUNC-MOB-2-b
+    source: ATIS-MVP
+    scope: Unspecified
+    description: .. shall support Inter-band mobility such as between supported FR1 bands, between supported FR1 and FR2 bands, and between supported FR2 bands for inter-RU
+    release: 26.04 (v1.0)
+    primary_test_type: []
+    comment: Inter-band mobility might require two different DUs, hence Inter-DU test cases
+  - id: MVP-FUNC-MOB-2-c
+    source: ATIS-MVP
+    scope: Unspecified
+    description: .. shall support Inter-band mobility such as between supported FR1 bands, between supported FR1 and FR2 bands, and between supported FR2 bands for inter-DU
+    release: 26.04 (v1.0)
+    primary_test_type: []
+    comment: Inter-band mobility might require two different DUs, hence Inter-DU test cases
+  - id: MVP-FUNC-MOB-2-d
+    source: ATIS-MVP
+    scope: Unspecified
+    description: .. shall support Inter-band mobility such as between supported FR1 bands, between supported FR1 and FR2 bands, and between supported FR2 bands for inter-CU HO, changing the CU-UP between FR1 and FR2
+    release: 26.04 (v1.0)
+    primary_test_type: []
+    comment: Inter-band mobility might require two different DUs, hence Inter-DU test cases
+  - id: MVP-FUNC-MOB-2-e
+    source: ATIS-MVP
+    scope: Unspecified
+    description: .. shall support Inter-band mobility such as between supported FR1 bands, between supported FR1 and FR2 bands, and between supported FR2 bands for inter-CU HO, same CU-UP  between FR1 and FR2
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: Inter-band mobility might require two different DUs, hence Inter-DU test cases
@@ -1621,7 +1663,14 @@ features:
     release: unspecified
     primary_test_type: []
     comment: ''
-  - id: DU-GEN-2
+  - id: DU-GEN-2-a
+    source: SRS defined
+    scope: Unspecified
+    description: '... shall support contention based and contention free Random Access'
+    release: 26.04 (v1.0)
+    primary_test_type: []
+    comment: ''
+  - id: DU-GEN-2-b
     source: SRS defined
     scope: Unspecified
     description: '... shall support contention based and contention free Random Access'
