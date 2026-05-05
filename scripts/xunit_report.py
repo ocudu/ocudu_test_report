@@ -559,6 +559,25 @@ def main():
     )
     total = sum(s.total for s in suites)
     failed = sum(s.failed for s in suites)
+
+    if args.release:
+        release_ids = {name for name, fd in features.items() if fd.release == args.release}
+        grouped = _group_by_features(suites, features, always_keep=release_ids)
+        failed_features = []
+        for fid, fg in sorted(grouped.items()):
+            all_tcs = [tc for _url, tcs in fg.suites.values() for tc in tcs]
+            nfailed = sum(1 for tc in all_tcs if tc.status in (Status.FAILED, Status.ERROR))
+            npassed = sum(1 for tc in all_tcs if tc.status == Status.PASSED)
+            nskipped = sum(1 for tc in all_tcs if tc.status == Status.SKIPPED)
+            if nfailed or npassed == 0:
+                failed_features.append((fid, nfailed, npassed, nskipped))
+        if failed_features:
+            print("\n| Feature | Failed | Passed | Skipped |")
+            print("| --- | --- | --- | --- |")
+            for fid, nfailed, npassed, nskipped in failed_features:
+                print(f"| {fid} | {nfailed} | {npassed} | {nskipped} |")
+            print("")
+
     print(f"Report written to {output}  ({total} tests, {failed} failed)")
 
 
