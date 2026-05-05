@@ -230,7 +230,7 @@ def _render_suite(name: str, testcases: list, url: str = "", description: str = 
     skipped = sum(1 for tc in testcases if tc.status == Status.SKIPPED)
     duration = sum(tc.duration for tc in testcases)
 
-    fail_class = "fail" if failed else ""
+    fail_class = "fail" if (failed or passed == 0) else ""
     counts = f"✓ {passed}/{total} passed"
     if failed:
         counts += f' &nbsp; <span class="count-failed">✗ {failed} failed</span>'
@@ -269,7 +269,7 @@ def _render_feature(fid: str, description: str, suites: dict) -> str:
     skipped = sum(1 for tc in all_tcs if tc.status == Status.SKIPPED)
     duration = sum(tc.duration for tc in all_tcs)
 
-    fail_class = "fail" if (failed or total == 0) else ""
+    fail_class = "fail" if (failed or passed == 0) else ""
     counts = f"✓ {passed}/{total} passed"
     if failed:
         counts += f' &nbsp; <span class="count-failed">✗ {failed} failed</span>'
