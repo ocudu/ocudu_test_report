@@ -47,10 +47,10 @@ spec:
       type: string
       default: ""
       description: "GitLab URL shown as a link in the report header (e.g. branch or pipeline URL)."
-    report_layout:
+    release:
       type: string
-      default: "features"
-      description: "Report layout: 'features' (features → suites → tests) or 'suites' (suites → features → tests)."
+      default: ""
+      description: "Show all features with this release value (e.g. '26.04 (v1.0)') plus an 'others' group. If not specified, uses suites layout."
 ---
 include:
   - project: $[[ inputs.ocudu_path ]]
@@ -129,7 +129,7 @@ generate-report:
     SUITE_7: "$[[ inputs.suite_7 ]]"
     SUITE_8: "$[[ inputs.suite_8 ]]"
     REPORT_LINK: "$[[ inputs.report_link ]]"
-    REPORT_LAYOUT: "$[[ inputs.report_layout ]]"
+    RELEASE: "$[[ inputs.release ]]"
   script:
     - cd scripts
     - pip install -r requirements.txt
@@ -139,7 +139,8 @@ generate-report:
         [ -n "${s// }" ] && SUITE_ARGS+=(--suite "$s")
       done
     - python3 gitlab_fetch.py "${SUITE_ARGS[@]}" -o artifacts/
-    - python3 xunit_report.py --dir artifacts/ --link "$REPORT_LINK" --layout "$REPORT_LAYOUT" -o report.html
+    - if [ -n "$RELEASE" ]; then RELEASE_ARGS=(--release "$RELEASE"); else RELEASE_ARGS=(); fi
+    - python3 xunit_report.py --dir artifacts/ --link "$REPORT_LINK" "${RELEASE_ARGS[@]}" -o report.html
   artifacts:
     paths:
       - scripts/report.html
