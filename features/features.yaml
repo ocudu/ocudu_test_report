@@ -1660,7 +1660,7 @@ features:
     source: SRS defined
     scope: Unspecified
     description: '... shall support Reestablishment to the same cell and different cell in the same CU-CP'
-    release: unspecified
+    release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-GEN-2-a
