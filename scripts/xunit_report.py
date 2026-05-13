@@ -7,7 +7,7 @@
 XUnit HTML reporter — aggregates multiple XUnit XML files into a single HTML report.
 
 Usage:
-    python report.py --suite "CTest=ctest.xml" --suite "E2E=e2e.xml" -o report.html
+    python xunit_report.py --dir FOLDER -o report.html
 """
 
 import argparse
@@ -46,6 +46,10 @@ class Status(Enum):
     FAILED = "failed"
     ERROR = "error"
     SKIPPED = "skipped"
+
+
+_TC_STATUS_SORT = {Status.SKIPPED: 0, Status.FAILED: 1, Status.ERROR: 1, Status.PASSED: 2}
+_FEATURE_STATUS_ICONS = {"passed": "✓", "failed": "✗", "skipped": "⊘", "untested": "—"}
 
 
 def _clean_output(text: str) -> str:
@@ -184,13 +188,24 @@ def _status_badge(status: Status) -> str:
     return f'<span class="badge {status.value}">{icon} {status.value}</span>'
 
 
-def _render_testcase(tc: TestCase, idx: int) -> str:
+def _render_testcase(tc: TestCase, idx: int, url: str = "") -> str:
     parity = "even" if idx % 2 == 0 else "odd"
     label = f"{html.escape(tc.classname)}." if tc.classname else ""
+
+    gitlab_html = ""
+    if url:
+        gitlab_html = (
+            f'<a class="tc-gitlab-link" href="{html.escape(url)}" target="_blank"'
+            f' title="GitLab pipeline" onclick="event.stopPropagation()">'
+            f'<img src="https://about.gitlab.com/images/press/gitlab-logo-500-rgb.svg"'
+            f' alt="GitLab" height="20"></a>'
+        )
+
     header = (
+        f"{_status_badge(tc.status)}"
         f'<span class="tc-name">{label}<b>{html.escape(tc.name)}</b></span>'
         f'<span class="tc-duration">{_fmt_duration(tc.duration)}</span>'
-        f"{_status_badge(tc.status)}"
+        f"{gitlab_html}"
     )
 
     labels_html = ""
@@ -221,70 +236,6 @@ def _render_testcase(tc: TestCase, idx: int) -> str:
         )
 
     return f'<div class="tc-row {parity}">{header}</div>'
-
-
-def _render_suite(name: str, testcases: list, url: str = "", description: str = "") -> str:
-    total = len(testcases)
-    passed = sum(1 for tc in testcases if tc.status == Status.PASSED)
-    failed = sum(1 for tc in testcases if tc.status in (Status.FAILED, Status.ERROR))
-    skipped = sum(1 for tc in testcases if tc.status == Status.SKIPPED)
-    duration = sum(tc.duration for tc in testcases)
-
-    fail_class = "fail" if (failed or passed == 0) else ""
-    counts = f"✓ {passed}/{total} passed"
-    if failed:
-        counts += f' &nbsp; <span class="count-failed">✗ {failed} failed</span>'
-    if skipped:
-        counts += f' &nbsp; <span class="count-skipped">⊘ {skipped} skipped</span>'
-
-    link_html = (
-        (
-            f'<a class="suite-link" href="{html.escape(url)}" target="_blank" title="{html.escape(url)}">'
-            f'<img src="https://about.gitlab.com/images/press/gitlab-logo-500-rgb.svg" alt="GitLab" height="26">'
-            f"</a>"
-        )
-        if url
-        else ""
-    )
-    desc_html = f'<span class="suite-desc">{html.escape(description)}</span>' if description else ""
-    summary = (
-        f'<summary class="suite-summary {fail_class}">'
-        f'<span class="suite-name">{html.escape(name)}</span>'
-        f"{desc_html}"
-        f'<span class="suite-counts">{counts} &nbsp; ⏱ {_fmt_duration(duration)}</span>'
-        f"{link_html}"
-        f"</summary>"
-    )
-    rows = "".join(
-        _render_testcase(tc, i) for i, tc in enumerate(sorted(testcases, key=lambda tc: f"{tc.classname}.{tc.name}"))
-    )
-    return f'<details class="suite">{summary}{rows}</details>'
-
-
-def _render_feature(fid: str, description: str, suites: dict) -> str:
-    all_tcs = [tc for _url, tcs in suites.values() for tc in tcs]
-    total = len(all_tcs)
-    passed = sum(1 for tc in all_tcs if tc.status == Status.PASSED)
-    failed = sum(1 for tc in all_tcs if tc.status in (Status.FAILED, Status.ERROR))
-    skipped = sum(1 for tc in all_tcs if tc.status == Status.SKIPPED)
-    duration = sum(tc.duration for tc in all_tcs)
-
-    fail_class = "fail" if (failed or passed == 0) else ""
-    counts = f"✓ {passed}/{total} passed"
-    if failed:
-        counts += f' &nbsp; <span class="count-failed">✗ {failed} failed</span>'
-    if skipped:
-        counts += f' &nbsp; <span class="count-skipped">⊘ {skipped} skipped</span>'
-
-    desc_html = f'<span class="feature-desc">{html.escape(description)}</span>' if description else ""
-    summary = (
-        f'<summary class="feature-summary {fail_class}">'
-        f'<span class="feature-title"><span class="feature-id">{html.escape(fid)}</span>{desc_html}</span>'
-        f'<span class="feature-counts">{counts} &nbsp; ⏱ {_fmt_duration(duration)}</span>'
-        f"</summary>"
-    )
-    suite_blocks = "".join(_render_suite(name, tcs, url) for name, (url, tcs) in sorted(suites.items()))
-    return f'<details class="feature">{summary}{suite_blocks}</details>'
 
 
 @dataclass
@@ -320,84 +271,11 @@ def _parse_features(raw: dict) -> dict[str, FeatureDef]:
     return result
 
 
-@dataclass
-class SuiteGroup:
-    """A suite with its test cases grouped by feature (for suites-first layout)."""
-
-    url: str
-    features: dict = field(default_factory=dict)  # {feature_name: (description, [TestCase])}
-
-
-def _group_by_suites(suites: list, features: dict[str, FeatureDef]) -> dict[str, SuiteGroup]:
-    """Return {suite_name: SuiteGroup}, tests with no matching label go under Others.
-
-    features must already be parsed by _parse_features.
-    """
-    alias_map = {alias: name for name, fd in features.items() for alias in fd.labels}
-    feat_desc = {name: fd.description for name, fd in features.items()}
-
-    grouped: dict[str, SuiteGroup] = {}
-    for suite in suites:
-        sg = SuiteGroup(url=suite.url)
-        for tc in suite.testcases:
-            matched = list(dict.fromkeys(alias_map[lbl] for lbl in tc.labels if lbl in alias_map))
-            for fid in matched or [OTHER_CATEGORY]:
-                if fid not in sg.features:
-                    desc = feat_desc.get(fid, OTHER_CATEGORY_DESCRIPTION)
-                    sg.features[fid] = (desc, [])
-                sg.features[fid][1].append(tc)
-        if sg.features:
-            grouped[suite.name] = sg
-    return grouped
-
-
-def _render_suite_toplevel(suite_name: str, sg: SuiteGroup) -> str:
-    """Render a suite as the top level with features nested inside (suites-first layout)."""
-    all_tcs = [tc for _desc, tcs in sg.features.values() for tc in tcs]
-    total = len(all_tcs)
-    passed = sum(1 for tc in all_tcs if tc.status == Status.PASSED)
-    failed = sum(1 for tc in all_tcs if tc.status in (Status.FAILED, Status.ERROR))
-    skipped = sum(1 for tc in all_tcs if tc.status == Status.SKIPPED)
-    duration = sum(tc.duration for tc in all_tcs)
-
-    fail_class = "fail" if failed else ""
-    counts = f"✓ {passed}/{total} passed"
-    if failed:
-        counts += f' &nbsp; <span class="count-failed">✗ {failed} failed</span>'
-    if skipped:
-        counts += f' &nbsp; <span class="count-skipped">⊘ {skipped} skipped</span>'
-
-    link_html = (
-        (
-            f'<a class="suite-link" href="{html.escape(sg.url)}" target="_blank" title="{html.escape(sg.url)}">'
-            f'<img src="https://about.gitlab.com/images/press/gitlab-logo-500-rgb.svg" alt="GitLab" height="26">'
-            f"</a>"
-        )
-        if sg.url
-        else ""
-    )
-    summary = (
-        f'<summary class="feature-summary {fail_class}">'
-        f'<span class="feature-title"><span class="feature-id">{html.escape(suite_name)}</span></span>'
-        f'<span class="feature-counts">{counts} &nbsp; ⏱ {_fmt_duration(duration)}</span>'
-        f"{link_html}"
-        f"</summary>"
-    )
-    feature_blocks = "".join(
-        _render_suite(fid, tcs, description=desc) for fid, (desc, tcs) in sorted(sg.features.items())
-    )
-    return f'<details class="feature">{summary}{feature_blocks}</details>'
-
-
-def _group_by_features(
-    suites: list, features: dict[str, FeatureDef], always_keep: Optional[set] = None
-) -> dict[str, FeatureGroup]:
+def _group_by_features(suites: list, features: dict[str, FeatureDef]) -> dict[str, FeatureGroup]:
     """Return {display_name: FeatureGroup}, tests with no matching label go under Others.
 
-    features must already be parsed by _parse_features.
-    always_keep: set of feature IDs to include even if they have no tests.
-    Features not in always_keep only appear when they have at least one test.
-    Others only appears when it has tests.
+    All defined features are always included (untested ones show with zero counts).
+    The Others bucket is included only when it has at least one test.
     """
     alias_map = {alias: name for name, fd in features.items() for alias in fd.labels}
 
@@ -412,28 +290,131 @@ def _group_by_features(
                     grouped[fid].suites[suite.name] = (suite.url, [])
                 grouped[fid].suites[suite.name][1].append(tc)
 
-    if always_keep is not None:
-        return {fid: fg for fid, fg in grouped.items() if fid in always_keep or fg.suites}
-    return {fid: fg for fid, fg in grouped.items() if fg.suites}
+    return {fid: fg for fid, fg in grouped.items() if fid != OTHER_CATEGORY or fg.suites}
 
 
 def _header_link_or_duration(link: str, duration: float) -> str:
-    """Return a GitLab link or a formatted duration for the report header."""
     if link:
         return f"<a class='header-link' href='{html.escape(link)}'>{link.split('/')[-1]}</a>"
     return f"⏱ {_fmt_duration(duration)}"
 
 
+def _feature_status(failed: int, passed: int, skipped: int) -> str:
+    if failed > 0:
+        return "failed"
+    if passed > 0:
+        return "passed"
+    if skipped > 0:
+        return "skipped"
+    return "untested"
+
+
+_REPORT_JS = r"""
+(function () {
+  const STATUS_ORDER = { untested: 0, skipped: 1, failed: 2, passed: 3 };
+  let sortCol = null, sortDir = 1;
+
+  function cmp(a, b) {
+    if (typeof a === 'number' && typeof b === 'number') return a - b;
+    return String(a).localeCompare(String(b));
+  }
+
+  function cellValue(row, col) {
+    switch (col) {
+      case 'status':  return STATUS_ORDER[row.dataset.status] ?? 99;
+      case 'fid':     return row.dataset.fid || '';
+      case 'desc':    return row.cells[2].textContent.trim();
+      case 'release': return row.dataset.release || '';
+      case 'failed':  return +row.dataset.failed;
+      case 'passed':  return +row.dataset.passed;
+      case 'skipped': return +row.dataset.skipped;
+      default:        return '';
+    }
+  }
+
+  function defaultCompare(a, b) {
+    return cmp(a.dataset.release || '', b.dataset.release || '')
+        || cmp(STATUS_ORDER[a.dataset.status] ?? 99, STATUS_ORDER[b.dataset.status] ?? 99)
+        || cmp(a.dataset.fid || '', b.dataset.fid || '');
+  }
+
+  function reorder(rows) {
+    const tbody = document.querySelector('#feature-table tbody');
+    rows.forEach((row, i) => {
+      row.classList.toggle('even', i % 2 === 0);
+      row.classList.toggle('odd',  i % 2 !== 0);
+      tbody.appendChild(row);
+      const exp = document.getElementById(row.dataset.expand);
+      if (exp) tbody.appendChild(exp);
+    });
+    document.querySelectorAll('#feature-table thead th').forEach(th => {
+      th.classList.remove('sort-asc', 'sort-desc');
+      if (sortCol && th.dataset.col === sortCol)
+        th.classList.add(sortDir === 1 ? 'sort-asc' : 'sort-desc');
+    });
+  }
+
+  function applyFilters() {
+    const sf = document.getElementById('filter-status').value;
+    const rf = document.getElementById('filter-release').value;
+    let vi = 0;
+    document.querySelectorAll('#feature-table .feature-row').forEach(row => {
+      const ok = (!sf || row.dataset.status === sf)
+               && (!rf || row.dataset.release === rf);
+      row.hidden = !ok;
+      const exp = document.getElementById(row.dataset.expand);
+      if (!ok) {
+        if (exp) exp.hidden = true;
+        row.classList.remove('open');
+      } else {
+        row.classList.toggle('even', vi % 2 === 0);
+        row.classList.toggle('odd',  vi % 2 !== 0);
+        vi++;
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const tbody = document.querySelector('#feature-table tbody');
+    if (!tbody) return;
+
+    const getRows = () => [...tbody.querySelectorAll('.feature-row')];
+
+    reorder(getRows().sort(defaultCompare));
+
+    document.querySelectorAll('#feature-table thead th[data-col]').forEach(th => {
+      th.addEventListener('click', () => {
+        const col = th.dataset.col;
+        if (sortCol === col) sortDir *= -1;
+        else { sortCol = col; sortDir = 1; }
+        reorder(getRows().sort((a, b) => cmp(cellValue(a, col), cellValue(b, col)) * sortDir));
+      });
+    });
+
+    document.getElementById('filter-status').addEventListener('change', applyFilters);
+    document.getElementById('filter-release').addEventListener('change', applyFilters);
+
+    tbody.addEventListener('click', e => {
+      const row = e.target.closest('.feature-row');
+      if (!row) return;
+      const exp = document.getElementById(row.dataset.expand);
+      if (!exp) return;
+      exp.hidden = !exp.hidden;
+      row.classList.toggle('open');
+    });
+  });
+})();
+"""
+
+
 # pylint: disable=too-many-locals
-def render_html(
-    suites: list, features: Optional[dict] = None, favicon: str = "", link: str = "", release: str = ""
-) -> str:
+def render_html(suites: list, features: Optional[dict] = None, favicon: str = "", link: str = "") -> str:
     """Render the full HTML report from a list of Suite objects."""
     total = sum(s.total for s in suites)
-    passed = sum(s.passed for s in suites)
-    failed = sum(s.failed for s in suites)
-    skipped = sum(s.skipped for s in suites)
-    duration = sum(s.duration for s in suites)
+    passed_total = sum(s.passed for s in suites)
+    failed_total = sum(s.failed for s in suites)
+    skipped_total = sum(s.skipped for s in suites)
+    duration_total = sum(s.duration for s in suites)
 
     def stat(value, label, modifier=""):
         return (
@@ -447,25 +428,101 @@ def render_html(
         f'<div class="report-header">'
         f'<div class="header-logo"></div>'
         f'<div class="header-title"><h1>Test Report</h1>'
-        f"<div>"
-        f"{_header_link_or_duration(link, duration)}"
-        f"</div></div>"
+        f"<div>{_header_link_or_duration(link, duration_total)}</div>"
+        f"</div>"
         f'{stat(total, "Total")}'
-        f'{stat(passed, "Passed", "passed")}'
-        f'{stat(failed, "Failed", "failed")}'
-        f'{stat(skipped, "Skipped", "skipped")}'
+        f'{stat(passed_total, "Passed", "passed")}'
+        f'{stat(failed_total, "Failed", "failed")}'
+        f'{stat(skipped_total, "Skipped", "skipped")}'
         f"</div>"
     )
 
-    if release and features:
-        release_ids = {name for name, fd in features.items() if fd.release == release}
-        grouped = _group_by_features(suites, features, always_keep=release_ids)
-        body = "".join(_render_feature(fid, fg.description, fg.suites) for fid, fg in sorted(grouped.items()))
-    elif features:
-        by_suite = _group_by_suites(suites, features)
-        body = "".join(_render_suite_toplevel(s.name, by_suite[s.name]) for s in suites if s.name in by_suite)
+    if features:
+        grouped = _group_by_features(suites, features)
+
+        all_releases = sorted({features[fid].release for fid in grouped if fid in features and features[fid].release})
+
+        rows_parts = []
+        for i, (fid, fg) in enumerate(sorted(grouped.items())):
+            all_tcs = [tc for _url, tcs in fg.suites.values() for tc in tcs]
+            nfailed = sum(1 for tc in all_tcs if tc.status in (Status.FAILED, Status.ERROR))
+            npassed = sum(1 for tc in all_tcs if tc.status == Status.PASSED)
+            nskipped = sum(1 for tc in all_tcs if tc.status == Status.SKIPPED)
+            fstatus = _feature_status(nfailed, npassed, nskipped)
+            feat_release = features[fid].release if fid in features else "unspecified"
+
+            icon = _FEATURE_STATUS_ICONS[fstatus]
+            badge = f'<span class="badge {fstatus}">{icon} {fstatus}</span>'
+
+            tc_with_url = [(tc, url) for _sname, (url, tcs) in fg.suites.items() for tc in tcs]
+            tc_with_url.sort(key=lambda x: (_TC_STATUS_SORT.get(x[0].status, 99), x[0].classname, x[0].name))
+            expanded = "".join(_render_testcase(tc, j, url) for j, (tc, url) in enumerate(tc_with_url))
+
+            expand_id = f"exp{i}"
+            failed_cls = " num-failed" if nfailed else ""
+            passed_cls = " num-passed" if npassed else ""
+            skipped_cls = " num-skipped" if nskipped else ""
+
+            rows_parts.append(
+                f'<tr class="feature-row"'
+                f' data-status="{fstatus}"'
+                f' data-release="{html.escape(feat_release, quote=True)}"'
+                f' data-fid="{html.escape(fid, quote=True)}"'
+                f' data-expand="{expand_id}"'
+                f' data-failed="{nfailed}"'
+                f' data-passed="{npassed}"'
+                f' data-skipped="{nskipped}">'
+                f"<td>{badge}</td>"
+                f'<td class="col-fid">{html.escape(fid)}</td>'
+                f'<td class="col-desc">{html.escape(fg.description)}</td>'
+                f'<td class="col-release">{html.escape(feat_release)}</td>'
+                f'<td class="col-num{failed_cls}">{nfailed}</td>'
+                f'<td class="col-num{passed_cls}">{npassed}</td>'
+                f'<td class="col-num{skipped_cls}">{nskipped}</td>'
+                f"</tr>"
+                f'<tr class="expand-row" id="{expand_id}" hidden>'
+                f'<td colspan="7"><div class="expand-body">{expanded}</div></td>'
+                f"</tr>"
+            )
+
+        rows_html = "".join(rows_parts)
+
+        release_options = '<option value="">All releases</option>' + "".join(
+            f'<option value="{html.escape(r, quote=True)}">{html.escape(r)}</option>' for r in all_releases
+        )
+
+        body = (
+            f'<div class="controls">'
+            f"<label>Status"
+            f'<select id="filter-status">'
+            f'<option value="">All</option>'
+            f'<option value="failed">Failed</option>'
+            f'<option value="passed">Passed</option>'
+            f'<option value="skipped">Skipped</option>'
+            f'<option value="untested">Untested</option>'
+            f"</select></label>"
+            f'<label>Release <select id="filter-release">{release_options}</select></label>'
+            f"</div>"
+            f'<div class="table-wrap">'
+            f'<table class="feature-table" id="feature-table">'
+            f"<thead><tr>"
+            f'<th data-col="status">Status</th>'
+            f'<th data-col="fid">Feature ID</th>'
+            f'<th data-col="desc">Description</th>'
+            f'<th data-col="release">Release</th>'
+            f'<th data-col="failed" class="col-num">Failed</th>'
+            f'<th data-col="passed" class="col-num">Passed</th>'
+            f'<th data-col="skipped" class="col-num">Skipped</th>'
+            f"</tr></thead>"
+            f"<tbody>{rows_html}</tbody>"
+            f"</table>"
+            f"</div>"
+        )
     else:
-        body = "".join(_render_suite(s.name, s.testcases, s.url) for s in suites)
+        body = "<p>No features defined.</p>"
+
+    favicon_tag = f"<link rel='icon' href='{html.escape(favicon)}'>" if favicon else ""
+    css = (Path(__file__).parent / "style.css").read_text(encoding="utf-8")
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -473,14 +530,15 @@ def render_html(
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Test Report</title>
-{"<link rel='icon' href='" + html.escape(favicon) + "'>" if favicon else ""}
+{favicon_tag}
 <style>
-{(Path(__file__).parent / "style.css").read_text(encoding="utf-8")}
+{css}
 </style>
 </head>
 <body>
 {header}
 {body}
+<script>{_REPORT_JS}</script>
 </body>
 </html>"""
 
@@ -527,13 +585,6 @@ def main():
         "--favicon", default="http://www.google.com/s2/favicons?domain=ocudu.org", metavar="URL", help="Favicon URL"
     )
     parser.add_argument("--link", default="", metavar="URL", help="Gitlab Link")
-    parser.add_argument(
-        "--release",
-        default="",
-        metavar="RELEASE",
-        help="Show all features with this release value (e.g. '26.04 (v1.0)') plus an 'others' group. "
-        "If not specified, uses suites layout.",
-    )
     args = parser.parse_args()
 
     root = Path(args.dir)
@@ -541,45 +592,17 @@ def main():
         parser.error(f"Not a directory: {root}")
     suites = parse_dir(root)
 
-    features_yaml: dict[str, FeatureDef] = {}
+    features: dict[str, FeatureDef] = {}
     with (Path(__file__).parent.parent / "features" / "features.yaml").open(encoding="utf-8") as f:
-        features_yaml.update(_parse_features(yaml.safe_load(f)))
-    levels: dict[str, FeatureDef] = {}
-    with (Path(__file__).parent / "levels.yaml").open(encoding="utf-8") as f:
-        levels.update(_parse_features(yaml.safe_load(f)))
-
-    # In release mode only features.yaml entries (filtered by release) are feature groups;
-    # levels and other releases feed into "others". In suites mode all definitions are used.
-    features = features_yaml if args.release else {**features_yaml, **levels}
+        features.update(_parse_features(yaml.safe_load(f)))
 
     output = Path(args.output)
     output.write_text(
-        render_html(suites, features=features, favicon=args.favicon, link=args.link, release=args.release),
+        render_html(suites, features=features, favicon=args.favicon, link=args.link),
         encoding="utf-8",
     )
     total = sum(s.total for s in suites)
     failed = sum(s.failed for s in suites)
-
-    if args.release:
-        release_ids = {name for name, fd in features.items() if fd.release == args.release}
-        grouped = _group_by_features(suites, features, always_keep=release_ids)
-        failed_features = []
-        for fid, fg in sorted(grouped.items()):
-            all_tcs = [tc for _url, tcs in fg.suites.values() for tc in tcs]
-            nfailed = sum(1 for tc in all_tcs if tc.status in (Status.FAILED, Status.ERROR))
-            npassed = sum(1 for tc in all_tcs if tc.status == Status.PASSED)
-            nskipped = sum(1 for tc in all_tcs if tc.status == Status.SKIPPED)
-            if nfailed or npassed == 0:
-                failed_features.append((fid, nfailed, npassed, nskipped))
-        if failed_features:
-            print("")
-            print(f"# Failed Features for {args.release}")
-            print("| Feature | Failed | Passed | Skipped |")
-            print("| --- | --- | --- | --- |")
-            for fid, nfailed, npassed, nskipped in failed_features:
-                print(f"| {fid} | {nfailed} | {npassed} | {nskipped} |")
-            print("")
-
     print(f"Report written to {output}  ({total} tests, {failed} failed)")
 
 
