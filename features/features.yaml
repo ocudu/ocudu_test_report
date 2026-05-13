@@ -846,7 +846,7 @@ features:
     source: ATIS-MVP
     scope: Unspecified
     description: '.. shall support the following RAN slicing enhancements: d) Slice specific multi-carrier resource sharing'
-    release: 26.04 (v1.0)
+    release: 27.10 (v2.3)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-SVCS-17-3-e
