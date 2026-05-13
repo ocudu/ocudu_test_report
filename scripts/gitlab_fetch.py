@@ -4,18 +4,23 @@
 # SPDX-License-Identifier: BSD-3-Clause-Open-MPI
 
 """
-Download XUnit artifacts from GitLab jobs or pipelines.
+Download XUnit artifacts from GitLab jobs, pipelines, or pipeline schedules.
 
 Usage:
-    fetch-xunit --suite "A=<job-url>" --suite "B=<pipeline-url>" -o ./artifacts
+    fetch-xunit --suite "A=<job-url>" --suite "B=<pipeline-url>" --suite "C=<schedule-api-url>" -o ./artifacts
+
+Schedule API URLs (https://gitlab.example.com/api/v4/projects/<id>/pipeline_schedules/<id>)
+resolve to the latest pipeline run automatically. Requires --token or GITLAB_TOKEN env var.
 """
 
 import argparse
 import io
+import os
 import re
 import sys
 import zipfile
 from pathlib import Path
+from typing import NamedTuple
 from urllib.parse import quote
 
 try:
@@ -27,24 +32,42 @@ except ImportError:
 # Matches: https://gitlab.example.com/group/sub/project/-/jobs/123
 #      or: https://gitlab.example.com/group/sub/project/-/pipelines/123
 _URL_RE = re.compile(r"(https?://[^/]+)/(.+?)/-/(jobs|pipelines)/(\d+)/?$")
+_KIND_MAP = {"jobs": "job", "pipelines": "pipeline"}
+
+# Matches the GitLab API URL for a schedule:
+#   https://gitlab.example.com/api/v4/projects/<project_id>/pipeline_schedules/<schedule_id>
+_API_SCHEDULE_RE = re.compile(r"(https?://[^/]+)/api/v4/projects/([^/]+)/pipeline_schedules/(\d+)/?$")
 
 # XUnit files we recognize inside an artifacts zip
 _XUNIT_RE = re.compile(r"(^|/)([^/]+_xunit\.xml|out\.xml)$")
 
 
-def _parse_url(url: str):
-    m = _URL_RE.match(url.rstrip("/"))
+class _ParsedURL(NamedTuple):
+    base: str
+    project: str
+    kind: str
+    id_: int
+    url: str
+
+
+def _parse_url(raw: str) -> _ParsedURL:
+    url = raw.rstrip("/")
+    m = _API_SCHEDULE_RE.match(url)
+    if m:
+        return _ParsedURL(m.group(1), m.group(2), "schedule", int(m.group(3)), url)
+    m = _URL_RE.match(url)
     if not m:
-        raise ValueError(f"Cannot parse as GitLab job/pipeline URL: {url!r}")
-    base, project, kind, id_ = m.group(1), m.group(2), m.group(3), int(m.group(4))
-    return base, project, kind.rstrip("s"), id_  # 'jobs'->'job', 'pipelines'->'pipeline'
+        raise ValueError(f"Cannot parse as GitLab job/pipeline/schedule API URL: {raw!r}")
+    return _ParsedURL(m.group(1), m.group(2), _KIND_MAP[m.group(3)], int(m.group(4)), url)
 
 
 class _Client:
-    def __init__(self, base_url: str, project_path: str):
+    def __init__(self, base_url: str, project_path: str, token: str = ""):
         encoded = quote(project_path, safe="")
         self._root = f"{base_url}/api/v4/projects/{encoded}"
         self._session = requests.Session()
+        if token:
+            self._session.headers["PRIVATE-TOKEN"] = token
 
     def _get(self, path: str, **kwargs) -> requests.Response:
         r = self._session.get(f"{self._root}/{path}", **kwargs)
@@ -65,9 +88,20 @@ class _Client:
             page += 1
         return jobs
 
+    def latest_scheduled_pipeline(self, schedule_id: int) -> tuple[int, str]:
+        """Return (pipeline_id, web_url) for the most recent run of a pipeline schedule."""
+        pipelines = self._get(
+            f"pipeline_schedules/{schedule_id}/pipelines",
+            params={"per_page": 1, "order_by": "id", "sort": "desc"},
+        ).json()
+        if not pipelines:
+            raise ValueError(f"No pipelines found for schedule {schedule_id}")
+        p = pipelines[0]
+        return p["id"], p["web_url"]
+
     def artifacts_zip(self, job_id: int) -> bytes:
         """Download the full artifacts zip for a job."""
-        return self._get(f"jobs/{job_id}/artifacts").content
+        return bytes(self._get(f"jobs/{job_id}/artifacts").content)
 
 
 def _extract_xunits(zip_bytes: bytes) -> list[tuple[str, bytes]]:
@@ -112,7 +146,40 @@ def _fetch_job(client: _Client, job_id: int, report_name: str, suite_dir: Path) 
     return saved
 
 
-def main():  # pylint: disable=too-many-locals
+def _fetch_suite(client: _Client, name: str, ref: _ParsedURL, suite_dir: Path) -> list[tuple[str, Path]]:
+    """Resolve a suite entry and download its XUnit artifacts. Returns list of (name, path) saved."""
+    kind, id_ = ref.kind, ref.id_
+    if kind == "schedule":
+        print(f"'{name}' — schedule {id_}, resolving latest pipeline ...")
+        try:
+            id_, pipeline_url = client.latest_scheduled_pipeline(id_)
+            print(f"  latest pipeline: {id_} ({pipeline_url})")
+            kind = "pipeline"
+            (suite_dir / "_url.txt").write_text(pipeline_url, encoding="utf-8")
+        except (requests.HTTPError, ValueError) as exc:
+            print(f"  error fetching schedule: {exc}")
+            return []
+    else:
+        (suite_dir / "_url.txt").write_text(ref.url, encoding="utf-8")
+
+    if kind == "job":
+        print(f"'{name}' — job {id_}")
+        return _fetch_job(client, id_, name, suite_dir)
+
+    print(f"'{name}' — pipeline {id_}")
+    try:
+        jobs = client.pipeline_jobs(id_)
+    except requests.HTTPError as exc:
+        print(f"  error fetching pipeline jobs: {exc}")
+        return []
+    print(f"  {len(jobs)} jobs in pipeline")
+    saved = []
+    for job in jobs:
+        saved.extend(_fetch_job(client, job["id"], job["name"], suite_dir))
+    return saved
+
+
+def main():
     """Entry point: parse arguments and download XUnit artifacts from GitLab."""
     parser = argparse.ArgumentParser(description="Download XUnit artifacts from GitLab jobs or pipelines")
     parser.add_argument(
@@ -129,6 +196,12 @@ def main():  # pylint: disable=too-many-locals
         default=Path("artifacts"),
         help="Directory to save downloaded XUnit files (default: ./artifacts)",
     )
+    parser.add_argument(
+        "--token",
+        default=os.environ.get("GITLAB_TOKEN", ""),
+        metavar="TOKEN",
+        help="GitLab personal/project access token (default: $GITLAB_TOKEN)",
+    )
     args = parser.parse_args()
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -141,33 +214,15 @@ def main():  # pylint: disable=too-many-locals
             parser.error(f"Expected NAME=URL, got: {entry!r}")
         name, _, url = entry.partition("=")
         name, url = name.strip(), url.strip()
-
         try:
-            base, project, kind, id_ = _parse_url(url)
+            ref = _parse_url(url)
         except ValueError as exc:
             parser.error(str(exc))
-
-        client = _Client(base, project)
+        client = _Client(ref.base, ref.project, token=args.token)
         suite_dir = args.output_dir / _safe_name(name)
         suite_dir.mkdir(parents=True, exist_ok=True)
-        (suite_dir / "_url.txt").write_text(url, encoding="utf-8")
         suite_order.append(_safe_name(name))
-
-        if kind == "job":
-            print(f"'{name}' — job {id_}")
-            saved = _fetch_job(client, id_, name, suite_dir)
-            all_saved.extend(saved)
-        else:
-            print(f"'{name}' — pipeline {id_}")
-            try:
-                jobs = client.pipeline_jobs(id_)
-            except requests.HTTPError as exc:
-                print(f"  error fetching pipeline jobs: {exc}")
-                continue
-            print(f"  {len(jobs)} jobs in pipeline")
-            for job in jobs:
-                saved = _fetch_job(client, job["id"], job["name"], suite_dir)
-                all_saved.extend(saved)
+        all_saved.extend(_fetch_suite(client, name, ref, suite_dir))
 
     (args.output_dir / "_order.txt").write_text("\n".join(suite_order), encoding="utf-8")
 

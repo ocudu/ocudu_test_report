@@ -572,7 +572,9 @@ def main():
             if nfailed or npassed == 0:
                 failed_features.append((fid, nfailed, npassed, nskipped))
         if failed_features:
-            print("\n| Feature | Failed | Passed | Skipped |")
+            print("")
+            print(f"# Failed Features for {args.release}")
+            print("| Feature | Failed | Passed | Skipped |")
             print("| --- | --- | --- | --- |")
             for fid, nfailed, npassed, nskipped in failed_features:
                 print(f"| {fid} | {nfailed} | {npassed} | {nskipped} |")
