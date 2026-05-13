@@ -354,6 +354,33 @@ _REPORT_JS = r"""
     });
   }
 
+  function updateStats() {
+    const seen = new Set();
+    let passed = 0, failed = 0, skipped = 0;
+    document.querySelectorAll('#feature-table .feature-row').forEach(row => {
+      if (row.hidden) return;
+      const exp = document.getElementById(row.dataset.expand);
+      if (!exp) return;
+      exp.querySelectorAll('.tc-row').forEach(tcRow => {
+        const nameEl = tcRow.querySelector('.tc-name');
+        if (!nameEl) return;
+        const id = nameEl.textContent.trim();
+        if (seen.has(id)) return;
+        seen.add(id);
+        const badge = tcRow.querySelector('.badge');
+        if (!badge) return;
+        const status = [...badge.classList].find(c => c !== 'badge');
+        if (status === 'passed') passed++;
+        else if (status === 'failed' || status === 'error') failed++;
+        else if (status === 'skipped') skipped++;
+      });
+    });
+    document.getElementById('stat-total').textContent   = failed + passed + skipped;
+    document.getElementById('stat-passed').textContent  = passed;
+    document.getElementById('stat-failed').textContent  = failed;
+    document.getElementById('stat-skipped').textContent = skipped;
+  }
+
   function applyFilters() {
     const sf = document.getElementById('filter-status').value;
     const rf = document.getElementById('filter-release').value;
@@ -372,6 +399,7 @@ _REPORT_JS = r"""
         vi++;
       }
     });
+    updateStats();
   }
 
   document.addEventListener('DOMContentLoaded', function () {
@@ -381,6 +409,7 @@ _REPORT_JS = r"""
     const getRows = () => [...tbody.querySelectorAll('.feature-row')];
 
     reorder(getRows().sort(defaultCompare));
+    updateStats();
 
     document.querySelectorAll('#feature-table thead th[data-col]').forEach(th => {
       th.addEventListener('click', () => {
@@ -410,16 +439,13 @@ _REPORT_JS = r"""
 # pylint: disable=too-many-locals
 def render_html(suites: list, features: Optional[dict] = None, favicon: str = "", link: str = "") -> str:
     """Render the full HTML report from a list of Suite objects."""
-    total = sum(s.total for s in suites)
-    passed_total = sum(s.passed for s in suites)
-    failed_total = sum(s.failed for s in suites)
-    skipped_total = sum(s.skipped for s in suites)
     duration_total = sum(s.duration for s in suites)
 
-    def stat(value, label, modifier=""):
+    def stat(label, modifier=""):
+        sid = modifier or "total"
         return (
             f'<div class="stat">'
-            f'<div class="stat-value {modifier}">{value}</div>'
+            f'<div class="stat-value {modifier}" id="stat-{sid}">0</div>'
             f'<div class="stat-label">{label}</div>'
             f"</div>"
         )
@@ -430,10 +456,10 @@ def render_html(suites: list, features: Optional[dict] = None, favicon: str = ""
         f'<div class="header-title"><h1>Test Report</h1>'
         f"<div>{_header_link_or_duration(link, duration_total)}</div>"
         f"</div>"
-        f'{stat(total, "Total")}'
-        f'{stat(passed_total, "Passed", "passed")}'
-        f'{stat(failed_total, "Failed", "failed")}'
-        f'{stat(skipped_total, "Skipped", "skipped")}'
+        f'{stat("Total")}'
+        f'{stat("Passed", "passed")}'
+        f'{stat("Failed", "failed")}'
+        f'{stat("Skipped", "skipped")}'
         f"</div>"
     )
 
