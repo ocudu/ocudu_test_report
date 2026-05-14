@@ -119,7 +119,9 @@ def _safe_name(name: str) -> str:
     return re.sub(r"[^\w\-.]", "_", name).strip("_. ")
 
 
-def _fetch_job(client: _Client, job_id: int, report_name: str, suite_dir: Path) -> list[tuple[str, Path]]:
+def _fetch_job(
+    client: _Client, job_id: int, report_name: str, suite_dir: Path, job_url: str = ""
+) -> list[tuple[str, Path]]:
     """Download artifacts for one job into suite_dir. report_name is used as the xunit-report suite label."""
     print(f"  job {job_id} ({report_name}) — downloading artifacts ...", end=" ", flush=True)
     try:
@@ -140,6 +142,8 @@ def _fetch_job(client: _Client, job_id: int, report_name: str, suite_dir: Path) 
         out_name = report_name if len(files) == 1 else f"{report_name} ({stem})"
         out_path = suite_dir / f"{_safe_name(report_name)}_{_safe_name(stem)}.xml"
         out_path.write_bytes(data)
+        if job_url:
+            out_path.with_name(out_path.stem + "_url.txt").write_text(job_url, encoding="utf-8")
         print(f"    saved {out_path}")
         saved.append((out_name, out_path))
 
@@ -164,7 +168,7 @@ def _fetch_suite(client: _Client, name: str, ref: _ParsedURL, suite_dir: Path) -
 
     if kind == "job":
         print(f"'{name}' — job {id_}")
-        return _fetch_job(client, id_, name, suite_dir)
+        return _fetch_job(client, id_, name, suite_dir, ref.url)
 
     print(f"'{name}' — pipeline {id_}")
     try:
@@ -175,7 +179,7 @@ def _fetch_suite(client: _Client, name: str, ref: _ParsedURL, suite_dir: Path) -
     print(f"  {len(jobs)} jobs in pipeline")
     saved = []
     for job in jobs:
-        saved.extend(_fetch_job(client, job["id"], job["name"], suite_dir))
+        saved.extend(_fetch_job(client, job["id"], job["name"], suite_dir, job.get("web_url", "")))
     return saved
 
 

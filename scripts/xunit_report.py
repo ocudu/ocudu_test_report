@@ -72,6 +72,7 @@ class TestCase:  # pylint: disable=too-many-instance-attributes
     system_out: str = ""
     system_err: str = ""
     labels: list[str] = field(default_factory=list)
+    url: str = ""
 
 
 @dataclass
@@ -480,9 +481,9 @@ def render_html(suites: list, features: Optional[dict] = None, favicon: str = ""
             icon = _FEATURE_STATUS_ICONS[fstatus]
             badge = f'<span class="badge {fstatus}">{icon} {fstatus}</span>'
 
-            tc_with_url = [(tc, url) for _sname, (url, tcs) in fg.suites.items() for tc in tcs]
-            tc_with_url.sort(key=lambda x: (_TC_STATUS_SORT.get(x[0].status, 99), x[0].classname, x[0].name))
-            expanded = "".join(_render_testcase(tc, j, url) for j, (tc, url) in enumerate(tc_with_url))
+            all_tcs = [tc for (_, tcs) in fg.suites.values() for tc in tcs]
+            all_tcs.sort(key=lambda tc: (_TC_STATUS_SORT.get(tc.status, 99), tc.classname, tc.name))
+            expanded = "".join(_render_testcase(tc, j, tc.url) for j, tc in enumerate(all_tcs))
 
             expand_id = f"exp{i}"
             failed_cls = " num-failed" if nfailed else ""
@@ -590,7 +591,11 @@ def parse_dir(root: Path) -> list:
         url = url_file.read_text(encoding="utf-8").strip() if url_file.exists() else ""
         suite = Suite(name=name, url=url)
         for xml_path in sorted(subdir.glob("*.xml")):
+            job_url_file = xml_path.with_name(xml_path.stem + "_url.txt")
+            job_url = job_url_file.read_text(encoding="utf-8").strip() if job_url_file.exists() else url
             child = parse_xml(name, xml_path)
+            for tc in child.testcases:
+                tc.url = job_url
             suite.testcases.extend(child.testcases)
         if suite.testcases:
             suites.append(suite)
@@ -623,6 +628,7 @@ def main():
         features.update(_parse_features(yaml.safe_load(f)))
 
     output = Path(args.output)
+    output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(
         render_html(suites, features=features, favicon=args.favicon, link=args.link),
         encoding="utf-8",
