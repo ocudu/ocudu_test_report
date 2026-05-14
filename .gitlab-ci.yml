@@ -119,7 +119,6 @@ generate-report:
   rules:
     - if: $ON_WEB
     - if: $ON_API
-    - if: $CI_PIPELINE_SCHEDULE_DESCRIPTION =~ /report/
   variables:
     SUITE_1: "$[[ inputs.suite_1 ]]"
     SUITE_2: "$[[ inputs.suite_2 ]]"
@@ -130,6 +129,7 @@ generate-report:
     SUITE_7: "$[[ inputs.suite_7 ]]"
     SUITE_8: "$[[ inputs.suite_8 ]]"
     REPORT_LINK: "$[[ inputs.report_link ]]"
+    OUTPUT: scripts/report.html
   script:
     - cd scripts
     - pip install -r requirements.txt
@@ -139,8 +139,8 @@ generate-report:
         [ -n "${s// }" ] && SUITE_ARGS+=(--suite "$s")
       done
     - python3 gitlab_fetch.py "${SUITE_ARGS[@]}" -o artifacts/
-    - python3 xunit_report.py --dir artifacts/ --link "$REPORT_LINK" -o report.html
-    # Report link
+    - python3 xunit_report.py --dir artifacts/ --link "$REPORT_LINK" -o ${CI_PROJECT_DIR}/${OUTPUT}
+  after_script:
     - |
       echo "*******************************************************************************************************************************"
       echo "Link ---> https://${CI_PROJECT_NAMESPACE_SLUG}.${CI_PAGES_DOMAIN}/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/scripts/report.html"
@@ -150,6 +150,25 @@ generate-report:
       - scripts/report.html
     expose_as: "Test Report"
     when: always
+
+pages:
+  extends: generate-report
+  stage: build
+  environment:
+    name: pages
+    url: $CI_PAGES_URL
+  rules:
+    - if: $CI_PIPELINE_SCHEDULE_DESCRIPTION =~ /report/
+  variables:
+    OUTPUT: public/index.html
+  artifacts:
+    paths:
+      - public
+  after_script:
+    - |
+      echo "*******************************************************************************************************************************"
+      echo "Deployed to Pages: ${CI_PAGES_URL}"
+      echo "*******************************************************************************************************************************"
 
 build-feature-list:
   stage: build
