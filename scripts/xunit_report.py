@@ -382,13 +382,29 @@ _REPORT_JS = r"""
     document.getElementById('stat-skipped').textContent = skipped;
   }
 
+  function msGetSelected(wrapId) {
+    const boxes = [...document.querySelectorAll(`#${wrapId} .ms-panel input`)];
+    const checked = boxes.filter(b => b.checked).map(b => b.value);
+    return checked.length === boxes.length ? null : new Set(checked);
+  }
+
+  function msUpdateLabel(wrapId) {
+    const boxes = [...document.querySelectorAll(`#${wrapId} .ms-panel input`)];
+    const checked = boxes.filter(b => b.checked);
+    const label = document.querySelector(`#${wrapId} .ms-label`);
+    if (!label) return;
+    if (checked.length === 0 || checked.length === boxes.length) label.textContent = 'All';
+    else if (checked.length === 1) label.textContent = checked[0].value;
+    else label.textContent = `${checked.length} selected`;
+  }
+
   function applyFilters() {
-    const sf = document.getElementById('filter-status').value;
-    const rf = document.getElementById('filter-release').value;
+    const sf = msGetSelected('ms-status');
+    const rf = msGetSelected('ms-release');
     let vi = 0;
     document.querySelectorAll('#feature-table .feature-row').forEach(row => {
-      const ok = (!sf || row.dataset.status === sf)
-               && (!rf || row.dataset.release === rf);
+      const ok = (!sf || sf.has(row.dataset.status))
+               && (!rf || rf.has(row.dataset.release));
       row.hidden = !ok;
       const exp = document.getElementById(row.dataset.expand);
       if (!ok) {
@@ -421,8 +437,35 @@ _REPORT_JS = r"""
       });
     });
 
-    document.getElementById('filter-status').addEventListener('change', applyFilters);
-    document.getElementById('filter-release').addEventListener('change', applyFilters);
+    ['ms-status', 'ms-release'].forEach(id => {
+      const wrap = document.getElementById(id);
+      if (!wrap) return;
+      const btn = wrap.querySelector('.ms-btn');
+      const panel = wrap.querySelector('.ms-panel');
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const isOpen = !panel.hidden;
+        document.querySelectorAll('.ms-panel').forEach(p => p.hidden = true);
+        document.querySelectorAll('.ms-wrap').forEach(w => w.classList.remove('open'));
+        if (!isOpen) { panel.hidden = false; wrap.classList.add('open'); }
+      });
+      panel.addEventListener('click', e => e.stopPropagation());
+      wrap.querySelectorAll('.ms-action-btn').forEach(ab => {
+        ab.addEventListener('click', () => {
+          const all = ab.dataset.action === 'all';
+          wrap.querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = all);
+          msUpdateLabel(id); applyFilters();
+        });
+      });
+      wrap.querySelectorAll('input[type=checkbox]').forEach(cb => {
+        cb.addEventListener('change', () => { msUpdateLabel(id); applyFilters(); });
+      });
+    });
+
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.ms-panel').forEach(p => p.hidden = true);
+      document.querySelectorAll('.ms-wrap').forEach(w => w.classList.remove('open'));
+    });
 
     tbody.addEventListener('click', e => {
       const row = e.target.closest('.feature-row');
@@ -468,6 +511,17 @@ def render_html(suites: list, features: Optional[dict] = None, favicon: str = ""
         grouped = _group_by_features(suites, features)
 
         all_releases = sorted({features[fid].release for fid in grouped if fid in features and features[fid].release})
+        _ms_actions = (
+            '<div class="ms-actions">'
+            '<button type="button" class="ms-action-btn" data-action="all">All</button>'
+            '<button type="button" class="ms-action-btn" data-action="none">None</button>'
+            "</div>"
+        )
+        release_checkboxes = _ms_actions + "".join(
+            f'<label class="ms-item"><input type="checkbox" value="{html.escape(r, quote=True)}" checked>'
+            f"<span>{html.escape(r)}</span></label>"
+            for r in all_releases
+        )
 
         rows_parts = []
         for i, (fid, fg) in enumerate(sorted(grouped.items())):
@@ -514,21 +568,21 @@ def render_html(suites: list, features: Optional[dict] = None, favicon: str = ""
 
         rows_html = "".join(rows_parts)
 
-        release_options = '<option value="">All releases</option>' + "".join(
-            f'<option value="{html.escape(r, quote=True)}">{html.escape(r)}</option>' for r in all_releases
-        )
-
         body = (
             f'<div class="controls">'
-            f"<label>Status"
-            f'<select id="filter-status">'
-            f'<option value="">All</option>'
-            f'<option value="failed">Failed</option>'
-            f'<option value="passed">Passed</option>'
-            f'<option value="skipped">Skipped</option>'
-            f'<option value="untested">Untested</option>'
-            f"</select></label>"
-            f'<label>Release <select id="filter-release">{release_options}</select></label>'
+            f'<div class="ms-wrap" id="ms-status">'
+            f'<button type="button" class="ms-btn">Status: <span class="ms-label">All</span></button>'
+            f'<div class="ms-panel" hidden>'
+            f"{_ms_actions}"
+            f'<label class="ms-item"><input type="checkbox" value="failed" checked><span>Failed</span></label>'
+            f'<label class="ms-item"><input type="checkbox" value="passed" checked><span>Passed</span></label>'
+            f'<label class="ms-item"><input type="checkbox" value="skipped" checked><span>Skipped</span></label>'
+            f'<label class="ms-item"><input type="checkbox" value="untested" checked><span>Untested</span></label>'
+            f"</div></div>"
+            f'<div class="ms-wrap" id="ms-release">'
+            f'<button type="button" class="ms-btn">Release: <span class="ms-label">All</span></button>'
+            f'<div class="ms-panel" hidden>{release_checkboxes}</div>'
+            f"</div>"
             f"</div>"
             f'<div class="table-wrap">'
             f'<table class="feature-table" id="feature-table">'
