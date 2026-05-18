@@ -35,8 +35,6 @@ except ImportError:
 
 _ANSI_CONVERTER = Ansi2HTMLConverter(inline=True, escaped=False)
 CAPTURE_HEADER_RE = re.compile(r"^-+\s+Captured \w+\s+-+$", re.MULTILINE)
-OTHER_CATEGORY = "others"
-OTHER_CATEGORY_DESCRIPTION = "Tests without another classification"
 
 
 class Status(Enum):
@@ -273,25 +271,24 @@ def _parse_features(raw: dict) -> dict[str, FeatureDef]:
 
 
 def _group_by_features(suites: list, features: dict[str, FeatureDef]) -> dict[str, FeatureGroup]:
-    """Return {display_name: FeatureGroup}, tests with no matching label go under Others.
+    """Return {display_name: FeatureGroup}.
 
     All defined features are always included (untested ones show with zero counts).
-    The Others bucket is included only when it has at least one test.
+    Tests with no matching feature label are silently dropped.
     """
     alias_map = {alias: name for name, fd in features.items() for alias in fd.labels}
 
     grouped: dict[str, FeatureGroup] = {name: FeatureGroup(description=fd.description) for name, fd in features.items()}
-    grouped[OTHER_CATEGORY] = FeatureGroup(description=OTHER_CATEGORY_DESCRIPTION)
 
     for suite in suites:
         for tc in suite.testcases:
             matched = list(dict.fromkeys(alias_map[lbl] for lbl in tc.labels if lbl in alias_map))
-            for fid in matched or [OTHER_CATEGORY]:
+            for fid in matched:
                 if suite.name not in grouped[fid].suites:
                     grouped[fid].suites[suite.name] = (suite.url, [])
                 grouped[fid].suites[suite.name][1].append(tc)
 
-    return {fid: fg for fid, fg in grouped.items() if fid != OTHER_CATEGORY or fg.suites}
+    return grouped
 
 
 def _header_link_or_duration(link: str, duration: float) -> str:
