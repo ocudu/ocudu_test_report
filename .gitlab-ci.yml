@@ -11,10 +11,14 @@ spec:
       type: string
       default: dev
       description: "OCUDU reference branch or tag."
+    suite_0:
+      type: string
+      default: ""
+      description: "Suite 0 — NAME=URL (e.g. E2E=https://gitlab.com/org/proj/-/pipelines/123). Required."
     suite_1:
       type: string
       default: ""
-      description: "Suite 1 — NAME=URL (e.g. E2E=https://gitlab.com/org/proj/-/pipelines/123). Required."
+      description: "Suite 1 — NAME=URL. Optional."
     suite_2:
       type: string
       default: ""
@@ -43,6 +47,10 @@ spec:
       type: string
       default: ""
       description: "Suite 7 — NAME=URL. Optional."
+    suite_9:
+      type: string
+      default: ""
+      description: "Suite 9 — NAME=URL. Optional."
     report_link:
       type: string
       default: ""
@@ -120,6 +128,7 @@ generate-report:
     - if: $ON_WEB
     - if: $ON_API
   variables:
+    SUITE_0: "$[[ inputs.suite_0 ]]"
     SUITE_1: "$[[ inputs.suite_1 ]]"
     SUITE_2: "$[[ inputs.suite_2 ]]"
     SUITE_3: "$[[ inputs.suite_3 ]]"
@@ -128,14 +137,15 @@ generate-report:
     SUITE_6: "$[[ inputs.suite_6 ]]"
     SUITE_7: "$[[ inputs.suite_7 ]]"
     SUITE_8: "$[[ inputs.suite_8 ]]"
+    SUITE_9: "$[[ inputs.suite_9 ]]"
     REPORT_LINK: "$[[ inputs.report_link ]]"
-    OUTPUT: scripts/report.html
+    OUTPUT: public
   script:
     - cd scripts
     - pip install -r requirements.txt
     - |
       SUITE_ARGS=()
-      for s in "$SUITE_1" "$SUITE_2" "$SUITE_3" "$SUITE_4" "$SUITE_5" "$SUITE_6" "$SUITE_7" "$SUITE_8"; do
+      for s in "$SUITE_0" "$SUITE_1" "$SUITE_2" "$SUITE_3" "$SUITE_4" "$SUITE_5" "$SUITE_6" "$SUITE_7" "$SUITE_8" "$SUITE_9"; do
         [ -n "${s// }" ] && SUITE_ARGS+=(--suite "$s")
       done
     - python3 gitlab_fetch.py "${SUITE_ARGS[@]}" -o artifacts/
@@ -143,11 +153,11 @@ generate-report:
   after_script:
     - |
       echo "*******************************************************************************************************************************"
-      echo "Link ---> https://${CI_PROJECT_NAMESPACE_SLUG}.${CI_PAGES_DOMAIN}/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/scripts/report.html"
+      echo "Link ---> https://${CI_PROJECT_NAMESPACE_SLUG}.${CI_PAGES_DOMAIN}/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public/index.html"
       echo "*******************************************************************************************************************************"
   artifacts:
     paths:
-      - scripts/report.html
+      - public/index.html
     expose_as: "Test Report"
     when: always
 
@@ -159,8 +169,6 @@ pages:
     url: $CI_PAGES_URL
   rules:
     - if: $CI_PIPELINE_SCHEDULE_DESCRIPTION =~ /report/
-  variables:
-    OUTPUT: public/index.html
   artifacts:
     paths:
       - public

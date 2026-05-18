@@ -7,7 +7,7 @@
 XUnit HTML reporter — aggregates multiple XUnit XML files into a single HTML report.
 
 Usage:
-    python xunit_report.py --dir FOLDER -o report.html
+    python xunit_report.py --dir FOLDER -o ./report/
 """
 
 import argparse
@@ -18,7 +18,7 @@ import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Union
 
 try:
     import yaml
@@ -47,7 +47,56 @@ class Status(Enum):
 
 
 _TC_STATUS_SORT = {Status.SKIPPED: 0, Status.FAILED: 1, Status.ERROR: 1, Status.PASSED: 2}
-_FEATURE_STATUS_ICONS = {"passed": "✓", "failed": "✗", "skipped": "⊘", "untested": "—"}
+_STATUS_ICONS = {"passed": "✓", "failed": "✗", "skipped": "⊘", "untested": "—"}
+
+_MS_ACTIONS = (
+    '<div class="ms-actions">'
+    '<button type="button" class="ms-action-btn" data-action="all">All</button>'
+    '<button type="button" class="ms-action-btn" data-action="none">None</button>'
+    "</div>"
+)
+
+_STATUS_CHECKBOXES = (
+    _MS_ACTIONS
+    + '<label class="ms-item"><input type="checkbox" value="failed" checked><span>Failed</span></label>'
+    + '<label class="ms-item"><input type="checkbox" value="passed" checked><span>Passed</span></label>'
+    + '<label class="ms-item"><input type="checkbox" value="skipped" checked><span>Skipped</span></label>'
+    + '<label class="ms-item"><input type="checkbox" value="untested" checked><span>Untested</span></label>'
+)
+
+_GITLAB_LOGO = "https://about.gitlab.com/images/press/gitlab-logo-500-rgb.svg"
+_SCRIPTS_DIR = Path(__file__).parent
+
+
+def _read_asset(name: str) -> str:
+    return (_SCRIPTS_DIR / name).read_text(encoding="utf-8")
+
+
+def _page_nav(active: str, show: bool) -> str:
+    """Render the Features / All Tests tab strip above the report header."""
+    if not show:
+        return ""
+
+    def tab(label: str, href: str, is_active: bool) -> str:
+        cls = "page-tab active" if is_active else "page-tab"
+        return f'<a class="{cls}" href="{html.escape(href)}">{label}</a>'
+
+    return (
+        '<nav class="page-nav">'
+        + tab("Features", "index.html", active == "features")
+        + tab("All Tests", "all.html", active == "all")
+        + "</nav>"
+    )
+
+
+def _stat_html(label: str, modifier: str = "") -> str:
+    sid = modifier or "total"
+    return (
+        f'<div class="stat">'
+        f'<div class="stat-value {modifier}" id="stat-{sid}">0</div>'
+        f'<div class="stat-label">{label}</div>'
+        f"</div>"
+    )
 
 
 def _clean_output(text: str) -> str:
@@ -174,37 +223,31 @@ def _fmt_duration(seconds: float) -> str:
     return f"{int(d)}d {int(h)}h"
 
 
-_ICONS = {
-    Status.PASSED: "✓",
-    Status.FAILED: "✗",
-    Status.ERROR: "!",
-    Status.SKIPPED: "⊘",
-}
+def _status_badge(status: Union[Status, str]) -> str:
+    key = status.value if isinstance(status, Status) else status
+    return f'<span class="badge {key}">{_STATUS_ICONS.get(key, "?")} {key}</span>'
 
 
-def _status_badge(status: Status) -> str:
-    icon = _ICONS.get(status, "?")
-    return f'<span class="badge {status.value}">{icon} {status.value}</span>'
+def _gitlab_link(url: str, title: str = "GitLab") -> str:
+    if not url:
+        return ""
+    return (
+        f'<a class="tc-gitlab-link" href="{html.escape(url)}" target="_blank"'
+        f' title="{html.escape(title)}" onclick="event.stopPropagation()">'
+        f'<img src="{_GITLAB_LOGO}" alt="GitLab" height="20"></a>'
+    )
 
 
-def _render_testcase(tc: TestCase, idx: int, url: str = "") -> str:
+def _render_testcase(tc: TestCase, idx: int) -> str:
     parity = "even" if idx % 2 == 0 else "odd"
     label = f"{html.escape(tc.classname)}." if tc.classname else ""
-
-    gitlab_html = ""
-    if url:
-        gitlab_html = (
-            f'<a class="tc-gitlab-link" href="{html.escape(url)}" target="_blank"'
-            f' title="GitLab pipeline" onclick="event.stopPropagation()">'
-            f'<img src="https://about.gitlab.com/images/press/gitlab-logo-500-rgb.svg"'
-            f' alt="GitLab" height="20"></a>'
-        )
+    display_status = Status.FAILED if tc.status == Status.ERROR else tc.status
 
     header = (
-        f"{_status_badge(tc.status)}"
+        f"{_status_badge(display_status)}"
         f'<span class="tc-name">{label}<b>{html.escape(tc.name)}</b></span>'
+        f"{_gitlab_link(tc.url, 'GitLab pipeline')}"
         f'<span class="tc-duration">{_fmt_duration(tc.duration)}</span>'
-        f"{gitlab_html}"
     )
 
     labels_html = ""
@@ -228,13 +271,13 @@ def _render_testcase(tc: TestCase, idx: int, url: str = "") -> str:
 
     if detail_body:
         return (
-            f'<details class="tc-detail {parity}">'
+            f'<details class="tc-detail {parity}" data-status="{display_status.value}">'
             f'<summary class="tc-row {parity}">{header}</summary>'
             f'<div class="tc-detail-body">{detail_body}</div>'
             f"</details>"
         )
 
-    return f'<div class="tc-row {parity}">{header}</div>'
+    return f'<div class="tc-row {parity}" data-status="{display_status.value}">{header}</div>'
 
 
 @dataclass
@@ -277,7 +320,6 @@ def _group_by_features(suites: list, features: dict[str, FeatureDef]) -> dict[st
     Tests with no matching feature label are silently dropped.
     """
     alias_map = {alias: name for name, fd in features.items() for alias in fd.labels}
-
     grouped: dict[str, FeatureGroup] = {name: FeatureGroup(description=fd.description) for name, fd in features.items()}
 
     for suite in suites:
@@ -291,10 +333,12 @@ def _group_by_features(suites: list, features: dict[str, FeatureDef]) -> dict[st
     return grouped
 
 
-def _header_link_or_duration(link: str, duration: float) -> str:
-    if link:
-        return f"<a class='header-link' href='{html.escape(link)}'>{link.split('/')[-1]}</a>"
-    return f"⏱ {_fmt_duration(duration)}"
+def _header_subtitle(link: str, duration: float) -> str:
+    duration_html = f"⏱ {_fmt_duration(duration)}"
+    if not link:
+        return duration_html
+    link_html = f"<a class='header-link' href='{html.escape(link)}'>{link.split('/')[-1]}</a>"
+    return f"{link_html} · {duration_html}"
 
 
 def _feature_status(failed: int, passed: int, skipped: int) -> str:
@@ -307,214 +351,60 @@ def _feature_status(failed: int, passed: int, skipped: int) -> str:
     return "untested"
 
 
-_REPORT_JS = r"""
-(function () {
-  const STATUS_ORDER = { untested: 0, skipped: 1, failed: 2, passed: 3 };
-  let sortCol = null, sortDir = 1;
+def _report_header(title: str, link: str, duration: float) -> str:
+    return (
+        '<div class="report-header">'
+        '<div class="header-logo"></div>'
+        f'<div class="header-title"><h1>{title}</h1>'
+        f"<div>{_header_subtitle(link, duration)}</div>"
+        "</div>"
+        f'{_stat_html("Total")}'
+        f'{_stat_html("Failed", "failed")}'
+        f'{_stat_html("Passed", "passed")}'
+        f'{_stat_html("Skipped", "skipped")}'
+        "</div>"
+    )
 
-  function cmp(a, b) {
-    if (typeof a === 'number' && typeof b === 'number') return a - b;
-    return String(a).localeCompare(String(b));
-  }
 
-  function cellValue(row, col) {
-    switch (col) {
-      case 'status':  return STATUS_ORDER[row.dataset.status] ?? 99;
-      case 'fid':     return row.dataset.fid || '';
-      case 'desc':    return row.cells[2].textContent.trim();
-      case 'release': return row.dataset.release || '';
-      case 'failed':  return +row.dataset.failed;
-      case 'passed':  return +row.dataset.passed;
-      case 'skipped': return +row.dataset.skipped;
-      default:        return '';
-    }
-  }
-
-  function defaultCompare(a, b) {
-    return cmp(a.dataset.release || '', b.dataset.release || '')
-        || cmp(STATUS_ORDER[a.dataset.status] ?? 99, STATUS_ORDER[b.dataset.status] ?? 99)
-        || cmp(a.dataset.fid || '', b.dataset.fid || '');
-  }
-
-  function reorder(rows) {
-    const tbody = document.querySelector('#feature-table tbody');
-    rows.forEach((row, i) => {
-      row.classList.toggle('even', i % 2 === 0);
-      row.classList.toggle('odd',  i % 2 !== 0);
-      tbody.appendChild(row);
-      const exp = document.getElementById(row.dataset.expand);
-      if (exp) tbody.appendChild(exp);
-    });
-    document.querySelectorAll('#feature-table thead th').forEach(th => {
-      th.classList.remove('sort-asc', 'sort-desc');
-      if (sortCol && th.dataset.col === sortCol)
-        th.classList.add(sortDir === 1 ? 'sort-asc' : 'sort-desc');
-    });
-  }
-
-  function updateStats() {
-    const seen = new Set();
-    let passed = 0, failed = 0, skipped = 0;
-    document.querySelectorAll('#feature-table .feature-row').forEach(row => {
-      if (row.hidden) return;
-      const exp = document.getElementById(row.dataset.expand);
-      if (!exp) return;
-      exp.querySelectorAll('.tc-row').forEach(tcRow => {
-        const nameEl = tcRow.querySelector('.tc-name');
-        if (!nameEl) return;
-        const id = nameEl.textContent.trim();
-        if (seen.has(id)) return;
-        seen.add(id);
-        const badge = tcRow.querySelector('.badge');
-        if (!badge) return;
-        const status = [...badge.classList].find(c => c !== 'badge');
-        if (status === 'passed') passed++;
-        else if (status === 'failed' || status === 'error') failed++;
-        else if (status === 'skipped') skipped++;
-      });
-    });
-    document.getElementById('stat-total').textContent   = failed + passed + skipped;
-    document.getElementById('stat-passed').textContent  = passed;
-    document.getElementById('stat-failed').textContent  = failed;
-    document.getElementById('stat-skipped').textContent = skipped;
-  }
-
-  function msGetSelected(wrapId) {
-    const boxes = [...document.querySelectorAll(`#${wrapId} .ms-panel input`)];
-    const checked = boxes.filter(b => b.checked).map(b => b.value);
-    return checked.length === boxes.length ? null : new Set(checked);
-  }
-
-  function msUpdateLabel(wrapId) {
-    const boxes = [...document.querySelectorAll(`#${wrapId} .ms-panel input`)];
-    const checked = boxes.filter(b => b.checked);
-    const label = document.querySelector(`#${wrapId} .ms-label`);
-    if (!label) return;
-    if (checked.length === 0 || checked.length === boxes.length) label.textContent = 'All';
-    else if (checked.length === 1) label.textContent = checked[0].value;
-    else label.textContent = `${checked.length} selected`;
-  }
-
-  function applyFilters() {
-    const sf = msGetSelected('ms-status');
-    const rf = msGetSelected('ms-release');
-    let vi = 0;
-    document.querySelectorAll('#feature-table .feature-row').forEach(row => {
-      const ok = (!sf || sf.has(row.dataset.status))
-               && (!rf || rf.has(row.dataset.release));
-      row.hidden = !ok;
-      const exp = document.getElementById(row.dataset.expand);
-      if (!ok) {
-        if (exp) exp.hidden = true;
-        row.classList.remove('open');
-      } else {
-        row.classList.toggle('even', vi % 2 === 0);
-        row.classList.toggle('odd',  vi % 2 !== 0);
-        vi++;
-      }
-    });
-    updateStats();
-  }
-
-  document.addEventListener('DOMContentLoaded', function () {
-    const tbody = document.querySelector('#feature-table tbody');
-    if (!tbody) return;
-
-    const getRows = () => [...tbody.querySelectorAll('.feature-row')];
-
-    reorder(getRows().sort(defaultCompare));
-    updateStats();
-
-    document.querySelectorAll('#feature-table thead th[data-col]').forEach(th => {
-      th.addEventListener('click', () => {
-        const col = th.dataset.col;
-        if (sortCol === col) sortDir *= -1;
-        else { sortCol = col; sortDir = 1; }
-        reorder(getRows().sort((a, b) => cmp(cellValue(a, col), cellValue(b, col)) * sortDir));
-      });
-    });
-
-    ['ms-status', 'ms-release'].forEach(id => {
-      const wrap = document.getElementById(id);
-      if (!wrap) return;
-      const btn = wrap.querySelector('.ms-btn');
-      const panel = wrap.querySelector('.ms-panel');
-      btn.addEventListener('click', e => {
-        e.stopPropagation();
-        const isOpen = !panel.hidden;
-        document.querySelectorAll('.ms-panel').forEach(p => p.hidden = true);
-        document.querySelectorAll('.ms-wrap').forEach(w => w.classList.remove('open'));
-        if (!isOpen) { panel.hidden = false; wrap.classList.add('open'); }
-      });
-      panel.addEventListener('click', e => e.stopPropagation());
-      wrap.querySelectorAll('.ms-action-btn').forEach(ab => {
-        ab.addEventListener('click', () => {
-          const all = ab.dataset.action === 'all';
-          wrap.querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = all);
-          msUpdateLabel(id); applyFilters();
-        });
-      });
-      wrap.querySelectorAll('input[type=checkbox]').forEach(cb => {
-        cb.addEventListener('change', () => { msUpdateLabel(id); applyFilters(); });
-      });
-    });
-
-    document.addEventListener('click', () => {
-      document.querySelectorAll('.ms-panel').forEach(p => p.hidden = true);
-      document.querySelectorAll('.ms-wrap').forEach(w => w.classList.remove('open'));
-    });
-
-    tbody.addEventListener('click', e => {
-      const row = e.target.closest('.feature-row');
-      if (!row) return;
-      const exp = document.getElementById(row.dataset.expand);
-      if (!exp) return;
-      exp.hidden = !exp.hidden;
-      row.classList.toggle('open');
-    });
-  });
-})();
-"""
+def _html_doc(title: str, favicon: str, preamble: str, body: str, js_name: str) -> str:
+    favicon_tag = f"<link rel='icon' href='{html.escape(favicon)}'>" if favicon else ""
+    css = _read_asset("style.css")
+    js = _read_asset(js_name)
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{title}</title>
+{favicon_tag}
+<style>
+{css}
+</style>
+</head>
+<body>
+{preamble}
+{body}
+<script>{js}</script>
+</body>
+</html>"""
 
 
 # pylint: disable=too-many-locals
-def render_html(suites: list, features: Optional[dict] = None, favicon: str = "", link: str = "") -> str:
+def render_html(
+    suites: list,
+    features: Optional[dict] = None,
+    favicon: str = "",
+    link: str = "",
+    nav_link: str = "",
+) -> str:
     """Render the full HTML report from a list of Suite objects."""
     duration_total = sum(s.duration for s in suites)
-
-    def stat(label, modifier=""):
-        sid = modifier or "total"
-        return (
-            f'<div class="stat">'
-            f'<div class="stat-value {modifier}" id="stat-{sid}">0</div>'
-            f'<div class="stat-label">{label}</div>'
-            f"</div>"
-        )
-
-    header = (
-        f'<div class="report-header">'
-        f'<div class="header-logo"></div>'
-        f'<div class="header-title"><h1>Test Report</h1>'
-        f"<div>{_header_link_or_duration(link, duration_total)}</div>"
-        f"</div>"
-        f'{stat("Total")}'
-        f'{stat("Passed", "passed")}'
-        f'{stat("Failed", "failed")}'
-        f'{stat("Skipped", "skipped")}'
-        f"</div>"
-    )
 
     if features:
         grouped = _group_by_features(suites, features)
 
         all_releases = sorted({features[fid].release for fid in grouped if fid in features and features[fid].release})
-        _ms_actions = (
-            '<div class="ms-actions">'
-            '<button type="button" class="ms-action-btn" data-action="all">All</button>'
-            '<button type="button" class="ms-action-btn" data-action="none">None</button>'
-            "</div>"
-        )
-        release_checkboxes = _ms_actions + "".join(
+        release_checkboxes = _MS_ACTIONS + "".join(
             f'<label class="ms-item"><input type="checkbox" value="{html.escape(r, quote=True)}" checked>'
             f"<span>{html.escape(r)}</span></label>"
             for r in all_releases
@@ -522,19 +412,16 @@ def render_html(suites: list, features: Optional[dict] = None, favicon: str = ""
 
         rows_parts = []
         for i, (fid, fg) in enumerate(sorted(grouped.items())):
-            all_tcs = [tc for _url, tcs in fg.suites.values() for tc in tcs]
+            all_tcs = [tc for _, tcs in fg.suites.values() for tc in tcs]
             nfailed = sum(1 for tc in all_tcs if tc.status in (Status.FAILED, Status.ERROR))
             npassed = sum(1 for tc in all_tcs if tc.status == Status.PASSED)
             nskipped = sum(1 for tc in all_tcs if tc.status == Status.SKIPPED)
             fstatus = _feature_status(nfailed, npassed, nskipped)
             feat_release = features[fid].release if fid in features else "unspecified"
 
-            icon = _FEATURE_STATUS_ICONS[fstatus]
-            badge = f'<span class="badge {fstatus}">{icon} {fstatus}</span>'
-
-            all_tcs = [tc for (_, tcs) in fg.suites.values() for tc in tcs]
+            badge = _status_badge(fstatus)
             all_tcs.sort(key=lambda tc: (_TC_STATUS_SORT.get(tc.status, 99), tc.classname, tc.name))
-            expanded = "".join(_render_testcase(tc, j, tc.url) for j, tc in enumerate(all_tcs))
+            expanded = "".join(_render_testcase(tc, j) for j, tc in enumerate(all_tcs))
 
             expand_id = f"exp{i}"
             failed_cls = " num-failed" if nfailed else ""
@@ -569,13 +456,8 @@ def render_html(suites: list, features: Optional[dict] = None, favicon: str = ""
             f'<div class="controls">'
             f'<div class="ms-wrap" id="ms-status">'
             f'<button type="button" class="ms-btn">Status: <span class="ms-label">All</span></button>'
-            f'<div class="ms-panel" hidden>'
-            f"{_ms_actions}"
-            f'<label class="ms-item"><input type="checkbox" value="failed" checked><span>Failed</span></label>'
-            f'<label class="ms-item"><input type="checkbox" value="passed" checked><span>Passed</span></label>'
-            f'<label class="ms-item"><input type="checkbox" value="skipped" checked><span>Skipped</span></label>'
-            f'<label class="ms-item"><input type="checkbox" value="untested" checked><span>Untested</span></label>'
-            f"</div></div>"
+            f'<div class="ms-panel" hidden>{_STATUS_CHECKBOXES}</div>'
+            f"</div>"
             f'<div class="ms-wrap" id="ms-release">'
             f'<button type="button" class="ms-btn">Release: <span class="ms-label">All</span></button>'
             f'<div class="ms-panel" hidden>{release_checkboxes}</div>'
@@ -588,9 +470,9 @@ def render_html(suites: list, features: Optional[dict] = None, favicon: str = ""
             f'<th data-col="fid">Feature ID</th>'
             f'<th data-col="desc">Description</th>'
             f'<th data-col="release">Release</th>'
-            f'<th data-col="failed" class="col-num">Failed</th>'
-            f'<th data-col="passed" class="col-num">Passed</th>'
-            f'<th data-col="skipped" class="col-num">Skipped</th>'
+            f'<th data-col="failed" class="col-num">F</th>'
+            f'<th data-col="passed" class="col-num">P</th>'
+            f'<th data-col="skipped" class="col-num">S</th>'
             f"</tr></thead>"
             f"<tbody>{rows_html}</tbody>"
             f"</table>"
@@ -599,26 +481,85 @@ def render_html(suites: list, features: Optional[dict] = None, favicon: str = ""
     else:
         body = "<p>No features defined.</p>"
 
-    favicon_tag = f"<link rel='icon' href='{html.escape(favicon)}'>" if favicon else ""
-    css = (Path(__file__).parent / "style.css").read_text(encoding="utf-8")
+    nav = _page_nav("features", bool(nav_link))
+    header = _report_header("Test Report", link, duration_total)
+    return _html_doc("Test Report", favicon, nav + header, body, "report.js")
 
-    return f"""<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Test Report</title>
-{favicon_tag}
-<style>
-{css}
-</style>
-</head>
-<body>
-{header}
-{body}
-<script>{_REPORT_JS}</script>
-</body>
-</html>"""
+
+def render_all_html(suites: list, favicon: str = "", nav_link: str = "", link: str = "") -> str:
+    """Render the all-tests HTML report: one accordion per suite, tests inside."""
+    duration_total = sum(s.duration for s in suites)
+
+    suite_checkboxes = _MS_ACTIONS + "".join(
+        f'<label class="ms-item">'
+        f'<input type="checkbox" value="{html.escape(s.name, quote=True)}" checked>'
+        f"<span>{html.escape(s.name)}</span></label>"
+        for s in suites
+    )
+
+    controls = (
+        f'<div class="controls">'
+        f'<div class="ms-wrap" id="ms-status">'
+        f'<button type="button" class="ms-btn">Status: <span class="ms-label">All</span></button>'
+        f'<div class="ms-panel" hidden>{_STATUS_CHECKBOXES}</div>'
+        f"</div>"
+        f'<div class="ms-wrap" id="ms-suite">'
+        f'<button type="button" class="ms-btn">Suite: <span class="ms-label">All</span></button>'
+        f'<div class="ms-panel" hidden>{suite_checkboxes}</div>'
+        f"</div>"
+        f"</div>"
+    )
+
+    rows_parts = []
+    for i, suite in enumerate(suites):
+        nfailed = suite.failed
+        npassed = suite.passed
+        nskipped = suite.skipped
+        fstatus = _feature_status(nfailed, npassed, nskipped)
+        badge = _status_badge(fstatus)
+
+        tcs = sorted(suite.testcases, key=lambda tc: (_TC_STATUS_SORT.get(tc.status, 99), tc.classname, tc.name))
+        expanded = "".join(_render_testcase(tc, j) for j, tc in enumerate(tcs))
+
+        expand_id = f"sexp{i}"
+        failed_cls = " num-failed" if nfailed else ""
+        passed_cls = " num-passed" if npassed else ""
+        skipped_cls = " num-skipped" if nskipped else ""
+
+        rows_parts.append(
+            f'<tr class="suite-row" data-suite="{html.escape(suite.name, quote=True)}" data-expand="{expand_id}">'
+            f'<td class="suite-name-cell">{badge}'
+            f'<span class="suite-name-text">{html.escape(suite.name)}</span>'
+            f"{_gitlab_link(suite.url)}</td>"
+            f'<td class="col-num{failed_cls}">{nfailed}</td>'
+            f'<td class="col-num{passed_cls}">{npassed}</td>'
+            f'<td class="col-num{skipped_cls}">{nskipped}</td>'
+            f"</tr>"
+            f'<tr class="expand-row" id="{expand_id}" hidden>'
+            f'<td colspan="4"><div class="expand-body">{expanded}</div></td>'
+            f"</tr>"
+        )
+
+    rows_html = "".join(rows_parts)
+
+    body = (
+        f"{controls}"
+        f'<div class="table-wrap">'
+        f'<table class="feature-table" id="suite-table">'
+        f"<thead><tr>"
+        f"<th>Suite</th>"
+        f'<th class="col-num">F</th>'
+        f'<th class="col-num">P</th>'
+        f'<th class="col-num">S</th>'
+        f"</tr></thead>"
+        f"<tbody>{rows_html}</tbody>"
+        f"</table>"
+        f"</div>"
+    )
+
+    nav = _page_nav("all", bool(nav_link))
+    header = _report_header("All Tests", link, duration_total)
+    return _html_doc("All Tests", favicon, nav + header, body, "all.js")
 
 
 def parse_dir(root: Path) -> list:
@@ -662,7 +603,13 @@ def main():
         required=True,
         help="Root artifacts folder: each subfolder becomes a suite (underscores→spaces)",
     )
-    parser.add_argument("-o", "--output", default="report.html", help="Output HTML file (default: report.html)")
+    parser.add_argument(
+        "-o",
+        "--output-dir",
+        type=Path,
+        default=Path("report"),
+        help="Output directory — writes index.html and all.html (default: ./report/)",
+    )
     parser.add_argument(
         "--favicon", default="http://www.google.com/s2/favicons?domain=ocudu.org", metavar="URL", help="Favicon URL"
     )
@@ -678,15 +625,22 @@ def main():
     with (Path(__file__).parent.parent / "features" / "features.yaml").open(encoding="utf-8") as f:
         features.update(_parse_features(yaml.safe_load(f)))
 
-    output = Path(args.output)
-    output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(
-        render_html(suites, features=features, favicon=args.favicon, link=args.link),
+    out_dir = args.output_dir
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    index = out_dir / "index.html"
+    all_html = out_dir / "all.html"
+
+    index.write_text(
+        render_html(suites, features=features, favicon=args.favicon, link=args.link, nav_link="all.html"),
         encoding="utf-8",
     )
-    total = sum(s.total for s in suites)
-    failed = sum(s.failed for s in suites)
-    print(f"Report written to {output}  ({total} tests, {failed} failed)")
+    all_html.write_text(
+        render_all_html(suites, favicon=args.favicon, nav_link="index.html", link=args.link),
+        encoding="utf-8",
+    )
+
+    print(f"index.html + all.html written to {out_dir}/")
 
 
 if __name__ == "__main__":

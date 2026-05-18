@@ -37,6 +37,7 @@ body {
   color: var(--text);
   padding: 32px 24px;
   line-height: 1.5;
+  scrollbar-gutter: stable;
 }
 
 /* ── Report header ─────────────────────────────────────────── */
@@ -81,6 +82,37 @@ body {
 }
 
 .header-link:hover { text-decoration: underline; }
+
+/* ── Page navigation tabs ──────────────────────────────────── */
+
+.page-nav {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.page-tab {
+  padding: 7px 22px;
+  border-radius: 20px;
+  font-size: 0.85em;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-muted);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  transition: color 0.12s, border-color 0.12s, background 0.12s;
+}
+
+.page-tab:hover {
+  color: var(--text);
+  border-color: var(--text-muted);
+}
+
+.page-tab.active {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(56, 189, 248, 0.08);
+}
 
 .stat {
   text-align: center;
@@ -257,6 +289,22 @@ body {
 
 .feature-table thead th.col-num { text-align: center; }
 
+/* ── Suite name cell (all.html) ────────────────────────────── */
+
+.suite-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+}
+
+.suite-name-text {
+  flex: 1;
+  font-weight: 700;
+  font-size: 0.9em;
+  color: #f1f5f9;
+}
+
 /* ── Feature rows ──────────────────────────────────────────── */
 
 .feature-row {
@@ -287,6 +335,11 @@ body {
 .feature-row .col-desc {
   font-size: 0.85em;
   color: var(--text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .feature-row .col-release {
@@ -295,17 +348,22 @@ body {
   color: var(--text-sub);
 }
 
-.feature-row .col-num {
+.feature-row .col-num,
+.suite-row .col-num {
   text-align: center;
   font-size: 0.88em;
   font-variant-numeric: tabular-nums;
   color: var(--text-dim);
-  min-width: 52px;
+  width: 1%;
+  white-space: nowrap;
 }
 
-.feature-row .col-num.num-failed  { color: var(--red);    font-weight: 600; }
-.feature-row .col-num.num-passed  { color: var(--green); }
-.feature-row .col-num.num-skipped { color: var(--orange); }
+.feature-row .col-num.num-failed,
+.suite-row   .col-num.num-failed  { color: var(--red);    font-weight: 600; }
+.feature-row .col-num.num-passed,
+.suite-row   .col-num.num-passed  { color: var(--green); }
+.feature-row .col-num.num-skipped,
+.suite-row   .col-num.num-skipped { color: var(--orange); }
 
 /* ── Expand row ────────────────────────────────────────────── */
 
@@ -333,7 +391,6 @@ body {
 
 .badge.passed   { background: #14532d; color: #bbf7d0; }
 .badge.failed   { background: #7f1d1d; color: #fecaca; }
-.badge.error    { background: #7c2d12; color: #fed7aa; }
 .badge.skipped  { background: #2d2008; color: #fbbf24; }
 .badge.untested { background: #1e293b; color: var(--text-dim); }
 
@@ -347,7 +404,7 @@ body {
 .tc-row {
   padding: 6px 14px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
 }
 
@@ -362,30 +419,32 @@ body {
   font-size: 0.88em;
   color: var(--text);
   min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  word-break: break-word;
 }
 
 .tc-row .badge {
   flex-shrink: 0;
   margin-right: 8px;
+  align-self: flex-start;
+  margin-top: 2px;
 }
 
 .tc-duration {
   color: var(--text-dim);
   font-size: 0.78em;
-  margin-right: 4px;
   white-space: nowrap;
+  flex-shrink: 0;
+  align-self: flex-start;
+  margin-top: 3px;
 }
 
 .tc-gitlab-link {
-  margin-left: 6px;
   text-decoration: none;
   opacity: 0.4;
   display: flex;
   align-items: center;
   flex-shrink: 0;
+  align-self: flex-start;
   transition: opacity 0.15s;
 }
 
@@ -468,6 +527,98 @@ body {
 details > summary::-webkit-details-marker { display: none; }
 details > summary::before { display: none; }
 
+div.tc-row::before {
+  content: '▷';
+  display: block;
+  font-size: 0.6em;
+  color: var(--text-dim);
+  flex-shrink: 0;
+  margin-right: 2px;
+}
+
+details.tc-detail > summary.tc-row::before {
+  content: '▶';
+  display: block;
+  font-size: 0.6em;
+  color: var(--text-dim);
+  flex-shrink: 0;
+  transition: transform 0.15s;
+  margin-right: 2px;
+}
+
+details.tc-detail[open] > summary.tc-row::before {
+  transform: rotate(90deg);
+}
+
+/* ── Mobile ─────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  body {
+    padding: 12px 8px;
+    font-size: 13px;
+  }
+
+  /* Compact header */
+  .report-header {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 12px;
+  }
+
+  .header-logo {
+    width: 70px;
+    height: 22px;
+  }
+
+  .header-title h1 {
+    font-size: 1rem;
+  }
+
+  .page-tab {
+    padding: 5px 12px;
+    font-size: 0.78em;
+  }
+
+  /* Tighter table cells */
+  .feature-table thead th,
+  .feature-row td,
+  .suite-row td {
+    padding: 7px 6px;
+  }
+
+  /* Horizontal scroll — show all columns, let the table scroll */
+  .table-wrap {
+    overflow-x: auto;
+  }
+
+  /* Fixed layout: table stays 560px wide regardless of expand content */
+  .feature-table {
+    table-layout: fixed;
+    min-width: 560px;
+  }
+
+  /* Narrow widths for F/P/S headers so the rest of the columns get more space */
+  .feature-table thead th.col-num {
+    width: 32px;
+  }
+
+  /* Expanded content scrolls within its own box instead of widening the table */
+  .expand-body {
+    overflow-x: auto;
+  }
+
+  /* Keep long test names wrapping instead of overflowing */
+  .tc-name {
+    overflow-wrap: anywhere;
+  }
+
+  /* Log output: horizontal scroll, preserve line structure */
+  .msg-failure, .system-out, .system-err {
+    overflow-x: auto;
+    white-space: pre;
+  }
+}
+
 /* ── Print / PDF ────────────────────────────────────────────── */
 
 @page { margin: 0; }
@@ -486,12 +637,6 @@ details > summary::before { display: none; }
 
   details { display: block !important; }
   details > summary { list-style: none; }
-
-  .tc-name {
-    white-space: normal;
-    word-break: break-word;
-    overflow: visible;
-  }
 
   .tc-row { flex-wrap: wrap; }
   .tc-gitlab-link { display: none; }
