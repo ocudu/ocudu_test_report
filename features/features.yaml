@@ -1842,7 +1842,7 @@ features:
     source: SRS defined
     scope: Unspecified
     description: '... shall support SCTP Multi-homing'
-    release: 26.04 (v1.0)
+    release: 26.10 (v2.1)
     primary_test_type: []
     comment: ''
   - id: CU-GEN-5
