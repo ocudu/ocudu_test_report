@@ -1366,7 +1366,7 @@ features:
     source: ATIS-MVP
     scope: CU/DU
     description: CU-CP shall support confidentiality, integrity, and replay protection using Datagram Transport Layer Security (DTLS) for the F1-C interface as specified in [O-RAN-8], clause 5.1.4.
-    release: 26.04.1 (v1.1)
+    release: 26.10 (v2.1)
     primary_test_type: []
     comment: ''
   - id: MVP-SEC-O-CU-02
@@ -1429,7 +1429,7 @@ features:
     source: ATIS-MVP
     scope: Unspecified
     description: O-CU-CP shall support confidentiality and integrity protection using DTLS for the E1 interface as specified in [O-RAN-8], clause 5.1.4.
-    release: 26.04.1 (v1.1)
+    release: 26.10 (v2.1)
     primary_test_type: []
     comment: ''
   - id: MVP-SEC-O-CU-10a
@@ -1443,7 +1443,7 @@ features:
     source: ATIS-MVP
     scope: Unspecified
     description: O-CU-CP shall support confidentiality, integrity, and replay protection using DTLS for the Xn-C interface as specified in [O-RAN-8], clause 5.1.4.
-    release: 26.04.1 (v1.1)
+    release: 26.10 (v2.1)
     primary_test_type: []
     comment: ''
   - id: MVP-SEC-O-CU-11
@@ -1492,7 +1492,7 @@ features:
     source: ATIS-MVP
     scope: Unspecified
     description: O-DU shall support confidentiality and integrity protection using DTLS for the F1-C interface as specified in [O-RAN-8], clause 5.1.5.
-    release: 26.04.1 (v1.1)
+    release: 26.10 (v2.1)
     primary_test_type: []
     comment: ''
   - id: MVP-SEC-O-DU-02
