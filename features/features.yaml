@@ -5,13 +5,18 @@ features:
     source: ATIS-MVP
     scope: Entire RAN Product
     description: 'The network functions shall support the following O-RAN functions: O-RU, O-DU, O-CU-CP, O-CU-UP, SMO including Non-RT RIC, O-Cloud'
+    short_description: O-RU, O-DU, O-CU-CP, O-CU-UP, SMO/Non-RT RIC, O-Cloud support
+    type: Architecture
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-ARCH-GEN-2
     source: ATIS-MVP
     scope: Entire RAN Product
-    description: The network functions shall support the functional requirements specified in Section 5 of this MVP.
+    description: The network functions shall support the functional requirements specified
+      in Section 5 of this MVP.
+    short_description: Comply with Section 5 functional requirements
+    type: Architecture
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
@@ -20,6 +25,8 @@ features:
     scope: Entire RAN Product
     description: The network functions shall support the performance requirements specified in Section 6 of this MVP.
     release: 26.04.1 (v1.1)
+    short_description: Comply with Section 6 performance requirements
+    type: Architecture
     primary_test_type: []
     comment: ''
   - id: MVP-ARCH-GEN-6
@@ -27,48 +34,66 @@ features:
     scope: Entire RAN Product
     description: The network functions shall support the security requirements specified in Section 9 of this MVP.
     release: 26.04.1 (v1.1)
+    short_description: Comply with Section 9 security requirements
+    type: Architecture
     primary_test_type: []
     comment: ''
   - id: MVP-ARCH-INTF-4
     source: ATIS-MVP
     scope: CU/DU
     description: 'The O-DU shall support the following O-RAN specified interfaces including associated protocol stacks: O-RAN FH CUS-Plane, Mplane'
+    short_description: 'O-DU: Open FH CUS-Plane and M-Plane'
+    type: Architecture
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: O-DU shall support Open FH CUS-Plane (O-RAN-2) and FH M-Plane (O-RAN-3)
+      interfaces.
   - id: MVP-ARCH-INTF-5
     source: ATIS-MVP
     scope: CU/DU
     description: The O-DU shall support the management O1 interface to SMO specified in O-RAN Alliance [O-RAN-6].
+    short_description: 'O-DU: O1 to SMO'
+    type: Architecture
     release: 26.04 (v1.0)
-    primary_test_type: []
-    comment: Need deployment with SMO
+    primary_test_type:
+     - integration
+    comment: 'Need deployment with SMO'
   - id: MVP-ARCH-INTF-6
     source: ATIS-MVP
     scope: CU/DU
     description: The O-DU shall support F1-C interface to O-CU-CP specified in 3GPP [3GPP-5].
+    short_description: 'O-DU: F1-C to O-CU-CP'
+    type: Architecture
     release: 26.04 (v1.0)
-    primary_test_type: []
-    comment: Option to test basic conformance against viavi O-CU
+    primary_test_type:
+     - integration
+    comment: 'Option to test basic conformance against viavi O-CU'
   - id: MVP-ARCH-INTF-7
     source: ATIS-MVP
     scope: CU/DU
     description: The O-DU shall support F1-U interface to O-CU-UP specified in 3GPP [3GPP-6].
+    short_description: 'O-DU: F1-U to O-CU-UP'
+    type: Architecture
     release: 26.04 (v1.0)
     primary_test_type:
       - e2e
-    comment: Option to test basic conformance against viavi O-CU
+    comment: 'Option to test basic conformance against viavi O-CU'
   - id: MVP-ARCH-INTF-8
     source: ATIS-MVP
     scope: CU/DU
     description: 'The O-CU-CP shall support the management O1 interface to Service Management and Orchestration (SMO) '
+    short_description: 'O-CU-CP: O1 to SMO'
+    type: Architecture
     release: 26.04 (v1.0)
-    primary_test_type: []
-    comment: Need deployment with SMO
+    primary_test_type:
+     - integration
+    comment: 'Need deployment with SMO'
   - id: MVP-ARCH-INTF-9
     source: ATIS-MVP
     scope: CU/DU
     description: The O-CU-CP shall support F1-C interface to O-DU specified in 3GPP [3GPP-5].
+    short_description: 'O-CU-CP: F1-C to O-DU'
+    type: Architecture
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: Option to test basic conformance against viavi O-DU
@@ -76,833 +101,1088 @@ features:
     source: ATIS-MVP
     scope: CU/DU
     description: The O-CU-UP shall support F1-U interface to O-DU specified in 3GPP [3GPP-6].
+    short_description: 'O-CU-UP: F1-U to O-DU'
+    type: Architecture
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: Option to test basic conformance against viavi O-DU
+    comment: 'Option to test basic conformance against viavi O-DU'
   - id: MVP-ARCH-INTF-11
     source: ATIS-MVP
     scope: CU/DU
-    description: .. shall support E1 interface to O-CU-UP specified in 3GPP [3GPP-7].
+    description: O-CU-CP shall support E1 interface to O-CU-UP (3GPP-7).
+    short_description: 'O-CU-CP: E1 to O-CU-UP'
+    type: Architecture
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-ARCH-16-1
     source: ATIS-MVP
     scope: CU/DU
-    description: '.. shall support 5G core SA option as specified in 3GPP '
+    description: Shall support 5G Core SA option (3GPP-1, 3GPP-2).
+    short_description: 5G Core SA option
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-PHY-16-1
     source: ATIS-MVP
     scope: CU/DU
-    description: .. shall support mixed numerology in O-DU across different bands (e.g., Subcarrier Spacing (SCS) 30 kHz for n41 band and 15 kHz for n66 band).
+    description: The Open RAN system shall support mixed numerology in O-DU across different bands (e.g., Subcarrier Spacing (SCS) 30 kHz for n41 band and 15 kHz for n66 band).
+    short_description: Mixed numerology across bands
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-PHY-16-2
     source: ATIS-MVP
     scope: CU/DU
-    description: .. shall support Physical Random Access Channel (PRACH) preamble formats of 0, 1, A3, B4, C0, C2.
+    description: Support PRACH preamble formats 0, 1, A3, B4, C0, C2.
+    short_description: PRACH formats 0, 1, A3, B4, C0, C2
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-PHY-16-3
     source: ATIS-MVP
     scope: CU/DU
-    description: .. shall support periodic Sounding Reference Signal (SRS).
+    description: Support periodic SRS.
+    short_description: Periodic SRS
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-PHY-16-4
     source: ATIS-MVP
     scope: CU/DU
-    description: .. shall support aperiodic SRS.
+    description: Support aperiodic SRS.
+    short_description: Aperiodic SRS
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-PHY-16-5
     source: ATIS-MVP
     scope: CU/DU
-    description: .. shall support wideband SRS.
+    description: Support wideband SRS.
+    short_description: Wideband SRS
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-PHY-16-6
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support narrowband SRS.
+    description: Support narrowband SRS.
+    short_description: Narrowband SRS
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-PHY-16-7
     source: ATIS-MVP
     scope: Unspecified
-    description: .. with outdoor O-RU shall support 4T4R downlink (DL) for  low bands (which exactly? 2.1GHz)
+    description: The Open RAN system with outdoor O-RU shall support 4T4R downlink (DL) for low bands authorized in North America.
+    short_description: 4T4R DL, low bands (outdoor O-RU)
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: Which band exactly?
+    comment: 'Which band exactly?'
   - id: MVP-FUNC-PHY-16-8
     source: ATIS-MVP
     scope: Unspecified
-    description: .. with outdoor O-RU shall support 4T4R DL for mid bands authorized in North America.
+    description: The Open RAN system with outdoor O-RU shall support 4T4R DL for mid bands authorized in North America.
+    short_description: 4T4R DL, mid bands (outdoor O-RU)
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: Which band exactly?
+    comment: 'Which band exactly?'
   - id: MVP-FUNC-PHY-16-9
     source: ATIS-MVP
     scope: Unspecified
-    description: .. with outdoor O-RU shall support 8T8R DL for mid bands authorized in North America.
+    description: The Open RAN system with outdoor O-RU shall support 8T8R DL for mid bands authorized in North America.
+    short_description: 8T8R DL, mid bands (outdoor O-RU)
+    type: Functional
     release: 26.10 (v2.1)
     primary_test_type: []
     comment: This is 7.2b?
   - id: MVP-FUNC-PHY-16-10
     source: ATIS-MVP
     scope: Unspecified
-    description: .. with outdoor O-RU shall support 2T2R uplink (UL) for low bands authorized in North America.
+    description: The Open RAN system with outdoor O-RU shall support 2T2R uplink (UL) for low bands authorized in North America.
+    short_description: 2T2R UL, low bands (outdoor O-RU)
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: Which band exactly?
   - id: MVP-FUNC-PHY-16-11
     source: ATIS-MVP
     scope: Unspecified
-    description: .. with outdoor O-RU shall support 2T2R UL for mid bands authorized in North America.
+    description: The Open RAN system with outdoor O-RU shall support 2T2R UL for mid bands authorized in North America.
+    short_description: 2T2R UL, mid bands (outdoor O-RU)
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: Which band exactly?
   - id: MVP-FUNC-PHY-16-12
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support SCS of 15 kHz for FR1 Frequency Division Duplex (FDD) bands as specified in [3GPP-3].
+    description: The Open RAN system shall support SCS of 15 kHz for FR1 Frequency Division Duplex (FDD) bands as specified in [3GPP-3].
+    short_description: 15 kHz SCS for FR1 FDD
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-PHY-16-13
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support SCS of 30 kHz for FR1 Time Division Duplex (TDD) bands as specified in [3GPP-3].
+    description: The Open RAN system shall support SCS of 30 kHz for FR1 Time Division Duplex (TDD) bands as specified in [3GPP-3].
+    short_description: 30 kHz SCS for FR1 TDD
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-PHY-16-14
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support SCS of 120 kHz for FR2 bands as specified in [3GPP-3].
+    description: The Open RAN system shall support SCS of 120 kHz for FR2 bands as specified in [3GPP-3].
+    short_description: 120 kHz SCS for FR2
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-PHY-16-15
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support modulation of up to 256QAM DL and UL 256QAM UL.
+    description: Support modulation up to 256QAM DL and 256QAM UL.
+    short_description: 256QAM DL and UL
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-PHY-16-16
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support UL transmit (Tx) switching.
+    description: Support UL Tx switching.
+    short_description: UL Tx switching
+    type: Functional
     release: 28.04 (v2.4)
     primary_test_type: []
     comment: What needs to be tested here?
   - id: MVP-FUNC-BAS-16-2
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support the configuration and broadcast of the following SIBs, e.g., SIB1-5 and SIB8
+    description: The Open RAN system shall support the configuration and broadcast of the following SIBs, e.g., SIB1-5 and SIB8
+    short_description: SIB1-5 and SIB8 broadcast
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: Shall support broadcast of SIB1-5 and SIB8.
   - id: MVP-FUNC-BAS-16-3
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Closed Loop Power Control.
+    description: Shall support Closed Loop Power Control.
+    short_description: Closed Loop Power Control
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-BAS-16-4
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support Access Barring with Unified Access '
+    description: Shall support Access Barring with Unified Access Control (UAC).
+    short_description: Access Barring with UAC
+    type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-MIMO-16-1
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Channel State Information (CSI) report for periodic and aperiodic Type-I codebook.
+    description: The Open RAN system shall support Channel State Information (CSI) report for periodic and aperiodic Type-I codebook.
+    short_description: CSI Type-I codebook (periodic and aperiodic)
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: Support CSI report for periodic and aperiodic Type-I codebook.
   - id: MVP-FUNC-MIMO-16-2
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support CSI report for periodic and aperiodic Type-II codebook.
+    description: Support CSI report for periodic and aperiodic Type-II codebook.
+    short_description: CSI Type-II codebook (periodic and aperiodic)
+    type: Functional
     release: 26.10 (v2.1)
     primary_test_type: []
     comment: Is this a specific config?
   - id: MVP-FUNC-MIMO-16-3
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support CSI feedback for Type-I and Type-II codebook
+    description: Support CSI feedback for Type-I and Type-II codebook.
+    short_description: CSI feedback, Type-I and Type-II
+    type: Functional
     release: 26.10 (v2.1)
     primary_test_type: []
     comment: Is this a specific config?
   - id: MVP-FUNC-MIMO-16-4
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Single User MIMO with 2T2R and up to 2 DL layers and up to 2 UL layers.
+    description: The Open RAN system shall support Single User MIMO with 2T2R and up to 2 DL layers and up to 2 UL layers.
+    short_description: SU-MIMO 2T2R, up to 2 layers
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: Support SU-MIMO with 2T2R, up to 2 DL and 2 UL layers.
   - id: MVP-FUNC-MIMO-16-5
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Single User MIMO with 4T4R and up to 4 DL layers and up to 4 UL layers.
+    description: The Open RAN system shall support Single User MIMO with 4T4R and up to 4 DL layers and up to 4 UL layers.
+    short_description: SU-MIMO 4T4R, up to 4 layers
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: 4L uplink only with test UEs
   - id: MVP-FUNC-MIMO-16-6
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support UL Multiuser MIMO with up to 2 layers per user and up to a total of 8 layers.
+    description: The Open RAN system shall support UL Multiuser MIMO with up to 2 layers per user and up to a total of 8 layers.
+    short_description: UL MU-MIMO, up to 2 layers/UE, 8 total
+    type: Functional
     release: 27.04 (v2.2)
     primary_test_type: []
-    comment: ''
+    comment: Support UL MU-MIMO with up to 2 layers/user and up to 8 total layers.
   - id: MVP-FUNC-MIMO-16-7
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support DL Multiuser MIMO with up to 4 layers per user and up to a total of 16 layers.
+    description: The Open RAN system shall support DL Multiuser MIMO with up to 4 layers per user and up to a total of 16 layers.
+    short_description: DL MU-MIMO, up to 4 layers/UE, 16 total
+    type: Functional
     release: 27.04 (v2.2)
     primary_test_type: []
-    comment: ''
+    comment: Support DL MU-MIMO with up to 4 layers/user and up to 16 total layers.
   - id: MVP-FUNC-MIMO-16-8
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Massive MIMO with 32T32R and up to 16 DL layers and up to 8 UL layers.
+    description: The Open RAN system shall support Massive MIMO with 32T32R and up to 16 DL layers and up to 8 UL layers.
+    short_description: Massive MIMO 32T32R, 16 DL / 8 UL layers
+    type: Functional
     release: 27.04 (v2.2)
     primary_test_type: []
-    comment: ''
+    comment: Support Massive MIMO 32T32R, up to 16 DL and 8 UL layers.
   - id: MVP-FUNC-MIMO-16-8a
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Massive MIMO with 64T64R and up to 16 DL layers and up to 8 UL layers.
+    description: The Open RAN system shall support Massive MIMO with 64T64R and up to 16 DL layers and up to 8 UL layers.
+    short_description: Massive MIMO 64T64R, 16 DL / 8 UL layers
+    type: Functional
     release: 27.04 (v2.2)
     primary_test_type: []
-    comment: ''
+    comment: Support Massive MIMO 64T64R, up to 16 DL and 8 UL layers.
   - id: MVP-FUNC-MIMO-16-9
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Reciprocity -based beam forming for FR1 TDD bands
+    description: Support reciprocity-based beamforming for FR1 TDD bands.
+    short_description: Reciprocity beamforming, FR1 TDD
+    type: Functional
     release: 27.04 (v2.2)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-MIMO-16-10
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Reciprocity -based beam forming for FR2 TDD bands
+    description: Support reciprocity-based beamforming for FR2 TDD bands.
+    short_description: Reciprocity beamforming, FR2 TDD
+    type: Functional
     release: 27.04 (v2.2)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-MIMO-16-11
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support hybrid beam forming for FR2.
+    description: Support hybrid beamforming for FR2.
+    short_description: Hybrid beamforming, FR2
+    type: Functional
     release: 27.04 (v2.2)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-MIMO-16-12
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Release 15/16 legacy beam management for FR2.
+    description: Support Release 15/16 legacy beam management for FR2.
+    short_description: Legacy beam management Rel-15/16, FR2
+    type: Functional
     release: 26.10 (v2.1)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-MIMO-16-13
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support SRS Antenna Switching.
+    description: Support SRS Antenna Switching.
+    short_description: SRS Antenna Switching
+    type: Functional
     release: 27.04 (v2.2)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-MIMO-16-14
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Demodulation Reference Signal (DM-RS) enhancement of Peak-to-Average Power Ratio (PAPR)
+    description: The Open RAN system shall support Demodulation Reference Signal (DM-RS) enhancement of Peak-to-Average Power Ratio (PAPR)
+    short_description: DMRS PAPR enhancement
+    type: Functional
     release: 27.04 (v2.2)
     primary_test_type: []
-    comment: ''
+    comment: Support DMRS enhancement of PAPR.
   - id: MVP-FUNC-BW-16-1
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support the following carrier bandwidths: FR1 50/100MHz, FR2 100MHZ'
+    description: 'The Open RAN system shall support the following carrier bandwidths: FR1 50/100MHz, FR2 100MHZ'
+    short_description: 'Carrier bandwidths: FR1 FDD/TDD, FR2'
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'Support carrier bandwidths — FR1 FDD: 5/10/20/25/30/40/45 MHz; FR1 TDD:
+      10/15/20/30/40/50/60/70/80/90/100 MHz; FR2: 100 MHz.'
   - id: MVP-FUNC-BW-16-2
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support UL pre-scheduling.
+    description: Support UL pre-scheduling.
+    short_description: UL pre-scheduling
+    type: Functional
     release: 26.10 (v2.1)
     primary_test_type: []
     comment: Requires corresponding test config (slice for which UL predsched is enabled?)
   - id: MVP-FUNC-BW-16-3
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support UL Configured Grant (CG) Type 1 and Type 2.
+    description: Support UL Configured Grant (CG) Type 1 and Type 2.
+    short_description: UL Configured Grant Type 1 and Type 2
+    type: Functional
     release: 26.10 (v2.1)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-BW-16-4-a
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support Bandwidth Parts (BWPs) for FDD and TDD bands in both DL and UL and for both Primary Cell (Pcell) and Secondary Cell (Scell) with the following: a) Minimum 2 BWPs, including one initial BWP and one dedicated BWP'
+    description: 'The Open RAN system shall support Bandwidth Parts (BWPs) for FDD and TDD bands in both DL and UL and for both Primary Cell (Pcell) and Secondary Cell (Scell) with the following: a) Minimum 2 BWPs, including one initial BWP and one dedicated BWP'
+    short_description: 'BWP: min 2, max 4 per carrier (FDD and TDD)'
+    type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
-    comment: No BWP in TIFG
+    comment: 'No BWP in TIFG'
   - id: MVP-FUNC-BW-16-4-b
     source: ATIS-MVP
-    scope: Unspecified
-    description: '.. shall support Bandwidth Parts (BWPs) for FDD and TDD bands in both DL and UL and for both Primary Cell (Pcell) and Secondary Cell (Scell) with the following: b) Maximum 4 BWPs, including the initial BWP'
+    scope: CU/DU
+    description: 'The Open RAN system shall support Bandwidth Parts (BWPs) for FDD and TDD bands in both DL and UL and for both Primary Cell (Pcell) and Secondary Cell (Scell) with the following: b) Maximum 4 BWPs, including the initial BWP'
+    short_description: 'BWP: min 2, max 4 per carrier (FDD and TDD)'
+    type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-TDD-16-1
     source: ATIS-MVP
-    scope: Unspecified
-    description: '.. shall support configurable TDD patterns through static or semi-static configuration, via Radio Resource Control (RRC). '
+    scope: CU/DU
+    description: 'The Open RAN system shall support configurable TDD patterns through static or semi-static configuration, via Radio Resource Control (RRC). '
+    short_description: Configurable TDD patterns via RRC
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: Requires corresponding test config
+    comment: ''
   - id: MVP-FUNC-TDD-16-2
     source: ATIS-MVP
-    scope: Unspecified
-    description: .. shall support TDD pattern 4:1 DDDSU where S slot has 10 DL, 2 GP, 2 UL symbols for FR1 bands as defined for relevant Open FH CUS IOT profiles.
+    scope: CU/DU
+    description: 'The Open RAN system shall support TDD pattern 4:1 DDDSU where S slot has 10 DL, 2 GP, 2 UL symbols for FR1 bands as defined for relevant Open FH CUS IOT profiles.'
+    short_description: TDD 4:1 DDDSU pattern, FR1
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: Requires corresponding test config
+    comment: ''
   - id: MVP-FUNC-TDD-16-3
     source: ATIS-MVP
-    scope: Unspecified
-    description: .. shall support TDD pattern 4:1 DDDSU where S slot has 10 DL, 2 GP, 2 UL symbols for FR2 bands as defined for relevant Open FH CUS IOT profiles
+    scope: CU/DU
+    description: 'The Open RAN system shall support TDD pattern 4:1 DDDSU where S slot has 10 DL, 2 GP, 2 UL symbols for FR2 bands as defined for relevant Open FH CUS IOT profiles.'
+    short_description: TDD 4:1 DDDSU pattern, FR2
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-TDD-16-4
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support TDD pattern 8:2 DDDSUUDDDD where S slot has 6 DL, 4 GP, 4 UL symbols for FR1 bands as defined for relevant Open FH CUS IOT profiles.
+    description: The Open RAN system shall support TDD pattern 8:2 DDDSUUDDDD where S slot has 6 DL, 4 GP, 4 UL symbols for FR1 bands as defined for relevant Open FH CUS IOT profiles.
+    short_description: TDD 8:2 DDDSUUDDDD pattern, FR1
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'Support TDD pattern 8:2 DDDSUUDDDD (S slot: 6 DL, 4 GP, 4 UL symbols)
+      for FR1 bands.'
   - id: MVP-FUNC-TDD-16-5
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support TDD pattern 6:4 DDDSUUUUDD where S slot has 6 DL, 4 GP, 4 UL symbols for FR1 bands as defined for relevant Open FH CUS IOT profiles
+    description: The Open RAN system shall support TDD pattern 6:4 DDDSUUUUDD where S slot has 6 DL, 4 GP, 4 UL symbols for FR1 bands as defined for relevant Open FH CUS IOT profiles
+    short_description: TDD 6:4 DDDSUUUUDD pattern, FR1
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'Support TDD pattern 6:4 DDDSUUUUDD (S slot: 6 DL, 4 GP, 4 UL symbols)
+      for FR1 bands.'
   - id: MVP-FUNC-CA-1
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support both Intra-band and Inter-band Carrier Aggregation.
+    description: Support both intra-band and inter-band Carrier Aggregation.
+    short_description: Intra-band and inter-band Carrier Aggregation
+    type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
     comment: Reuse mobility configuration
   - id: MVP-FUNC-CA-2
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Intra-DU Carrier Aggregation.
+    description: Support intra-DU Carrier Aggregation.
+    short_description: Intra-DU Carrier Aggregation
+    type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-CA-3
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support FR1 FDD Carrier Aggregation across both inter-band and intra-band component carriers, with up to 4 Component Carriers in DL and up to 2 Component Carriers in UL.
+    description: The Open RAN system shall support FR1 FDD Carrier Aggregation across both inter-band and intra-band component carriers, with up to 4 Component Carriers in DL and up to 2 Component Carriers in UL.
+    short_description: FR1 FDD CA, up to 4 CCs DL / 2 UL
+    type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
-    comment: ''
+    comment: Support FR1 FDD CA (inter/intra-band), up to 4 CCs DL and 2 CCs UL.
   - id: MVP-FUNC-CA-4
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support FR1 FDD and TDD Carrier Aggregation both inter-band and intra-band, with up to 6 Component Carriers in DL and up to 2 Component Carriers in UL.
+    description: The Open RAN system shall support FR1 FDD and TDD Carrier Aggregation both inter-band and intra-band, with up to 6 Component Carriers in DL and up to 2 Component Carriers in UL.
+    short_description: FR1 FDD+TDD CA, up to 6 CCs DL / 2 UL
+    type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
-    comment: ''
+    comment: Support FR1 FDD+TDD CA (inter/intra-band), up to 6 CCs DL and 2 CCs UL.
   - id: MVP-FUNC-CA-5
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support FR1 TDD Carrier Aggregation both inter-band and intra-band, with up to 3 Component Carriers DL and 1 Component Carrier in UL.
+    description: The Open RAN system shall support FR1 TDD Carrier Aggregation both inter-band and intra-band, with up to 3 Component Carriers DL and 1 Component Carrier in UL.
+    short_description: FR1 TDD CA, up to 3 CCs DL / 1 UL
+    type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
-    comment: ''
+    comment: Support FR1 TDD CA (inter/intra-band), up to 3 CCs DL and 1 CC UL.
   - id: MVP-FUNC-CA-6
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support FR2 Carrier Aggregation both inter-band and intra-band, with up to 8 Component Carriers in DL and up to 4 Component Carriers in UL.
+    description: The Open RAN system shall support FR2 Carrier Aggregation both inter-band and intra-band, with up to 8 Component Carriers in DL and up to 4 Component Carriers in UL.
+    short_description: FR2 CA, up to 8 CCs DL / 4 UL
+    type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
-    comment: ''
+    comment: Support FR2 CA (inter/intra-band), up to 8 CCs DL and 4 CCs UL.
   - id: MVP-FUNC-CA-7
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support NR-Dual Connectivity with FR1 and FR2 Dual Connectivity with 1 FR1 FDD or TDD along with FR2 up to 8 Component Carriers in DL, and FR2 up to 4 Component Carriers in UL.
+    description: The Open RAN system shall support NR-Dual Connectivity with FR1 and FR2 Dual Connectivity with 1 FR1 FDD or TDD along with FR2 up to 8 Component Carriers in DL, and FR2 up to 4 Component Carriers in UL.
     release: 27.10 (v2.3)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-MOB-1-a
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Intra-band mobility within supported FR1 and FR2 bands for Intra-cell handover for key regeneration
-    release: 26.04 (v1.0)
+    description: The Open RAN system shall support Intra-band mobility within supported FR1 and FR2 bands for Intra-cell handover for key regeneration
+    short_description: NR Dual Connectivity FR1+FR2
+    type: Functional
+    release: 27.10 (v2.3)
     primary_test_type: []
-    comment: Inter-band mobility might require two different DUs, hence Inter-DU test cases
+    comment: Support NR Dual Connectivity (FR1+FR2), up to 8 CCs DL and 4 CCs UL in
+      FR2.
   - id: MVP-FUNC-MOB-1-b
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Intra-band mobility within supported FR1 and FR2 bands for Inter-RU handover
-    release: 26.04 (v1.0)
+    description: The Open RAN system shall support Intra-band mobility within supported FR1 and FR2 bands for Inter-RU handover
+    release: 27.10 (v2.3)
     primary_test_type: []
     comment: Inter-band mobility might require two different DUs, hence Inter-DU test cases
   - id: MVP-FUNC-MOB-1-c
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Intra-band mobility within supported FR1 and FR2 bands for Intra-DU handover
-    release: 26.04 (v1.0)
+    description: The Open RAN system shall support Intra-band mobility within supported FR1 and FR2 bands for Intra-DU handover
+    release: 27.10 (v2.3)
     primary_test_type: []
     comment: Inter-band mobility might require two different DUs, hence Inter-DU test cases
   - id: MVP-FUNC-MOB-1-d
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Inter-CU handover with same CU-UP
+    description: The Open RAN system shall support Inter-CU handover with same CU-UP
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: Inter-band mobility might require two different DUs, hence Inter-DU test cases
   - id: MVP-FUNC-MOB-2-b
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Inter-band mobility such as between supported FR1 bands, between supported FR1 and FR2 bands, and between supported FR2 bands for inter-RU
+    description: The Open RAN system shall support Inter-band mobility such as between supported FR1 bands, between supported FR1 and FR2 bands, and between supported FR2 bands for inter-RU
+    short_description: Inter-band handovers (FR1-FR1, FR1-FR2, FR2-FR2)
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: Inter-band mobility might require two different DUs, hence Inter-DU test cases
   - id: MVP-FUNC-MOB-2-c
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Inter-band mobility such as between supported FR1 bands, between supported FR1 and FR2 bands, and between supported FR2 bands for inter-DU
+    description: The Open RAN system shall support Inter-band mobility such as between supported FR1 bands, between supported FR1 and FR2 bands, and between supported FR2 bands for inter-DU
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: Inter-band mobility might require two different DUs, hence Inter-DU test cases
   - id: MVP-FUNC-MOB-2-d
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Inter-band mobility such as between supported FR1 bands, between supported FR1 and FR2 bands, and between supported FR2 bands for inter-CU HO, changing the CU-UP between FR1 and FR2
+    description: The Open RAN system shall support Inter-band mobility such as between supported FR1 bands, between supported FR1 and FR2 bands, and between supported FR2 bands for inter-CU HO, changing the CU-UP between FR1 and FR2
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: Inter-band mobility might require two different DUs, hence Inter-DU test cases
   - id: MVP-FUNC-MOB-2-e
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Inter-band mobility such as between supported FR1 bands, between supported FR1 and FR2 bands, and between supported FR2 bands for inter-CU HO, same CU-UP  between FR1 and FR2
+    description: The Open RAN system shall support Inter-band mobility such as between supported FR1 bands, between supported FR1 and FR2 bands, and between supported FR2 bands for inter-CU HO, same CU-UP  between FR1 and FR2
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: Inter-band mobility might require two different DUs, hence Inter-DU test cases
   - id: MVP-FUNC-MOB-3
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Xn-based Handover.
+    description: Support Xn-based Handover.
+    short_description: Xn-based Handover
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-MOB-4
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Next-Generation (NG)-based Handover.
+    description: Support NG-based Handover.
+    short_description: NG-based Handover
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-MOB-5
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Intra-Master Node (MN) Handover with Secondary Node (SN) change.
+    description: The Open RAN system shall support Intra-Master Node (MN) Handover with Secondary Node (SN) change.
+    short_description: Intra-MN HO with SN change
+    type: Functional
     release: unspecified
     primary_test_type: []
-    comment: ''
+    comment: Support Intra-MN Handover with SN change.
   - id: MVP-FUNC-MOB-6
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Intra-MN Handover without SN change.
+    description: Support Intra-MN Handover without SN change.
+    short_description: Intra-MN HO without SN change
+    type: Functional
     release: unspecified
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-MOB-7
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Inter-MN Handover with SN change.
+    description: Support Inter-MN Handover with SN change.
+    short_description: Inter-MN HO with SN change
+    type: Functional
     release: unspecified
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-MOB-8
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Inter-MN Handover without SN change.
+    description: Support Inter-MN Handover without SN change.
+    short_description: Inter-MN HO without SN change
+    type: Functional
     release: unspecified
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-MOB-9
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support RRC_CONNECTED state mobility.
+    description: Support RRC_CONNECTED state mobility.
+    short_description: RRC_CONNECTED mobility
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-MOB-10
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support RRC_INACTIVE state mobility.
+    description: Support RRC_INACTIVE state mobility.
+    short_description: RRC_INACTIVE mobility
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: 'TIFG test requesting inactive state doesn''t exist '
   - id: MVP-FUNC-MOB-11
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support RRC_IDLE state mobility.
+    description: Support RRC_IDLE state mobility.
+    short_description: RRC_IDLE mobility
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-MOB-12
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support FR2 coverage-based SN release.
+    description: Support FR2 coverage-based SN release.
+    short_description: FR2 coverage-based SN release
+    type: Functional
     release: unspecified
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-MOB-13
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support Secondary Cell Group (SCG) Radio Link '
+    description: Support SCG RLF detection and recovery.
+    short_description: SCG RLF detection and recovery
+    type: Functional
     release: unspecified
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-MOB-14
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Fast Handover failure recovery based on T312.
+    description: Support Fast Handover failure recovery based on T312.
+    short_description: Fast HO failure recovery (T312)
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: No reestablishment in TIFG
   - id: MVP-FUNC-MOB-15
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Conditional handover.
+    description: Support Conditional Handover.
+    short_description: Conditional Handover
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: No conditional HO in TIFG but could be tested with normal HO cases
   - id: MVP-FUNC-SVCS-16-1
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Admission control, Priority, and Preemption.
+    description: Support Admission Control, Priority, and Preemption.
+    short_description: Admission Control, Priority, Preemption
+    type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
     comment: Not directly tested but e.g. admission control metrics shall be reported
   - id: MVP-FUNC-SVCS-16-2
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support User Equipment (UE) Power Savings '
+    description: 'Support UE Power Savings: Wake Up Signal (WUS), UE Assistance Information.'
+    short_description: UE Power Savings (WUS, UE Assistance Info)
+    type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
     comment: UE triggered RRC release
   - id: MVP-FUNC-SVCS-16-3
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Emergency Call Prioritization.
+    description: Support Emergency Call Prioritization.
+    short_description: Emergency Call Prioritization
+    type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-SVCS-16-4
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Wireless Priority Service (WPS) and Multimedia Priority Service.
+    description: The Open RAN system shall support Wireless Priority Service (WPS) and Multimedia Priority Service.
+    short_description: Wireless Priority Service and Multimedia Priority Service
+    type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
-    comment: ''
+    comment: Support Wireless Priority Service (WPS) and Multimedia Priority Service.
   - id: MVP-FUNC-SVCS-16-5
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Public Warning Systems (PWS).
+    description: Support Public Warning Systems (PWS).
+    short_description: Public Warning Systems (PWS)
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-SVCS-16-6
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Connected Mode Discontinuous Reception (DRX).
+    description: Support Connected Mode DRX.
+    short_description: Connected Mode DRX
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-SVCS-16-7
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Evolved Packet System (EPS) Fallback to Voice over Long-Term Evolution (VoLTE).
+    description: The Open RAN system shall support Evolved Packet System (EPS) Fallback to Voice over Long-Term Evolution (VoLTE).
+    short_description: EPS Fallback to VoLTE
+    type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
-    comment: ''
+    comment: Support EPS Fallback to VoLTE.
   - id: MVP-FUNC-SVCS-16-8-a
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support the following Voice over New Radio (VoNR) features: (a) ROHC'
+    description: 'The Open RAN system shall support the following Voice over New Radio (VoNR) features: (a) ROHC'
+    short_description: 'VoNR: RoHC, GBR, 5QI 1/2, Slot Aggregation'
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: TIFG doesnt require ROHC
   - id: MVP-FUNC-SVCS-16-8-b
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support the following Voice over New Radio (VoNR) features: (b) GBR'
+    description: 'The Open RAN system shall support the following Voice over New Radio (VoNR) features: (b) GBR'
+    short_description: 'VoNR: RoHC, GBR, 5QI 1/2, Slot Aggregation'
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'Support VoNR features: RoHC Profile 1, GBR, 5QI 1 and 2 for GBR, Slot
+      Aggregation (TTI bundling).'
   - id: MVP-FUNC-SVCS-16-8-c
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support the following Voice over New Radio (VoNR) features: (a) 5QI 1,2'
+    description: 'The Open RAN system shall support the following Voice over New Radio (VoNR) features: (a) 5QI 1,2'
+    short_description: 'VoNR: RoHC, GBR, 5QI 1/2, Slot Aggregation'
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'Support VoNR features: RoHC Profile 1, GBR, 5QI 1 and 2 for GBR, Slot
+      Aggregation (TTI bundling).'
   - id: MVP-FUNC-SVCS-16-8-d
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support the following Voice over New Radio (VoNR) features: (a) TTI bundling'
+    description: 'The Open RAN system shall support the following Voice over New Radio (VoNR) features: (a) TTI bundling'
+    short_description: 'VoNR: RoHC, GBR, 5QI 1/2, Slot Aggregation'
+    type: Functional
     release: 26.10 (v2.1)
     primary_test_type: []
-    comment: ''
+    comment: 'Support VoNR features: RoHC Profile 1, GBR, 5QI 1 and 2 for GBR, Slot
+      Aggregation (TTI bundling).'
   - id: MVP-FUNC-OTH-16-1
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Remote Interference Management (RIM) for RIM-RS Type 1 backhaul framework.
+    description: The Open RAN system shall support Remote Interference Management (RIM) for RIM-RS Type 1 backhaul framework.
+    short_description: Remote Interference Management (RIM-RS Type 1)
+    type: Functional
     release: 28.04 (v2.4)
     primary_test_type: []
-    comment: ''
+    comment: Support Remote Interference Management (RIM) for RIM-RS Type 1 backhaul
+      framework.
   - id: MVP-FUNC-RANS-16-1
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Multi-Operator Core Network (MOCN).
+    description: Support Multi-Operator Core Network (MOCN).
+    short_description: Multi-Operator Core Network (MOCN)
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-RANS-16-2
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Multi-Operator RAN (MORAN).
+    description: Support Multi-Operator RAN (MORAN).
+    short_description: Multi-Operator RAN (MORAN)
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-POS-16-1
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support New Radio Positioning Protocol (NRPPa) based Enhanced Cell Identity (ECID) positioning method.
+    description: The Open RAN system shall support New Radio Positioning Protocol (NRPPa) based Enhanced Cell Identity (ECID) positioning method.
+    short_description: ECID positioning via NRPPa
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: Support NRPPa-based Enhanced Cell Identity (ECID) positioning.
   - id: MVP-FUNC-POS-16-2
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support DL Positioning Reference Signal (PRS) for FDD and TDD bands with Comb-4 or higher configuration.
+    description: The Open RAN system shall support DL Positioning Reference Signal (PRS) for FDD and TDD bands with Comb-4 or higher configuration.
+    short_description: DL PRS, Comb-4 or higher
+    type: Functional
     release: 26.10 (v2.1)
     primary_test_type: []
-    comment: ''
+    comment: Support DL PRS for FDD and TDD bands with Comb-4 or higher.
   - id: MVP-FUNC-POS-16-3-a
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support for the following positioning methods: (a) Power'
+    description: 'Support positioning methods: Power, Time (all bands), Angle (FR2 bands).'
+    short_description: 'Positioning: Power, Time, Angle methods'
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-POS-16-3-b
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support for the following positioning methods: b) Time for all bands'
+    description: 'The Open RAN system shall support for the following positioning methods: b) Time for all bands'
+    short_description: 'Positioning: Power, Time, Angle methods'
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'Support positioning methods: Power, Time (all bands), Angle (FR2 bands).'
   - id: MVP-FUNC-POS-16-3-c
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support for the following positioning methods: c) Angle for FR2 bands'
+    description: 'The Open RAN system shall support for the following positioning methods: c) Angle for FR2 bands'
+    short_description: 'Positioning: Power, Time, Angle methods'
+    type: Functional
     release: 26.10 (v2.1)
     primary_test_type: []
-    comment: ''
+    comment: 'Support positioning methods: Power, Time (all bands), Angle (FR2 bands).'
   - id: MVP-FUNC-RLM-16-1
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support both SSB and CSI-RS based Radio Link Monitoring.
+    description: Support SSB and CSI-RS based Radio Link Monitoring.
+    short_description: Radio Link Monitoring (SSB and CSI-RS)
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-RACH-16-1
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support the 4-step Random Access Channel (RACH).
+    description: Support 4-step RACH.
+    short_description: 4-step RACH
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-RACH-16-2
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support the 2-step RACH as specified in Release 16.
+    description: Support 2-step RACH (Release 16).
+    short_description: 2-step RACH (Rel-16)
+    type: Functional
     release: 26.10 (v2.1)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-MIMO-17-2-a
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support Type-II codebook Release 17 enhancements related the following: a) Reliability'
+    description: 'The Open RAN system shall support Type-II codebook Release 17 enhancements related the following: a) Reliability'
+    short_description: Type-II codebook Rel-17 enhancements
+    type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
-    comment: ''
+    comment: 'Support Type-II codebook Rel-17 enhancements: reliability, repetition/time
+      bundling, aperiodic SRS triggering.'
   - id: MVP-FUNC-MIMO-17-2-b
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support Type-II codebook Release 17 enhancements related the following: b) Repetition and time bundling'
+    description: 'The Open RAN system shall support Type-II codebook Release 17 enhancements related the following: b) Repetition and time bundling'
+    short_description: Type-II codebook Rel-17 enhancements
+    type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
-    comment: ''
+    comment: 'Support Type-II codebook Rel-17 enhancements: reliability, repetition/time
+      bundling, aperiodic SRS triggering.'
   - id: MVP-FUNC-MIMO-17-2-c
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support Type-II codebook Release 17 enhancements related the following: c) Aperiodic SRS triggering'
+    description: 'The Open RAN system shall support Type-II codebook Release 17 enhancements related the following: c) Aperiodic SRS triggering'
+    short_description: Type-II codebook Rel-17 enhancements
+    type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
-    comment: ''
+    comment: 'Support Type-II codebook Rel-17 enhancements: reliability, repetition/time
+      bundling, aperiodic SRS triggering.'
   - id: MVP-FUNC-MIMO-17-3-a
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support SRS coverage enhancements related the following: a) Reliability'
+    description: 'The Open RAN system shall support SRS coverage enhancements related the following: a) Reliability'
+    short_description: SRS coverage enhancements (Rel-17)
+    type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
-    comment: ''
+    comment: 'Support SRS coverage enhancements: reliability, repetition/time bundling,
+      aperiodic SRS triggering.'
   - id: MVP-FUNC-MIMO-17-3-b
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support SRS coverage enhancements related the following: b) Repetition and time bundling'
+    description: 'The Open RAN system shall support SRS coverage enhancements related the following: b) Repetition and time bundling'
+    short_description: SRS coverage enhancements (Rel-17)
+    type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
-    comment: ''
+    comment: 'Support SRS coverage enhancements: reliability, repetition/time bundling,
+      aperiodic SRS triggering.'
   - id: MVP-FUNC-MIMO-17-3-c
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support SRS coverage enhancements related the following: c) Aperiodic SRS triggering'
+    description: 'The Open RAN system shall support SRS coverage enhancements related the following: c) Aperiodic SRS triggering'
+    short_description: SRS coverage enhancements (Rel-17)
+    type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
-    comment: ''
+    comment: 'Support SRS coverage enhancements: reliability, repetition/time bundling,
+      aperiodic SRS triggering.'
   - id: MVP-FUNC-BW-17-1
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support UL Dynamic Physical Uplink Control Channel (PUCCH) repetition factor indication.
+    description: The Open RAN system shall support UL Dynamic Physical Uplink Control Channel (PUCCH) repetition factor indication.
+    short_description: UL Dynamic PUCCH repetition factor
+    type: Functional
     release: 26.10 (v2.1)
     primary_test_type: []
-    comment: ''
+    comment: Support UL Dynamic PUCCH repetition factor indication.
   - id: MVP-FUNC-BW-17-2
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support UL Tx switching Release 17 enhancements.
+    description: Support UL Tx switching Rel-17 enhancements.
+    short_description: UL Tx switching Rel-17 enhancements
+    type: Functional
     release: 28.04 (v2.4)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-SVCS-17-1
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Power Classes of 1, 1.5, and 2.
+    description: Support UE Power Classes 1, 1.5, and 2.
+    short_description: UE Power Classes 1, 1.5, 2
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-SVCS-17-2
     source: ATIS-MVP
     scope: Unspecified
-    description: .. shall support Reduced Capability (RedCap) features for both TDD and FDD.
+    description: The Open RAN system shall support Reduced Capability (RedCap) features for both TDD and FDD.
+    short_description: RedCap (TDD and FDD)
+    type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
-    comment: ''
+    comment: Support Reduced Capability (RedCap) features for both TDD and FDD.
   - id: MVP-FUNC-SVCS-17-3-a
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support the following RAN slicing enhancements: a) Slice aware reselection'
+    description: 'The Open RAN system shall support the following RAN slicing enhancements: a) Slice aware reselection'
+    short_description: RAN slicing enhancements (Rel-17)
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'Support RAN slicing enhancements: slice-aware reselection, slice-specific
+      RACH config, MBR, multi-carrier resource sharing, and resource partitioning.'
   - id: MVP-FUNC-SVCS-17-3-b
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support the following RAN slicing enhancements: b) Slice specific RACH configuration'
+    description: 'The Open RAN system shall support the following RAN slicing enhancements: b) Slice specific RACH configuration'
+    short_description: RAN slicing enhancements (Rel-17)
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'Support RAN slicing enhancements: slice-aware reselection, slice-specific
+      RACH config, MBR, multi-carrier resource sharing, and resource partitioning.'
   - id: MVP-FUNC-SVCS-17-3-c
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support the following RAN slicing enhancements: c) Slice specific Maximum Bit Rate (MBR)'
+    description: 'The Open RAN system shall support the following RAN slicing enhancements: c) Slice specific Maximum Bit Rate (MBR)'
+    short_description: RAN slicing enhancements (Rel-17)
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'Support RAN slicing enhancements: slice-aware reselection, slice-specific
+      RACH config, MBR, multi-carrier resource sharing, and resource partitioning.'
   - id: MVP-FUNC-SVCS-17-3-d
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support the following RAN slicing enhancements: d) Slice specific multi-carrier resource sharing'
+    description: 'The Open RAN system shall support the following RAN slicing enhancements: d) Slice specific multi-carrier resource sharing'
     release: 27.10 (v2.3)
+    short_description: RAN slicing enhancements (Rel-17)
+    type: Functional
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'Support RAN slicing enhancements: slice-aware reselection, slice-specific
+      RACH config, MBR, multi-carrier resource sharing, and resource partitioning.'
   - id: MVP-FUNC-SVCS-17-3-e
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support the following RAN slicing enhancements: e) Slice specific resource partitioning'
+    description: 'The Open RAN system shall support the following RAN slicing enhancements: e) Slice specific resource partitioning'
+    short_description: RAN slicing enhancements (Rel-17)
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'Support RAN slicing enhancements: slice-aware reselection, slice-specific
+      RACH config, MBR, multi-carrier resource sharing, and resource partitioning.'
   - id: MVP-FUNC-SMO-17-1-a
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support appropriate data to be ingested by the SMO to enable the following use cases via rApps: a) Automatic Neighbor Relations (ANR)'
+    description: 'The Open RAN system shall support appropriate data to be ingested by the SMO to enable the following use cases via rApps: a) Automatic Neighbor Relations (ANR)'
+    short_description: SMO data ingestion for rApp use cases (ANR, PCI, MLB, MRO, CCO,
+      RACH)
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: TIFG has a RIC traffic steering and energy effiency TC that covers those topics over E2/O1 quite ok
   - id: MVP-FUNC-SMO-17-1-b
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support appropriate data to be ingested by the SMO to enable the following use cases via rApps: b) Physical Cell ID (PCI) Optimization'
+    description: 'The Open RAN system shall support appropriate data to be ingested by the SMO to enable the following use cases via rApps: b) Physical Cell ID (PCI) Optimization'
+    short_description: SMO data ingestion for rApp use cases (ANR, PCI, MLB, MRO, CCO,
+      RACH)
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: no passing criteria defined for this test due to the diversity of vendor-specific RRM and MAC layer scheduler
   - id: MVP-FUNC-SMO-17-1-c
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support appropriate data to be ingested by the SMO to enable the following use cases via rApps: c) Mobility Load Balancing (MLB)'
+    description: 'The Open RAN system shall support appropriate data to be ingested by the SMO to enable the following use cases via rApps: c) Mobility Load Balancing (MLB)'
+    short_description: SMO data ingestion for rApp use cases (ANR, PCI, MLB, MRO, CCO,
+      RACH)
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'SMO shall ingest data to support rApp use cases: ANR, PCI Optimization,
+      MLB, MRO, CCO, RACH Optimization.'
   - id: MVP-FUNC-SMO-17-1-d
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support appropriate data to be ingested by the SMO to enable the following use cases via rApps: d) Mobility Robustness Optimization (MRO)'
+    description: 'The Open RAN system shall support appropriate data to be ingested by the SMO to enable the following use cases via rApps: d) Mobility Robustness Optimization (MRO)'
+    short_description: SMO data ingestion for rApp use cases (ANR, PCI, MLB, MRO, CCO,
+      RACH)
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'SMO shall ingest data to support rApp use cases: ANR, PCI Optimization,
+      MLB, MRO, CCO, RACH Optimization.'
   - id: MVP-FUNC-SMO-17-1-e
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support appropriate data to be ingested by the SMO to enable the following use cases via rApps: e) Coverage and Capacity Optimization (CCO)'
+    description: 'The Open RAN system shall support appropriate data to be ingested by the SMO to enable the following use cases via rApps: e) Coverage and Capacity Optimization (CCO)'
+    short_description: SMO data ingestion for rApp use cases (ANR, PCI, MLB, MRO, CCO,
+      RACH)
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'SMO shall ingest data to support rApp use cases: ANR, PCI Optimization,
+      MLB, MRO, CCO, RACH Optimization.'
   - id: MVP-FUNC-SMO-17-1-f
     source: ATIS-MVP
     scope: Unspecified
-    description: '.. shall support appropriate data to be ingested by the SMO to enable the following use cases via rApps: f) RACH Optimization'
+    description: 'The Open RAN system shall support appropriate data to be ingested by the SMO to enable the following use cases via rApps: f) RACH Optimization'
+    short_description: SMO data ingestion for rApp use cases (ANR, PCI, MLB, MRO, CCO,
+      RACH)
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'SMO shall ingest data to support rApp use cases: ANR, PCI Optimization,
+      MLB, MRO, CCO, RACH Optimization.'
   - id: MVP-PERF-ACC-1
     source: ATIS-MVP
     scope: Unspecified
     description: 'PRACH Success Rate:'
     release: 26.04.1 (v1.1)
+    short_description: PRACH Success Rate >99%
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
     comment: Currently done in matlab at a PHY level. The E2E test is quite difficult to setup and would only add coverage for the MAC part in charge of allocating Msg2, but since the test definition does not consider background traffic, a unit/integration test verifying Msg2 reply for different TDD formats should be enough.
   - id: MVP-PERF-ACC-2
@@ -910,6 +1190,9 @@ features:
     scope: Unspecified
     description: 'RRC Setup Success Rate:'
     release: 26.04.1 (v1.1)
+    short_description: RRC Setup Success Rate >99%
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
     comment: No TIFG/3GPP definition. For me this is an attach/dettach test
   - id: MVPC-PERF-ACC-3
@@ -917,6 +1200,9 @@ features:
     scope: Unspecified
     description: '5G SA registration success rate:'
     release: 26.04.1 (v1.1)
+    short_description: 5G SA registration success rate 100%
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
     comment: 'This is again the attach-dettach but even simpler: a single UE is attaching, starting UDP traffic and dettaching, repeat loop. We should measure the registration and de-registration time'
   - id: MVPC-PERF-ACC-4
@@ -924,6 +1210,9 @@ features:
     scope: Unspecified
     description: '5G SA deregistration success rate:'
     release: 26.04.1 (v1.1)
+    short_description: 5G SA deregistration success rate 100%
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
     comment: Same as above
   - id: MVP-PERF-RET-1
@@ -931,15 +1220,19 @@ features:
     scope: Unspecified
     description: 'RRC Dropped Call Rate:'
     release: 26.04.1 (v1.1)
+    short_description: RRC Dropped Call Rate <0.01%
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'This is a UDP traffic with different radio conditions and measure RRC Release due to reasons other than inactivity and radio link
-
-      failures (RLF), is this single or multi UE?'
+    comment: 'This is a UDP traffic with different radio conditions and measure RRC Release due to reasons other than inactivity and radio link failures (RLF), is this single or multi UE?'
   - id: MVP-PERF-RET-2
     source: ATIS-MVP
     scope: Unspecified
     description: 'VoNR Dropped Call Rate: '
     release: 26.04.1 (v1.1)
+    short_description: VoNR Dropped Call Rate <0.05%
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
     comment: TIFG 7.5 with HO could measure drop rate
   - id: MVP-PERF-THR-1a
@@ -947,6 +1240,9 @@ features:
     scope: Unspecified
     description: L1 Downlink peak throughput,
     release: 26.04.1 (v1.1)
+    short_description: L1 DL peak throughput
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
     comment: All these performance tests are basically the 1UE UDP test, adding different levels of noise
   - id: MVP-PERF-THR-1b
@@ -954,104 +1250,151 @@ features:
     scope: Unspecified
     description: Application-level Downlink peak throughput,
     release: 26.04.1 (v1.1)
+    short_description: App-level DL peak throughput
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: App-level DL peak throughput per clause 6.1.2 formula.
   - id: MVP-PERF-THR-1c
     source: ATIS-MVP
     scope: Unspecified
     description: 'L1 Downlink peak spectral efficiency:'
     release: 26.04.1 (v1.1)
+    short_description: L1 DL peak spectral efficiency
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: L1 DL peak spectral efficiency per clause 6.1.2 formula.
   - id: MVP-PERF-THR-2a
     source: ATIS-MVP
     scope: Unspecified
     description: L1 Uplink peak throughput,
     release: 26.04.1 (v1.1)
+    short_description: L1 UL peak throughput
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'L1 UL peak throughput per clause 6.1.2 formula; test method: TIFG clauses
+      4.8, 6.1, 6.3.'
   - id: MVP-PERF-THR-2b
     source: ATIS-MVP
     scope: Unspecified
     description: Application-level Uplink peak throughput,
     release: 26.04.1 (v1.1)
+    short_description: App-level UL peak throughput
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: App-level UL peak throughput per clause 6.1.2 formula.
   - id: MVP-PERF-THR-2c
     source: ATIS-MVP
     scope: Unspecified
     description: 'L1 Uplink peak spectral efficiency:'
     release: 26.04.1 (v1.1)
+    short_description: L1 UL peak spectral efficiency
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: L1 UL peak spectral efficiency per clause 6.1.2 formula.
   - id: MVP-PERF-THR-3a
     source: ATIS-MVP
     scope: Unspecified
     description: 'Bidirectional L1 Downlink and Uplink throughput in excellent, good, fair and poor radio conditions, '
     release: 26.04.1 (v1.1)
+    short_description: Bidirectional DL+UL throughput vs. RF condition
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'Bidirectional DL+UL throughput at excellent/good/fair/poor RF; test method:
+      TIFG clauses 4.8, 6.6.'
   - id: MVP-PERF-THR-3b
     source: ATIS-MVP
     scope: Unspecified
     description: Bidirectional Application-level Downlink and Uplink throughput in excellent, good, fair and poor radio conditions,
     release: 26.04.1 (v1.1)
+    short_description: DL spectral efficiency vs. RF condition
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: DL spectral efficiency at excellent/good/fair/poor RF.
   - id: MVP-PERF-THR-3c
     source: ATIS-MVP
     scope: Unspecified
     description: 'Bidirectional L1 Downlink and Uplink spectral efficiency in excellent, good, fair and poor radio conditions:'
     release: 26.04.1 (v1.1)
+    short_description: UL spectral efficiency vs. RF condition
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: UL spectral efficiency at excellent/good/fair/poor RF.
   - id: MVP-PERF-THR-4a
     source: ATIS-MVP
     scope: Unspecified
     description: Downlink L1 throughput for varying channel conditions to plot between throughput and Signal-to-Interfer-
     release: 26.04.1 (v1.1)
+    short_description: DL throughput vs. SINR
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'DL throughput vs. SINR curve; test method: TIFG clauses 4.8, 6.7.'
   - id: MVP-PERF-THR-4b
     source: ATIS-MVP
     scope: Unspecified
     description: Downlink Application throughput for varying channel conditions to plot between throughput and SINR,
     release: 26.04.1 (v1.1)
+    short_description: DL spectral efficiency vs. SINR
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: DL spectral efficiency vs. SINR curve.
   - id: MVP-PERF-THR-4c
     source: ATIS-MVP
     scope: Unspecified
     description: 'Downlink Spectral Efficiency (SE) for varying channel conditions to plot between SE and SINR:'
     release: 26.04.1 (v1.1)
+    short_description: DL throughput/SE at additional SINR point
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: DL throughput/SE at additional RF condition.
   - id: MVP-PERF-THR-5a
     source: ATIS-MVP
     scope: Unspecified
     description: Uplink L1 throughput for varying channel conditions to plot between throughput and SINR,
     release: 26.04.1 (v1.1)
+    short_description: UL throughput vs. SINR
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'UL throughput vs. SINR curve; test method: TIFG clauses 4.8, 6.8.'
   - id: MVP-PERF-THR-5b
     source: ATIS-MVP
     scope: Unspecified
     description: Uplink Application throughput for varying channel conditions to plot between throughput and SINR,
     release: 26.04.1 (v1.1)
+    short_description: UL spectral efficiency vs. SINR
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: UL spectral efficiency vs. SINR curve.
   - id: MVP-PERF-THR-5c
     source: ATIS-MVP
     scope: Unspecified
     description: 'Uplink Spectral Efficiency for varying channel conditions to plot between SE and SINR:'
     release: 26.04.1 (v1.1)
+    short_description: UL throughput/SE at additional SINR point
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: UL throughput/SE at additional RF condition.
   - id: MVP-PERF-LAT-1
     source: ATIS-MVP
     scope: Unspecified
     description: 'RRC Setup Time:'
     release: 26.04.1 (v1.1)
+    short_description: RRC Setup Time ≤25 ms
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
     comment: All perf-lat-* are the attach/dettach with metrics and pass/fail based on latency
   - id: MVP-PERF-LAT-2
@@ -1059,27 +1402,40 @@ features:
     scope: Unspecified
     description: 'Ping Round Trip Time:'
     release: 26.04.1 (v1.1)
+    short_description: Ping RTT ≤23 ms (lab) / ≤60 ms (field)
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'Ping Round Trip Time: Lab ≤23 ms, Field ≤60 ms, median ≤25 ms; custom
+      test up to 1340-byte pings.'
   - id: MVP-PERF-LAT-3
     source: ATIS-MVP
     scope: Unspecified
     description: '5G SA registration time:'
     release: 26.04.1 (v1.1)
+    short_description: 5G SA registration time
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: '5G SA registration time; test method: TIFG clause 5.3.'
   - id: MVP-PERF-LAT-4
     source: ATIS-MVP
     scope: Unspecified
     description: '5G SA deregistration time:'
     release: 26.04.1 (v1.1)
+    short_description: 5G SA deregistration time
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: '5G SA deregistration time; test method: TIFG clause 5.3.'
   - id: MVP-PERF-CAP-1a
     source: ATIS-MVP
     scope: Unspecified
     description: Downlink aggregated cell L1 throughput,
     release: 26.04.1 (v1.1)
+    short_description: DL aggregated cell L1 throughput
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
     comment: This is with 10 UEs and has more complexity in terms of spatially distributing them in the cell, then do traffic and measure
   - id: MVP-PERF-CAP-1b
@@ -1087,27 +1443,39 @@ features:
     scope: Unspecified
     description: 'Cell based average DL L1 spectral efficiency:'
     release: 26.04.1 (v1.1)
+    short_description: DL spectral efficiency (aggregated cell)
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: DL spectral efficiency (aggregated cell).
   - id: MVP-PERF-CAP-2a
     source: ATIS-MVP
     scope: Unspecified
     description: Uplink aggregated cell L1 throughput,
     release: 26.04.1 (v1.1)
+    short_description: UL aggregated cell L1 throughput
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'UL aggregated cell L1 throughput; test method: TIFG clauses 4.8, 6.10.'
   - id: MVP-PERF-CAP-2b
     source: ATIS-MVP
     scope: Unspecified
     description: 'Cell based average UL L1 spectral efficiency:'
     release: 26.04.1 (v1.1)
+    short_description: UL spectral efficiency (aggregated cell)
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: UL spectral efficiency (aggregated cell).
   - id: MVP-PERF-CAP-3
     source: ATIS-MVP
     scope: Unspecified
     description: 'Simultaneous RRC_CONNECTED UEs (max. # of RRC_CONNECTED UEs):'
     release: 26.04.1 (v1.1)
+    short_description: Max simultaneous RRC_CONNECTED UEs
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
     comment: For a given configuration, stack 1 UE after another until Reject
   - id: MVP-PERF-MOB-1
@@ -1115,295 +1483,440 @@ features:
     scope: Unspecified
     description: 'Handover Success Rate:'
     release: 26.04.1 (v1.1)
+    short_description: Handover Success Rate >99.99%
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'Handover Success Rate >99.99% (all HO scenarios); test method: TIFG clauses
+      5.4, 5.5, 5.6.'
   - id: MVP-PERF-MOB-2
     source: ATIS-MVP
     scope: Unspecified
     description: 'Handover Interruption Time:'
     release: 26.04.1 (v1.1)
+    short_description: Handover Interruption Time by band combination
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'Handover Interruption Time: FR1-FR1 ≤52 ms, FR2-FR1 ≤72 ms, FR2-FR2 ≤157
+      ms, FR1-FR2 ≤177 ms (field); test method: TIFG clauses 5.4, 5.5, 5.6 / TS 38.133
+      clause 6.1.'
   - id: MVP-PERF-MOB-3
     source: ATIS-MVP
     scope: Unspecified
     description: 'DL packet loss during handover:'
     release: 26.04.1 (v1.1)
+    short_description: DL packet loss during handover
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'DL packet loss during handover; test method: TIFG clauses 5.4, 5.5, 5.6.'
   - id: MVP-PERF-MOB-4
     source: ATIS-MVP
     scope: Unspecified
     description: 'UL packet loss during handover:'
     release: 26.04.1 (v1.1)
+    short_description: UL packet loss during handover
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'UL packet loss during handover; test method: TIFG clauses 5.4, 5.5, 5.6.'
   - id: MVP-PERF-MOB-5
     source: ATIS-MVP
     scope: Unspecified
     description: 'Call drop due to unsuccessful handover:'
     release: 26.04.1 (v1.1)
+    short_description: Call drop due to failed handover
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'Call drop due to unsuccessful handover; test method: TIFG clauses 5.4,
+      5.5, 5.6.'
   - id: MVP-PERF-MOB-6
     source: ATIS-MVP
     scope: Unspecified
     description: 'Application DL Throughput before and after a successful handover:'
     release: 26.04.1 (v1.1)
+    short_description: App DL throughput after HO > before HO
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'App DL Throughput after HO > before HO; test method: TIFG clauses 5.4,
+      5.5, 5.6.'
   - id: MVP-PERF-MOB-7
     source: ATIS-MVP
     scope: Unspecified
     description: 'L1 DL Throughput before and after a successful handover:'
     release: 26.04.1 (v1.1)
+    short_description: L1 DL throughput after HO > before HO
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'L1 DL Throughput after HO > before HO; test method: TIFG clauses 5.4,
+      5.5, 5.6.'
   - id: MVP-PERF-MOB-8
     source: ATIS-MVP
     scope: Unspecified
     description: 'L3 DL Throughput before and after a successful handover:'
     release: 26.04.1 (v1.1)
+    short_description: L3 DL throughput after HO > before HO
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'L3 DL Throughput after HO > before HO; test method: TIFG clauses 5.4,
+      5.5, 5.6.'
   - id: MVP-PERF-MOB-9
     source: ATIS-MVP
     scope: Unspecified
     description: 'Application UL Throughput before and after a successful handover:'
     release: 26.04.1 (v1.1)
+    short_description: App UL throughput after HO > before HO
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'App UL Throughput after HO > before HO; test method: TIFG clauses 5.4,
+      5.5, 5.6.'
   - id: MVP-PERF-MOB-10
     source: ATIS-MVP
     scope: Unspecified
     description: 'L1 UL Throughput before and after a successful handover:'
     release: 26.04.1 (v1.1)
+    short_description: L1 UL throughput after HO > before HO
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'L1 UL Throughput after HO > before HO; test method: TIFG clauses 5.4,
+      5.5, 5.6.'
   - id: MVP-PERF-MOB-11
     source: ATIS-MVP
     scope: Unspecified
     description: 'L3 UL Throughput before and after a successful handover:'
     release: 26.04.1 (v1.1)
+    short_description: L3 UL throughput after HO > before HO
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'L3 UL Throughput after HO > before HO; test method: TIFG clauses 5.4,
+      5.5, 5.6.'
   - id: MVP-PERF-VNR-1
     source: ATIS-MVP
     scope: Unspecified
     description: 'VoNR Call Setup Success Rate:'
     release: 26.04.1 (v1.1)
+    short_description: VoNR Call Setup Success Rate >99%
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'VoNR Call Setup Success Rate >99%; test method: TIFG clause 7.5.1-4.'
   - id: MVP-PERF-VNR-2
     source: ATIS-MVP
     scope: Unspecified
     description: 'VoNR Call Setup Time:'
     release: 26.04.1 (v1.1)
+    short_description: VoNR Call Setup Time <2.5 s
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'VoNR Call Setup Time <2.5 s; test method: TIFG clause 7.5.1-4.'
   - id: MVP-PERF-VNR-3
     source: ATIS-MVP
     scope: Unspecified
     description: 'VoNR Handover Success Rate:'
     release: 26.04.1 (v1.1)
+    short_description: VoNR Handover Success Rate >99.99%
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'VoNR Handover Success Rate >99.99%; test method: TIFG clauses 7.5.2, 7.5.3,
+      7.5.4.'
   - id: MVP-PERF-VNR-4
     source: ATIS-MVP
     scope: Unspecified
     description: 'VoNR Handover - Real-time Transport Protocol (RTP) Packet loss %:'
     release: 26.04.1 (v1.1)
+    short_description: VoNR Handover RTP Packet Loss
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'VoNR Handover RTP Packet Loss %; test method: TIFG clauses 7.5.2, 7.5.3,
+      7.5.4.'
   - id: MVP-PERF-VNR-5
     source: ATIS-MVP
     scope: Unspecified
     description: 'VoNR Handover - UE Packet delay:'
     release: 26.04.1 (v1.1)
+    short_description: VoNR Handover UE Packet Delay
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'VoNR Handover UE Packet Delay; test method: TIFG clauses 7.5.2, 7.5.3,
+      7.5.4.'
   - id: MVP-PERF-VNR-6
     source: ATIS-MVP
     scope: Unspecified
     description: 'VoNR Mean Opinion Score:'
     release: 26.04.1 (v1.1)
+    short_description: VoNR MOS >3.5
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'VoNR Mean Opinion Score (MOS) >3.5; test method: TIFG clause 7.5.1-4.'
   - id: MVP-PERF-VNR-7
     source: ATIS-MVP
     scope: Unspecified
     description: 'VoNR Packet Loss Rate:'
     release: 26.04.1 (v1.1)
+    short_description: VoNR Packet Loss Rate <1%
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'VoNR Packet Loss Rate <1%; test method: TIFG clause 7.5.1-4.'
   - id: MVP-PERF-VNR-8
     source: ATIS-MVP
     scope: Unspecified
     description: 'VoNR muting Rate:'
     release: 26.04.1 (v1.1)
+    short_description: VoNR Muting Rate <1%
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'VoNR Muting Rate <1%; test method: TIFG clause 7.5.1-4.'
   - id: MVP-PERF-VNR-9
     source: ATIS-MVP
     scope: Unspecified
     description: 'VoNR One way call:'
     release: 26.04.1 (v1.1)
+    short_description: VoNR One-Way Call Rate <1%
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'VoNR One-Way Call Rate <1%; test method: TIFG clause 7.5.1-4.'
   - id: MVP-PERF-VNR-10
     source: ATIS-MVP
     scope: Unspecified
     description: 'VoNR Call Block rate:'
     release: 26.04.1 (v1.1)
+    short_description: VoNR Call Block Rate <0.01%
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'VoNR Call Block Rate <0.01%; test method: TIFG clause 7.5.1-4.'
   - id: MVP-PERF-WEB-1
     source: ATIS-MVP
     scope: Unspecified
     description: 'Domain Name System (DNS) Resolution Time:'
     release: 26.04.1 (v1.1)
+    short_description: DNS Resolution Time <1 s
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'DNS Resolution Time <1 s; test method: TIFG clause 7.1.1.'
   - id: MVP-PERF-WEB-2
     source: ATIS-MVP
     scope: Unspecified
     description: 'Time to First Byte (TTFB):'
     release: 26.04.1 (v1.1)
+    short_description: Time to First Byte <3 s (2 MB page)
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'Time to First Byte (TTFB) <3 s (2 MB page); test method: TIFG clause 7.1.1.'
   - id: MVP-PERF-WEB-3
     source: ATIS-MVP
     scope: Unspecified
     description: 'Page Load Time:'
     release: 26.04.1 (v1.1)
+    short_description: Page Load Time <12 s (2 MB page)
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'Page Load Time <12 s (2 MB page); test method: TIFG clause 7.1.1.'
   - id: MVP-PERF-WEB-4
     source: ATIS-MVP
     scope: Unspecified
     description: 'Application DL throughput (Mbps):'
     release: 26.04.1 (v1.1)
+    short_description: App DL throughput (web)
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'App DL Throughput (web) same as MVP-PERF-THR-3a for comparable RF; test
+      method: TIFG clause 7.1.1.'
   - id: MVP-PERF-FILDL-1
     source: ATIS-MVP
     scope: Unspecified
     description: 'Time taken to Download File:'
     release: 26.04.1 (v1.1)
+    short_description: Download time for 1 GB file
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'Time to Download File (1 GB); test method: TIFG clause 7.1.2.'
   - id: MVP-PERF-FILDL-2
     source: ATIS-MVP
     scope: Unspecified
     description: 'Application DL throughput (Mbps):'
     release: 26.04.1 (v1.1)
+    short_description: App DL throughput (file download)
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'App DL Throughput (file, 1 GB) same as MVP-PERF-THR-3a; test method: TIFG
+      clause 7.1.2.'
   - id: MVP-PERF-FILUL-1
     source: ATIS-MVP
     scope: Unspecified
     description: 'Time taken to Upload File:'
     release: 26.04.1 (v1.1)
+    short_description: Upload time for 1 GB file
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'Time to Upload File (1 GB); test method: TIFG clause 7.1.2.'
   - id: MVP-PERF-FILUL-2
     source: ATIS-MVP
     scope: Unspecified
     description: 'Application UL throughput (Mbps):'
     release: 26.04.1 (v1.1)
+    short_description: App UL throughput (file upload)
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'App UL Throughput (file, 1 GB) same as MVP-PERF-THR-3a; test method: TIFG
+      clause 7.1.2.'
   - id: MVP-PERF-LOAD-1
     source: ATIS-MVP
     scope: Unspecified
     description: 'Long hours stability Testing (successfully tested hours):'
     release: 26.04.1 (v1.1)
+    short_description: 24-hour continuous stability
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'Long-hours Stability: minimum 24 h continuous operation; test method:
+      TIFG clauses 8.4, 8.5.'
   - id: MVP-PERF-LOAD-2
     source: ATIS-MVP
     scope: Unspecified
     description: 'RRC Access Success Rate:'
     release: 26.04.1 (v1.1)
+    short_description: RRC access rate under multi-UE load
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'RRC Access Success Rate under emulated multi-UE load; test method: TIFG
+      clause 8.3.'
   - id: MVP-PERF-LOAD-3
     source: ATIS-MVP
     scope: Unspecified
     description: 'Packet Error Rate:'
     release: 26.04.1 (v1.1)
+    short_description: Packet Error Rate under multi-UE load
+    type: Performance
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'Packet Error Rate under emulated multi-UE load; test method: TIFG clause
+      8.3.'
   - id: MVP-PERF-RF-1
     source: ATIS-MVP
     scope: Unspecified
-    description: 'RF Transmitter:'
+    description: RF Transmitter characteristics (signal quality, ACLR, spurious emissions)
+      per 3GPP TS 38.141-1/2.
+    short_description: RF transmitter characteristics
+    type: Performance
     release: unspecified
     primary_test_type: []
-    comment: ''
+    comment: 'RF Transmitter (signal quality, ACLR, spurious emissions) per 3GPP-3;
+      test method: 3GPP TS 38.141-1/2.'
   - id: MVP-PERF-RF-2
     source: ATIS-MVP
     scope: Unspecified
-    description: 'RF Receiver:'
+    description: RF Receiver characteristics (sensitivity, dynamic range, blocking,
+      intermodulation) per 3GPP TS 38.141-1/2.
+    short_description: RF receiver characteristics
+    type: Performance
     release: unspecified
     primary_test_type: []
-    comment: ''
+    comment: 'RF Receiver (sensitivity, dynamic range, blocking, intermodulation) per
+      3GPP-3; test method: 3GPP TS 38.141-1/2.'
   - id: MVP-PERF-RF-3
     source: ATIS-MVP
     scope: Unspecified
-    description: 'RF Demodulation:'
+    description: RF Demodulation (PUSCH, PUCCH, PRACH) per 3GPP TS 38.141-1/2.
+    short_description: RF demodulation (PUSCH, PUCCH, PRACH)
+    type: Performance
     release: unspecified
     primary_test_type: []
-    comment: ''
+    comment: 'RF Demodulation (PUSCH, PUCCH, PRACH) per 3GPP-3; test method: 3GPP TS
+      38.141-1/2.'
   - id: MVP-SEC-O-CU-01a
     source: ATIS-MVP
     scope: CU/DU
     description: CU-CP shall support confidentiality, integrity, and replay protection using Internet Protocol Security (IPsec) for the F1-C interface
     release: 26.04.1 (v1.1)
+    short_description: 'O-CU-CP F1-C: IPsec confidentiality/integrity/replay'
+    type: Security
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'O-CU-CP: F1-C confidentiality/integrity/replay protection via IPsec.'
   - id: MVP-SEC-O-CU-01b
     source: ATIS-MVP
     scope: CU/DU
     description: CU-CP shall support confidentiality, integrity, and replay protection using Datagram Transport Layer Security (DTLS) for the F1-C interface as specified in [O-RAN-8], clause 5.1.4.
+    short_description: 'O-CU-CP F1-C: DTLS confidentiality/integrity/replay'
+    type: Security
     release: 26.10 (v2.1)
     primary_test_type: []
-    comment: ''
+    comment: 'O-CU-CP: F1-C confidentiality/integrity/replay protection via DTLS.'
   - id: MVP-SEC-O-CU-02
     source: ATIS-MVP
     scope: Platform/deployment/auxiliary component
     description: CU-UP shall support confidentiality, integrity, and replay protection using IPsec for the F1-U interface as specified in [O-RAN-8], clause 5.1.4.
     release: 26.04.1 (v1.1)
+    short_description: 'O-CU-UP F1-U: IPsec confidentiality/integrity/replay'
+    type: Security
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'O-CU-UP: F1-U confidentiality/integrity/replay protection via IPsec.'
   - id: MVP-SEC-O-CU-03
     source: ATIS-MVP
     scope: Entire RAN Product
     description: O-CU-CP shall support mutual authentication and authorization for Operations, Administration, and Management (OAM) as specified in [3GPP-4], clause 5.3.4.
     release: 26.04.1 (v1.1)
+    short_description: 'O-CU-CP OAM: mutual authentication/authorization'
+    type: Security
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'O-CU-CP: mutual authentication/authorization for OAM (3GPP-4 clause 5.3.4).'
   - id: MVP-SEC-O-CU-04
     source: ATIS-MVP
     scope: Platform/deployment/auxiliary component
     description: ' O-CU-UP shall support mutual authentication and authorization for OAM as specified in [3GPP-4], clause 5.3.4.'
     release: 26.04.1 (v1.1)
+    short_description: 'O-CU-UP OAM: mutual authentication/authorization'
+    type: Security
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'O-CU-UP: mutual authentication/authorization for OAM (3GPP-4 clause 5.3.4).'
   - id: MVP-SEC-O-CU-05
     source: ATIS-MVP
     scope: Platform/deployment/auxiliary component
     description: O-CU-CP shall support confidentiality and integrity protection for the O1 interface using TLS 1.2 and 1.3 as specified in [O-RAN-8], clause 5.2.2.
+    short_description: 'O-CU-CP O1: TLS confidentiality/integrity'
+    type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'O-CU-CP: O1 interface confidentiality/integrity via TLS 1.2 and 1.3.'
   - id: MVP-SEC-O-CU-06
     source: ATIS-MVP
     scope: Platform/deployment/auxiliary component
     description: O-CU-CP shall support authentication for the O1 interface using mTLS 1.2 and 1.3 and PKI-based X.509 certificates as specified in [O-RAN-8], clause 5.2.2.
     release: 26.04.1 (v1.1)
+    short_description: 'O-CU-CP O1: mTLS + PKI X.509 authentication'
+    type: Security
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'O-CU-CP: O1 interface authentication via mTLS 1.2/1.3 and PKI X.509.'
   - id: MVP-SEC-O-CU-07
     source: ATIS-MVP
     scope: Unspecified
@@ -1416,6 +1929,18 @@ features:
     scope: Unspecified
     description: O-CU-UP shall support authentication for the O1 interface using mTLS 1.2 and 1.3 and PKI-based X.509 certificates as specified in [O-RAN-8], clause 5.2.2.
     release: 26.04.1 (v1.1)
+    short_description: 'O-CU-UP O1: TLS confidentiality/integrity'
+    type: Security
+    release: 26.04 (v1.0)
+    primary_test_type: []
+    comment: 'O-CU-UP: O1 interface confidentiality/integrity via TLS 1.2 and 1.3.'
+  - id: MVP-SEC-O-CU-08
+    source: ATIS-MVP
+    scope: Unspecified
+    description: 'O-CU-UP: O1 interface authentication via mTLS 1.2/1.3 and PKI X.509.'
+    short_description: 'O-CU-UP O1: mTLS + PKI X.509 authentication'
+    type: Security
+    release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-SEC-O-CU-09a
@@ -1423,26 +1948,38 @@ features:
     scope: Unspecified
     description: O-CU-CP shall support confidentiality, integrity, and replay protection using IPsec for the E1 interface as specified in [O-RAN-8], clause 5.1.4.
     release: 26.04.1 (v1.1)
+    short_description: 'O-CU-CP E1: IPsec confidentiality/integrity/replay'
+    type: Security
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'O-CU-CP: E1 interface confidentiality/integrity/replay via IPsec.'
   - id: MVP-SEC-O-CU-09b
     source: ATIS-MVP
     scope: Unspecified
     description: O-CU-CP shall support confidentiality and integrity protection using DTLS for the E1 interface as specified in [O-RAN-8], clause 5.1.4.
+    release: 26.04.1 (v1.1)
+    short_description: 'O-CU-CP E1: DTLS confidentiality/integrity'
+    type: Security
     release: 26.10 (v2.1)
     primary_test_type: []
-    comment: ''
+    comment: 'O-CU-CP: E1 interface confidentiality/integrity via DTLS.'
   - id: MVP-SEC-O-CU-10a
     source: ATIS-MVP
     scope: Unspecified
     description: O-CU-CP shall support confidentiality and integrity protection using IPsec for the Xn-C interface as specified in [O-RAN-8], clause 5.1.4.
     release: 26.04.1 (v1.1)
+    short_description: 'O-CU-CP Xn-C: IPsec confidentiality/integrity'
+    type: Security
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'O-CU-CP: Xn-C interface confidentiality/integrity via IPsec.'
   - id: MVP-SEC-O-CU-10b
     source: ATIS-MVP
     scope: Unspecified
     description: O-CU-CP shall support confidentiality, integrity, and replay protection using DTLS for the Xn-C interface as specified in [O-RAN-8], clause 5.1.4.
+    release: 26.04.1 (v1.1)
+    short_description: 'O-CU-CP Xn-C: DTLS confidentiality/integrity/replay'
+    type: Security
     release: 26.10 (v2.1)
     primary_test_type: []
     comment: ''
@@ -1451,47 +1988,68 @@ features:
     scope: Unspecified
     description: O-CU-UP shall support confidentiality, integrity, and replay protection using IPsec for the Xn-U interface as specified in [O-RAN-8], clause 5.1.4.
     release: 26.04.1 (v1.1)
+    short_description: 'O-CU-UP Xn-U: IPsec confidentiality/integrity/replay'
+    type: Security
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'O-CU-UP: Xn-U interface confidentiality/integrity/replay via IPsec.'
   - id: MVP-SEC-O-CU-12
     source: ATIS-MVP
     scope: CU/DU
     description: O-CU-CP shall support RRC confidentiality, integrity and replay protection with the PDCP protocol as specified in [O-RAN-8], clause 5.1.4.
     release: 26.04.1 (v1.1)
+    short_description: 'O-CU-CP RRC: PDCP confidentiality/integrity/replay'
+    type: Security
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'O-CU-CP: RRC confidentiality/integrity/replay via PDCP.'
   - id: MVP-SEC-O-CU-13
     source: ATIS-MVP
     scope: Unspecified
     description: O-CU-UP shall support user plane data confidentiality protection with the PDCP protocol as specified in [O-RAN-8], clause 5.1.4.
     release: 26.04.1 (v1.1)
+    short_description: 'O-CU-UP: PDCP user plane confidentiality'
+    type: Security
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'O-CU-UP: user plane data confidentiality via PDCP.'
   - id: MVP-SEC-O-CU-14
     source: ATIS-MVP
     scope: Unspecified
     description: O-CU-CP shall follow the security requirements in [3GPP-4], clauses 5.3.5 and 5.3.7.
     release: 26.04.1 (v1.1)
+    short_description: 'O-CU-CP: 3GPP-4 clause 5.3.5 and 5.3.7'
+    type: Security
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'O-CU-CP: follow 3GPP-4 clauses 5.3.5 and 5.3.7.'
   - id: MVP-SEC-O-CU-15
     source: ATIS-MVP
     scope: Unspecified
     description: O-CU-UP shall follow the security requirements in [3GPP-4], clauses 5.3.5 and 5.3.6.
     release: 26.04.1 (v1.1)
+    short_description: 'O-CU-UP: 3GPP-4 clause 5.3.5 and 5.3.6'
+    type: Security
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'O-CU-UP: follow 3GPP-4 clauses 5.3.5 and 5.3.6.'
   - id: MVP-SEC-O-DU-01a
     source: ATIS-MVP
     scope: Unspecified
     description: O-DU shall support confidentiality and integrity protection using IPsec for the F1-C interface as specified in [O-RAN-8], clause 5.1.5.
     release: 26.04.1 (v1.1)
+    short_description: 'O-DU F1-C: IPsec confidentiality/integrity'
+    type: Security
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'O-DU: F1-C confidentiality/integrity via IPsec.'
   - id: MVP-SEC-O-DU-01b
     source: ATIS-MVP
     scope: Unspecified
     description: O-DU shall support confidentiality and integrity protection using DTLS for the F1-C interface as specified in [O-RAN-8], clause 5.1.5.
+    release: 26.04.1 (v1.1)
+    short_description: 'O-DU F1-C: DTLS confidentiality/integrity'
+    type: Security
     release: 26.10 (v2.1)
     primary_test_type: []
     comment: ''
@@ -1500,376 +2058,511 @@ features:
     scope: Unspecified
     description: O-DU shall support confidentiality and integrity protection using IPsec for the F1-U interface as specified in [O-RAN-8], clause 5.1.5.
     release: 26.04.1 (v1.1)
+    short_description: 'O-DU F1-U: IPsec confidentiality/integrity'
+    type: Security
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'O-DU: F1-U confidentiality/integrity via IPsec.'
   - id: MVP-SEC-O-DU-03a
     source: ATIS-MVP
     scope: Unspecified
     description: O-DU shall support confidentiality and integrity protection using TLS 1.2 and 1.3 for the Open Fronthaul M-Plane interface as specified in [O-RAN-3] clause 5.4 and [O-RAN-8], clauses 5.1.5 and 5.2.5.4.
+    short_description: 'O-DU M-Plane: TLS confidentiality/integrity'
+    type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'O-DU: Open FH M-Plane confidentiality/integrity via TLS 1.2 and 1.3.'
   - id: MVP-SEC-O-DU-03b
     source: ATIS-MVP
     scope: Unspecified
     description: O-DU shall support confidentiality and integrity protection using Secure Shell Protocol (SSH) v2.0 for the Open Fronthaul M-Plane interface as specified in [O-RAN-3], clause 5.4 and [O-RAN-8], clauses 5.1.5 and 5.2.5.4.
     release: 26.04.1 (v1.1)
+    short_description: 'O-DU M-Plane: SSH v2.0 confidentiality/integrity'
+    type: Security
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'O-DU: Open FH M-Plane confidentiality/integrity via SSH v2.0.'
   - id: MVP-SEC-O-DU-04
     source: ATIS-MVP
     scope: Unspecified
     description: O-DU shall support authentication using mTLS 1.2 and 1.3 for the Open Fronthaul M-Plane interface as specified in [O-RAN-8], clauses 5.1.5 and 5.2.5.4.
+    short_description: 'O-DU M-Plane: mTLS authentication'
+    type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'O-DU: Open FH M-Plane authentication via mTLS 1.2 and 1.3.'
   - id: MVP-SEC-O-DU-05
     source: ATIS-MVP
     scope: Unspecified
     description: O-DU shall support authorization using NACM for the Open Fronthaul M-Plane interface as specified in [O-RAN-8], clauses 5.1.5 and 5.2.5.4.
+    short_description: 'O-DU M-Plane: NACM authorization'
+    type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'O-DU: Open FH M-Plane authorization via NACM.'
   - id: MVP-SEC-O-DU-06
     source: ATIS-MVP
     scope: Unspecified
     description: O-DU shall support port-based access control with authentication and authorization using IEEE 802.1X for the Open Fronthaul point-to-point Local Area Network (LAN) segments as specified in [O-RAN-8], clauses 5.1.5, 5.2.5.4, and 5.2.5.5.
     release: 26.04.1 (v1.1)
+    short_description: 'O-DU: IEEE 802.1X port-based access control'
+    type: Security
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'O-DU: port-based access control via IEEE 802.1X for Open FH point-to-point
+      LAN segments.'
   - id: MVP-SEC-O-DU-07
     source: ATIS-MVP
     scope: Unspecified
     description: O-DU shall support mutual authentication and authorization for OAM as specified in [3GPP-4], clause 5.3.4.
     release: 26.04.1 (v1.1)
+    short_description: 'O-DU OAM: mutual authentication/authorization'
+    type: Security
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'O-DU: mutual authentication/authorization for OAM (3GPP-4 clause 5.3.4).'
   - id: MVP-SEC-O-DU-08
     source: ATIS-MVP
     scope: Unspecified
     description: O-DU shall support confidentiality and integrity protection for the O1 interface using TLS 1.2 and 1.3 as specified in [O-RAN-8], clause 5.2.2.
     release: 26.04.1 (v1.1)
+    short_description: 'O-DU O1: TLS confidentiality/integrity'
+    type: Security
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'O-DU: O1 interface confidentiality/integrity via TLS 1.2 and 1.3.'
   - id: MVP-SEC-O-DU-09
     source: ATIS-MVP
     scope: Unspecified
     description: O-DU shall support authentication for the O1 interface using mTLS 1.2 and 1.3 and PKI-based X.509 certificates as specified in [O-RAN-8], clause 5.2.2.
     release: 26.04.1 (v1.1)
+    short_description: 'O-DU O1: mTLS + PKI X.509 authentication'
+    type: Security
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'O-DU: O1 interface authentication via mTLS 1.2/1.3 and PKI X.509.'
   - id: MVP-SEC-ADD-02
     source: ATIS-MVP
     scope: Unspecified
     description: Open RAN architectural elements shall have unused protocols disabled as specified in [O-RAN-8], clause 5.3.3.
     release: 26.04.1 (v1.1)
+    short_description: Unused protocols disabled
+    type: Security
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: Open RAN elements shall have unused protocols disabled (O-RAN-8 clause
+      5.3.3).
   - id: MVP-SEC-ADD-03
     source: ATIS-MVP
     scope: Unspecified
     description: Open RAN architectural elements shall be able to withstand and recover from a volumetric Distributed Denial of Service (DDoS) attack, on any interface, without system crash as specified in [O-RAN-8], clause 5.3.5.
     release: 26.04.1 (v1.1)
+    short_description: DDoS attack resilience
+    type: Security
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: Open RAN elements shall withstand/recover from volumetric DDoS attacks
+      without system crash (O-RAN-8 clause 5.3.5).
   - id: MVP-SEC-ADD-04
     source: ATIS-MVP
     scope: Unspecified
     description: Open RAN architectural elements shall support password hygiene as specified in [O-RAN-8], clause 5.3.7.
     release: 26.04.1 (v1.1)
+    short_description: Password hygiene
+    type: Security
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: Open RAN elements shall support password hygiene (O-RAN-8 clause 5.3.7).
   - id: MVP-SEC-ADD-05
     source: ATIS-MVP
     scope: Unspecified
     description: Open RAN architectural elements shall support PKI with X.509 certificates as specified in [O-RAN-8], clause 5.3.9.
     release: 26.04.1 (v1.1)
+    short_description: PKI with X.509 certificates
+    type: Security
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: Open RAN elements shall support PKI with X.509 certificates (O-RAN-8 clause
+      5.3.9).
   - id: MVP-SEC-ADD-06
     source: ATIS-MVP
     scope: Unspecified
     description: Open RAN architectural elements shall support Certificate Management Protocol (CMP) v2 as specified in [O-RAN-8], clause 5.3.9.
     release: 26.04.1 (v1.1)
+    short_description: Certificate Management Protocol (CMP) v2
+    type: Security
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: Open RAN elements shall support Certificate Management Protocol (CMP) v2
+      (O-RAN-8 clause 5.3.9).
   - id: MVP-SEC-ADD-07
     source: ATIS-MVP
     scope: Unspecified
     description: Open RAN architectural elements shall provide API security as specified in [O-RAN-8], clause 5.3.10.
     release: 26.04.1 (v1.1)
+    short_description: API security
+    type: Security
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: Open RAN elements shall provide API security (O-RAN-8 clause 5.3.10).
   - id: MVP-SEC-ADD-08
     source: ATIS-MVP
     scope: Unspecified
     description: Open RAN architectural elements shall be able to handle unexpected inputs to transport protocols as specified in [O-RAN-8], Clause 5.3.4.
     release: 26.04.1 (v1.1)
+    short_description: Unexpected transport protocol input handling
+    type: Security
+    release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: Open RAN elements shall handle unexpected inputs to transport protocols
+      (O-RAN-8 clause 5.3.4).
   - id: DU-GEN-1
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support Type A DL/UL Transmission Type'
+    description: 'The Open RAN system shall support Type A DL/UL Transmission Type'
+    short_description: Type A DL/UL Transmission Type
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-URLLC-2
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support Type B DL/UL Transmission Type (low latency)'
+    description: 'The Open RAN system shall support Type B DL/UL Transmission Type (low latency)'
+    short_description: Type B DL/UL Transmission Type (low latency)
+    type: Functional
     release: unspecified
     primary_test_type: []
     comment: ''
   - id: DU-URLLC-3
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support Self-contained subframes (Low Latency)'
+    description: 'The Open RAN system shall support Self-contained subframes (Low Latency)'
+    short_description: Self-contained subframes (Low Latency)
+    type: Functional
     release: unspecified
     primary_test_type: []
     comment: ''
   - id: DU-URLLC-4
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support slot aggregation'
+    description: 'The Open RAN system shall support slot aggregation'
+    short_description: Slot aggregation
+    type: Functional
     release: unspecified
     primary_test_type: []
     comment: ''
   - id: DU-MM-1
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support Code Block Groups (CGB)'
+    description: 'The Open RAN system shall support Code Block Groups (CGB)'
+    short_description: Code Block Groups (CGB)
+    type: Functional
     release: unspecified
     primary_test_type: []
     comment: ''
   - id: CU-GEN-1
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support Emergency Broadcast signalling (SIB6, SIB7 and SIB8)'
+    description: 'The Open RAN system shall support Emergency Broadcast signalling (SIB6, SIB7 and SIB8)'
+    short_description: Emergency Broadcast signalling (SIB6, SIB7 and SIB8)
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: CU-GEN-2
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support SIB on Demand'
+    description: 'The Open RAN system shall support SIB on Demand'
+    short_description: SIB on Demand
+    type: Functional
     release: unspecified
     primary_test_type: []
     comment: ''
   - id: CU-GEN-3
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support Reestablishment to the same cell and different cell in the same CU-CP'
+    description: 'The Open RAN system shall support Reestablishment to the same cell and different cell in the same CU-CP'
     release: 26.04 (v1.0)
+    short_description: Reestablishment to the same cell and different cell in the same
+      CU-CP
+    type: Functional
+    release: unspecified
     primary_test_type: []
     comment: ''
   - id: DU-GEN-2-a
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support contention based and contention free Random Access'
+    description: 'The Open RAN system shall support contention based and contention free Random Access'
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-GEN-2-b
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support contention based and contention free Random Access'
+    description: 'The Open RAN system shall support contention based and contention free Random Access'
+    short_description: Contention based and contention free Random Access
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-GEN-3
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support intraslot frequency hopping PUCCH'
-    release: 26.04 (v1.0)
+    description: 'The Open RAN system shall support intraslot frequency hopping PUCCH'
+    release: 26.04.1 (v1.1)
+    short_description: Intraslot frequency hopping PUCCH
+    type: Functional
     primary_test_type: []
     comment: ''
   - id: DU-PHY-1
     source: OCUDU defined
     scope: Unspecified
-    description: .. shall support PUCCH Format 0, 1, 2, 3 and 4
+    description: The Open RAN system shall support PUCCH Format 0, 1, 2, 3 and 4
+    short_description: PUCCH Format 0, 1, 2, 3 and 4
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-PHY-2
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support the following DCI formats: 0_0, 0_1, 1_0, 1_1'
+    description: 'The Open RAN system shall support the following DCI formats: 0_0, 0_1, 1_0, 1_1'
+    short_description: 'The following DCI formats: 0_0, 0_1, 1_0, 1_1'
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-PHY-3
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support Additional PUCCH DMRS for Format 3 and 4'
+    description: 'The Open RAN system shall support Additional PUCCH DMRS for Format 3 and 4'
+    short_description: Additional PUCCH DMRS for Format 3 and 4
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-PHY-4
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support Tracking RS (TRS)'
+    description: 'The Open RAN system shall support Tracking RS (TRS)'
+    short_description: Tracking RS (TRS)
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-GEN-4
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support resource allocation Type 0'
+    description: 'The Open RAN system shall support resource allocation Type 0'
+    short_description: Resource allocation Type 0
+    type: Functional
     release: unspecified
     primary_test_type: []
     comment: ''
   - id: DU-GEN-5
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support resource allocation Type 1'
+    description: 'The Open RAN system shall support resource allocation Type 1'
+    short_description: Resource allocation Type 1
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-GEN-6
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support dynamic PDCCH aggregation level adaptation '
+    description: 'The Open RAN system shall support dynamic PDCCH aggregation level adaptation '
     release: 26.04.1 (v1.1)
+    short_description: Dynamic PDCCH aggregation level adaptation
+    type: Functional
+    release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-GEN-7
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support dynamic PDSCH MCS adaptation based on BLER target'
+    description: 'The Open RAN system shall support dynamic PDSCH MCS adaptation based on BLER target'
     release: 26.04.1 (v1.1)
+    short_description: Dynamic PDSCH MCS adaptation based on BLER target
+    type: Functional
+    release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-GEN-8
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support dynamic PUSCH MCS adaptation based on BLER target'
+    description: 'The Open RAN system shall support dynamic PUSCH MCS adaptation based on BLER target'
     release: 26.04.1 (v1.1)
+    short_description: Dynamic PUSCH MCS adaptation based on BLER target
+    type: Functional
+    release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-PHY-5
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support PDSCH DMRS Type A'
+    description: 'The Open RAN system shall support PDSCH DMRS Type A'
+    short_description: PDSCH DMRS Type A
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-PHY-6
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support PUSCH DMRS Type A'
+    description: 'The Open RAN system shall support PUSCH DMRS Type A'
+    short_description: PUSCH DMRS Type A
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-PHY-7
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support DFT-S-OFDM'
+    description: 'The Open RAN system shall support DFT-S-OFDM'
+    short_description: DFT-S-OFDM
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-PHY-8
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support PDSCH VRB mapping'
+    description: 'The Open RAN system shall support PDSCH VRB mapping'
+    short_description: PDSCH VRB mapping
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-PHY-9
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support PTRS in PDSCH'
+    description: 'The Open RAN system shall support PTRS in PDSCH'
+    short_description: PTRS in PDSCH
+    type: Functional
     release: unspecified
     primary_test_type: []
     comment: ''
   - id: DU-PHY-10
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support PTRS in PUSCH'
+    description: 'The Open RAN system shall support PTRS in PUSCH'
+    short_description: PTRS in PUSCH
+    type: Functional
     release: unspecified
     primary_test_type: []
     comment: ''
   - id: DU-GEN-9
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support Measurement Gaps (for inter-frequency mobility)'
+    description: 'The Open RAN system shall support Measurement Gaps (for inter-frequency mobility)'
+    short_description: Measurement Gaps (for inter-frequency mobility)
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-GEN-10
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support eDRX'
+    description: 'The Open RAN system shall support eDRX'
+    short_description: EDRX
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-QOS-1
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support GBR bearer and non-GBR service differentiation'
+    description: 'The Open RAN system shall support GBR bearer and non-GBR service differentiation'
+    short_description: GBR bearer and non-GBR service differentiation
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-QOS-2
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support UE-AMBR'
+    description: 'The Open RAN system shall support UE-AMBR'
     release: 26.04.1 (v1.1)
+    short_description: UE-AMBR
+    type: Functional
+    release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-QOS-3
     source: OCUDU defined
     scope: Unspecified
-    description: '...  shall support packet delay budget and packet error loss rate handling'
+    description: 'The Open RAN system shall support packet delay budget and packet error loss rate handling'
     release: 26.04.1 (v1.1)
+    short_description: Packet delay budget and packet error loss rate handling
+    type: Functional
+    release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-QOS-4
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support Diffserv Code Point Marking (DSCP)'
+    description: 'The Open RAN system shall support Diffserv Code Point Marking (DSCP)'
     release: 26.04.1 (v1.1)
+    short_description: Diffserv Code Point Marking (DSCP)
+    type: Functional
+    release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-QOS-5
     source: OCUDU defined
     scope: Unspecified
-    description: .. shall support standardised 5QI 1-9 and mission critical 5QI 65-70
+    description: The Open RAN system shall support standardised 5QI 1-9 and mission critical 5QI 65-70
     release: 26.04.1 (v1.1)
+    short_description: Standardised 5QI 1-9 and mission critical 5QI 65-70
+    type: Functional
+    release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: CU-GEN-4
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support SCTP Multi-homing'
+    description: 'The Open RAN system shall support SCTP Multi-homing'
+    short_description: SCTP Multi-homing
+    type: Functional
     release: 26.10 (v2.1)
     primary_test_type: []
     comment: ''
   - id: CU-GEN-5
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support periodic measurement reporting '
+    description: 'The Open RAN system shall support periodic measurement reporting '
+    short_description: Periodic measurement reporting
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: CU-GEN-6
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support event-based measurment reporting for events A1-A6'
+    description: 'The Open RAN system shall support event-based measurment reporting for events A1-A6'
     release: 26.04.1 (v1.1)
+    short_description: Event-based measurment reporting for events A1-A6
+    type: Functional
+    release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: CU-GEN-7
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support NAS Tracking Area Update'
+    description: 'The Open RAN system shall support NAS Tracking Area Update'
+    short_description: NAS Tracking Area Update
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: CU-GEN-8
     source: OCUDU defined
     scope: Unspecified
-    description: '... shall support NAS Tracking Area Update'
+    description: 'The Open RAN system shall support NAS Tracking Area Update'
+    short_description: NAS Tracking Area Update
+    type: Functional
     release: unspecified
     primary_test_type: []
     comment: ''

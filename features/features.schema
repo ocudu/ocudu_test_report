@@ -18,6 +18,8 @@ $defs:
       - source
       - scope
       - description
+      - short_description
+      - type
       - release
       - primary_test_type
       - comment
@@ -54,5 +56,16 @@ $defs:
         items:
           type: string
           enum: ["unit", "integration", "e2e"]
+      short_description:
+        type: string
+      type:
+        type: string
+        enum:
+          - "Architecture"
+          - "Functional"
+          - "Performance"
+          - "Security"
+          - "O-Cloud"
+          - "Management"
       comment:
         type: string
