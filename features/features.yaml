@@ -2264,7 +2264,7 @@ features:
     comment: ''
   - id: MVP-SEC-O-CU-01a
     source: ATIS-MVP
-    scope: CU/DU
+    scope: Platform/deployment/auxiliary component
     description: O-CU-CP shall support confidentiality, integrity, and replay protection
       using Internet Protocol Security (IPsec) for the F1-C interface as specified in
       [O-RAN-8], clause 5.1.4.
@@ -2294,9 +2294,9 @@ features:
     comment: ''
   - id: MVP-SEC-O-CU-03
     source: ATIS-MVP
-    scope: Entire RAN Product
-    description: O-CU-CP shall support mutual authentication and authorization for Operations, Administration, and Management (OAM) as specified in [3GPP-4], clause 5.3.4.
-    release: 26.04.1 (v1.1)
+    scope: CU/DU
+    description: O-CU-CP shall support mutual authentication and authorization for Operations,
+      Administration, and Management (OAM) as specified in [3GPP-4], clause 5.3.4.
     short_description: 'O-CU-CP OAM: mutual authentication/authorization'
     type: Security
     release: 26.04 (v1.0)
@@ -2304,9 +2304,9 @@ features:
     comment: ''
   - id: MVP-SEC-O-CU-04
     source: ATIS-MVP
-    scope: Platform/deployment/auxiliary component
-    description: ' O-CU-UP shall support mutual authentication and authorization for OAM as specified in [3GPP-4], clause 5.3.4.'
-    release: 26.04.1 (v1.1)
+    scope: CU/DU
+    description: O-CU-UP shall support mutual authentication and authorization for OAM
+      as specified in [3GPP-4], clause 5.3.4.
     short_description: 'O-CU-UP OAM: mutual authentication/authorization'
     type: Security
     release: 26.04 (v1.0)
@@ -2314,7 +2314,7 @@ features:
     comment: ''
   - id: MVP-SEC-O-CU-05
     source: ATIS-MVP
-    scope: Platform/deployment/auxiliary component
+    scope: CU/DU
     description: O-CU-CP shall support confidentiality and integrity protection for
       the O1 interface using TLS 1.2 and 1.3 as specified in [O-RAN-8], clause 5.2.2.
     short_description: 'O-CU-CP O1: TLS confidentiality/integrity'
@@ -2324,9 +2324,10 @@ features:
     comment: ''
   - id: MVP-SEC-O-CU-06
     source: ATIS-MVP
-    scope: Platform/deployment/auxiliary component
-    description: O-CU-CP shall support authentication for the O1 interface using mTLS 1.2 and 1.3 and PKI-based X.509 certificates as specified in [O-RAN-8], clause 5.2.2.
-    release: 26.04.1 (v1.1)
+    scope: CU/DU
+    description: O-CU-CP shall support authentication for the O1 interface using mTLS
+      1.2 and 1.3 and PKI-based X.509 certificates as specified in [O-RAN-8], clause
+      5.2.2.
     short_description: 'O-CU-CP O1: mTLS + PKI X.509 authentication'
     type: Security
     release: 26.04 (v1.0)
@@ -2334,24 +2335,25 @@ features:
     comment: ''
   - id: MVP-SEC-O-CU-07
     source: ATIS-MVP
-    scope: Unspecified
+    scope: CU/DU
     description: O-CU-UP shall support confidentiality and integrity protection for the O1 interface using TLS 1.2 and 1.3 as specified in [O-RAN-8], clause 5.2.2.
     release: 26.04 (v1.0)
+    type: Security
     primary_test_type: []
     comment: ''
   - id: MVP-SEC-O-CU-08
     source: ATIS-MVP
-    scope: Unspecified
     description: O-CU-UP shall support authentication for the O1 interface using mTLS 1.2 and 1.3 and PKI-based X.509 certificates as specified in [O-RAN-8], clause 5.2.2.
-    release: 26.04.1 (v1.1)
     short_description: 'O-CU-UP O1: TLS confidentiality/integrity'
+    release: 26.04.1 (v1.1)
+    scope: CU/DU
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-SEC-O-CU-08
     source: ATIS-MVP
-    scope: Unspecified
+    scope: CU/DU
     description: O-CU-UP shall support authentication for the O1 interface using mTLS
       1.2 and 1.3 and PKI-based X.509 certificates as specified in [O-RAN-8], clause
       5.2.2.
@@ -2362,9 +2364,9 @@ features:
     comment: ''
   - id: MVP-SEC-O-CU-09a
     source: ATIS-MVP
-    scope: Unspecified
-    description: O-CU-CP shall support confidentiality, integrity, and replay protection using IPsec for the E1 interface as specified in [O-RAN-8], clause 5.1.4.
-    release: 26.04.1 (v1.1)
+    scope: Platform/deployment/auxiliary component
+    description: O-CU-CP shall support confidentiality, integrity, and replay protection
+      using IPsec for the E1 interface as specified in [O-RAN-8], clause 5.1.4.
     short_description: 'O-CU-CP E1: IPsec confidentiality/integrity/replay'
     type: Security
     release: 26.04 (v1.0)
@@ -2372,9 +2374,9 @@ features:
     comment: ''
   - id: MVP-SEC-O-CU-09b
     source: ATIS-MVP
-    scope: Unspecified
-    description: O-CU-CP shall support confidentiality and integrity protection using DTLS for the E1 interface as specified in [O-RAN-8], clause 5.1.4.
-    release: 26.04.1 (v1.1)
+    scope: CU/DU
+    description: O-CU-CP shall support confidentiality and integrity protection using
+      DTLS for the E1 interface as specified in [O-RAN-8], clause 5.1.4.
     short_description: 'O-CU-CP E1: DTLS confidentiality/integrity'
     type: Security
     release: 26.10 (v2.1)
@@ -2382,9 +2384,9 @@ features:
     comment: ''
   - id: MVP-SEC-O-CU-10a
     source: ATIS-MVP
-    scope: Unspecified
-    description: O-CU-CP shall support confidentiality and integrity protection using IPsec for the Xn-C interface as specified in [O-RAN-8], clause 5.1.4.
-    release: 26.04.1 (v1.1)
+    scope: Platform/deployment/auxiliary component
+    description: O-CU-CP shall support confidentiality and integrity protection using
+      IPsec for the Xn-C interface as specified in [O-RAN-8], clause 5.1.4.
     short_description: 'O-CU-CP Xn-C: IPsec confidentiality/integrity'
     type: Security
     release: 26.04 (v1.0)
@@ -2392,9 +2394,9 @@ features:
     comment: ''
   - id: MVP-SEC-O-CU-10b
     source: ATIS-MVP
-    scope: Unspecified
-    description: O-CU-CP shall support confidentiality, integrity, and replay protection using DTLS for the Xn-C interface as specified in [O-RAN-8], clause 5.1.4.
-    release: 26.04.1 (v1.1)
+    scope: CU/DU
+    description: O-CU-CP shall support confidentiality, integrity, and replay protection
+      using DTLS for the Xn-C interface as specified in [O-RAN-8], clause 5.1.4.
     short_description: 'O-CU-CP Xn-C: DTLS confidentiality/integrity/replay'
     type: Security
     release: 26.10 (v2.1)
@@ -2402,9 +2404,9 @@ features:
     comment: ''
   - id: MVP-SEC-O-CU-11
     source: ATIS-MVP
-    scope: Unspecified
-    description: O-CU-UP shall support confidentiality, integrity, and replay protection using IPsec for the Xn-U interface as specified in [O-RAN-8], clause 5.1.4.
-    release: 26.04.1 (v1.1)
+    scope: Platform/deployment/auxiliary component
+    description: O-CU-UP shall support confidentiality, integrity, and replay protection
+      using IPsec for the Xn-U interface as specified in [O-RAN-8], clause 5.1.4.
     short_description: 'O-CU-UP Xn-U: IPsec confidentiality/integrity/replay'
     type: Security
     release: 26.04 (v1.0)
@@ -2422,9 +2424,9 @@ features:
     comment: ''
   - id: MVP-SEC-O-CU-13
     source: ATIS-MVP
-    scope: Unspecified
-    description: O-CU-UP shall support user plane data confidentiality protection with the PDCP protocol as specified in [O-RAN-8], clause 5.1.4.
-    release: 26.04.1 (v1.1)
+    scope: CU/DU
+    description: O-CU-UP shall support user plane data confidentiality protection with
+      the PDCP protocol as specified in [O-RAN-8], clause 5.1.4.
     short_description: 'O-CU-UP: PDCP user plane confidentiality'
     type: Security
     release: 26.04 (v1.0)
@@ -2432,9 +2434,9 @@ features:
     comment: ''
   - id: MVP-SEC-O-CU-14
     source: ATIS-MVP
-    scope: Unspecified
-    description: O-CU-CP shall follow the security requirements in [3GPP-4], clauses 5.3.5 and 5.3.7.
-    release: 26.04.1 (v1.1)
+    scope: CU/DU
+    description: O-CU-CP shall follow the security requirements in [3GPP-4], clauses
+      5.3.5 and 5.3.7.
     short_description: 'O-CU-CP: 3GPP-4 clause 5.3.5 and 5.3.7'
     type: Security
     release: 26.04 (v1.0)
@@ -2442,9 +2444,9 @@ features:
     comment: ''
   - id: MVP-SEC-O-CU-15
     source: ATIS-MVP
-    scope: Unspecified
-    description: O-CU-UP shall follow the security requirements in [3GPP-4], clauses 5.3.5 and 5.3.6.
-    release: 26.04.1 (v1.1)
+    scope: CU/DU
+    description: O-CU-UP shall follow the security requirements in [3GPP-4], clauses
+      5.3.5 and 5.3.6.
     short_description: 'O-CU-UP: 3GPP-4 clause 5.3.5 and 5.3.6'
     type: Security
     release: 26.04 (v1.0)
@@ -2452,9 +2454,9 @@ features:
     comment: ''
   - id: MVP-SEC-O-DU-01a
     source: ATIS-MVP
-    scope: Unspecified
-    description: O-DU shall support confidentiality and integrity protection using IPsec for the F1-C interface as specified in [O-RAN-8], clause 5.1.5.
-    release: 26.04.1 (v1.1)
+    scope: Platform/deployment/auxiliary component
+    description: O-DU shall support confidentiality and integrity protection using IPsec
+      for the F1-C interface as specified in [O-RAN-8], clause 5.1.5.
     short_description: 'O-DU F1-C: IPsec confidentiality/integrity'
     type: Security
     release: 26.04 (v1.0)
@@ -2462,9 +2464,9 @@ features:
     comment: ''
   - id: MVP-SEC-O-DU-01b
     source: ATIS-MVP
-    scope: Unspecified
-    description: O-DU shall support confidentiality and integrity protection using DTLS for the F1-C interface as specified in [O-RAN-8], clause 5.1.5.
-    release: 26.04.1 (v1.1)
+    scope: CU/DU
+    description: O-DU shall support confidentiality and integrity protection using DTLS
+      for the F1-C interface as specified in [O-RAN-8], clause 5.1.5.
     short_description: 'O-DU F1-C: DTLS confidentiality/integrity'
     type: Security
     release: 26.10 (v2.1)
@@ -2472,9 +2474,9 @@ features:
     comment: ''
   - id: MVP-SEC-O-DU-02
     source: ATIS-MVP
-    scope: Unspecified
-    description: O-DU shall support confidentiality and integrity protection using IPsec for the F1-U interface as specified in [O-RAN-8], clause 5.1.5.
-    release: 26.04.1 (v1.1)
+    scope: Platform/deployment/auxiliary component
+    description: O-DU shall support confidentiality and integrity protection using IPsec
+      for the F1-U interface as specified in [O-RAN-8], clause 5.1.5.
     short_description: 'O-DU F1-U: IPsec confidentiality/integrity'
     type: Security
     release: 26.04 (v1.0)
@@ -2482,7 +2484,7 @@ features:
     comment: ''
   - id: MVP-SEC-O-DU-03a
     source: ATIS-MVP
-    scope: Unspecified
+    scope: CU/DU
     description: O-DU shall support confidentiality and integrity protection using TLS
       1.2 and 1.3 for the Open Fronthaul M-Plane interface as specified in [O-RAN-3]
       clause 5.4 and [O-RAN-8], clauses 5.1.5 and 5.2.5.4.
@@ -2493,9 +2495,10 @@ features:
     comment: ''
   - id: MVP-SEC-O-DU-03b
     source: ATIS-MVP
-    scope: Unspecified
-    description: O-DU shall support confidentiality and integrity protection using Secure Shell Protocol (SSH) v2.0 for the Open Fronthaul M-Plane interface as specified in [O-RAN-3], clause 5.4 and [O-RAN-8], clauses 5.1.5 and 5.2.5.4.
-    release: 26.04.1 (v1.1)
+    scope: CU/DU
+    description: O-DU shall support confidentiality and integrity protection using Secure
+      Shell Protocol (SSH) v2.0 for the Open Fronthaul M-Plane interface as specified
+      in [O-RAN-3], clause 5.4 and [O-RAN-8], clauses 5.1.5 and 5.2.5.4.
     short_description: 'O-DU M-Plane: SSH v2.0 confidentiality/integrity'
     type: Security
     release: 26.04 (v1.0)
@@ -2503,7 +2506,7 @@ features:
     comment: ''
   - id: MVP-SEC-O-DU-04
     source: ATIS-MVP
-    scope: Unspecified
+    scope: CU/DU
     description: O-DU shall support authentication using mTLS 1.2 and 1.3 for the Open
       Fronthaul M-Plane interface as specified in [O-RAN-8], clauses 5.1.5 and 5.2.5.4.
     short_description: 'O-DU M-Plane: mTLS authentication'
@@ -2513,7 +2516,7 @@ features:
     comment: ''
   - id: MVP-SEC-O-DU-05
     source: ATIS-MVP
-    scope: Unspecified
+    scope: CU/DU
     description: O-DU shall support authorization using NACM for the Open Fronthaul
       M-Plane interface as specified in [O-RAN-8], clauses 5.1.5 and 5.2.5.4.
     short_description: 'O-DU M-Plane: NACM authorization'
@@ -2523,9 +2526,11 @@ features:
     comment: ''
   - id: MVP-SEC-O-DU-06
     source: ATIS-MVP
-    scope: Unspecified
-    description: O-DU shall support port-based access control with authentication and authorization using IEEE 802.1X for the Open Fronthaul point-to-point Local Area Network (LAN) segments as specified in [O-RAN-8], clauses 5.1.5, 5.2.5.4, and 5.2.5.5.
-    release: 26.04.1 (v1.1)
+    scope: Platform/deployment/auxiliary component
+    description: O-DU shall support port-based access control with authentication and
+      authorization using IEEE 802.1X for the Open Fronthaul point-to-point Local Area
+      Network (LAN) segments as specified in [O-RAN-8], clauses 5.1.5, 5.2.5.4, and
+      5.2.5.5.
     short_description: 'O-DU: IEEE 802.1X port-based access control'
     type: Security
     release: 26.04 (v1.0)
@@ -2533,9 +2538,9 @@ features:
     comment: ''
   - id: MVP-SEC-O-DU-07
     source: ATIS-MVP
-    scope: Unspecified
-    description: O-DU shall support mutual authentication and authorization for OAM as specified in [3GPP-4], clause 5.3.4.
-    release: 26.04.1 (v1.1)
+    scope: CU/DU
+    description: O-DU shall support mutual authentication and authorization for OAM
+      as specified in [3GPP-4], clause 5.3.4.
     short_description: 'O-DU OAM: mutual authentication/authorization'
     type: Security
     release: 26.04 (v1.0)
@@ -2543,9 +2548,9 @@ features:
     comment: ''
   - id: MVP-SEC-O-DU-08
     source: ATIS-MVP
-    scope: Unspecified
-    description: O-DU shall support confidentiality and integrity protection for the O1 interface using TLS 1.2 and 1.3 as specified in [O-RAN-8], clause 5.2.2.
-    release: 26.04.1 (v1.1)
+    scope: CU/DU
+    description: O-DU shall support confidentiality and integrity protection for the
+      O1 interface using TLS 1.2 and 1.3 as specified in [O-RAN-8], clause 5.2.2.
     short_description: 'O-DU O1: TLS confidentiality/integrity'
     type: Security
     release: 26.04 (v1.0)
@@ -2553,9 +2558,9 @@ features:
     comment: ''
   - id: MVP-SEC-O-DU-09
     source: ATIS-MVP
-    scope: Unspecified
-    description: O-DU shall support authentication for the O1 interface using mTLS 1.2 and 1.3 and PKI-based X.509 certificates as specified in [O-RAN-8], clause 5.2.2.
-    release: 26.04.1 (v1.1)
+    scope: CU/DU
+    description: O-DU shall support authentication for the O1 interface using mTLS 1.2
+      and 1.3 and PKI-based X.509 certificates as specified in [O-RAN-8], clause 5.2.2.
     short_description: 'O-DU O1: mTLS + PKI X.509 authentication'
     type: Security
     release: 26.04 (v1.0)
@@ -2563,9 +2568,9 @@ features:
     comment: ''
   - id: MVP-SEC-ADD-02
     source: ATIS-MVP
-    scope: Unspecified
-    description: Open RAN architectural elements shall have unused protocols disabled as specified in [O-RAN-8], clause 5.3.3.
-    release: 26.04.1 (v1.1)
+    scope: Platform/deployment/auxiliary component
+    description: Open RAN architectural elements shall have unused protocols disabled
+      as specified in [O-RAN-8], clause 5.3.3.
     short_description: Unused protocols disabled
     type: Security
     release: 26.04 (v1.0)
@@ -2573,9 +2578,10 @@ features:
     comment: ''
   - id: MVP-SEC-ADD-03
     source: ATIS-MVP
-    scope: Unspecified
-    description: Open RAN architectural elements shall be able to withstand and recover from a volumetric Distributed Denial of Service (DDoS) attack, on any interface, without system crash as specified in [O-RAN-8], clause 5.3.5.
-    release: 26.04.1 (v1.1)
+    scope: Platform/deployment/auxiliary component
+    description: Open RAN architectural elements shall be able to withstand and recover
+      from a volumetric Distributed Denial of Service (DDoS) attack, on any interface,
+      without system crash as specified in [O-RAN-8], clause 5.3.5.
     short_description: DDoS attack resilience
     type: Security
     release: 26.04 (v1.0)
@@ -2583,9 +2589,9 @@ features:
     comment: ''
   - id: MVP-SEC-ADD-04
     source: ATIS-MVP
-    scope: Unspecified
-    description: Open RAN architectural elements shall support password hygiene as specified in [O-RAN-8], clause 5.3.7.
-    release: 26.04.1 (v1.1)
+    scope: Platform/deployment/auxiliary component
+    description: Open RAN architectural elements shall support password hygiene as specified
+      in [O-RAN-8], clause 5.3.7.
     short_description: Password hygiene
     type: Security
     release: 26.04 (v1.0)
@@ -2593,9 +2599,9 @@ features:
     comment: ''
   - id: MVP-SEC-ADD-05
     source: ATIS-MVP
-    scope: Unspecified
-    description: Open RAN architectural elements shall support PKI with X.509 certificates as specified in [O-RAN-8], clause 5.3.9.
-    release: 26.04.1 (v1.1)
+    scope: Platform/deployment/auxiliary component
+    description: Open RAN architectural elements shall support PKI with X.509 certificates
+      as specified in [O-RAN-8], clause 5.3.9.
     short_description: PKI with X.509 certificates
     type: Security
     release: 26.04 (v1.0)
@@ -2603,9 +2609,9 @@ features:
     comment: ''
   - id: MVP-SEC-ADD-06
     source: ATIS-MVP
-    scope: Unspecified
-    description: Open RAN architectural elements shall support Certificate Management Protocol (CMP) v2 as specified in [O-RAN-8], clause 5.3.9.
-    release: 26.04.1 (v1.1)
+    scope: Platform/deployment/auxiliary component
+    description: Open RAN architectural elements shall support Certificate Management
+      Protocol (CMP) v2 as specified in [O-RAN-8], clause 5.3.9.
     short_description: Certificate Management Protocol (CMP) v2
     type: Security
     release: 26.04 (v1.0)
@@ -2613,9 +2619,9 @@ features:
     comment: ''
   - id: MVP-SEC-ADD-07
     source: ATIS-MVP
-    scope: Unspecified
-    description: Open RAN architectural elements shall provide API security as specified in [O-RAN-8], clause 5.3.10.
-    release: 26.04.1 (v1.1)
+    scope: Platform/deployment/auxiliary component
+    description: Open RAN architectural elements shall provide API security as specified
+      in [O-RAN-8], clause 5.3.10.
     short_description: API security
     type: Security
     release: 26.04 (v1.0)
@@ -2623,9 +2629,9 @@ features:
     comment: ''
   - id: MVP-SEC-ADD-08
     source: ATIS-MVP
-    scope: Unspecified
-    description: Open RAN architectural elements shall be able to handle unexpected inputs to transport protocols as specified in [O-RAN-8], Clause 5.3.4.
-    release: 26.04.1 (v1.1)
+    scope: Platform/deployment/auxiliary component
+    description: Open RAN architectural elements shall be able to handle unexpected
+      inputs to transport protocols as specified in [O-RAN-8], Clause 5.3.4.
     short_description: Unexpected transport protocol input handling
     type: Security
     release: 26.04 (v1.0)
