@@ -59,7 +59,7 @@ features:
     type: Architecture
     release: 26.04 (v1.0)
     primary_test_type:
-     - integration
+      - integration
     comment: 'Need deployment with SMO'
   - id: MVP-ARCH-INTF-6
     source: ATIS-MVP
@@ -70,7 +70,7 @@ features:
     type: Architecture
     release: 26.04 (v1.0)
     primary_test_type:
-     - integration
+      - integration
     comment: 'Option to test basic conformance against viavi O-CU'
   - id: MVP-ARCH-INTF-7
     source: ATIS-MVP
@@ -92,7 +92,7 @@ features:
     type: Architecture
     release: 26.04 (v1.0)
     primary_test_type:
-     - integration
+      - integration
     comment: 'Need deployment with SMO'
   - id: MVP-ARCH-INTF-9
     source: ATIS-MVP
