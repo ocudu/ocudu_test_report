@@ -46,8 +46,7 @@ features:
     type: Architecture
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: O-DU shall support Open FH CUS-Plane (O-RAN-2) and FH M-Plane (O-RAN-3)
-      interfaces.
+    comment: ''
   - id: MVP-ARCH-INTF-5
     source: ATIS-MVP
     scope: CU/DU
@@ -276,7 +275,7 @@ features:
     type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: Shall support broadcast of SIB1-5 and SIB8.
+    comment: ''
   - id: MVP-FUNC-BAS-16-3
     source: ATIS-MVP
     scope: Unspecified
@@ -303,7 +302,7 @@ features:
     type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: Support CSI report for periodic and aperiodic Type-I codebook.
+    comment: ''
   - id: MVP-FUNC-MIMO-16-2
     source: ATIS-MVP
     scope: Unspecified
@@ -330,7 +329,7 @@ features:
     type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: Support SU-MIMO with 2T2R, up to 2 DL and 2 UL layers.
+    comment: ''
   - id: MVP-FUNC-MIMO-16-5
     source: ATIS-MVP
     scope: Unspecified
@@ -348,7 +347,7 @@ features:
     type: Functional
     release: 27.04 (v2.2)
     primary_test_type: []
-    comment: Support UL MU-MIMO with up to 2 layers/user and up to 8 total layers.
+    comment: ''
   - id: MVP-FUNC-MIMO-16-7
     source: ATIS-MVP
     scope: Unspecified
@@ -357,7 +356,7 @@ features:
     type: Functional
     release: 27.04 (v2.2)
     primary_test_type: []
-    comment: Support DL MU-MIMO with up to 4 layers/user and up to 16 total layers.
+    comment: ''
   - id: MVP-FUNC-MIMO-16-8
     source: ATIS-MVP
     scope: Unspecified
@@ -366,7 +365,7 @@ features:
     type: Functional
     release: 27.04 (v2.2)
     primary_test_type: []
-    comment: Support Massive MIMO 32T32R, up to 16 DL and 8 UL layers.
+    comment: ''
   - id: MVP-FUNC-MIMO-16-8a
     source: ATIS-MVP
     scope: Unspecified
@@ -375,7 +374,7 @@ features:
     type: Functional
     release: 27.04 (v2.2)
     primary_test_type: []
-    comment: Support Massive MIMO 64T64R, up to 16 DL and 8 UL layers.
+    comment: ''
   - id: MVP-FUNC-MIMO-16-9
     source: ATIS-MVP
     scope: Unspecified
@@ -429,7 +428,7 @@ features:
     type: Functional
     release: 27.04 (v2.2)
     primary_test_type: []
-    comment: Support DMRS enhancement of PAPR.
+    comment: ''
   - id: MVP-FUNC-BW-16-1
     source: ATIS-MVP
     scope: Unspecified
@@ -438,8 +437,7 @@ features:
     type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'Support carrier bandwidths — FR1 FDD: 5/10/20/25/30/40/45 MHz; FR1 TDD:
-      10/15/20/30/40/50/60/70/80/90/100 MHz; FR2: 100 MHz.'
+    comment: ''
   - id: MVP-FUNC-BW-16-2
     source: ATIS-MVP
     scope: Unspecified
@@ -511,8 +509,7 @@ features:
     type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'Support TDD pattern 8:2 DDDSUUDDDD (S slot: 6 DL, 4 GP, 4 UL symbols)
-      for FR1 bands.'
+    comment: ''
   - id: MVP-FUNC-TDD-16-5
     source: ATIS-MVP
     scope: Unspecified
@@ -521,8 +518,7 @@ features:
     type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'Support TDD pattern 6:4 DDDSUUUUDD (S slot: 6 DL, 4 GP, 4 UL symbols)
-      for FR1 bands.'
+    comment: ''
   - id: MVP-FUNC-CA-1
     source: ATIS-MVP
     scope: Unspecified
@@ -549,7 +545,7 @@ features:
     type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
-    comment: Support FR1 FDD CA (inter/intra-band), up to 4 CCs DL and 2 CCs UL.
+    comment: ''
   - id: MVP-FUNC-CA-4
     source: ATIS-MVP
     scope: Unspecified
@@ -558,7 +554,7 @@ features:
     type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
-    comment: Support FR1 FDD+TDD CA (inter/intra-band), up to 6 CCs DL and 2 CCs UL.
+    comment: ''
   - id: MVP-FUNC-CA-5
     source: ATIS-MVP
     scope: Unspecified
@@ -567,7 +563,7 @@ features:
     type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
-    comment: Support FR1 TDD CA (inter/intra-band), up to 3 CCs DL and 1 CC UL.
+    comment: ''
   - id: MVP-FUNC-CA-6
     source: ATIS-MVP
     scope: Unspecified
@@ -576,7 +572,7 @@ features:
     type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
-    comment: Support FR2 CA (inter/intra-band), up to 8 CCs DL and 4 CCs UL.
+    comment: ''
   - id: MVP-FUNC-CA-7
     source: ATIS-MVP
     scope: Unspecified
@@ -592,8 +588,7 @@ features:
     type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
-    comment: Support NR Dual Connectivity (FR1+FR2), up to 8 CCs DL and 4 CCs UL in
-      FR2.
+    comment: ''
   - id: MVP-FUNC-MOB-1-b
     source: ATIS-MVP
     scope: Unspecified
@@ -671,7 +666,7 @@ features:
     type: Functional
     release: unspecified
     primary_test_type: []
-    comment: Support Intra-MN Handover with SN change.
+    comment: ''
   - id: MVP-FUNC-MOB-6
     source: ATIS-MVP
     scope: Unspecified
@@ -797,7 +792,7 @@ features:
     type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
-    comment: Support Wireless Priority Service (WPS) and Multimedia Priority Service.
+    comment: ''
   - id: MVP-FUNC-SVCS-16-5
     source: ATIS-MVP
     scope: Unspecified
@@ -824,7 +819,7 @@ features:
     type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
-    comment: Support EPS Fallback to VoLTE.
+    comment: ''
   - id: MVP-FUNC-SVCS-16-8-a
     source: ATIS-MVP
     scope: Unspecified
@@ -842,8 +837,7 @@ features:
     type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'Support VoNR features: RoHC Profile 1, GBR, 5QI 1 and 2 for GBR, Slot
-      Aggregation (TTI bundling).'
+    comment: ''
   - id: MVP-FUNC-SVCS-16-8-c
     source: ATIS-MVP
     scope: Unspecified
@@ -852,8 +846,7 @@ features:
     type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'Support VoNR features: RoHC Profile 1, GBR, 5QI 1 and 2 for GBR, Slot
-      Aggregation (TTI bundling).'
+    comment: ''
   - id: MVP-FUNC-SVCS-16-8-d
     source: ATIS-MVP
     scope: Unspecified
@@ -862,8 +855,7 @@ features:
     type: Functional
     release: 26.10 (v2.1)
     primary_test_type: []
-    comment: 'Support VoNR features: RoHC Profile 1, GBR, 5QI 1 and 2 for GBR, Slot
-      Aggregation (TTI bundling).'
+    comment: ''
   - id: MVP-FUNC-OTH-16-1
     source: ATIS-MVP
     scope: Unspecified
@@ -872,8 +864,7 @@ features:
     type: Functional
     release: 28.04 (v2.4)
     primary_test_type: []
-    comment: Support Remote Interference Management (RIM) for RIM-RS Type 1 backhaul
-      framework.
+    comment: ''
   - id: MVP-FUNC-RANS-16-1
     source: ATIS-MVP
     scope: Unspecified
@@ -900,7 +891,7 @@ features:
     type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: Support NRPPa-based Enhanced Cell Identity (ECID) positioning.
+    comment: ''
   - id: MVP-FUNC-POS-16-2
     source: ATIS-MVP
     scope: Unspecified
@@ -909,7 +900,7 @@ features:
     type: Functional
     release: 26.10 (v2.1)
     primary_test_type: []
-    comment: Support DL PRS for FDD and TDD bands with Comb-4 or higher.
+    comment: ''
   - id: MVP-FUNC-POS-16-3-a
     source: ATIS-MVP
     scope: Unspecified
@@ -927,7 +918,7 @@ features:
     type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'Support positioning methods: Power, Time (all bands), Angle (FR2 bands).'
+    comment: ''
   - id: MVP-FUNC-POS-16-3-c
     source: ATIS-MVP
     scope: Unspecified
@@ -936,7 +927,7 @@ features:
     type: Functional
     release: 26.10 (v2.1)
     primary_test_type: []
-    comment: 'Support positioning methods: Power, Time (all bands), Angle (FR2 bands).'
+    comment: ''
   - id: MVP-FUNC-RLM-16-1
     source: ATIS-MVP
     scope: Unspecified
@@ -972,8 +963,7 @@ features:
     type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
-    comment: 'Support Type-II codebook Rel-17 enhancements: reliability, repetition/time
-      bundling, aperiodic SRS triggering.'
+    comment: ''
   - id: MVP-FUNC-MIMO-17-2-b
     source: ATIS-MVP
     scope: Unspecified
@@ -982,8 +972,7 @@ features:
     type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
-    comment: 'Support Type-II codebook Rel-17 enhancements: reliability, repetition/time
-      bundling, aperiodic SRS triggering.'
+    comment: ''
   - id: MVP-FUNC-MIMO-17-2-c
     source: ATIS-MVP
     scope: Unspecified
@@ -992,8 +981,7 @@ features:
     type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
-    comment: 'Support Type-II codebook Rel-17 enhancements: reliability, repetition/time
-      bundling, aperiodic SRS triggering.'
+    comment: ''
   - id: MVP-FUNC-MIMO-17-3-a
     source: ATIS-MVP
     scope: Unspecified
@@ -1002,8 +990,7 @@ features:
     type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
-    comment: 'Support SRS coverage enhancements: reliability, repetition/time bundling,
-      aperiodic SRS triggering.'
+    comment: ''
   - id: MVP-FUNC-MIMO-17-3-b
     source: ATIS-MVP
     scope: Unspecified
@@ -1012,8 +999,7 @@ features:
     type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
-    comment: 'Support SRS coverage enhancements: reliability, repetition/time bundling,
-      aperiodic SRS triggering.'
+    comment: ''
   - id: MVP-FUNC-MIMO-17-3-c
     source: ATIS-MVP
     scope: Unspecified
@@ -1022,8 +1008,7 @@ features:
     type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
-    comment: 'Support SRS coverage enhancements: reliability, repetition/time bundling,
-      aperiodic SRS triggering.'
+    comment: ''
   - id: MVP-FUNC-BW-17-1
     source: ATIS-MVP
     scope: Unspecified
@@ -1032,7 +1017,7 @@ features:
     type: Functional
     release: 26.10 (v2.1)
     primary_test_type: []
-    comment: Support UL Dynamic PUCCH repetition factor indication.
+    comment: ''
   - id: MVP-FUNC-BW-17-2
     source: ATIS-MVP
     scope: Unspecified
@@ -1059,7 +1044,7 @@ features:
     type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
-    comment: Support Reduced Capability (RedCap) features for both TDD and FDD.
+    comment: ''
   - id: MVP-FUNC-SVCS-17-3-a
     source: ATIS-MVP
     scope: Unspecified
@@ -1068,8 +1053,7 @@ features:
     type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'Support RAN slicing enhancements: slice-aware reselection, slice-specific
-      RACH config, MBR, multi-carrier resource sharing, and resource partitioning.'
+    comment: ''
   - id: MVP-FUNC-SVCS-17-3-b
     source: ATIS-MVP
     scope: Unspecified
@@ -1078,8 +1062,7 @@ features:
     type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'Support RAN slicing enhancements: slice-aware reselection, slice-specific
-      RACH config, MBR, multi-carrier resource sharing, and resource partitioning.'
+    comment: ''
   - id: MVP-FUNC-SVCS-17-3-c
     source: ATIS-MVP
     scope: Unspecified
@@ -1088,8 +1071,7 @@ features:
     type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'Support RAN slicing enhancements: slice-aware reselection, slice-specific
-      RACH config, MBR, multi-carrier resource sharing, and resource partitioning.'
+    comment: ''
   - id: MVP-FUNC-SVCS-17-3-d
     source: ATIS-MVP
     scope: Unspecified
@@ -1099,8 +1081,7 @@ features:
     type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'Support RAN slicing enhancements: slice-aware reselection, slice-specific
-      RACH config, MBR, multi-carrier resource sharing, and resource partitioning.'
+    comment: ''
   - id: MVP-FUNC-SVCS-17-3-e
     source: ATIS-MVP
     scope: Unspecified
@@ -1109,8 +1090,7 @@ features:
     type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'Support RAN slicing enhancements: slice-aware reselection, slice-specific
-      RACH config, MBR, multi-carrier resource sharing, and resource partitioning.'
+    comment: ''
   - id: MVP-FUNC-SMO-17-1-a
     source: ATIS-MVP
     scope: Unspecified
@@ -1140,8 +1120,7 @@ features:
     type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'SMO shall ingest data to support rApp use cases: ANR, PCI Optimization,
-      MLB, MRO, CCO, RACH Optimization.'
+    comment: ''
   - id: MVP-FUNC-SMO-17-1-d
     source: ATIS-MVP
     scope: Unspecified
@@ -1151,8 +1130,7 @@ features:
     type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'SMO shall ingest data to support rApp use cases: ANR, PCI Optimization,
-      MLB, MRO, CCO, RACH Optimization.'
+    comment: ''
   - id: MVP-FUNC-SMO-17-1-e
     source: ATIS-MVP
     scope: Unspecified
@@ -1162,8 +1140,7 @@ features:
     type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'SMO shall ingest data to support rApp use cases: ANR, PCI Optimization,
-      MLB, MRO, CCO, RACH Optimization.'
+    comment: ''
   - id: MVP-FUNC-SMO-17-1-f
     source: ATIS-MVP
     scope: Unspecified
@@ -1173,8 +1150,7 @@ features:
     type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'SMO shall ingest data to support rApp use cases: ANR, PCI Optimization,
-      MLB, MRO, CCO, RACH Optimization.'
+    comment: ''
   - id: MVP-PERF-ACC-1
     source: ATIS-MVP
     scope: Unspecified
@@ -1254,7 +1230,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: App-level DL peak throughput per clause 6.1.2 formula.
+    comment: ''
   - id: MVP-PERF-THR-1c
     source: ATIS-MVP
     scope: Unspecified
@@ -1264,7 +1240,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: L1 DL peak spectral efficiency per clause 6.1.2 formula.
+    comment: ''
   - id: MVP-PERF-THR-2a
     source: ATIS-MVP
     scope: Unspecified
@@ -1274,8 +1250,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'L1 UL peak throughput per clause 6.1.2 formula; test method: TIFG clauses
-      4.8, 6.1, 6.3.'
+    comment: ''
   - id: MVP-PERF-THR-2b
     source: ATIS-MVP
     scope: Unspecified
@@ -1285,7 +1260,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: App-level UL peak throughput per clause 6.1.2 formula.
+    comment: ''
   - id: MVP-PERF-THR-2c
     source: ATIS-MVP
     scope: Unspecified
@@ -1295,7 +1270,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: L1 UL peak spectral efficiency per clause 6.1.2 formula.
+    comment: ''
   - id: MVP-PERF-THR-3a
     source: ATIS-MVP
     scope: Unspecified
@@ -1305,8 +1280,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'Bidirectional DL+UL throughput at excellent/good/fair/poor RF; test method:
-      TIFG clauses 4.8, 6.6.'
+    comment: ''
   - id: MVP-PERF-THR-3b
     source: ATIS-MVP
     scope: Unspecified
@@ -1316,7 +1290,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: DL spectral efficiency at excellent/good/fair/poor RF.
+    comment: ''
   - id: MVP-PERF-THR-3c
     source: ATIS-MVP
     scope: Unspecified
@@ -1326,7 +1300,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: UL spectral efficiency at excellent/good/fair/poor RF.
+    comment: ''
   - id: MVP-PERF-THR-4a
     source: ATIS-MVP
     scope: Unspecified
@@ -1336,7 +1310,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'DL throughput vs. SINR curve; test method: TIFG clauses 4.8, 6.7.'
+    comment: ''
   - id: MVP-PERF-THR-4b
     source: ATIS-MVP
     scope: Unspecified
@@ -1346,7 +1320,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: DL spectral efficiency vs. SINR curve.
+    comment: ''
   - id: MVP-PERF-THR-4c
     source: ATIS-MVP
     scope: Unspecified
@@ -1366,7 +1340,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'UL throughput vs. SINR curve; test method: TIFG clauses 4.8, 6.8.'
+    comment: ''
   - id: MVP-PERF-THR-5b
     source: ATIS-MVP
     scope: Unspecified
@@ -1376,7 +1350,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: UL spectral efficiency vs. SINR curve.
+    comment: ''
   - id: MVP-PERF-THR-5c
     source: ATIS-MVP
     scope: Unspecified
@@ -1406,8 +1380,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'Ping Round Trip Time: Lab ≤23 ms, Field ≤60 ms, median ≤25 ms; custom
-      test up to 1340-byte pings.'
+    comment: ''
   - id: MVP-PERF-LAT-3
     source: ATIS-MVP
     scope: Unspecified
@@ -1417,7 +1390,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: '5G SA registration time; test method: TIFG clause 5.3.'
+    comment: ''
   - id: MVP-PERF-LAT-4
     source: ATIS-MVP
     scope: Unspecified
@@ -1427,7 +1400,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: '5G SA deregistration time; test method: TIFG clause 5.3.'
+    comment: ''
   - id: MVP-PERF-CAP-1a
     source: ATIS-MVP
     scope: Unspecified
@@ -1447,7 +1420,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: DL spectral efficiency (aggregated cell).
+    comment: ''
   - id: MVP-PERF-CAP-2a
     source: ATIS-MVP
     scope: Unspecified
@@ -1457,7 +1430,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'UL aggregated cell L1 throughput; test method: TIFG clauses 4.8, 6.10.'
+    comment: ''
   - id: MVP-PERF-CAP-2b
     source: ATIS-MVP
     scope: Unspecified
@@ -1467,7 +1440,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: UL spectral efficiency (aggregated cell).
+    comment: ''
   - id: MVP-PERF-CAP-3
     source: ATIS-MVP
     scope: Unspecified
@@ -1487,8 +1460,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'Handover Success Rate >99.99% (all HO scenarios); test method: TIFG clauses
-      5.4, 5.5, 5.6.'
+    comment: ''
   - id: MVP-PERF-MOB-2
     source: ATIS-MVP
     scope: Unspecified
@@ -1498,9 +1470,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'Handover Interruption Time: FR1-FR1 ≤52 ms, FR2-FR1 ≤72 ms, FR2-FR2 ≤157
-      ms, FR1-FR2 ≤177 ms (field); test method: TIFG clauses 5.4, 5.5, 5.6 / TS 38.133
-      clause 6.1.'
+    comment: ''
   - id: MVP-PERF-MOB-3
     source: ATIS-MVP
     scope: Unspecified
@@ -1510,7 +1480,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'DL packet loss during handover; test method: TIFG clauses 5.4, 5.5, 5.6.'
+    comment: ''
   - id: MVP-PERF-MOB-4
     source: ATIS-MVP
     scope: Unspecified
@@ -1520,7 +1490,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'UL packet loss during handover; test method: TIFG clauses 5.4, 5.5, 5.6.'
+    comment: ''
   - id: MVP-PERF-MOB-5
     source: ATIS-MVP
     scope: Unspecified
@@ -1530,8 +1500,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'Call drop due to unsuccessful handover; test method: TIFG clauses 5.4,
-      5.5, 5.6.'
+    comment: ''
   - id: MVP-PERF-MOB-6
     source: ATIS-MVP
     scope: Unspecified
@@ -1541,8 +1510,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'App DL Throughput after HO > before HO; test method: TIFG clauses 5.4,
-      5.5, 5.6.'
+    comment: ''
   - id: MVP-PERF-MOB-7
     source: ATIS-MVP
     scope: Unspecified
@@ -1552,8 +1520,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'L1 DL Throughput after HO > before HO; test method: TIFG clauses 5.4,
-      5.5, 5.6.'
+    comment: ''
   - id: MVP-PERF-MOB-8
     source: ATIS-MVP
     scope: Unspecified
@@ -1563,8 +1530,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'L3 DL Throughput after HO > before HO; test method: TIFG clauses 5.4,
-      5.5, 5.6.'
+    comment: ''
   - id: MVP-PERF-MOB-9
     source: ATIS-MVP
     scope: Unspecified
@@ -1574,8 +1540,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'App UL Throughput after HO > before HO; test method: TIFG clauses 5.4,
-      5.5, 5.6.'
+    comment: ''
   - id: MVP-PERF-MOB-10
     source: ATIS-MVP
     scope: Unspecified
@@ -1585,8 +1550,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'L1 UL Throughput after HO > before HO; test method: TIFG clauses 5.4,
-      5.5, 5.6.'
+    comment: ''
   - id: MVP-PERF-MOB-11
     source: ATIS-MVP
     scope: Unspecified
@@ -1596,8 +1560,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'L3 UL Throughput after HO > before HO; test method: TIFG clauses 5.4,
-      5.5, 5.6.'
+    comment: ''
   - id: MVP-PERF-VNR-1
     source: ATIS-MVP
     scope: Unspecified
@@ -1607,7 +1570,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'VoNR Call Setup Success Rate >99%; test method: TIFG clause 7.5.1-4.'
+    comment: ''
   - id: MVP-PERF-VNR-2
     source: ATIS-MVP
     scope: Unspecified
@@ -1617,7 +1580,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'VoNR Call Setup Time <2.5 s; test method: TIFG clause 7.5.1-4.'
+    comment: ''
   - id: MVP-PERF-VNR-3
     source: ATIS-MVP
     scope: Unspecified
@@ -1627,8 +1590,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'VoNR Handover Success Rate >99.99%; test method: TIFG clauses 7.5.2, 7.5.3,
-      7.5.4.'
+    comment: ''
   - id: MVP-PERF-VNR-4
     source: ATIS-MVP
     scope: Unspecified
@@ -1638,8 +1600,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'VoNR Handover RTP Packet Loss %; test method: TIFG clauses 7.5.2, 7.5.3,
-      7.5.4.'
+    comment: ''
   - id: MVP-PERF-VNR-5
     source: ATIS-MVP
     scope: Unspecified
@@ -1649,8 +1610,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'VoNR Handover UE Packet Delay; test method: TIFG clauses 7.5.2, 7.5.3,
-      7.5.4.'
+    comment: ''
   - id: MVP-PERF-VNR-6
     source: ATIS-MVP
     scope: Unspecified
@@ -1660,7 +1620,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'VoNR Mean Opinion Score (MOS) >3.5; test method: TIFG clause 7.5.1-4.'
+    comment: ''
   - id: MVP-PERF-VNR-7
     source: ATIS-MVP
     scope: Unspecified
@@ -1670,7 +1630,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'VoNR Packet Loss Rate <1%; test method: TIFG clause 7.5.1-4.'
+    comment: ''
   - id: MVP-PERF-VNR-8
     source: ATIS-MVP
     scope: Unspecified
@@ -1680,7 +1640,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'VoNR Muting Rate <1%; test method: TIFG clause 7.5.1-4.'
+    comment: ''
   - id: MVP-PERF-VNR-9
     source: ATIS-MVP
     scope: Unspecified
@@ -1690,7 +1650,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'VoNR One-Way Call Rate <1%; test method: TIFG clause 7.5.1-4.'
+    comment: ''
   - id: MVP-PERF-VNR-10
     source: ATIS-MVP
     scope: Unspecified
@@ -1700,7 +1660,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'VoNR Call Block Rate <0.01%; test method: TIFG clause 7.5.1-4.'
+    comment: ''
   - id: MVP-PERF-WEB-1
     source: ATIS-MVP
     scope: Unspecified
@@ -1710,7 +1670,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'DNS Resolution Time <1 s; test method: TIFG clause 7.1.1.'
+    comment: ''
   - id: MVP-PERF-WEB-2
     source: ATIS-MVP
     scope: Unspecified
@@ -1720,7 +1680,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'Time to First Byte (TTFB) <3 s (2 MB page); test method: TIFG clause 7.1.1.'
+    comment: ''
   - id: MVP-PERF-WEB-3
     source: ATIS-MVP
     scope: Unspecified
@@ -1730,7 +1690,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'Page Load Time <12 s (2 MB page); test method: TIFG clause 7.1.1.'
+    comment: ''
   - id: MVP-PERF-WEB-4
     source: ATIS-MVP
     scope: Unspecified
@@ -1740,8 +1700,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'App DL Throughput (web) same as MVP-PERF-THR-3a for comparable RF; test
-      method: TIFG clause 7.1.1.'
+    comment: ''
   - id: MVP-PERF-FILDL-1
     source: ATIS-MVP
     scope: Unspecified
@@ -1751,7 +1710,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'Time to Download File (1 GB); test method: TIFG clause 7.1.2.'
+    comment: ''
   - id: MVP-PERF-FILDL-2
     source: ATIS-MVP
     scope: Unspecified
@@ -1761,8 +1720,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'App DL Throughput (file, 1 GB) same as MVP-PERF-THR-3a; test method: TIFG
-      clause 7.1.2.'
+    comment: ''
   - id: MVP-PERF-FILUL-1
     source: ATIS-MVP
     scope: Unspecified
@@ -1772,7 +1730,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'Time to Upload File (1 GB); test method: TIFG clause 7.1.2.'
+    comment: ''
   - id: MVP-PERF-FILUL-2
     source: ATIS-MVP
     scope: Unspecified
@@ -1782,8 +1740,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'App UL Throughput (file, 1 GB) same as MVP-PERF-THR-3a; test method: TIFG
-      clause 7.1.2.'
+    comment: ''
   - id: MVP-PERF-LOAD-1
     source: ATIS-MVP
     scope: Unspecified
@@ -1793,8 +1750,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'Long-hours Stability: minimum 24 h continuous operation; test method:
-      TIFG clauses 8.4, 8.5.'
+    comment: ''
   - id: MVP-PERF-LOAD-2
     source: ATIS-MVP
     scope: Unspecified
@@ -1804,8 +1760,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'RRC Access Success Rate under emulated multi-UE load; test method: TIFG
-      clause 8.3.'
+    comment: ''
   - id: MVP-PERF-LOAD-3
     source: ATIS-MVP
     scope: Unspecified
@@ -1815,8 +1770,7 @@ features:
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'Packet Error Rate under emulated multi-UE load; test method: TIFG clause
-      8.3.'
+    comment: ''
   - id: MVP-PERF-RF-1
     source: ATIS-MVP
     scope: Unspecified
@@ -1826,8 +1780,7 @@ features:
     type: Performance
     release: unspecified
     primary_test_type: []
-    comment: 'RF Transmitter (signal quality, ACLR, spurious emissions) per 3GPP-3;
-      test method: 3GPP TS 38.141-1/2.'
+    comment: ''
   - id: MVP-PERF-RF-2
     source: ATIS-MVP
     scope: Unspecified
@@ -1837,8 +1790,7 @@ features:
     type: Performance
     release: unspecified
     primary_test_type: []
-    comment: 'RF Receiver (sensitivity, dynamic range, blocking, intermodulation) per
-      3GPP-3; test method: 3GPP TS 38.141-1/2.'
+    comment: ''
   - id: MVP-PERF-RF-3
     source: ATIS-MVP
     scope: Unspecified
@@ -1847,8 +1799,7 @@ features:
     type: Performance
     release: unspecified
     primary_test_type: []
-    comment: 'RF Demodulation (PUSCH, PUCCH, PRACH) per 3GPP-3; test method: 3GPP TS
-      38.141-1/2.'
+    comment: ''
   - id: MVP-SEC-O-CU-01a
     source: ATIS-MVP
     scope: CU/DU
@@ -1858,7 +1809,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'O-CU-CP: F1-C confidentiality/integrity/replay protection via IPsec.'
+    comment: ''
   - id: MVP-SEC-O-CU-01b
     source: ATIS-MVP
     scope: CU/DU
@@ -1867,7 +1818,7 @@ features:
     type: Security
     release: 26.10 (v2.1)
     primary_test_type: []
-    comment: 'O-CU-CP: F1-C confidentiality/integrity/replay protection via DTLS.'
+    comment: ''
   - id: MVP-SEC-O-CU-02
     source: ATIS-MVP
     scope: Platform/deployment/auxiliary component
@@ -1877,7 +1828,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'O-CU-UP: F1-U confidentiality/integrity/replay protection via IPsec.'
+    comment: ''
   - id: MVP-SEC-O-CU-03
     source: ATIS-MVP
     scope: Entire RAN Product
@@ -1887,7 +1838,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'O-CU-CP: mutual authentication/authorization for OAM (3GPP-4 clause 5.3.4).'
+    comment: ''
   - id: MVP-SEC-O-CU-04
     source: ATIS-MVP
     scope: Platform/deployment/auxiliary component
@@ -1897,7 +1848,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'O-CU-UP: mutual authentication/authorization for OAM (3GPP-4 clause 5.3.4).'
+    comment: ''
   - id: MVP-SEC-O-CU-05
     source: ATIS-MVP
     scope: Platform/deployment/auxiliary component
@@ -1906,7 +1857,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'O-CU-CP: O1 interface confidentiality/integrity via TLS 1.2 and 1.3.'
+    comment: ''
   - id: MVP-SEC-O-CU-06
     source: ATIS-MVP
     scope: Platform/deployment/auxiliary component
@@ -1916,7 +1867,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'O-CU-CP: O1 interface authentication via mTLS 1.2/1.3 and PKI X.509.'
+    comment: ''
   - id: MVP-SEC-O-CU-07
     source: ATIS-MVP
     scope: Unspecified
@@ -1933,7 +1884,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'O-CU-UP: O1 interface confidentiality/integrity via TLS 1.2 and 1.3.'
+    comment: ''
   - id: MVP-SEC-O-CU-08
     source: ATIS-MVP
     scope: Unspecified
@@ -1952,7 +1903,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'O-CU-CP: E1 interface confidentiality/integrity/replay via IPsec.'
+    comment: ''
   - id: MVP-SEC-O-CU-09b
     source: ATIS-MVP
     scope: Unspecified
@@ -1962,7 +1913,7 @@ features:
     type: Security
     release: 26.10 (v2.1)
     primary_test_type: []
-    comment: 'O-CU-CP: E1 interface confidentiality/integrity via DTLS.'
+    comment: ''
   - id: MVP-SEC-O-CU-10a
     source: ATIS-MVP
     scope: Unspecified
@@ -1972,7 +1923,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'O-CU-CP: Xn-C interface confidentiality/integrity via IPsec.'
+    comment: ''
   - id: MVP-SEC-O-CU-10b
     source: ATIS-MVP
     scope: Unspecified
@@ -1992,7 +1943,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'O-CU-UP: Xn-U interface confidentiality/integrity/replay via IPsec.'
+    comment: ''
   - id: MVP-SEC-O-CU-12
     source: ATIS-MVP
     scope: CU/DU
@@ -2002,7 +1953,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'O-CU-CP: RRC confidentiality/integrity/replay via PDCP.'
+    comment: ''
   - id: MVP-SEC-O-CU-13
     source: ATIS-MVP
     scope: Unspecified
@@ -2012,7 +1963,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'O-CU-UP: user plane data confidentiality via PDCP.'
+    comment: ''
   - id: MVP-SEC-O-CU-14
     source: ATIS-MVP
     scope: Unspecified
@@ -2022,7 +1973,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'O-CU-CP: follow 3GPP-4 clauses 5.3.5 and 5.3.7.'
+    comment: ''
   - id: MVP-SEC-O-CU-15
     source: ATIS-MVP
     scope: Unspecified
@@ -2032,7 +1983,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'O-CU-UP: follow 3GPP-4 clauses 5.3.5 and 5.3.6.'
+    comment: ''
   - id: MVP-SEC-O-DU-01a
     source: ATIS-MVP
     scope: Unspecified
@@ -2042,7 +1993,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'O-DU: F1-C confidentiality/integrity via IPsec.'
+    comment: ''
   - id: MVP-SEC-O-DU-01b
     source: ATIS-MVP
     scope: Unspecified
@@ -2062,7 +2013,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'O-DU: F1-U confidentiality/integrity via IPsec.'
+    comment: ''
   - id: MVP-SEC-O-DU-03a
     source: ATIS-MVP
     scope: Unspecified
@@ -2071,7 +2022,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'O-DU: Open FH M-Plane confidentiality/integrity via TLS 1.2 and 1.3.'
+    comment: ''
   - id: MVP-SEC-O-DU-03b
     source: ATIS-MVP
     scope: Unspecified
@@ -2081,7 +2032,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'O-DU: Open FH M-Plane confidentiality/integrity via SSH v2.0.'
+    comment: ''
   - id: MVP-SEC-O-DU-04
     source: ATIS-MVP
     scope: Unspecified
@@ -2090,7 +2041,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'O-DU: Open FH M-Plane authentication via mTLS 1.2 and 1.3.'
+    comment: ''
   - id: MVP-SEC-O-DU-05
     source: ATIS-MVP
     scope: Unspecified
@@ -2099,7 +2050,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'O-DU: Open FH M-Plane authorization via NACM.'
+    comment: ''
   - id: MVP-SEC-O-DU-06
     source: ATIS-MVP
     scope: Unspecified
@@ -2109,8 +2060,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'O-DU: port-based access control via IEEE 802.1X for Open FH point-to-point
-      LAN segments.'
+    comment: ''
   - id: MVP-SEC-O-DU-07
     source: ATIS-MVP
     scope: Unspecified
@@ -2120,7 +2070,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'O-DU: mutual authentication/authorization for OAM (3GPP-4 clause 5.3.4).'
+    comment: ''
   - id: MVP-SEC-O-DU-08
     source: ATIS-MVP
     scope: Unspecified
@@ -2130,7 +2080,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'O-DU: O1 interface confidentiality/integrity via TLS 1.2 and 1.3.'
+    comment: ''
   - id: MVP-SEC-O-DU-09
     source: ATIS-MVP
     scope: Unspecified
@@ -2140,7 +2090,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: 'O-DU: O1 interface authentication via mTLS 1.2/1.3 and PKI X.509.'
+    comment: ''
   - id: MVP-SEC-ADD-02
     source: ATIS-MVP
     scope: Unspecified
@@ -2150,8 +2100,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: Open RAN elements shall have unused protocols disabled (O-RAN-8 clause
-      5.3.3).
+    comment: ''
   - id: MVP-SEC-ADD-03
     source: ATIS-MVP
     scope: Unspecified
@@ -2161,8 +2110,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: Open RAN elements shall withstand/recover from volumetric DDoS attacks
-      without system crash (O-RAN-8 clause 5.3.5).
+    comment: ''
   - id: MVP-SEC-ADD-04
     source: ATIS-MVP
     scope: Unspecified
@@ -2172,7 +2120,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: Open RAN elements shall support password hygiene (O-RAN-8 clause 5.3.7).
+    comment: ''
   - id: MVP-SEC-ADD-05
     source: ATIS-MVP
     scope: Unspecified
@@ -2182,8 +2130,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: Open RAN elements shall support PKI with X.509 certificates (O-RAN-8 clause
-      5.3.9).
+    comment: ''
   - id: MVP-SEC-ADD-06
     source: ATIS-MVP
     scope: Unspecified
@@ -2193,8 +2140,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: Open RAN elements shall support Certificate Management Protocol (CMP) v2
-      (O-RAN-8 clause 5.3.9).
+    comment: ''
   - id: MVP-SEC-ADD-07
     source: ATIS-MVP
     scope: Unspecified
@@ -2204,7 +2150,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: Open RAN elements shall provide API security (O-RAN-8 clause 5.3.10).
+    comment: ''
   - id: MVP-SEC-ADD-08
     source: ATIS-MVP
     scope: Unspecified
@@ -2214,8 +2160,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: Open RAN elements shall handle unexpected inputs to transport protocols
-      (O-RAN-8 clause 5.3.4).
+    comment: ''
   - id: DU-GEN-1
     source: OCUDU defined
     scope: Unspecified
