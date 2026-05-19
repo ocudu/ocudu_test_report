@@ -656,6 +656,8 @@ features:
     source: ATIS-MVP
     scope: Unspecified
     description: The Open RAN system shall support NR-Dual Connectivity with FR1 and FR2 Dual Connectivity with 1 FR1 FDD or TDD along with FR2 up to 8 Component Carriers in DL, and FR2 up to 4 Component Carriers in UL.
+    short_description: NR-Dual Connectivity with FR1 and FR2, up to 8 CCs DL / 4 UL
+    type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
     comment: ''
@@ -672,11 +674,9 @@ features:
     source: ATIS-MVP
     scope: Unspecified
     description: 'The Open RAN system specified in Section 4.1 shall support Intra-band
-      mobility within supported FR1 and FR2 bands for the following scenarios: a) Intra-RU,
-      Intra-DU, Intra-CU, b) Inter-RU, Intra-DU, Intra-CU, c) Inter-RU, Inter-DU, Intra-CU,
-      d) Inter-RU, Inter-DU, Inter-CU handovers without CU-UP change, e) Inter-RU, Inter-DU,
-      Inter-CU handovers with CU-UP change.'
-    short_description: Inter-RU, Intra-DU, Intra-CU handovers
+      mobility within supported FR1 and FR2 bands for Inter-RU, Intra-DU, Intra-CU with CU-UP change.'
+    short_description: Inter-RU, Intra-DU, Intra-CU handovers with CU-UP change
+    type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
     comment: ''
@@ -684,11 +684,9 @@ features:
     source: ATIS-MVP
     scope: Unspecified
     description: 'The Open RAN system specified in Section 4.1 shall support Intra-band
-      mobility within supported FR1 and FR2 bands for the following scenarios: a) Intra-RU,
-      Intra-DU, Intra-CU, b) Inter-RU, Intra-DU, Intra-CU, c) Inter-RU, Inter-DU, Intra-CU,
-      d) Inter-RU, Inter-DU, Inter-CU handovers without CU-UP change, e) Inter-RU, Inter-DU,
-      Inter-CU handovers with CU-UP change.'
-    short_description: Inter-RU, Inter-DU, Intra-CU handovers
+      mobility within supported FR1 and FR2 bands for Inter-RU, Inter-DU, Intra-CU handovers with CU-UP change.'
+    short_description: Inter-RU, Inter-DU, Intra-CU handovers with CU-UP change
+    type: Functional
     release: 27.10 (v2.3)
     primary_test_type: []
     comment: ''
@@ -2337,6 +2335,7 @@ features:
     source: ATIS-MVP
     scope: CU/DU
     description: O-CU-UP shall support confidentiality and integrity protection for the O1 interface using TLS 1.2 and 1.3 as specified in [O-RAN-8], clause 5.2.2.
+    short_description: 'O-CU-UP O1: TLS confidentiality/integrity'
     release: 26.04 (v1.0)
     type: Security
     primary_test_type: []
@@ -2344,7 +2343,7 @@ features:
   - id: MVP-SEC-O-CU-08
     source: ATIS-MVP
     description: O-CU-UP shall support authentication for the O1 interface using mTLS 1.2 and 1.3 and PKI-based X.509 certificates as specified in [O-RAN-8], clause 5.2.2.
-    short_description: 'O-CU-UP O1: TLS confidentiality/integrity'
+    short_description: 'O-CU-UP O1: mTLS + PKI X.509 authentication'
     release: 26.04.1 (v1.1)
     scope: CU/DU
     type: Security
@@ -2715,7 +2714,9 @@ features:
     source: OCUDU defined
     scope: Unspecified
     description: 'The Open RAN system shall support contention based and contention free Random Access'
+    short_description: Contention based and contention free Random Access
     release: 26.04 (v1.0)
+    type: Functional
     primary_test_type: []
     comment: ''
   - id: DU-GEN-2-b
