@@ -2741,30 +2741,27 @@ features:
     source: OCUDU defined
     scope: CU/DU
     description: 'The Open RAN system shall support dynamic PDCCH aggregation level adaptation'
-    release: 26.04.1 (v1.1)
     short_description: Dynamic PDCCH aggregation level adaptation
     type: Functional
-    release: 26.04 (v1.0)
+    release: 26.10 (v2.1)
     primary_test_type: []
     comment: ''
   - id: DU-GEN-7
     source: OCUDU defined
     scope: CU/DU
     description: 'The Open RAN system shall support dynamic PDSCH MCS adaptation based on BLER target'
-    release: 26.04.1 (v1.1)
     short_description: Dynamic PDSCH MCS adaptation based on BLER target
     type: Functional
-    release: 26.04 (v1.0)
+    release: 26.10 (v2.1)
     primary_test_type: []
     comment: ''
   - id: DU-GEN-8
     source: OCUDU defined
     scope: CU/DU
     description: 'The Open RAN system shall support dynamic PUSCH MCS adaptation based on BLER target'
-    release: 26.04.1 (v1.1)
     short_description: Dynamic PUSCH MCS adaptation based on BLER target
     type: Functional
-    release: 26.04 (v1.0)
+    release: 26.10 (v2.1)
     primary_test_type: []
     comment: ''
   - id: DU-PHY-5
@@ -2852,40 +2849,36 @@ features:
     source: OCUDU defined
     scope: CU/DU
     description: 'The Open RAN system shall support UE-AMBR'
-    release: 26.04.1 (v1.1)
     short_description: UE-AMBR
     type: Functional
-    release: 26.04 (v1.0)
+    release: 26.10 (v2.1)
     primary_test_type: []
     comment: ''
   - id: DU-QOS-3
     source: OCUDU defined
     scope: CU/DU
     description: 'The Open RAN system shall support packet delay budget and packet error loss rate handling'
-    release: 26.04.1 (v1.1)
     short_description: Packet delay budget and packet error loss rate handling
     type: Functional
-    release: 26.04 (v1.0)
+    release: 26.10 (v2.1)
     primary_test_type: []
     comment: ''
   - id: DU-QOS-4
     source: OCUDU defined
     scope: CU/DU
     description: 'The Open RAN system shall support Diffserv Code Point Marking (DSCP)'
-    release: 26.04.1 (v1.1)
     short_description: Diffserv Code Point Marking (DSCP)
     type: Functional
-    release: 26.04 (v1.0)
+    release: 26.10 (v2.1)
     primary_test_type: []
     comment: ''
   - id: DU-QOS-5
     source: OCUDU defined
     scope: CU/DU
     description: The Open RAN system shall support standardised 5QI 1-9 and mission critical 5QI 65-70
-    release: 26.04.1 (v1.1)
     short_description: Standardised 5QI 1-9 and mission critical 5QI 65-70
     type: Functional
-    release: 26.04 (v1.0)
+    release: 26.10 (v2.1)
     primary_test_type: []
     comment: ''
   - id: CU-GEN-4
@@ -2910,10 +2903,9 @@ features:
     source: OCUDU defined
     scope: CU/DU
     description: 'The Open RAN system shall support event-based measurment reporting for events A1-A6'
-    release: 26.04.1 (v1.1)
+    release: 26.10 (v2.1)
     short_description: Event-based measurment reporting for events A1-A6
     type: Functional
-    release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: CU-GEN-7
