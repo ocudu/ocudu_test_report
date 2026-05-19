@@ -32,11 +32,11 @@ SCOPE_COLORS = {
 }
 TYPE_COLORS = {
     "Architecture": "#818cf8",
-    "Functional":   "#34d399",
-    "Performance":  "#f59e0b",
-    "Security":     "#f87171",
-    "O-Cloud":      "#38bdf8",
-    "Management":   "#a78bfa",
+    "Functional": "#34d399",
+    "Performance": "#f59e0b",
+    "Security": "#f87171",
+    "O-Cloud": "#38bdf8",
+    "Management": "#a78bfa",
 }
 
 
@@ -73,6 +73,7 @@ def _bar_chart(counts: dict[str, int], colors: dict[str, str], total: int) -> st
     return rows
 
 
+# pylint: disable=too-many-locals
 def _render(features: list[dict]) -> str:
     total = len(features)
     release_counts = Counter(f["release"] for f in features)
@@ -110,10 +111,7 @@ def _render(features: list[dict]) -> str:
         + card(str(sum(test_type_counts.values())), "Test type refs")
     )
 
-    type_cards = "".join(
-        type_card(label, count)
-        for label, count in sorted(type_counts.items(), key=lambda x: -x[1])
-    )
+    type_cards = "".join(type_card(label, count) for label, count in sorted(type_counts.items(), key=lambda x: -x[1]))
 
     # ── charts ───────────────────────────────────────────────────────────────
     def chart_section(title: str, bars: str) -> str:
