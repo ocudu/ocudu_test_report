@@ -673,36 +673,36 @@ features:
   - id: MVP-FUNC-MOB-1-a
     source: ATIS-MVP
     scope: CU/DU
-    description: The Open RAN system shall support Intra-band mobility within supported FR1 and FR2 bands for Intra-cell handover for key regeneration
+    description: The Open RAN system shall support Intra-band mobility within supported FR1 and FR2 bands for Intra-RU, Intra-DU, Intra-CU mobility.
     short_description: Intra-RU, Intra-DU, Intra-CU mobility.
     type: Functional
-    release: 27.10 (v2.3)
+    release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-MOB-1-b
     source: ATIS-MVP
     scope: CU/DU
     description: 'The Open RAN system specified in Section 4.1 shall support Intra-band
-      mobility within supported FR1 and FR2 bands for Inter-RU, Intra-DU, Intra-CU with CU-UP change.'
-    short_description: Inter-RU, Intra-DU, Intra-CU handovers with CU-UP change
+      mobility within supported FR1 and FR2 bands for Inter-RU, Intra-DU, Intra-CU with'
+    short_description: Inter-RU, Intra-DU, Intra-CU mobility.
     type: Functional
-    release: 27.10 (v2.3)
+    release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-MOB-1-c
     source: ATIS-MVP
     scope: CU/DU
     description: 'The Open RAN system specified in Section 4.1 shall support Intra-band
-      mobility within supported FR1 and FR2 bands for Inter-RU, Inter-DU, Intra-CU handovers with CU-UP change.'
-    short_description: Inter-RU, Inter-DU, Intra-CU handovers with CU-UP change
+      mobility within supported FR1 and FR2 bands for Inter-RU, Inter-DU, Intra-CU handovers'
+    short_description: Inter-RU, Inter-DU, Intra-CU mobility
     type: Functional
-    release: 27.10 (v2.3)
+    release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-MOB-1-d
     source: ATIS-MVP
     scope: CU/DU
-    release: 27.10 (v2.3)
+    release: 26.04 (v1.0)
     description: 'The Open RAN system specified in Section 4.1 shall support Intra-band
       mobility within supported FR1 and FR2 bands for Inter-RU, Inter-DU, Inter-CU handovers without CU-UP change.'
     short_description: Inter-RU, Inter-DU, Inter-CU handovers without CU-UP change
@@ -713,13 +713,11 @@ features:
     source: ATIS-MVP
     scope: CU/DU
     description: 'The Open RAN system specified in Section 4.1 shall support Intra-band
-      mobility within supported FR1 and FR2 bands for the following scenarios: a) Intra-RU,
-      Intra-DU, Intra-CU, b) Inter-RU, Intra-DU, Intra-CU, c) Inter-RU, Inter-DU, Intra-CU,
-      d) Inter-RU, Inter-DU, Inter-CU handovers without CU-UP change, e) Inter-RU, Inter-DU,
+      mobility within supported FR1 and FR2 bands for Inter-RU, Inter-DU,
       Inter-CU handovers with CU-UP change.'
     short_description: Inter-RU, Inter-DU, Inter-CU handovers with CU-UP change
     type: Functional
-    release: 27.10 (v2.3)
+    release: 26.04 (v1.0)
     primary_test_type: []
     comment: Inter-band mobility might require two different DUs, hence Inter-DU test
       cases
