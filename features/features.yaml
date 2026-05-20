@@ -3,7 +3,7 @@
 features:
   - id: MVP-ARCH-GEN-1
     source: ATIS-MVP
-    scope: Entire RAN Product
+    scope: Entire RAN/platform/deployment/auxiliary component
     description: 'The Open RAN functional architecture shall support the following O-RAN
       functions: O-RU, O-DU, O-CU-CP, O-CU-UP, SMO including Non-RT RIC, O-Cloud.'
     short_description: O-RU, O-DU, O-CU-CP, O-CU-UP, SMO/Non-RT RIC, O-Cloud support
@@ -13,7 +13,7 @@ features:
     comment: ''
   - id: MVP-ARCH-GEN-2
     source: ATIS-MVP
-    scope: Entire RAN Product
+    scope: Entire RAN/platform/deployment/auxiliary component
     description: The network functions shall support the functional requirements specified
       in Section 5 of this MVP.
     short_description: Comply with Section 5 functional requirements
@@ -23,7 +23,7 @@ features:
     comment: ''
   - id: MVP-ARCH-GEN-3
     source: ATIS-MVP
-    scope: Entire RAN Product
+    scope: Entire RAN/platform/deployment/auxiliary component
     description: The network functions shall support the performance requirements specified in Section 6 of this MVP.
     release: 26.04.1 (v1.1)
     short_description: Comply with Section 6 performance requirements
@@ -32,7 +32,7 @@ features:
     comment: ''
   - id: MVP-ARCH-GEN-6
     source: ATIS-MVP
-    scope: Entire RAN Product
+    scope: Entire RAN/platform/deployment/auxiliary component
     description: The network functions shall support the security requirements specified in Section 9 of this MVP.
     release: 26.04.1 (v1.1)
     short_description: Comply with Section 9 security requirements
@@ -2170,7 +2170,7 @@ features:
     comment: ''
   - id: MVP-PERF-RF-1
     source: ATIS-MVP
-    scope: Entire RAN Product
+    scope: Entire RAN/platform/deployment/auxiliary component
     description: 'RF Transmitter: Measure of transmitter performance for Conducted and
       Over the Air (OTA) RF setups related to each of the following: signal quality,
       transmitter ON/OFF, dynamic range, Adjacent Channel Leakage Ratio (ACLR), operating
@@ -2184,7 +2184,7 @@ features:
     comment: 'This involves testing of the RF transmitter characteristics of the O-RU.'
   - id: MVP-PERF-RF-2
     source: ATIS-MVP
-    scope: Entire RAN Product
+    scope: Entire RAN/platform/deployment/auxiliary component
     description: 'RF Receiver: Measure of receiver performance for Conducted and OTA
       RF setups related to each of the following: receiver sensitivity, dynamic range,
       adjacent channel selectivity, in-band and out of band blocking, receiver spurious
@@ -2198,7 +2198,7 @@ features:
     comment: 'This involves testing of the RF receiver characteristics of the O-RU.'
   - id: MVP-PERF-RF-3
     source: ATIS-MVP
-    scope: Entire RAN Product
+    scope: Entire RAN/platform/deployment/auxiliary component
     description: 'RF Demodulation: Measure of demodulation performance for Conducted
       and OTA RF setups related to each of the following: Physical Uplink Shared Channel
       (PUSCH), PUCCH, PRACH specified in [3GPP-3]. | Test Method: 38.141-1, 38.141-2
@@ -2210,7 +2210,7 @@ features:
     comment: 'This involves testing of the RF demodulation performance of the O-RU.'
   - id: MVP-SEC-O-CU-01a
     source: ATIS-MVP
-    scope: Platform/deployment/auxiliary component
+    scope: Entire RAN/platform/deployment/auxiliary component
     description: O-CU-CP shall support confidentiality, integrity, and replay protection
       using Internet Protocol Security (IPsec) for the F1-C interface as specified in
       [O-RAN-8], clause 5.1.4.
@@ -2230,7 +2230,7 @@ features:
     comment: ''
   - id: MVP-SEC-O-CU-02
     source: ATIS-MVP
-    scope: Platform/deployment/auxiliary component
+    scope: Entire RAN/platform/deployment/auxiliary component
     description: CU-UP shall support confidentiality, integrity, and replay protection using IPsec for the F1-U interface as specified in [O-RAN-8], clause 5.1.4.
     release: 26.04.1 (v1.1)
     short_description: 'O-CU-UP F1-U: IPsec confidentiality/integrity/replay'
@@ -2311,7 +2311,7 @@ features:
     comment: ''
   - id: MVP-SEC-O-CU-09a
     source: ATIS-MVP
-    scope: Platform/deployment/auxiliary component
+    scope: Entire RAN/platform/deployment/auxiliary component
     description: O-CU-CP shall support confidentiality, integrity, and replay protection
       using IPsec for the E1 interface as specified in [O-RAN-8], clause 5.1.4.
     short_description: 'O-CU-CP E1: IPsec confidentiality/integrity/replay'
@@ -2331,7 +2331,7 @@ features:
     comment: ''
   - id: MVP-SEC-O-CU-10a
     source: ATIS-MVP
-    scope: Platform/deployment/auxiliary component
+    scope: Entire RAN/platform/deployment/auxiliary component
     description: O-CU-CP shall support confidentiality and integrity protection using
       IPsec for the Xn-C interface as specified in [O-RAN-8], clause 5.1.4.
     short_description: 'O-CU-CP Xn-C: IPsec confidentiality/integrity'
@@ -2351,7 +2351,7 @@ features:
     comment: ''
   - id: MVP-SEC-O-CU-11
     source: ATIS-MVP
-    scope: Platform/deployment/auxiliary component
+    scope: Entire RAN/platform/deployment/auxiliary component
     description: O-CU-UP shall support confidentiality, integrity, and replay protection
       using IPsec for the Xn-U interface as specified in [O-RAN-8], clause 5.1.4.
     short_description: 'O-CU-UP Xn-U: IPsec confidentiality/integrity/replay'
@@ -2401,7 +2401,7 @@ features:
     comment: ''
   - id: MVP-SEC-O-DU-01a
     source: ATIS-MVP
-    scope: Platform/deployment/auxiliary component
+    scope: Entire RAN/platform/deployment/auxiliary component
     description: O-DU shall support confidentiality and integrity protection using IPsec
       for the F1-C interface as specified in [O-RAN-8], clause 5.1.5.
     short_description: 'O-DU F1-C: IPsec confidentiality/integrity'
@@ -2421,7 +2421,7 @@ features:
     comment: ''
   - id: MVP-SEC-O-DU-02
     source: ATIS-MVP
-    scope: Platform/deployment/auxiliary component
+    scope: Entire RAN/platform/deployment/auxiliary component
     description: O-DU shall support confidentiality and integrity protection using IPsec
       for the F1-U interface as specified in [O-RAN-8], clause 5.1.5.
     short_description: 'O-DU F1-U: IPsec confidentiality/integrity'
@@ -2473,7 +2473,7 @@ features:
     comment: ''
   - id: MVP-SEC-O-DU-06
     source: ATIS-MVP
-    scope: Platform/deployment/auxiliary component
+    scope: Entire RAN/platform/deployment/auxiliary component
     description: O-DU shall support port-based access control with authentication and
       authorization using IEEE 802.1X for the Open Fronthaul point-to-point Local Area
       Network (LAN) segments as specified in [O-RAN-8], clauses 5.1.5, 5.2.5.4, and
@@ -2482,7 +2482,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'Depends on NIC/switch support for 802.1X authentication. Mplane over hostapd.'
   - id: MVP-SEC-O-DU-07
     source: ATIS-MVP
     scope: CU/DU
@@ -2515,7 +2515,7 @@ features:
     comment: ''
   - id: MVP-SEC-ADD-02
     source: ATIS-MVP
-    scope: Platform/deployment/auxiliary component
+    scope: Entire RAN/platform/deployment/auxiliary component
     description: Open RAN architectural elements shall have unused protocols disabled
       as specified in [O-RAN-8], clause 5.3.3.
     short_description: Unused protocols disabled
@@ -2525,7 +2525,7 @@ features:
     comment: ''
   - id: MVP-SEC-ADD-03
     source: ATIS-MVP
-    scope: Platform/deployment/auxiliary component
+    scope: Entire RAN/platform/deployment/auxiliary component
     description: Open RAN architectural elements shall be able to withstand and recover
       from a volumetric Distributed Denial of Service (DDoS) attack, on any interface,
       without system crash as specified in [O-RAN-8], clause 5.3.5.
@@ -2536,7 +2536,7 @@ features:
     comment: ''
   - id: MVP-SEC-ADD-04
     source: ATIS-MVP
-    scope: Platform/deployment/auxiliary component
+    scope: Entire RAN/platform/deployment/auxiliary component
     description: Open RAN architectural elements shall support password hygiene as specified
       in [O-RAN-8], clause 5.3.7.
     short_description: Password hygiene
@@ -2546,7 +2546,7 @@ features:
     comment: ''
   - id: MVP-SEC-ADD-05
     source: ATIS-MVP
-    scope: Platform/deployment/auxiliary component
+    scope: Entire RAN/platform/deployment/auxiliary component
     description: Open RAN architectural elements shall support PKI with X.509 certificates
       as specified in [O-RAN-8], clause 5.3.9.
     short_description: PKI with X.509 certificates
@@ -2556,7 +2556,7 @@ features:
     comment: ''
   - id: MVP-SEC-ADD-06
     source: ATIS-MVP
-    scope: Platform/deployment/auxiliary component
+    scope: Entire RAN/platform/deployment/auxiliary component
     description: Open RAN architectural elements shall support Certificate Management
       Protocol (CMP) v2 as specified in [O-RAN-8], clause 5.3.9.
     short_description: Certificate Management Protocol (CMP) v2
@@ -2566,7 +2566,7 @@ features:
     comment: ''
   - id: MVP-SEC-ADD-07
     source: ATIS-MVP
-    scope: Platform/deployment/auxiliary component
+    scope: Entire RAN/platform/deployment/auxiliary component
     description: Open RAN architectural elements shall provide API security as specified
       in [O-RAN-8], clause 5.3.10.
     short_description: API security
@@ -2576,7 +2576,7 @@ features:
     comment: ''
   - id: MVP-SEC-ADD-08
     source: ATIS-MVP
-    scope: Platform/deployment/auxiliary component
+    scope: Entire RAN/platform/deployment/auxiliary component
     description: Open RAN architectural elements shall be able to handle unexpected
       inputs to transport protocols as specified in [O-RAN-8], Clause 5.3.4.
     short_description: Unexpected transport protocol input handling

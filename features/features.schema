@@ -35,9 +35,7 @@ $defs:
         type: string
         enum:
           - "CU/DU"
-          - "Unspecified"
-          - "Entire RAN Product"
-          - "Platform/deployment/auxiliary component"
+          - "Entire RAN/platform/deployment/auxiliary component"
       description:
         type: string
       release:
