@@ -49,28 +49,28 @@ def _load_features(path: str) -> list[dict]:
 def _badge(text: str, color: str) -> str:
     return (
         f'<span style="background:{color};color:#fff;padding:2px 8px;'
-        f"border-radius:12px;font-size:0.78rem;font-weight:600;"
-        f'white-space:nowrap">{text}</span>'
+        f'border-radius:12px;font-size:0.78rem;font-weight:600;white-space:nowrap">{text}</span>'
     )
 
 
 def _bar_chart(counts: dict[str, int], colors: dict[str, str], total: int) -> str:
     if total == 0:
         return ""
-    rows = ""
+    cells = ""
     for label, count in sorted(counts.items(), key=lambda x: -x[1]):
         pct = count / total * 100
         color = colors.get(label, "#64748b")
-        rows += f"""
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
-          <div style="width:200px;font-size:0.85rem;color:#cbd5e1;text-align:right">{label}</div>
-          <div style="flex:1;background:#1e293b;border-radius:4px;height:18px;overflow:hidden">
-            <div style="width:{pct:.1f}%;background:{color};height:100%;border-radius:4px;
-                        transition:width 0.3s"></div>
-          </div>
-          <div style="width:30px;font-size:0.85rem;color:#94a3b8">{count}</div>
-        </div>"""
-    return rows
+        bar_style = f"width:{pct:.1f}%;background:{color};height:100%;border-radius:4px;transition:width 0.3s"
+        cells += (
+            f'<div style="font-size:0.85rem;color:#cbd5e1;word-break:break-word">'
+            f"{label.replace('/', ' / ')}</div>"
+            f'<div style="background:#0f172a;border-radius:4px;height:18px;overflow:hidden">'
+            f'<div style="{bar_style}"></div>'
+            f"</div>"
+            f'<div style="font-size:0.85rem;color:#94a3b8;white-space:nowrap">{count}</div>'
+        )
+    grid = "display:grid;grid-template-columns:minmax(min-content,40%) 1fr auto;align-items:center;gap:6px 10px"
+    return f'<div style="{grid}">{cells}</div>'
 
 
 # pylint: disable=too-many-locals
@@ -133,17 +133,15 @@ def _render(features: list[dict]) -> str:
     rows = ""
     for f in features:
         test_badges = " ".join(_badge(t, TEST_TYPE_COLORS.get(t, "#64748b")) for t in f.get("primary_test_type", []))
-        scope_color = SCOPE_COLORS.get(f.get("scope", ""), "#64748b")
         feat_type = f.get("type", "")
         type_color = TYPE_COLORS.get(feat_type, "#64748b")
         rows += f"""
         <tr>
-          <td style="font-family:monospace;font-size:0.82rem;color:#93c5fd;
-                     white-space:nowrap">{f['id']}</td>
-          <td>{_badge(f.get('source',''), '#475569')}</td>
+          <td style="font-family:monospace;font-size:0.82rem;color:#93c5fd;white-space:nowrap">{f['id']}</td>
+          <td style="white-space:nowrap">{_badge(f.get('source',''), '#475569')}</td>
           <td style="white-space:nowrap">{_badge(feat_type, type_color)}</td>
-          <td>{_badge(f.get('scope',''), scope_color)}</td>
-          <td style="color:#e2e8f0;font-size:0.88rem">{f.get('description','')}</td>
+          <td style="width:160px;font-size:0.82rem;color:#94a3b8">{f.get('scope','').replace('/', ' / ')}</td>
+          <td style="width:100%;color:#e2e8f0;font-size:0.88rem">{f.get('description','')}</td>
           <td style="white-space:nowrap">{_badge(f.get('release',''), '#0284c7')}</td>
           <td style="white-space:nowrap">{test_badges}</td>
           <td style="color:#94a3b8;font-size:0.82rem">{f.get('comment','')}</td>
@@ -173,7 +171,9 @@ def _render(features: list[dict]) -> str:
       border-bottom: 1px solid #334155;
     }}
     td {{ padding: 10px 12px; border-bottom: 1px solid #1e293b; vertical-align: top; }}
-    tr:hover td {{ background: #1e293b55; }}
+    tbody tr:nth-child(odd)  td {{ background: #1e293b; }}
+    tbody tr:nth-child(even) td {{ background: #263448; }}
+    tr:hover td {{ background: #2d3f58 !important; }}
   </style>
 </head>
 <body>
