@@ -91,10 +91,14 @@
   function applyFilters() {
     const sf = msGetSelected('ms-status');
     const rf = msGetSelected('ms-release');
+    const tf = msGetSelected('ms-type');
+    const scf = msGetSelected('ms-scope');
     let vi = 0;
     document.querySelectorAll('#feature-table .feature-row').forEach(row => {
       const ok = (!sf || sf.has(row.dataset.status))
-               && (!rf || rf.has(row.dataset.release));
+               && (!rf || rf.has(row.dataset.release))
+               && (!tf || tf.has(row.dataset.type))
+               && (!scf || scf.has(row.dataset.scope));
       row.hidden = !ok;
       const exp = document.getElementById(row.dataset.expand);
       if (!ok) {
@@ -116,7 +120,8 @@
     const getRows = () => [...tbody.querySelectorAll('.feature-row')];
 
     reorder(getRows().sort(defaultCompare));
-    updateStats();
+    ['ms-status', 'ms-scope', 'ms-type', 'ms-release'].forEach(id => msUpdateLabel(id));
+    applyFilters();
 
     document.querySelectorAll('#feature-table thead th[data-col]').forEach(th => {
       th.addEventListener('click', () => {
@@ -127,7 +132,7 @@
       });
     });
 
-    ['ms-status', 'ms-release'].forEach(id => {
+    ['ms-status', 'ms-release', 'ms-type', 'ms-scope'].forEach(id => {
       const wrap = document.getElementById(id);
       if (!wrap) return;
       const btn = wrap.querySelector('.ms-btn');

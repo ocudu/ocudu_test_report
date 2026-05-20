@@ -313,10 +313,13 @@ body {
   transition: background 0.08s;
 }
 
-.feature-row.even { background: var(--bg-surface); }
-.feature-row.odd  { background: var(--bg-raised); }
+.feature-row.even,
+.suite-row.even { background: var(--bg-surface); }
+.feature-row.odd,
+.suite-row.odd  { background: var(--bg-raised); }
 
-.feature-row:hover { background: #2d3f58 !important; }
+.feature-row:hover,
+.suite-row:hover { background: #2d3f58 !important; }
 
 .feature-row.open { border-bottom: none; }
 
@@ -335,11 +338,6 @@ body {
 .feature-row .col-desc {
   font-size: 0.85em;
   color: var(--text-muted);
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 
 .feature-row .col-release {

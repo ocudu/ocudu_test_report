@@ -56,13 +56,17 @@ _MS_ACTIONS = (
     "</div>"
 )
 
-_STATUS_CHECKBOXES = (
-    _MS_ACTIONS
-    + '<label class="ms-item"><input type="checkbox" value="failed" checked><span>Failed</span></label>'
-    + '<label class="ms-item"><input type="checkbox" value="passed" checked><span>Passed</span></label>'
-    + '<label class="ms-item"><input type="checkbox" value="skipped" checked><span>Skipped</span></label>'
-    + '<label class="ms-item"><input type="checkbox" value="untested" checked><span>Untested</span></label>'
-)
+_STATUS_VALUES = [("failed", "Failed"), ("passed", "Passed"), ("skipped", "Skipped"), ("untested", "Untested")]
+
+
+def _status_checkboxes(defaults: Optional[frozenset[str]] = None) -> str:
+    return _MS_ACTIONS + "".join(
+        f'<label class="ms-item"><input type="checkbox" value="{val}"'
+        f'{" checked" if defaults is None or val in defaults else ""}>'
+        f"<span>{label}</span></label>"
+        for val, label in _STATUS_VALUES
+    )
+
 
 _GITLAB_LOGO = "https://about.gitlab.com/images/press/gitlab-logo-500-rgb.svg"
 _SCRIPTS_DIR = Path(__file__).parent
@@ -70,23 +74,6 @@ _SCRIPTS_DIR = Path(__file__).parent
 
 def _read_asset(name: str) -> str:
     return (_SCRIPTS_DIR / name).read_text(encoding="utf-8")
-
-
-def _page_nav(active: str, show: bool) -> str:
-    """Render the Features / All Tests tab strip above the report header."""
-    if not show:
-        return ""
-
-    def tab(label: str, href: str, is_active: bool) -> str:
-        cls = "page-tab active" if is_active else "page-tab"
-        return f'<a class="{cls}" href="{html.escape(href)}">{label}</a>'
-
-    return (
-        '<nav class="page-nav">'
-        + tab("Features", "index.html", active == "features")
-        + tab("All Tests", "all.html", active == "all")
-        + "</nav>"
-    )
 
 
 def _stat_html(label: str, modifier: str = "") -> str:
@@ -287,6 +274,8 @@ class FeatureDef:
     description: str
     labels: set = field(default_factory=set)
     release: str = ""
+    type: str = ""
+    scope: str = ""
 
 
 @dataclass
@@ -295,6 +284,16 @@ class FeatureGroup:
 
     description: str
     suites: dict = field(default_factory=dict)  # {suite_name: (url, [TestCase])}
+
+
+@dataclass
+class FilterDefaults:
+    """Pre-selected filter values for the HTML report dropdowns."""
+
+    statuses: Optional[list[str]] = None
+    scopes: Optional[list[str]] = None
+    types: Optional[list[str]] = None
+    releases: Optional[list[str]] = None
 
 
 def _parse_features(raw: dict) -> dict[str, FeatureDef]:
@@ -309,7 +308,13 @@ def _parse_features(raw: dict) -> dict[str, FeatureDef]:
         key = item["id"]
         description = item["description"]
         parts = [p.strip() for p in str(key).split("|")]
-        result[parts[0]] = FeatureDef(description=description or "", labels=set(parts), release=item.get("release", ""))
+        result[parts[0]] = FeatureDef(
+            description=description or "",
+            labels=set(parts),
+            release=item.get("release", ""),
+            type=item.get("type", ""),
+            scope=item.get("scope", ""),
+        )
     return result
 
 
@@ -395,19 +400,40 @@ def render_html(
     features: Optional[dict] = None,
     favicon: str = "",
     link: str = "",
-    nav_link: str = "",
+    defaults: Optional[FilterDefaults] = None,
 ) -> str:
     """Render the full HTML report from a list of Suite objects."""
     duration_total = sum(s.duration for s in suites)
+    default_statuses = frozenset(defaults.statuses) if defaults and defaults.statuses else None
+    default_scopes = frozenset(defaults.scopes) if defaults and defaults.scopes else None
+    default_types = frozenset(defaults.types) if defaults and defaults.types else None
+    default_releases = frozenset(defaults.releases) if defaults and defaults.releases else None
 
     if features:
         grouped = _group_by_features(suites, features)
 
         all_releases = sorted({features[fid].release for fid in grouped if fid in features and features[fid].release})
         release_checkboxes = _MS_ACTIONS + "".join(
-            f'<label class="ms-item"><input type="checkbox" value="{html.escape(r, quote=True)}" checked>'
+            f'<label class="ms-item"><input type="checkbox" value="{html.escape(r, quote=True)}"'
+            f'{" checked" if default_releases is None or r in default_releases else ""}>'
             f"<span>{html.escape(r)}</span></label>"
             for r in all_releases
+        )
+
+        all_types = sorted({features[fid].type for fid in grouped if fid in features and features[fid].type})
+        type_checkboxes = _MS_ACTIONS + "".join(
+            f'<label class="ms-item"><input type="checkbox" value="{html.escape(t, quote=True)}"'
+            f'{" checked" if default_types is None or t in default_types else ""}>'
+            f"<span>{html.escape(t)}</span></label>"
+            for t in all_types
+        )
+
+        all_scopes = sorted({features[fid].scope for fid in grouped if fid in features and features[fid].scope})
+        scope_checkboxes = _MS_ACTIONS + "".join(
+            f'<label class="ms-item"><input type="checkbox" value="{html.escape(s, quote=True)}"'
+            f'{" checked" if default_scopes is None or s in default_scopes else ""}>'
+            f"<span>{html.escape(s)}</span></label>"
+            for s in all_scopes
         )
 
         rows_parts = []
@@ -418,6 +444,8 @@ def render_html(
             nskipped = sum(1 for tc in all_tcs if tc.status == Status.SKIPPED)
             fstatus = _feature_status(nfailed, npassed, nskipped)
             feat_release = features[fid].release if fid in features else "unspecified"
+            feat_type = features[fid].type if fid in features else ""
+            feat_scope = features[fid].scope if fid in features else ""
 
             badge = _status_badge(fstatus)
             all_tcs.sort(key=lambda tc: (_TC_STATUS_SORT.get(tc.status, 99), tc.classname, tc.name))
@@ -428,12 +456,24 @@ def render_html(
             passed_cls = " num-passed" if npassed else ""
             skipped_cls = " num-skipped" if nskipped else ""
 
+            expand_attr = f' data-expand="{expand_id}"' if expanded else ""
+            expand_row = (
+                (
+                    f'<tr class="expand-row" id="{expand_id}" hidden>'
+                    f'<td colspan="7"><div class="expand-body">{expanded}</div></td>'
+                    f"</tr>"
+                )
+                if expanded
+                else ""
+            )
             rows_parts.append(
                 f'<tr class="feature-row"'
                 f' data-status="{fstatus}"'
                 f' data-release="{html.escape(feat_release, quote=True)}"'
+                f' data-type="{html.escape(feat_type, quote=True)}"'
+                f' data-scope="{html.escape(feat_scope, quote=True)}"'
                 f' data-fid="{html.escape(fid, quote=True)}"'
-                f' data-expand="{expand_id}"'
+                f"{expand_attr}"
                 f' data-failed="{nfailed}"'
                 f' data-passed="{npassed}"'
                 f' data-skipped="{nskipped}">'
@@ -445,9 +485,7 @@ def render_html(
                 f'<td class="col-num{passed_cls}">{npassed}</td>'
                 f'<td class="col-num{skipped_cls}">{nskipped}</td>'
                 f"</tr>"
-                f'<tr class="expand-row" id="{expand_id}" hidden>'
-                f'<td colspan="7"><div class="expand-body">{expanded}</div></td>'
-                f"</tr>"
+                f"{expand_row}"
             )
 
         rows_html = "".join(rows_parts)
@@ -456,7 +494,15 @@ def render_html(
             f'<div class="controls">'
             f'<div class="ms-wrap" id="ms-status">'
             f'<button type="button" class="ms-btn">Status: <span class="ms-label">All</span></button>'
-            f'<div class="ms-panel" hidden>{_STATUS_CHECKBOXES}</div>'
+            f'<div class="ms-panel" hidden>{_status_checkboxes(default_statuses)}</div>'
+            f"</div>"
+            f'<div class="ms-wrap" id="ms-scope">'
+            f'<button type="button" class="ms-btn">Scope: <span class="ms-label">All</span></button>'
+            f'<div class="ms-panel" hidden>{scope_checkboxes}</div>'
+            f"</div>"
+            f'<div class="ms-wrap" id="ms-type">'
+            f'<button type="button" class="ms-btn">Type: <span class="ms-label">All</span></button>'
+            f'<div class="ms-panel" hidden>{type_checkboxes}</div>'
             f"</div>"
             f'<div class="ms-wrap" id="ms-release">'
             f'<button type="button" class="ms-btn">Release: <span class="ms-label">All</span></button>'
@@ -481,12 +527,12 @@ def render_html(
     else:
         body = "<p>No features defined.</p>"
 
-    nav = _page_nav("features", bool(nav_link))
     header = _report_header("Test Report", link, duration_total)
-    return _html_doc("Test Report", favicon, nav + header, body, "report.js")
+    return _html_doc("Test Report", favicon, header, body, "report.js")
 
 
-def render_all_html(suites: list, favicon: str = "", nav_link: str = "", link: str = "") -> str:
+# pylint: disable=too-many-locals
+def render_all_html(suites: list, favicon: str = "", link: str = "") -> str:
     """Render the all-tests HTML report: one accordion per suite, tests inside."""
     duration_total = sum(s.duration for s in suites)
 
@@ -501,7 +547,7 @@ def render_all_html(suites: list, favicon: str = "", nav_link: str = "", link: s
         f'<div class="controls">'
         f'<div class="ms-wrap" id="ms-status">'
         f'<button type="button" class="ms-btn">Status: <span class="ms-label">All</span></button>'
-        f'<div class="ms-panel" hidden>{_STATUS_CHECKBOXES}</div>'
+        f'<div class="ms-panel" hidden>{_status_checkboxes()}</div>'
         f"</div>"
         f'<div class="ms-wrap" id="ms-suite">'
         f'<button type="button" class="ms-btn">Suite: <span class="ms-label">All</span></button>'
@@ -557,9 +603,8 @@ def render_all_html(suites: list, favicon: str = "", nav_link: str = "", link: s
         f"</div>"
     )
 
-    nav = _page_nav("all", bool(nav_link))
     header = _report_header("All Tests", link, duration_total)
-    return _html_doc("All Tests", favicon, nav + header, body, "all.js")
+    return _html_doc("All Tests", favicon, header, body, "all.js")
 
 
 def parse_dir(root: Path) -> list:
@@ -614,6 +659,35 @@ def main():
         "--favicon", default="http://www.google.com/s2/favicons?domain=ocudu.org", metavar="URL", help="Favicon URL"
     )
     parser.add_argument("--link", default="", metavar="URL", help="Gitlab Link")
+    parser.add_argument(
+        "--status",
+        nargs="+",
+        metavar="STATUS",
+        default=None,
+        choices=["failed", "passed", "skipped", "untested"],
+        help="Pre-select status filter",
+    )
+    parser.add_argument(
+        "--scope",
+        nargs="+",
+        metavar="SCOPE",
+        default=None,
+        help="Pre-select scope filter (space-separate multiple values)",
+    )
+    parser.add_argument(
+        "--type",
+        nargs="+",
+        metavar="TYPE",
+        default=None,
+        help="Pre-select type filter (space-separate multiple values)",
+    )
+    parser.add_argument(
+        "--release",
+        nargs="+",
+        metavar="RELEASE",
+        default=None,
+        help="Pre-select release filter (space-separate multiple values)",
+    )
     args = parser.parse_args()
 
     root = Path(args.dir)
@@ -628,19 +702,27 @@ def main():
     out_dir = args.output_dir
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    index = out_dir / "index.html"
-    all_html = out_dir / "all.html"
-
-    index.write_text(
-        render_html(suites, features=features, favicon=args.favicon, link=args.link, nav_link="all.html"),
+    (out_dir / "report.html").write_text(
+        render_html(
+            suites,
+            features=features,
+            favicon=args.favicon,
+            link=args.link,
+            defaults=FilterDefaults(
+                statuses=args.status,
+                scopes=args.scope,
+                types=args.type,
+                releases=args.release,
+            ),
+        ),
         encoding="utf-8",
     )
-    all_html.write_text(
-        render_all_html(suites, favicon=args.favicon, nav_link="index.html", link=args.link),
+    (out_dir / "all.html").write_text(
+        render_all_html(suites, favicon=args.favicon, link=args.link),
         encoding="utf-8",
     )
 
-    print(f"index.html + all.html written to {out_dir}/")
+    print(f"report.html + all.html written to {out_dir}/")
 
 
 if __name__ == "__main__":

@@ -55,10 +55,22 @@ spec:
       type: string
       default: ""
       description: "GitLab URL shown as a link in the report header (e.g. branch or pipeline URL)."
-    release:
+    filter_status:
       type: string
       default: ""
-      description: "Show all features with this release value (e.g. '26.04 (v1.0)') plus an 'others' group. If not specified, uses suites layout."
+      description: "Space-separated status values to pre-select (e.g. 'failed skipped')."
+    filter_scope:
+      type: string
+      default: ""
+      description: "Comma-separated scope values to pre-select (e.g. 'CU/DU,Entire RAN Product')."
+    filter_type:
+      type: string
+      default: ""
+      description: "Comma-separated type values to pre-select (e.g. 'Functional,Security')."
+    filter_release:
+      type: string
+      default: ""
+      description: "Comma-separated release values to pre-select (e.g. '26.04 (v1.0),26.10')."
 ---
 include:
   - project: $[[ inputs.ocudu_path ]]
@@ -139,6 +151,10 @@ generate-report:
     SUITE_8: "$[[ inputs.suite_8 ]]"
     SUITE_9: "$[[ inputs.suite_9 ]]"
     REPORT_LINK: "$[[ inputs.report_link ]]"
+    FILTER_STATUS: "$[[ inputs.filter_status ]]"
+    FILTER_SCOPE: "$[[ inputs.filter_scope ]]"
+    FILTER_TYPE: "$[[ inputs.filter_type ]]"
+    FILTER_RELEASE: "$[[ inputs.filter_release ]]"
     OUTPUT: public
   script:
     - cd scripts
@@ -148,8 +164,17 @@ generate-report:
       for s in "$SUITE_0" "$SUITE_1" "$SUITE_2" "$SUITE_3" "$SUITE_4" "$SUITE_5" "$SUITE_6" "$SUITE_7" "$SUITE_8" "$SUITE_9"; do
         [ -n "${s// }" ] && SUITE_ARGS+=(--suite "$s")
       done
+    - |
+      FILTER_ARGS=()
+      [ -n "$FILTER_STATUS" ] && for s in $FILTER_STATUS; do FILTER_ARGS+=(--status "$s"); done
+      if [ -n "$FILTER_SCOPE" ];   then IFS=',' read -ra _v <<< "$FILTER_SCOPE";   FILTER_ARGS+=(--scope   "${_v[@]}"); fi
+      if [ -n "$FILTER_TYPE" ];    then IFS=',' read -ra _v <<< "$FILTER_TYPE";    FILTER_ARGS+=(--type    "${_v[@]}"); fi
+      if [ -n "$FILTER_RELEASE" ]; then IFS=',' read -ra _v <<< "$FILTER_RELEASE"; FILTER_ARGS+=(--release "${_v[@]}"); fi
+    - mkdir -p "${CI_PROJECT_DIR}/${OUTPUT}"
+    - cp index.html "${CI_PROJECT_DIR}/${OUTPUT}/index.html"
     - python3 gitlab_fetch.py "${SUITE_ARGS[@]}" -o artifacts/
-    - python3 xunit_report.py --dir artifacts/ --link "$REPORT_LINK" -o ${CI_PROJECT_DIR}/${OUTPUT}
+    - python3 xunit_report.py --dir artifacts/ --link "$REPORT_LINK" -o "${CI_PROJECT_DIR}/${OUTPUT}" "${FILTER_ARGS[@]}"
+    - python3 render_report.py --data ../features/features.yaml --output ${CI_PROJECT_DIR}/${OUTPUT}/feature_list.html
   after_script:
     - |
       echo "*******************************************************************************************************************************"
@@ -157,8 +182,7 @@ generate-report:
       echo "*******************************************************************************************************************************"
   artifacts:
     paths:
-      - public/index.html
-    expose_as: "Test Report"
+      - ${OUTPUT}
     when: always
 
 pages:
@@ -169,9 +193,6 @@ pages:
     url: $CI_PAGES_URL
   rules:
     - if: $CI_PIPELINE_SCHEDULE_DESCRIPTION =~ /report/
-  artifacts:
-    paths:
-      - public
   after_script:
     - |
       echo "*******************************************************************************************************************************"
