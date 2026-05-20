@@ -7,7 +7,7 @@ features:
     description: 'The Open RAN functional architecture shall support the following O-RAN
       functions: O-RU, O-DU, O-CU-CP, O-CU-UP, SMO including Non-RT RIC, O-Cloud.'
     short_description: O-RU, O-DU, O-CU-CP, O-CU-UP, SMO/Non-RT RIC, O-Cloud support
-    type: Architecture
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
@@ -17,7 +17,7 @@ features:
     description: The network functions shall support the functional requirements specified
       in Section 5 of this MVP.
     short_description: Comply with Section 5 functional requirements
-    type: Architecture
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
@@ -27,7 +27,7 @@ features:
     description: The network functions shall support the performance requirements specified in Section 6 of this MVP.
     release: 26.04.1 (v1.1)
     short_description: Comply with Section 6 performance requirements
-    type: Architecture
+    type: Performance
     primary_test_type: []
     comment: ''
   - id: MVP-ARCH-GEN-6
@@ -36,7 +36,7 @@ features:
     description: The network functions shall support the security requirements specified in Section 9 of this MVP.
     release: 26.04.1 (v1.1)
     short_description: Comply with Section 9 security requirements
-    type: Architecture
+    type: Security
     primary_test_type: []
     comment: ''
   - id: MVP-ARCH-INTF-4
@@ -46,7 +46,7 @@ features:
       associated protocol stacks: O-RAN FH CUS-Plane interface specified in O-RAN Alliance
       [O-RAN-2], O-RAN FH M-Plane interface specified in O-RAN Alliance [O-RAN-3].'
     short_description: 'O-DU: Open FH CUS-Plane and M-Plane'
-    type: Architecture
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
@@ -56,7 +56,7 @@ features:
     description: The O-DU shall support the management O1 interface to SMO specified
       in O-RAN Alliance [O-RAN-6].
     short_description: 'O-DU: O1 to SMO'
-    type: Architecture
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type:
       - integration
@@ -67,7 +67,7 @@ features:
     description: The O-DU shall support F1-C interface to O-CU-CP specified in 3GPP
       [3GPP-5].
     short_description: 'O-DU: F1-C to O-CU-CP'
-    type: Architecture
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type:
       - integration
@@ -78,7 +78,7 @@ features:
     description: The O-DU shall support F1-U interface to O-CU-UP specified in 3GPP
       [3GPP-6].
     short_description: 'O-DU: F1-U to O-CU-UP'
-    type: Architecture
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type:
       - e2e
@@ -89,7 +89,7 @@ features:
     description: The O-CU-CP shall support the management O1 interface to Service Management
       and Orchestration (SMO) specified in O-RAN Alliance [O-RAN-5].
     short_description: 'O-CU-CP: O1 to SMO'
-    type: Architecture
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type:
       - integration
@@ -100,7 +100,7 @@ features:
     description: The O-CU-CP shall support F1-C interface to O-DU specified in 3GPP
       [3GPP-5].
     short_description: 'O-CU-CP: F1-C to O-DU'
-    type: Architecture
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: Option to test basic conformance against viavi O-DU
@@ -110,7 +110,7 @@ features:
     description: The O-CU-UP shall support F1-U interface to O-DU specified in 3GPP
       [3GPP-6].
     short_description: 'O-CU-UP: F1-U to O-DU'
-    type: Architecture
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: 'Option to test basic conformance against viavi O-DU'
@@ -119,7 +119,7 @@ features:
     scope: CU/DU
     description: O-CU-CP shall support E1 interface to O-CU-UP specified in 3GPP [3GPP-7].
     short_description: 'O-CU-CP: E1 to O-CU-UP'
-    type: Architecture
+    type: Functional
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''

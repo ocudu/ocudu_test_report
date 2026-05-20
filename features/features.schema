@@ -59,11 +59,8 @@ $defs:
       type:
         type: string
         enum:
-          - "Architecture"
           - "Functional"
           - "Performance"
           - "Security"
-          - "O-Cloud"
-          - "Management"
       comment:
         type: string
