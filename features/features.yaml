@@ -693,7 +693,7 @@ features:
     source: ATIS-MVP
     scope: CU/DU
     description: 'The Open RAN system specified in Section 4.1 shall support Intra-band
-      mobility within supported FR1 and FR2 bands for Inter-RU, Inter-DU, Intra-CU handovers.
+      mobility within supported FR1 and FR2 bands for Inter-RU, Inter-DU, Intra-CU handovers.'
     short_description: Inter-RU, Inter-DU, Intra-CU mobility
     type: Functional
     release: 26.04 (v1.0)
