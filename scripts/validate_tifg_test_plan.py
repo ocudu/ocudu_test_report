@@ -3,7 +3,7 @@
 # SPDX-FileCopyrightText: Copyright (C) 2021-2026 Software Radio Systems Limited
 # SPDX-License-Identifier: BSD-3-Clause-Open-MPI
 
-"""Validate tifg_tests.yaml against schema.json.
+"""Validate tifg_tests.yaml against its YAML schema.
 
 Exit codes:
   0  - validation passed
@@ -12,7 +12,6 @@ Exit codes:
 """
 
 import argparse
-import json
 import sys
 from pathlib import Path
 
@@ -33,17 +32,17 @@ def main() -> int:
     parser.add_argument(
         "--schema",
         default=DEFAULT_SCHEMA_FILE,
-        help=f"Path to the JSON Schema file (default: {DEFAULT_SCHEMA_FILE})",
+        help=f"Path to the YAML schema file (default: {DEFAULT_SCHEMA_FILE})",
     )
     args = parser.parse_args()
 
     try:
         with open(args.schema) as f:
-            schema = json.load(f)
+            schema = yaml.safe_load(f)
     except FileNotFoundError:
         print(f"ERROR: schema file not found: {args.schema}", file=sys.stderr)
         return 2
-    except json.JSONDecodeError as e:
+    except yaml.YAMLError as e:
         print(f"ERROR: failed to parse schema file '{args.schema}': {e}", file=sys.stderr)
         return 2
 
