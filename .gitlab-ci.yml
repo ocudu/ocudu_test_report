@@ -133,6 +133,15 @@ validate-features-yaml:
     - pip install --quiet pyyaml jsonschema
     - python3 scripts/validate_features.py --schema features/features.schema --data ./features/features.yaml
 
+validate-tifg-test-plan:
+  stage: static
+  image: python:3.11-slim
+  rules:
+    - if: $ON_MR
+  script:
+    - pip install --quiet pyyaml jsonschema
+    - python3 scripts/validate_tifg_test_plan.py --data tifg_test_plan/tifg_tests.yaml --schema tifg_test_plan/tifg_tests.schema
+
 generate-report:
   stage: build
   image: python:3.14-slim
