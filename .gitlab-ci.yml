@@ -208,6 +208,21 @@ pages:
       echo "Deployed to Pages: ${CI_PAGES_URL}"
       echo "*******************************************************************************************************************************"
 
+build-tifg-report:
+  stage: build
+  image: python:3.11-slim
+  rules:
+    - if: $ON_MR
+    - if: $ON_WEB
+    - if: $ON_API
+  script:
+    - pip install --quiet pyyaml
+    - python3 scripts/tifg_report.py --data tifg_test_plan/tifg_tests.yaml --output tifg_report.html
+  artifacts:
+    paths:
+      - tifg_report.html
+    expose_as: "TIFG Test Plan"
+
 build-feature-list:
   stage: build
   image: python:3.11-slim
