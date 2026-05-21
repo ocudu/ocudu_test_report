@@ -393,29 +393,6 @@ tests:
     description: "mMTC - Sensors"
     scope: "Service"
 
-  # Section 9 - RIC-enabled End-to-end Use Case Tests
-  - test_id: "9.2"
-    description: "Traffic steering with connected mode mobility control"
-    scope: "RIC-enabled"
-    ocudu_features:
-      - MVP-FUNC-SMO-17-1-a
-      - MVP-FUNC-SMO-17-1-b
-      - MVP-FUNC-SMO-17-1-c
-      - MVP-FUNC-SMO-17-1-d
-      - MVP-FUNC-SMO-17-1-e
-      - MVP-FUNC-SMO-17-1-f
-
-  - test_id: "9.3"
-    description: "Network Energy Saving with Carrier and Cell switch off/on using Non-RT RIC"
-    scope: "RIC-enabled"
-    ocudu_features:
-      - MVP-FUNC-SMO-17-1-a
-      - MVP-FUNC-SMO-17-1-b
-      - MVP-FUNC-SMO-17-1-c
-      - MVP-FUNC-SMO-17-1-d
-      - MVP-FUNC-SMO-17-1-e
-      - MVP-FUNC-SMO-17-1-f
-
   # Section 8 - Load and Stress Tests
   - test_id: "8.1"
     description: "Simultaneous RRC_CONNECTED UEs"
@@ -474,3 +451,26 @@ tests:
   - test_id: "8.10"
     description: "Simultaneous RRC_CONNECTED UEs Stability"
     scope: "Load and Stress"
+
+  # Section 9 - RIC-enabled End-to-end Use Case Tests
+  - test_id: "9.2"
+    description: "Traffic steering with connected mode mobility control"
+    scope: "RIC-enabled"
+    ocudu_features:
+      - MVP-FUNC-SMO-17-1-a
+      - MVP-FUNC-SMO-17-1-b
+      - MVP-FUNC-SMO-17-1-c
+      - MVP-FUNC-SMO-17-1-d
+      - MVP-FUNC-SMO-17-1-e
+      - MVP-FUNC-SMO-17-1-f
+
+  - test_id: "9.3"
+    description: "Network Energy Saving with Carrier and Cell switch off/on using Non-RT RIC"
+    scope: "RIC-enabled"
+    ocudu_features:
+      - MVP-FUNC-SMO-17-1-a
+      - MVP-FUNC-SMO-17-1-b
+      - MVP-FUNC-SMO-17-1-c
+      - MVP-FUNC-SMO-17-1-d
+      - MVP-FUNC-SMO-17-1-e
+      - MVP-FUNC-SMO-17-1-f
