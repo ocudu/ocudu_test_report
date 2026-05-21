@@ -9,18 +9,105 @@ tests:
   - test_id: "5.3"
     description: "5G SA Registration and deregistration of single UE"
     scope: "Functional"
+    ocudu_features:
+      - MVP-ARCH-INTF-4
+      - MVP-ARCH-INTF-5
+      - MVP-ARCH-INTF-6
+      - MVP-ARCH-INTF-7
+      - MVP-ARCH-INTF-8
+      - MVP-ARCH-INTF-9
+      - MVP-ARCH-INTF-10
+      - MVP-ARCH-INTF-11
+      - MVP-FUNC-ARCH-16-1
+      - MVP-FUNC-PHY-16-1
+      - MVP-FUNC-PHY-16-2
+      - MVP-FUNC-PHY-16-3
+      - MVP-FUNC-PHY-16-4
+      - MVP-FUNC-PHY-16-5
+      - MVP-FUNC-PHY-16-6
+      - MVP-FUNC-PHY-16-7
+      - MVP-FUNC-PHY-16-8
+      - MVP-FUNC-PHY-16-9
+      - MVP-FUNC-PHY-16-10
+      - MVP-FUNC-PHY-16-11
+      - MVP-FUNC-PHY-16-12
+      - MVP-FUNC-PHY-16-13
+      - MVP-FUNC-PHY-16-14
+      - MVP-FUNC-PHY-16-15
+      - MVP-FUNC-PHY-16-16
+      - MVP-FUNC-BAS-16-2
+      - MVP-FUNC-BAS-16-3
+      - MVP-FUNC-BAS-16-4
+      - MVP-FUNC-MIMO-16-1
+      - MVP-FUNC-MIMO-16-2
+      - MVP-FUNC-MIMO-16-3
+      - MVP-FUNC-BW-16-1
+      - MVP-FUNC-TDD-16-1
+      - MVP-FUNC-TDD-16-2
+      - MVP-FUNC-TDD-16-3
+      - MVP-FUNC-TDD-16-4
+      - MVP-FUNC-TDD-16-5
+      - MVP-FUNC-SVCS-16-2
+      - MVP-FUNC-SVCS-16-6
+      - MVP-FUNC-RLM-16-1
+      - MVP-FUNC-RACH-16-1
+      - MVP-FUNC-BW-17-2
+      - MVP-FUNC-SVCS-17-1
+      - MVPC-PERF-ACC-3
+      - MVPC-PERF-ACC-4
 
   - test_id: "5.4"
     description: "Intra O-DU mobility (connected mode)"
     scope: "Functional"
+    ocudu_features:
+      - MVP-PERF-MOB-1
+      - MVP-PERF-MOB-2
+      - MVP-PERF-MOB-3
+      - MVP-PERF-MOB-4
+      - MVP-PERF-MOB-5
+      - MVP-PERF-MOB-6
+      - MVP-PERF-MOB-7
+      - MVP-PERF-MOB-8
+      - MVP-PERF-MOB-9
+      - MVP-PERF-MOB-10
+      - MVP-PERF-MOB-11
 
   - test_id: "5.5"
     description: "Inter O-DU mobility (connected mode)"
     scope: "Functional"
+    ocudu_features:
+      - MVP-FUNC-MOB-1
+      - MVP-FUNC-MOB-2
+      - MVP-FUNC-MOB-9
+      - MVP-PERF-MOB-1
+      - MVP-PERF-MOB-2
+      - MVP-PERF-MOB-3
+      - MVP-PERF-MOB-4
+      - MVP-PERF-MOB-5
+      - MVP-PERF-MOB-6
+      - MVP-PERF-MOB-7
+      - MVP-PERF-MOB-8
+      - MVP-PERF-MOB-9
+      - MVP-PERF-MOB-10
+      - MVP-PERF-MOB-11
 
   - test_id: "5.6"
     description: "Inter O-CU mobility (connected mode)"
     scope: "Functional"
+    ocudu_features:
+      - MVP-FUNC-MOB-3
+      - MVP-FUNC-MOB-4
+      - MVP-PERF-MOB-1
+      - MVP-PERF-MOB-2
+      - MVP-PERF-MOB-3
+      - MVP-PERF-MOB-4
+      - MVP-PERF-MOB-5
+      - MVP-PERF-MOB-6
+      - MVP-PERF-MOB-7
+      - MVP-PERF-MOB-8
+      - MVP-PERF-MOB-9
+      - MVP-PERF-MOB-10
+      - MVP-PERF-MOB-11
 
   - test_id: "5.7"
     description: "5G SA registration and deregistration to single network slice"
@@ -29,6 +116,8 @@ tests:
   - test_id: "5.8"
     description: "5G SA registration and deregistration to multiple network slices"
     scope: "Functional"
+    ocudu_features:
+      - MVP-FUNC-SVCS-17-3-a
 
   - test_id: "5.9"
     description: "Idle Mode Intra O-DU mobility"
@@ -37,6 +126,9 @@ tests:
   - test_id: "5.10"
     description: "Idle Mode Inter O-DU mobility"
     scope: "Functional"
+    ocudu_features:
+      - MVP-FUNC-MOB-10
+      - MVP-FUNC-MOB-11
 
   - test_id: "5.11"
     description: "Idle Mode Inter O-CU mobility"
@@ -54,10 +146,36 @@ tests:
   - test_id: "6.2"
     description: "Downlink peak throughput"
     scope: "Performance"
+    ocudu_features:
+      - MVP-FUNC-MIMO-16-4
+      - MVP-FUNC-MIMO-16-5
+      - MVP-FUNC-CA-1
+      - MVP-FUNC-CA-2
+      - MVP-FUNC-CA-3
+      - MVP-FUNC-CA-4
+      - MVP-FUNC-CA-5
+      - MVP-FUNC-CA-6
+      - MVP-FUNC-CA-7
+      - MVP-PERF-THR-1a
+      - MVP-PERF-THR-1b
+      - MVP-PERF-THR-1c
 
   - test_id: "6.3"
     description: "Uplink peak throughput"
     scope: "Performance"
+    ocudu_features:
+      - MVP-FUNC-MIMO-16-4
+      - MVP-FUNC-MIMO-16-5
+      - MVP-FUNC-CA-1
+      - MVP-FUNC-CA-2
+      - MVP-FUNC-CA-3
+      - MVP-FUNC-CA-4
+      - MVP-FUNC-CA-5
+      - MVP-FUNC-CA-6
+      - MVP-FUNC-CA-7
+      - MVP-PERF-THR-2a
+      - MVP-PERF-THR-2b
+      - MVP-PERF-THR-2c
 
   - test_id: "6.4"
     description: "Downlink throughput in different radio conditions"
@@ -70,22 +188,46 @@ tests:
   - test_id: "6.6"
     description: "Bidirectional throughput in different radio conditions"
     scope: "Performance"
+    ocudu_features:
+      - MVP-PERF-THR-3a
+      - MVP-PERF-THR-3b
+      - MVP-PERF-THR-3c
 
   - test_id: "6.7"
     description: "Downlink coverage throughput (link budget)"
     scope: "Performance"
+    ocudu_features:
+      - MVP-PERF-THR-4a
+      - MVP-PERF-THR-4b
+      - MVP-PERF-THR-4c
 
   - test_id: "6.8"
     description: "Uplink coverage throughput (link budget)"
     scope: "Performance"
+    ocudu_features:
+      - MVP-PERF-THR-5a
+      - MVP-PERF-THR-5b
+      - MVP-PERF-THR-5c
 
   - test_id: "6.9"
     description: "Downlink aggregated cell throughput (cell capacity)"
     scope: "Performance"
+    ocudu_features:
+      - MVP-FUNC-MIMO-16-7
+      - MVP-FUNC-MIMO-16-8
+      - MVP-FUNC-MIMO-16-8a
+      - MVP-PERF-CAP-1a
+      - MVP-PERF-CAP-1b
 
   - test_id: "6.10"
     description: "Uplink aggregated cell throughput (cell capacity)"
     scope: "Performance"
+    ocudu_features:
+      - MVP-FUNC-MIMO-16-6
+      - MVP-FUNC-MIMO-16-8
+      - MVP-FUNC-MIMO-16-8a
+      - MVP-PERF-CAP-2a
+      - MVP-PERF-CAP-2b
 
   - test_id: "6.11"
     description: "Impact of fronthaul latency on DL peak throughput"
@@ -111,10 +253,20 @@ tests:
   - test_id: "7.1.1"
     description: "Web Browsing"
     scope: "Service"
+    ocudu_features:
+      - MVP-PERF-WEB-1
+      - MVP-PERF-WEB-2
+      - MVP-PERF-WEB-3
+      - MVP-PERF-WEB-4
 
   - test_id: "7.1.2"
     description: "File upload/download"
     scope: "Service"
+    ocudu_features:
+      - MVP-PERF-FILDL-1
+      - MVP-PERF-FILDL-2
+      - MVP-PERF-FILUL-1
+      - MVP-PERF-FILUL-2
 
   - test_id: "7.2.1"
     description: "Video Streaming - Stationary Test"
@@ -123,26 +275,78 @@ tests:
   - test_id: "7.3.3"
     description: "Voice Service - LTE to NR / NR to LTE handover"
     scope: "Service"
+    ocudu_features:
+      - MVP-FUNC-SVCS-16-1
 
   - test_id: "7.4.1"
     description: "EPS Fallback (voice, N26 and without N26)"
     scope: "Service"
+    ocudu_features:
+      - MVP-FUNC-SVCS-16-7
 
   - test_id: "7.5.1"
     description: "Voice over NR - Stationary"
     scope: "Service"
+    ocudu_features:
+      - MVP-FUNC-SVCS-16-8-a
+      - MVP-FUNC-SVCS-16-8-b
+      - MVP-FUNC-SVCS-16-8-c
+      - MVP-PERF-RET-2
+      - MVP-PERF-VNR-1
+      - MVP-PERF-VNR-2
+      - MVP-PERF-VNR-6
+      - MVP-PERF-VNR-7
+      - MVP-PERF-VNR-8
+      - MVP-PERF-VNR-9
+      - MVP-PERF-VNR-10
 
   - test_id: "7.5.2"
     description: "VoNR - Intra O-DU handover"
     scope: "Service"
+    ocudu_features:
+      - MVP-PERF-RET-2
+      - MVP-PERF-VNR-1
+      - MVP-PERF-VNR-2
+      - MVP-PERF-VNR-3
+      - MVP-PERF-VNR-4
+      - MVP-PERF-VNR-5
+      - MVP-PERF-VNR-6
+      - MVP-PERF-VNR-7
+      - MVP-PERF-VNR-8
+      - MVP-PERF-VNR-9
+      - MVP-PERF-VNR-10
 
   - test_id: "7.5.3"
     description: "VoNR - Intra O-CU/Inter O-DU handover"
     scope: "Service"
+    ocudu_features:
+      - MVP-PERF-RET-2
+      - MVP-PERF-VNR-1
+      - MVP-PERF-VNR-2
+      - MVP-PERF-VNR-3
+      - MVP-PERF-VNR-4
+      - MVP-PERF-VNR-5
+      - MVP-PERF-VNR-6
+      - MVP-PERF-VNR-7
+      - MVP-PERF-VNR-8
+      - MVP-PERF-VNR-9
+      - MVP-PERF-VNR-10
 
   - test_id: "7.5.4"
     description: "VoNR - Inter O-CU handover"
     scope: "Service"
+    ocudu_features:
+      - MVP-PERF-RET-2
+      - MVP-PERF-VNR-1
+      - MVP-PERF-VNR-2
+      - MVP-PERF-VNR-3
+      - MVP-PERF-VNR-4
+      - MVP-PERF-VNR-5
+      - MVP-PERF-VNR-6
+      - MVP-PERF-VNR-7
+      - MVP-PERF-VNR-8
+      - MVP-PERF-VNR-9
+      - MVP-PERF-VNR-10
 
   - test_id: "7.6.3"
     description: "ViLTE - LTE to NR / NR to LTE handover"
@@ -155,6 +359,8 @@ tests:
   - test_id: "7.8.1"
     description: "Video over NR - Stationary"
     scope: "Service"
+    ocudu_features:
+      - MVP-FUNC-SVCS-16-8-c
 
   - test_id: "7.8.2"
     description: "Video over NR - Intra O-DU handover"
@@ -171,6 +377,8 @@ tests:
   - test_id: "7.9.1"
     description: "URLLC - Augmented Reality"
     scope: "Service"
+    ocudu_features:
+      - MVP-FUNC-SVCS-17-3-a
 
   - test_id: "7.10.1"
     description: "mMTC - Sensors"
@@ -180,6 +388,13 @@ tests:
   - test_id: "8.1"
     description: "Simultaneous RRC_CONNECTED UEs"
     scope: "Load and Stress"
+    ocudu_features:
+      - MVP-PERF-ACC-2
+      - MVP-PERF-LAT-1
+      - MVP-PERF-LAT-2
+      - MVP-PERF-LAT-3
+      - MVP-PERF-LAT-4
+      - MVP-PERF-CAP-3
 
   - test_id: "8.2"
     description: "UE State Transition Rate Testing"
@@ -188,6 +403,9 @@ tests:
   - test_id: "8.3"
     description: "Traffic Load Testing"
     scope: "Load and Stress"
+    ocudu_features:
+      - MVP-PERF-LOAD-2
+      - MVP-PERF-LOAD-3
 
   - test_id: "8.4"
     description: "Traffic Model Testing"
@@ -196,6 +414,8 @@ tests:
   - test_id: "8.5"
     description: "Long hours stability Testing"
     scope: "Load and Stress"
+    ocudu_features:
+      - MVP-PERF-LOAD-1
 
   - test_id: "8.6"
     description: "Multi-cell Testing"
@@ -204,14 +424,20 @@ tests:
   - test_id: "8.7"
     description: "Emergency call"
     scope: "Load and Stress"
+    ocudu_features:
+      - MVP-FUNC-SVCS-16-3
 
   - test_id: "8.8"
     description: "ETWS (Earthquake and Tsunami Warning System)"
     scope: "Load and Stress"
+    ocudu_features:
+      - MVP-FUNC-SVCS-16-5
 
   - test_id: "8.9"
     description: "MPS Call"
     scope: "Load and Stress"
+    ocudu_features:
+      - MVP-FUNC-SVCS-16-4
 
   - test_id: "8.10"
     description: "Simultaneous RRC_CONNECTED UEs Stability"

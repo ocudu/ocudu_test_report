@@ -33,6 +33,15 @@
               "Service",
               "Load and Stress"
             ]
+          },
+          "ocudu_features": {
+            "type": "array",
+            "description": "OCUDU feature IDs covered by this test case",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
           }
         }
       }
