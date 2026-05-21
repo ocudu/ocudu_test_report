@@ -31,7 +31,8 @@
               "Functional",
               "Performance",
               "Service",
-              "Load and Stress"
+              "Load and Stress",
+              "RIC-enabled"
             ]
           },
           "ocudu_features": {
