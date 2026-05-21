@@ -122,17 +122,26 @@ tests:
   - test_id: "5.9"
     description: "Idle Mode Intra O-DU mobility"
     scope: "Functional"
+    ocudu_features:
+      - MVP-FUNC-MOB-1-a
+      - MVP-FUNC-MOB-1-b
 
   - test_id: "5.10"
     description: "Idle Mode Inter O-DU mobility"
     scope: "Functional"
     ocudu_features:
+      - MVP-FUNC-MOB-1-c
+      - MVP-FUNC-MOB-1-d
+      - MVP-FUNC-MOB-1-e
       - MVP-FUNC-MOB-10
       - MVP-FUNC-MOB-11
 
   - test_id: "5.11"
     description: "Idle Mode Inter O-CU mobility"
     scope: "Functional"
+    ocudu_features:
+      - MVP-FUNC-MOB-1-d
+      - MVP-FUNC-MOB-1-e
 
   - test_id: "5.12"
     description: "5G/4G Inter-System mobility - 5GS to EPS handover"
