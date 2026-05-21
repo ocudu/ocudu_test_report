@@ -2379,24 +2379,24 @@ features:
     comment: ''
   - id: MVP-SEC-O-CU-14
     source: ATIS-MVP
-    scope: CU/DU
+    scope: Entire RAN/platform/deployment/auxiliary component
     description: O-CU-CP shall follow the security requirements in [3GPP-4], clauses
       5.3.5 and 5.3.7.
     short_description: 'O-CU-CP: 3GPP-4 clause 5.3.5 and 5.3.7'
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'Requirements for control/user plane key management inside the gNB. Disable CU logs in debug mode to prevent keys being dumped in clear. If they are logged then they need to be placed in physical secure location.'
   - id: MVP-SEC-O-CU-15
     source: ATIS-MVP
-    scope: CU/DU
+    scope: Entire RAN/platform/deployment/auxiliary component
     description: O-CU-UP shall follow the security requirements in [3GPP-4], clauses
       5.3.5 and 5.3.6.
     short_description: 'O-CU-UP: 3GPP-4 clause 5.3.5 and 5.3.6'
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'Same as MVP-SEC-O-CU-14'
   - id: MVP-SEC-O-DU-01a
     source: ATIS-MVP
     scope: Entire RAN/platform/deployment/auxiliary component
