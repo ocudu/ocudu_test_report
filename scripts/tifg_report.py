@@ -61,52 +61,30 @@ def _bar_chart(counts: dict[str, int], total: int) -> str:
     return rows
 
 
-def _render(tests: list[dict]) -> str:
-    total = len(tests)
-    scope_counts = Counter(t["scope"] for t in tests)
-    with_features = sum(1 for t in tests if t.get("ocudu_features"))
-    without_features = total - with_features
-    total_feature_refs = sum(len(t.get("ocudu_features") or []) for t in tests)
-
-    # ── summary cards ────────────────────────────────────────────────────────
-    def card(value: str, label: str) -> str:
-        return f"""
+def _summary_card(value: str, label: str) -> str:
+    return f"""
         <div style="background:#1e293b;border-radius:10px;padding:20px 28px;
                     text-align:center;min-width:120px">
           <div style="font-size:2rem;font-weight:700;color:#f1f5f9">{value}</div>
           <div style="font-size:0.8rem;color:#94a3b8;margin-top:4px">{label}</div>
         </div>"""
 
-    cards = (
-        card(str(total), "Test Cases")
-        + card(str(len(scope_counts)), "Scopes")
-        + card(str(with_features), "With features")
-        + card(str(without_features), "Without features")
-        + card(str(total_feature_refs), "Feature refs")
-    )
 
-    # ── scope cards ──────────────────────────────────────────────────────────
-    scope_cards = ""
+def _build_scope_cards(scope_counts: Counter) -> str:
+    html = ""
     for label, count in sorted(scope_counts.items(), key=lambda x: -x[1]):
         color = SCOPE_COLORS.get(label, "#64748b")
-        scope_cards += f"""
+        html += f"""
         <div style="background:#1e293b;border-radius:10px;padding:16px 20px;
                     min-width:140px;border-left:4px solid {color}">
           <div style="font-size:1.6rem;font-weight:700;color:#f1f5f9">{count}</div>
           <div style="font-size:0.8rem;color:#94a3b8;margin-top:4px">{label}</div>
         </div>"""
+    return html
 
-    # ── distribution chart ───────────────────────────────────────────────────
-    chart_bars = _bar_chart(scope_counts, total)
-    chart = f"""
-    <div style="background:#1e293b;border-radius:10px;padding:20px 24px;max-width:600px">
-      <h3 style="margin:0 0 14px;font-size:0.95rem;color:#94a3b8;
-                 text-transform:uppercase;letter-spacing:.06em">By scope</h3>
-      {chart_bars}
-    </div>"""
 
-    # ── test rows ────────────────────────────────────────────────────────────
-    rows = ""
+def _build_rows(tests: list[dict]) -> str:
+    html = ""
     for t in sorted(tests, key=lambda t: tuple(int(x) for x in t["test_id"].split("."))):
         scope = t.get("scope", "")
         scope_color = SCOPE_COLORS.get(scope, "#64748b")
@@ -114,7 +92,7 @@ def _render(tests: list[dict]) -> str:
         feature_chips = "".join(_badge(fid, "#1e40af", small=True) for fid in features)
         if not feature_chips:
             feature_chips = '<span style="color:#475569;font-size:0.8rem">—</span>'
-        rows += f"""
+        html += f"""
         <tr>
           <td style="font-family:monospace;font-size:0.85rem;color:#93c5fd;
                      white-space:nowrap;font-weight:600">{t['test_id']}</td>
@@ -122,6 +100,32 @@ def _render(tests: list[dict]) -> str:
           <td style="white-space:nowrap">{_badge(scope, scope_color)}</td>
           <td style="line-height:1.8">{feature_chips}</td>
         </tr>"""
+    return html
+
+
+def _render(tests: list[dict]) -> str:
+    total = len(tests)
+    scope_counts = Counter(t["scope"] for t in tests)
+    with_features = sum(1 for t in tests if t.get("ocudu_features"))
+    without_features = total - with_features
+    total_feature_refs = sum(len(t.get("ocudu_features") or []) for t in tests)
+
+    cards = (
+        _summary_card(str(total), "Test Cases")
+        + _summary_card(str(len(scope_counts)), "Scopes")
+        + _summary_card(str(with_features), "With features")
+        + _summary_card(str(without_features), "Without features")
+        + _summary_card(str(total_feature_refs), "Feature refs")
+    )
+    scope_cards = _build_scope_cards(scope_counts)
+    chart_bars = _bar_chart(scope_counts, total)
+    chart = f"""
+    <div style="background:#1e293b;border-radius:10px;padding:20px 24px;max-width:600px">
+      <h3 style="margin:0 0 14px;font-size:0.95rem;color:#94a3b8;
+                 text-transform:uppercase;letter-spacing:.06em">By scope</h3>
+      {chart_bars}
+    </div>"""
+    rows = _build_rows(tests)
 
     # ── full page ─────────────────────────────────────────────────────────────
     return f"""<!DOCTYPE html>

@@ -15,15 +15,38 @@ import argparse
 import sys
 from pathlib import Path
 
-import jsonschema
-import yaml
+try:
+    import jsonschema
+except ImportError:
+    print("ERROR: jsonschema is required. Install with: pip install jsonschema", file=sys.stderr)
+    sys.exit(2)
+
+try:
+    import yaml
+except ImportError:
+    print("ERROR: PyYAML is required. Install with: pip install pyyaml", file=sys.stderr)
+    sys.exit(2)
 
 DEFAULT_TESTS_FILE = str(Path(__file__).parent.parent / "tifg_test_plan" / "tifg_tests.yaml")
 DEFAULT_SCHEMA_FILE = str(Path(__file__).parent.parent / "tifg_test_plan" / "tifg_tests.schema")
 
 
+def _load_yaml(path: str, label: str) -> tuple:
+    """Load a YAML file, returning (data, exit_code). exit_code is non-zero on error."""
+    try:
+        with open(path, encoding="utf-8") as f:
+            return yaml.safe_load(f), 0
+    except FileNotFoundError:
+        print(f"ERROR: {label} not found: {path}", file=sys.stderr)
+        return None, 2
+    except yaml.YAMLError as e:
+        print(f"ERROR: failed to parse {label} '{path}': {e}", file=sys.stderr)
+        return None, 2
+
+
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Validate a TIFG test plan YAML against its JSON Schema.")
+    """Validate a TIFG test plan YAML file against its schema."""
+    parser = argparse.ArgumentParser(description="Validate a TIFG test plan YAML against its YAML schema.")
     parser.add_argument(
         "--data",
         default=DEFAULT_TESTS_FILE,
@@ -36,25 +59,13 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    try:
-        with open(args.schema) as f:
-            schema = yaml.safe_load(f)
-    except FileNotFoundError:
-        print(f"ERROR: schema file not found: {args.schema}", file=sys.stderr)
-        return 2
-    except yaml.YAMLError as e:
-        print(f"ERROR: failed to parse schema file '{args.schema}': {e}", file=sys.stderr)
-        return 2
+    schema, rc = _load_yaml(args.schema, "schema file")
+    if rc:
+        return rc
 
-    try:
-        with open(args.data) as f:
-            data = yaml.safe_load(f)
-    except FileNotFoundError:
-        print(f"ERROR: data file not found: {args.data}", file=sys.stderr)
-        return 2
-    except yaml.YAMLError as e:
-        print(f"ERROR: failed to parse data file '{args.data}': {e}", file=sys.stderr)
-        return 2
+    data, rc = _load_yaml(args.data, "data file")
+    if rc:
+        return rc
 
     print(f"Validating '{args.data}' against schema '{args.schema}' ...")
 
