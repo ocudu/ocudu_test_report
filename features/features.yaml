@@ -2649,11 +2649,10 @@ features:
     source: OCUDU defined
     scope: CU/DU
     description: 'The Open RAN system shall support Reestablishment to the same cell and different cell in the same CU-CP'
-    release: 26.04 (v1.0)
     short_description: Reestablishment to the same cell and different cell in the same
       CU-CP
     type: Functional
-    release: unspecified
+    release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
   - id: DU-GEN-2-a
