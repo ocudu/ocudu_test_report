@@ -1,0 +1,218 @@
+# SPDX-FileCopyrightText: Copyright (C) 2021-2026 Software Radio Systems Limited
+# SPDX-License-Identifier: BSD-3-Clause-Open-MPI
+
+# O-RAN TIFG E2E Test Cases applicable for 5G Standalone (SA)
+# Source: O-RAN.TIFG.TS.E2E-Test.0-R005-v09.00
+
+tests:
+  # Section 5 - Functional Tests
+  - test_id: "5.3"
+    description: "5G SA Registration and deregistration of single UE"
+    scope: "Functional"
+
+  - test_id: "5.4"
+    description: "Intra O-DU mobility (connected mode)"
+    scope: "Functional"
+
+  - test_id: "5.5"
+    description: "Inter O-DU mobility (connected mode)"
+    scope: "Functional"
+
+  - test_id: "5.6"
+    description: "Inter O-CU mobility (connected mode)"
+    scope: "Functional"
+
+  - test_id: "5.7"
+    description: "5G SA registration and deregistration to single network slice"
+    scope: "Functional"
+
+  - test_id: "5.8"
+    description: "5G SA registration and deregistration to multiple network slices"
+    scope: "Functional"
+
+  - test_id: "5.9"
+    description: "Idle Mode Intra O-DU mobility"
+    scope: "Functional"
+
+  - test_id: "5.10"
+    description: "Idle Mode Inter O-DU mobility"
+    scope: "Functional"
+
+  - test_id: "5.11"
+    description: "Idle Mode Inter O-CU mobility"
+    scope: "Functional"
+
+  - test_id: "5.12"
+    description: "5G/4G Inter-System mobility - 5GS to EPS handover"
+    scope: "Functional"
+
+  - test_id: "5.13"
+    description: "5G/4G Inter-System mobility - EPS to 5GS handover"
+    scope: "Functional"
+
+  # Section 6 - Performance Tests
+  - test_id: "6.2"
+    description: "Downlink peak throughput"
+    scope: "Performance"
+
+  - test_id: "6.3"
+    description: "Uplink peak throughput"
+    scope: "Performance"
+
+  - test_id: "6.4"
+    description: "Downlink throughput in different radio conditions"
+    scope: "Performance"
+
+  - test_id: "6.5"
+    description: "Uplink throughput in different radio conditions"
+    scope: "Performance"
+
+  - test_id: "6.6"
+    description: "Bidirectional throughput in different radio conditions"
+    scope: "Performance"
+
+  - test_id: "6.7"
+    description: "Downlink coverage throughput (link budget)"
+    scope: "Performance"
+
+  - test_id: "6.8"
+    description: "Uplink coverage throughput (link budget)"
+    scope: "Performance"
+
+  - test_id: "6.9"
+    description: "Downlink aggregated cell throughput (cell capacity)"
+    scope: "Performance"
+
+  - test_id: "6.10"
+    description: "Uplink aggregated cell throughput (cell capacity)"
+    scope: "Performance"
+
+  - test_id: "6.11"
+    description: "Impact of fronthaul latency on DL peak throughput"
+    scope: "Performance"
+
+  - test_id: "6.12"
+    description: "Impact of fronthaul latency on UL peak throughput"
+    scope: "Performance"
+
+  - test_id: "6.13"
+    description: "Impact of midhaul latency on DL peak throughput"
+    scope: "Performance"
+
+  - test_id: "6.14"
+    description: "Impact of midhaul latency on UL peak throughput"
+    scope: "Performance"
+
+  - test_id: "6.15"
+    description: "End-to-end user plane latency"
+    scope: "Performance"
+
+  # Section 7 - Services Tests
+  - test_id: "7.1.1"
+    description: "Web Browsing"
+    scope: "Service"
+
+  - test_id: "7.1.2"
+    description: "File upload/download"
+    scope: "Service"
+
+  - test_id: "7.2.1"
+    description: "Video Streaming - Stationary Test"
+    scope: "Service"
+
+  - test_id: "7.3.3"
+    description: "Voice Service - LTE to NR / NR to LTE handover"
+    scope: "Service"
+
+  - test_id: "7.4.1"
+    description: "EPS Fallback (voice, N26 and without N26)"
+    scope: "Service"
+
+  - test_id: "7.5.1"
+    description: "Voice over NR - Stationary"
+    scope: "Service"
+
+  - test_id: "7.5.2"
+    description: "VoNR - Intra O-DU handover"
+    scope: "Service"
+
+  - test_id: "7.5.3"
+    description: "VoNR - Intra O-CU/Inter O-DU handover"
+    scope: "Service"
+
+  - test_id: "7.5.4"
+    description: "VoNR - Inter O-CU handover"
+    scope: "Service"
+
+  - test_id: "7.6.3"
+    description: "ViLTE - LTE to NR / NR to LTE handover"
+    scope: "Service"
+
+  - test_id: "7.7.1"
+    description: "Video Service EPS Fallback"
+    scope: "Service"
+
+  - test_id: "7.8.1"
+    description: "Video over NR - Stationary"
+    scope: "Service"
+
+  - test_id: "7.8.2"
+    description: "Video over NR - Intra O-DU handover"
+    scope: "Service"
+
+  - test_id: "7.8.3"
+    description: "Video over NR - Intra O-CU/Inter O-DU handover"
+    scope: "Service"
+
+  - test_id: "7.8.4"
+    description: "Video over NR - Inter O-CU handover"
+    scope: "Service"
+
+  - test_id: "7.9.1"
+    description: "URLLC - Augmented Reality"
+    scope: "Service"
+
+  - test_id: "7.10.1"
+    description: "mMTC - Sensors"
+    scope: "Service"
+
+  # Section 8 - Load and Stress Tests
+  - test_id: "8.1"
+    description: "Simultaneous RRC_CONNECTED UEs"
+    scope: "Load and Stress"
+
+  - test_id: "8.2"
+    description: "UE State Transition Rate Testing"
+    scope: "Load and Stress"
+
+  - test_id: "8.3"
+    description: "Traffic Load Testing"
+    scope: "Load and Stress"
+
+  - test_id: "8.4"
+    description: "Traffic Model Testing"
+    scope: "Load and Stress"
+
+  - test_id: "8.5"
+    description: "Long hours stability Testing"
+    scope: "Load and Stress"
+
+  - test_id: "8.6"
+    description: "Multi-cell Testing"
+    scope: "Load and Stress"
+
+  - test_id: "8.7"
+    description: "Emergency call"
+    scope: "Load and Stress"
+
+  - test_id: "8.8"
+    description: "ETWS (Earthquake and Tsunami Warning System)"
+    scope: "Load and Stress"
+
+  - test_id: "8.9"
+    description: "MPS Call"
+    scope: "Load and Stress"
+
+  - test_id: "8.10"
+    description: "Simultaneous RRC_CONNECTED UEs Stability"
+    scope: "Load and Stress"
