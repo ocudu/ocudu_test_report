@@ -2245,7 +2245,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'Requires TLS enabled in O1/netconf server.'
   - id: MVP-SEC-O-CU-04
     source: ATIS-MVP
     scope: CU/DU
@@ -2255,7 +2255,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'Requires TLS enabled in O1/netconf server.'
   - id: MVP-SEC-O-CU-05
     source: ATIS-MVP
     scope: CU/DU
@@ -2490,7 +2490,7 @@ features:
     type: Security
     release: 26.04 (v1.0)
     primary_test_type: []
-    comment: ''
+    comment: 'Requires TLS enabled in O1/netconf server.'
   - id: MVP-SEC-O-DU-08
     source: ATIS-MVP
     scope: CU/DU
