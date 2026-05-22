@@ -31,7 +31,7 @@ DEFAULT_TESTS_FILE = str(Path(__file__).parent.parent / "tifg_test_plan" / "tifg
 DEFAULT_SCHEMA_FILE = str(Path(__file__).parent.parent / "tifg_test_plan" / "tifg_tests.schema")
 
 
-def _load_yaml(path: str, label: str) -> tuple:
+def _load_yaml(path: str, label: str) -> tuple[object, int]:
     """Load a YAML file, returning (data, exit_code). exit_code is non-zero on error."""
     try:
         with open(path, encoding="utf-8") as f:

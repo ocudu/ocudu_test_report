@@ -31,7 +31,8 @@ SCOPE_COLORS = {
 def _load_tests(path: str) -> list[dict]:
     with open(path, encoding="utf-8") as f:
         data = yaml.safe_load(f)
-    return data["tests"]
+    result: list[dict] = data["tests"]
+    return result
 
 
 def _badge(text: str, color: str, small: bool = False) -> str:
