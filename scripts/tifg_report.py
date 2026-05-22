@@ -226,7 +226,9 @@ def main() -> None:
     """Entrypoint"""
     parser = argparse.ArgumentParser(description="Render tifg_tests.yaml to an HTML report.")
     parser.add_argument("--data", default=DEFAULT_DATA_FILE, help=f"Input YAML file (default: {DEFAULT_DATA_FILE})")
-    parser.add_argument("--output", default=DEFAULT_OUTPUT_FILE, help=f"Output HTML file (default: {DEFAULT_OUTPUT_FILE})")
+    parser.add_argument(
+        "--output", default=DEFAULT_OUTPUT_FILE, help=f"Output HTML file (default: {DEFAULT_OUTPUT_FILE})"
+    )
     args = parser.parse_args()
 
     try:
