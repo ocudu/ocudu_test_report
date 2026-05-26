@@ -1274,7 +1274,7 @@ features:
     description: 'The Open RAN system specified in Section 4.1 shall support RAN slicing enhancements for Slice specific multi-carrier resource sharing'
     short_description: RAN slicing enhancements (Rel-17) for slice specific multi-carrier resource sharing
     type: Functional
-    release: 26.04 (v1.0)
+    release: 27.10 (v2.3)
     primary_test_type: []
     comment: ''
   - id: MVP-FUNC-SVCS-17-3-e
