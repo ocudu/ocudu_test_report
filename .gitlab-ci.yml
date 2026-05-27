@@ -71,6 +71,10 @@ spec:
       type: string
       default: ""
       description: "Comma-separated release values to pre-select (e.g. '26.04 (v1.0),26.10')."
+    historic_versions:
+      type: string
+      default: ""
+      description: "Comma-separated release versions to include as Historic tabs (e.g. '26.04,26.03'). Each version must have an artifacts.zip published to the e2e-xunits generic package."
 ---
 include:
   - project: $[[ inputs.ocudu_path ]]
@@ -164,6 +168,7 @@ generate-report:
     FILTER_SCOPE: "$[[ inputs.filter_scope ]]"
     FILTER_TYPE: "$[[ inputs.filter_type ]]"
     FILTER_RELEASE: "$[[ inputs.filter_release ]]"
+    HISTORIC_VERSIONS: "$[[ inputs.historic_versions ]]"
     OUTPUT: public
   script:
     - cd scripts
@@ -180,11 +185,25 @@ generate-report:
       if [ -n "$FILTER_TYPE" ];    then IFS=',' read -ra _v <<< "$FILTER_TYPE";    FILTER_ARGS+=(--type    "${_v[@]}"); fi
       if [ -n "$FILTER_RELEASE" ]; then IFS=',' read -ra _v <<< "$FILTER_RELEASE"; FILTER_ARGS+=(--release "${_v[@]}"); fi
     - mkdir -p "${CI_PROJECT_DIR}/${OUTPUT}"
-    - cp index.html "${CI_PROJECT_DIR}/${OUTPUT}/index.html"
     - python3 gitlab_fetch.py "${SUITE_ARGS[@]}" -o artifacts/
     - python3 render_report.py --data ../features/features.yaml --output ${CI_PROJECT_DIR}/${OUTPUT}/feature_list.html
     - python3 tifg_report.py --data ../tifg_test_plan/tifg_tests.yaml --output "${CI_PROJECT_DIR}/${OUTPUT}/tifg_report.html"
     - python3 xunit_report.py --dir artifacts/ --link "$REPORT_LINK" -o "${CI_PROJECT_DIR}/${OUTPUT}" "${FILTER_ARGS[@]}"
+    - |
+      HISTORIC_LIST=()
+      if [ -n "$HISTORIC_VERSIONS" ]; then
+        IFS=',' read -ra _hv <<< "$HISTORIC_VERSIONS"
+        for version in "${_hv[@]}"; do
+          version="${version// /}"
+          HIST_VERSION="$version" python3 -c "import io,os,zipfile,requests as rq;v=os.environ['HIST_VERSION'];url=os.environ['CI_API_V4_URL']+'/projects/'+os.environ['CI_PROJECT_ID']+'/packages/generic/xunits/'+v+'/artifacts.zip';r=rq.get(url,headers={'JOB-TOKEN':os.environ['CI_JOB_TOKEN']});r.raise_for_status();zipfile.ZipFile(io.BytesIO(r.content)).extractall('historic_'+v+'/')"
+          python3 xunit_report.py \
+            --dir "historic_${version}/" \
+            -o "${CI_PROJECT_DIR}/${OUTPUT}/historic_${version}" \
+            "${FILTER_ARGS[@]}"
+          HISTORIC_LIST+=("$version")
+        done
+      fi
+      python3 gen_index.py --historic "${HISTORIC_LIST[@]}" -o "${CI_PROJECT_DIR}/${OUTPUT}/index.html"
   after_script:
     - |
       echo "*******************************************************************************************************************************"
