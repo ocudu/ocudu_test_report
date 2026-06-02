@@ -47,7 +47,7 @@
 
   function updateStats() {
     const seen = new Set();
-    let passed = 0, failed = 0, skipped = 0;
+    let passed = 0, failed = 0;
     document.querySelectorAll('#feature-table .feature-row').forEach(row => {
       if (row.hidden) return;
       const exp = document.getElementById(row.dataset.expand);
@@ -62,14 +62,12 @@
         if (!badge) return;
         const status = [...badge.classList].find(c => c !== 'badge');
         if (status === 'passed') passed++;
-        else if (status === 'failed') failed++;
-        else if (status === 'skipped') skipped++;
+        else if (status === 'failed' || status === 'skipped') failed++;
       });
     });
-    document.getElementById('stat-total').textContent   = failed + passed + skipped;
+    document.getElementById('stat-total').textContent   = failed + passed;
     document.getElementById('stat-passed').textContent  = passed;
     document.getElementById('stat-failed').textContent  = failed;
-    document.getElementById('stat-skipped').textContent = skipped;
   }
 
   function msGetSelected(wrapId) {

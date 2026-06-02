@@ -21,7 +21,7 @@
   function applyFilters() {
     const sf  = msGetSelected('ms-status');
     const suf = msGetSelected('ms-suite');
-    let vi = 0, total = 0, passed = 0, failed = 0, skipped = 0;
+    let vi = 0, total = 0, passed = 0, failed = 0;
 
     document.querySelectorAll('#suite-table .suite-row').forEach(row => {
       const exp = document.getElementById(row.dataset.expand);
@@ -51,8 +51,7 @@
             if (el.hidden) return;
             const s = el.dataset.status;
             if (s === 'passed') passed++;
-            else if (s === 'failed') failed++;
-            else if (s === 'skipped') skipped++;
+            else if (s === 'failed' || s === 'skipped') failed++;
             total++;
           });
         }
@@ -62,7 +61,6 @@
     document.getElementById('stat-total').textContent   = total;
     document.getElementById('stat-passed').textContent  = passed;
     document.getElementById('stat-failed').textContent  = failed;
-    document.getElementById('stat-skipped').textContent = skipped;
   }
 
   document.addEventListener('DOMContentLoaded', function () {
