@@ -471,8 +471,8 @@ def render_html(
                 f"{expand_attr}"
                 f' data-failed="{nfailed}"'
                 f' data-passed="{npassed}">'
-                f"<td>{badge}</td>"
                 f'<td class="col-fid">{html.escape(fid)}</td>'
+                f"<td>{badge}</td>"
                 f'<td class="col-desc">{html.escape(fg.description)}</td>'
                 f'<td class="col-release">{html.escape(feat_release)}</td>'
                 f'<td class="col-num{failed_cls}">{nfailed}</td>'
@@ -505,8 +505,8 @@ def render_html(
             f'<div class="table-wrap">'
             f'<table class="feature-table" id="feature-table">'
             f"<thead><tr>"
-            f'<th data-col="status">Status</th>'
             f'<th data-col="fid">Feature ID</th>'
+            f'<th data-col="status">Status</th>'
             f'<th data-col="desc">Description</th>'
             f'<th data-col="release">Release</th>'
             f'<th data-col="failed" class="col-num">F</th>'
