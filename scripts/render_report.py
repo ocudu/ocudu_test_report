@@ -191,8 +191,7 @@ def _badge(text: str, color: str) -> str:
 
 def _ms_dropdown(wrap_id: str, label: str, values: list[str]) -> str:
     items = "".join(
-        f'<label class="ms-item"><input type="checkbox" value="{v}" checked>'
-        f"<span>{v}</span></label>"
+        f'<label class="ms-item"><input type="checkbox" value="{v}" checked>' f"<span>{v}</span></label>"
         for v in values
     )
     return (
@@ -371,7 +370,7 @@ def _render(features: list[dict]) -> str:
 </head>
 <body>
 
-  <h1>Features Report</h1>
+  <h1>OCUDU Feature Overview</h1>
   <p style="color:#64748b;font-size:0.85rem;margin-top:4px">
     Auto-generated from <code style="color:#94a3b8">features.yaml</code>
   </p>
