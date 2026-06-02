@@ -434,7 +434,7 @@ def render_html(
         )
 
         rows_parts = []
-        for i, (fid, fg) in enumerate(sorted(grouped.items())):
+        for i, (fid, fg) in enumerate(grouped.items()):
             all_tcs = [tc for _, tcs in fg.suites.values() for tc in tcs]
             nfailed = sum(1 for tc in all_tcs if tc.status in (Status.FAILED, Status.ERROR, Status.SKIPPED))
             npassed = sum(1 for tc in all_tcs if tc.status == Status.PASSED)
