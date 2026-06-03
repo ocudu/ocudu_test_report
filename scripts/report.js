@@ -23,12 +23,6 @@
     }
   }
 
-  function defaultCompare(a, b) {
-    return cmp(a.dataset.release || '', b.dataset.release || '')
-        || cmp(STATUS_ORDER[a.dataset.status] ?? 99, STATUS_ORDER[b.dataset.status] ?? 99)
-        || cmp(a.dataset.fid || '', b.dataset.fid || '');
-  }
-
   function reorder(rows) {
     const tbody = document.querySelector('#feature-table tbody');
     rows.forEach((row, i) => {
@@ -117,7 +111,7 @@
 
     const getRows = () => [...tbody.querySelectorAll('.feature-row')];
 
-    reorder(getRows().sort(defaultCompare));
+    reorder(getRows());
     ['ms-status', 'ms-scope', 'ms-type', 'ms-release'].forEach(id => msUpdateLabel(id));
     applyFilters();
 
