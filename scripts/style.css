@@ -389,6 +389,7 @@ body {
 
 .badge.passed   { background: #14532d; color: #bbf7d0; }
 .badge.failed   { background: #7f1d1d; color: #fecaca; }
+.badge.partial  { background: #431407; color: #fed7aa; }
 .badge.skipped  { background: #2d2008; color: #fbbf24; }
 .badge.untested { background: #1e293b; color: var(--text-dim); }
 

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: BSD-3-Clause-Open-MPI
 
 (function () {
-  const STATUS_ORDER = { untested: 0, skipped: 1, failed: 2, passed: 3 };
+  const STATUS_ORDER = { untested: 0, skipped: 1, failed: 2, partial: 3, passed: 4 };
   let sortCol = null, sortDir = 1;
 
   function cmp(a, b) {

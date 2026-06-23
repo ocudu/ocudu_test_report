@@ -47,7 +47,7 @@ class Status(Enum):
 
 
 _TC_STATUS_SORT = {Status.SKIPPED: 0, Status.FAILED: 1, Status.ERROR: 1, Status.PASSED: 2}
-_STATUS_ICONS = {"passed": "✓", "failed": "✗", "skipped": "⊘", "untested": "—"}
+_STATUS_ICONS = {"passed": "✓", "failed": "✗", "partial": "!", "skipped": "⊘", "untested": "—"}
 
 _MS_ACTIONS = (
     '<div class="ms-actions">'
@@ -56,15 +56,23 @@ _MS_ACTIONS = (
     "</div>"
 )
 
-_STATUS_VALUES = [("failed", "Failed"), ("passed", "Passed"), ("skipped", "Skipped"), ("untested", "Untested")]
+_STATUS_VALUES = [
+    ("failed", "Failed"),
+    ("partial", "Partial"),
+    ("passed", "Passed"),
+    ("skipped", "Skipped"),
+    ("untested", "Untested"),
+]
+_TC_STATUS_VALUES = [("failed", "Failed"), ("passed", "Passed"), ("skipped", "Skipped"), ("untested", "Untested")]
 
 
-def _status_checkboxes(defaults: Optional[frozenset[str]] = None) -> str:
+def _status_checkboxes(defaults: Optional[frozenset[str]] = None, values=None) -> str:
+    vals = values if values is not None else _STATUS_VALUES
     return _MS_ACTIONS + "".join(
         f'<label class="ms-item"><input type="checkbox" value="{val}"'
         f'{" checked" if defaults is None or val in defaults else ""}>'
         f"<span>{label}</span></label>"
-        for val, label in _STATUS_VALUES
+        for val, label in vals
     )
 
 
@@ -95,9 +103,10 @@ def _clean_output(text: str) -> str:
 
 
 @dataclass
-class TestCase:  # pylint: disable=too-many-instance-attributes
+class TestCase:
     """Holds data for a single test case parsed from an XUnit XML file."""
 
+    # pylint: disable=too-many-instance-attributes
     name: str
     classname: str
     duration: float
@@ -347,11 +356,14 @@ def _header_subtitle(link: str, duration: float) -> str:
 
 
 def _feature_status(failed: int, passed: int) -> str:
-    if failed > 0:
-        return "failed"
-    if passed > 0:
+    total = failed + passed
+    if total == 0:
+        return "untested"
+    if failed == 0:
         return "passed"
-    return "untested"
+    if failed / total > 0.5:
+        return "failed"
+    return "partial"
 
 
 def _report_header(title: str, link: str, duration: float) -> str:
@@ -391,7 +403,6 @@ def _html_doc(title: str, favicon: str, preamble: str, body: str, js_name: str) 
 </html>"""
 
 
-# pylint: disable=too-many-locals
 def render_html(
     suites: list,
     features: Optional[dict] = None,
@@ -400,6 +411,7 @@ def render_html(
     defaults: Optional[FilterDefaults] = None,
 ) -> str:
     """Render the full HTML report from a list of Suite objects."""
+    # pylint: disable=too-many-locals
     duration_total = sum(s.duration for s in suites)
     default_statuses = frozenset(defaults.statuses) if defaults and defaults.statuses else None
     default_scopes = frozenset(defaults.scopes) if defaults and defaults.scopes else None
@@ -523,9 +535,9 @@ def render_html(
     return _html_doc("Results", favicon, header, body, "report.js")
 
 
-# pylint: disable=too-many-locals
 def render_all_html(suites: list, favicon: str = "", link: str = "") -> str:
     """Render the all-tests HTML report: one accordion per suite, tests inside."""
+    # pylint: disable=too-many-locals
     duration_total = sum(s.duration for s in suites)
 
     suite_checkboxes = _MS_ACTIONS + "".join(
@@ -539,7 +551,7 @@ def render_all_html(suites: list, favicon: str = "", link: str = "") -> str:
         f'<div class="controls">'
         f'<div class="ms-wrap" id="ms-status">'
         f'<button type="button" class="ms-btn">Status: <span class="ms-label">All</span></button>'
-        f'<div class="ms-panel" hidden>{_status_checkboxes()}</div>'
+        f'<div class="ms-panel" hidden>{_status_checkboxes(values=_TC_STATUS_VALUES)}</div>'
         f"</div>"
         f'<div class="ms-wrap" id="ms-suite">'
         f'<button type="button" class="ms-btn">Suite: <span class="ms-label">All</span></button>'
