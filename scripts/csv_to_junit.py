@@ -36,26 +36,57 @@ def result_to_outcome(result: str) -> str:
     return "skip"
 
 
+def _add_testcase(testsuite: ET.Element, row: dict[str, str]) -> None:
+    """Append a single testcase element built from a CSV row to testsuite."""
+    test_id = row.get("Test ID", "").strip()
+    test_name = row.get("Test Name", "").strip()
+    sub_test = row.get("Sub-Test", "").strip()
+    execution_date = parse_date(row.get("Execution Date", ""))
+    result = row.get("Result", "").strip()
+
+    classname = f"{test_name}.{sub_test}" if sub_test else test_name
+    tc_attrs: dict[str, str] = {"name": test_id, "classname": classname}
+    if execution_date:
+        tc_attrs["timestamp"] = execution_date
+
+    testcase = ET.SubElement(testsuite, "testcase", attrib=tc_attrs)
+
+    props = ET.SubElement(testcase, "properties")
+    for prop_name, prop_value in [
+        ("Radio Condition", row.get("Radio Condition", "").strip()),
+        ("DUT", row.get("DUT", "").strip()),
+        ("Priority", row.get("Priority", "").strip()),
+        ("Comments", row.get("Comments", "").strip()),
+    ]:
+        ET.SubElement(props, "property", name=prop_name, value=prop_value)
+
+    outcome = result_to_outcome(result)
+    if outcome == "fail":
+        ET.SubElement(testcase, "failure", message=f"Test {test_id} failed", type="AssertionError")
+    elif outcome == "skip":
+        ET.SubElement(testcase, "skipped", message=f"Test {test_id} skipped")
+
+    ET.SubElement(testcase, "system-out")
+    ET.SubElement(testcase, "system-err")
+
+
 def csv_to_junit(csv_path: Path, output_path: Path) -> None:
+    """Convert a CSV tracker file to a JUnit XML file."""
     now = datetime.now(timezone.utc).isoformat()
 
-    rows = []
     with csv_path.open(newline="", encoding="utf-8-sig") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            rows.append(row)
+        rows: list[dict[str, str]] = list(csv.DictReader(f))
 
     total = len(rows)
     failures = sum(1 for r in rows if result_to_outcome(r.get("Result", "")) == "fail")
     skipped = sum(1 for r in rows if result_to_outcome(r.get("Result", "")) == "skip")
-    errors = 0
 
     testsuites = ET.Element("testsuites", name="TIFG tests")
     testsuite = ET.SubElement(
         testsuites,
         "testsuite",
         name="TIFG",
-        errors=str(errors),
+        errors="0",
         failures=str(failures),
         skipped=str(skipped),
         tests=str(total),
@@ -63,47 +94,10 @@ def csv_to_junit(csv_path: Path, output_path: Path) -> None:
     )
 
     for row in rows:
-        test_id = row.get("Test ID", "").strip()
-        test_name = row.get("Test Name", "").strip()
-        sub_test = row.get("Sub-Test", "").strip()
-        radio_condition = row.get("Radio Condition", "").strip()
-        dut = row.get("DUT", "").strip()
-        priority = row.get("Priority", "").strip()
-        execution_date = parse_date(row.get("Execution Date", ""))
-        result = row.get("Result", "").strip()
-        comments = row.get("Comments", "").strip()
-
-        classname = f"{test_name}.{sub_test}" if sub_test else test_name
-
-        tc_attrs: dict[str, str] = {
-            "name": test_id,
-            "classname": classname,
-        }
-        if execution_date:
-            tc_attrs["timestamp"] = execution_date
-
-        testcase = ET.SubElement(testsuite, "testcase", attrib=tc_attrs)
-
-        props = ET.SubElement(testcase, "properties")
-        for prop_name, prop_value in [
-            ("Radio Condition", radio_condition),
-            ("DUT", dut),
-            ("Priority", priority),
-            ("Comments", comments),
-        ]:
-            ET.SubElement(props, "property", name=prop_name, value=prop_value)
-
-        outcome = result_to_outcome(result)
-        if outcome == "fail":
-            ET.SubElement(testcase, "failure", message=f"Test {test_id} failed", type="AssertionError")
-        elif outcome == "skip":
-            ET.SubElement(testcase, "skipped", message=f"Test {test_id} skipped")
-
-        ET.SubElement(testcase, "system-out")
-        ET.SubElement(testcase, "system-err")
+        _add_testcase(testsuite, row)
 
     xml_str = minidom.parseString(ET.tostring(testsuites, encoding="unicode")).toprettyxml(indent="  ")
-    # Remove the extra XML declaration added by toprettyxml since we prepend our own
+    # toprettyxml adds its own declaration; replace it to fix the encoding attribute
     lines = xml_str.splitlines()
     if lines[0].startswith("<?xml"):
         lines[0] = '<?xml version="1.0" encoding="utf-8"?>'
@@ -113,6 +107,7 @@ def csv_to_junit(csv_path: Path, output_path: Path) -> None:
 
 
 def main() -> None:
+    """Parse arguments and run the conversion."""
     parser = argparse.ArgumentParser(description="Convert Valor CSV to JUnit XML")
     parser.add_argument("-i", "--input", required=True, type=Path, metavar="CSV", help="Input CSV file")
     parser.add_argument("-o", "--output", type=Path, metavar="XML", help="Output XML file (default: <input_stem>.xml)")
