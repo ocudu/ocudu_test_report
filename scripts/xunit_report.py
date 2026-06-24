@@ -327,6 +327,33 @@ def _parse_features(raw: dict) -> dict[str, FeatureDef]:
     return result
 
 
+def _load_tifg_map(yaml_path: Path) -> dict[str, list[str]]:
+    """Return {test_id: [feature_ids]} from tifg_tests.yaml."""
+    with yaml_path.open(encoding="utf-8") as f:
+        data = yaml.safe_load(f)
+    result: dict[str, list[str]] = {}
+    for test in data.get("tests", []):
+        tid = str(test.get("test_id", ""))
+        feature_ids: list[str] = test.get("ocudu_features") or []
+        if tid and feature_ids:
+            result[tid] = feature_ids
+    return result
+
+
+def _apply_tifg_labels(suites: list, tifg_map: dict[str, list[str]]) -> None:
+    """Inject feature labels derived from tifg_tests.yaml into matching test cases.
+
+    Test cases whose name matches a TIFG test_id receive the corresponding
+    ocudu_features as labels, making them visible in the feature overview.
+    """
+    for suite in suites:
+        for tc in suite.testcases:
+            feature_ids = tifg_map.get(tc.name)
+            if feature_ids:
+                existing = set(tc.labels)
+                tc.labels.extend(fid for fid in feature_ids if fid not in existing)
+
+
 def _group_by_features(suites: list, features: dict[str, FeatureDef]) -> dict[str, FeatureGroup]:
     """Return {display_name: FeatureGroup}.
 
@@ -699,6 +726,10 @@ def main():
     link = rf.read_text(encoding="utf-8").strip() if rf.exists() else ""
 
     suites = parse_dir(root)
+
+    tifg_yaml = Path(__file__).parent.parent / "tifg_test_plan" / "tifg_tests.yaml"
+    if tifg_yaml.exists():
+        _apply_tifg_labels(suites, _load_tifg_map(tifg_yaml))
 
     features: dict[str, FeatureDef] = {}
     with (Path(__file__).parent.parent / "features" / "features.yaml").open(encoding="utf-8") as f:
