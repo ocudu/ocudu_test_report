@@ -29,6 +29,13 @@ except ImportError:
     print("ERROR: requests is required. Install with: pip install requests", file=sys.stderr)
     sys.exit(2)
 
+try:
+    from tqdm import tqdm as _tqdm
+
+    _HAS_TQDM = True
+except ImportError:
+    _HAS_TQDM = False
+
 # Matches: https://gitlab.example.com/group/sub/project/-/jobs/123
 #      or: https://gitlab.example.com/group/sub/project/-/pipelines/123
 _URL_RE = re.compile(r"(https?://[^/]+)/(.+?)/-/(jobs|pipelines)/(\d+)/?$")
@@ -100,9 +107,27 @@ class _Client:
         p = pipelines[0]
         return p["id"], p["web_url"]
 
-    def artifacts_zip(self, job_id: int) -> bytes:
-        """Download the full artifacts zip for a job."""
-        return bytes(self._get(f"jobs/{job_id}/artifacts").content)
+    def artifacts_zip(self, job_id: int, label: str = "") -> bytes:
+        """Download the full artifacts zip for a job, showing a progress bar if tqdm is available."""
+        r = self._get(f"jobs/{job_id}/artifacts", stream=True)
+        total = int(r.headers.get("content-length", 0)) or None
+        chunks = []
+        if _HAS_TQDM:
+            with _tqdm(
+                total=total,
+                unit="B",
+                unit_scale=True,
+                unit_divisor=1024,
+                desc=f"    {label}" if label else "    downloading",
+                leave=False,
+            ) as progress_bar:
+                for chunk in r.iter_content(chunk_size=65536):
+                    chunks.append(chunk)
+                    progress_bar.update(len(chunk))
+        else:
+            for chunk in r.iter_content(chunk_size=65536):
+                chunks.append(chunk)
+        return b"".join(chunks)
 
 
 def _extract_xunits(zip_bytes: bytes) -> list[tuple[str, bytes]]:
@@ -124,19 +149,19 @@ def _fetch_job(
     client: _Client, job_id: int, report_name: str, suite_dir: Path, job_url: str = ""
 ) -> list[tuple[str, Path]]:
     """Download artifacts for one job into suite_dir. report_name is used as the xunit-report suite label."""
-    print(f"  job {job_id} ({report_name}) — downloading artifacts ...", end=" ", flush=True)
+    print(f"  job {job_id} ({report_name}) — downloading artifacts ...", flush=True)
     try:
-        zip_bytes = client.artifacts_zip(job_id)
+        zip_bytes = client.artifacts_zip(job_id, label=report_name)
     except requests.HTTPError as exc:
-        print(f"skipped ({exc})")
+        print(f"  skipped ({exc})")
         return []
 
     files = _extract_xunits(zip_bytes)
     if not files:
-        print("no XUnit files found")
+        print("  no XUnit files found")
         return []
 
-    print(f"{len(files)} XUnit file(s) found")
+    print(f"  {len(files)} XUnit file(s) found")
     saved = []
     for filename, data in files:
         stem = Path(filename).stem
