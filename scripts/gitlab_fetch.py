@@ -62,10 +62,11 @@ def _parse_url(raw: str) -> _ParsedURL:
 
 
 class _Client:
-    def __init__(self, base_url: str, project_path: str, token: str = ""):
+    def __init__(self, base_url: str, project_path: str, token: str = "", verify_ssl: bool = True):
         encoded = quote(project_path, safe="")
         self._root = f"{base_url}/api/v4/projects/{encoded}"
         self._session = requests.Session()
+        self._session.verify = verify_ssl
         if token:
             self._session.headers["PRIVATE-TOKEN"] = token
 
@@ -206,6 +207,11 @@ def main():
         metavar="TOKEN",
         help="GitLab personal/project access token (default: $GITLAB_TOKEN)",
     )
+    parser.add_argument(
+        "--no-verify-ssl",
+        action="store_true",
+        help="Disable SSL certificate verification",
+    )
     args = parser.parse_args()
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -222,7 +228,7 @@ def main():
             ref = _parse_url(url)
         except ValueError as exc:
             parser.error(str(exc))
-        client = _Client(ref.base, ref.project, token=args.token)
+        client = _Client(ref.base, ref.project, token=args.token, verify_ssl=not args.no_verify_ssl)
         suite_dir = args.output_dir / _safe_name(name)
         suite_dir.mkdir(parents=True, exist_ok=True)
         suite_order.append(_safe_name(name))
