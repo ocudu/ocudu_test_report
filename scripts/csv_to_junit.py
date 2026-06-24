@@ -75,14 +75,14 @@ def csv_to_junit(csv_path: Path, output_path: Path) -> None:
 
         classname = f"{test_name}.{sub_test}" if sub_test else test_name
 
-        tc_attrs = {
+        tc_attrs: dict[str, str] = {
             "name": test_id,
             "classname": classname,
         }
         if execution_date:
             tc_attrs["timestamp"] = execution_date
 
-        testcase = ET.SubElement(testsuite, "testcase", **tc_attrs)
+        testcase = ET.SubElement(testsuite, "testcase", attrib=tc_attrs)
 
         props = ET.SubElement(testcase, "properties")
         for prop_name, prop_value in [
