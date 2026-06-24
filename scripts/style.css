@@ -483,6 +483,37 @@ body {
   font-size: 0.76em;
 }
 
+.tc-classname {
+  font-weight: 400;
+  color: var(--text-muted);
+  font-size: 0.9em;
+}
+
+.tc-props {
+  border-collapse: collapse;
+  font-size: 0.82em;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.tc-props th {
+  text-align: left;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.88em;
+  padding: 3px 12px 3px 0;
+  white-space: nowrap;
+  vertical-align: top;
+}
+
+.tc-props td {
+  color: var(--text);
+  padding: 3px 0;
+  word-break: break-word;
+}
+
 /* ── Output blocks ─────────────────────────────────────────── */
 
 .msg-failure {

@@ -116,6 +116,8 @@ class TestCase:
     system_err: str = ""
     labels: list[str] = field(default_factory=list)
     url: str = ""
+    timestamp: str = ""
+    properties: dict[str, str] = field(default_factory=dict)
 
 
 @dataclass
@@ -156,6 +158,7 @@ def _parse_testcase(elem) -> TestCase:
     name = elem.get("name", "")
     classname = elem.get("classname", "")
     duration = float(elem.get("time", 0) or 0)
+    timestamp = elem.get("timestamp", "")
 
     failure = elem.find("failure")
     error = elem.find("error")
@@ -178,13 +181,21 @@ def _parse_testcase(elem) -> TestCase:
     system_err = _clean_output(elem.findtext("system-err", ""))
 
     labels: list[str] = []
+    properties: dict[str, str] = {}
     props_elem = elem.find("properties")
     if props_elem is not None:
         for prop in props_elem.findall("property"):
-            if prop.get("name") in ("cmake_labels", "markers"):
-                labels.extend(v.strip() for v in prop.get("value", "").split(";") if v.strip())
+            prop_name = prop.get("name", "")
+            prop_value = prop.get("value", "")
+            if prop_name in ("cmake_labels", "markers"):
+                labels.extend(v.strip() for v in prop_value.split(";") if v.strip())
+            elif prop_name:
+                properties[prop_name] = prop_value
 
-    return TestCase(name, classname, duration, status, message, system_out, system_err, labels)
+    tc = TestCase(name, classname, duration, status, message, system_out, system_err, labels)
+    tc.timestamp = timestamp
+    tc.properties = properties
+    return tc
 
 
 def parse_xml(name: str, path: Path) -> Suite:
@@ -236,12 +247,12 @@ def _gitlab_link(url: str, title: str = "GitLab") -> str:
 
 def _render_testcase(tc: TestCase, idx: int) -> str:
     parity = "even" if idx % 2 == 0 else "odd"
-    label = f"{html.escape(tc.classname)}." if tc.classname else ""
     display_status = Status.FAILED if tc.status == Status.ERROR else tc.status
 
+    classname_html = f' <span class="tc-classname">— {html.escape(tc.classname)}</span>' if tc.classname else ""
     header = (
         f"{_status_badge(display_status)}"
-        f'<span class="tc-name">{label}<b>{html.escape(tc.name)}</b></span>'
+        f'<span class="tc-name"><b>{html.escape(tc.name)}</b>{classname_html}</span>'
         f"{_gitlab_link(tc.url, 'GitLab pipeline')}"
         f'<span class="tc-duration">{_fmt_duration(tc.duration)}</span>'
     )
@@ -250,6 +261,15 @@ def _render_testcase(tc: TestCase, idx: int) -> str:
     if tc.labels:
         chips = "".join(f'<span class="label-chip">{html.escape(lbl)}</span>' for lbl in tc.labels)
         labels_html = f'<div class="labels"><span class="labels-title">Labels:</span>{chips}</div>'
+
+    meta_html = ""
+    if tc.timestamp or tc.properties:
+        rows = ""
+        if tc.timestamp:
+            rows += f'<tr><th>Timestamp</th><td>{html.escape(tc.timestamp)}</td></tr>'
+        for prop_name, prop_value in tc.properties.items():
+            rows += f'<tr><th>{html.escape(prop_name)}</th><td>{html.escape(prop_value)}</td></tr>'
+        meta_html = f'<table class="tc-props">{rows}</table>'
 
     msg_html = ""
     if tc.message:
@@ -263,7 +283,7 @@ def _render_testcase(tc: TestCase, idx: int) -> str:
     if tc.system_err.strip():
         err_html = f'<pre class="system-err">{tc.system_err.strip()}</pre>'
 
-    detail_body = labels_html + msg_html + out_html + err_html
+    detail_body = labels_html + meta_html + msg_html + out_html + err_html
 
     if detail_body:
         return (
