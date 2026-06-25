@@ -154,6 +154,7 @@ class Suite:
         return float(sum(t.duration for t in self.testcases))
 
 
+# pylint: disable=too-many-locals
 def _parse_testcase(elem) -> TestCase:
     name = elem.get("name", "")
     classname = elem.get("classname", "")
@@ -245,6 +246,7 @@ def _gitlab_link(url: str, title: str = "GitLab") -> str:
     )
 
 
+# pylint: disable=too-many-locals
 def _render_testcase(tc: TestCase, idx: int) -> str:
     parity = "even" if idx % 2 == 0 else "odd"
     display_status = Status.FAILED if tc.status == Status.ERROR else tc.status
@@ -266,9 +268,9 @@ def _render_testcase(tc: TestCase, idx: int) -> str:
     if tc.timestamp or tc.properties:
         rows = ""
         if tc.timestamp:
-            rows += f'<tr><th>Timestamp</th><td>{html.escape(tc.timestamp)}</td></tr>'
+            rows += f"<tr><th>Timestamp</th><td>{html.escape(tc.timestamp)}</td></tr>"
         for prop_name, prop_value in tc.properties.items():
-            rows += f'<tr><th>{html.escape(prop_name)}</th><td>{html.escape(prop_value)}</td></tr>'
+            rows += f"<tr><th>{html.escape(prop_name)}</th><td>{html.escape(prop_value)}</td></tr>"
         meta_html = f'<table class="tc-props">{rows}</table>'
 
     msg_html = ""
