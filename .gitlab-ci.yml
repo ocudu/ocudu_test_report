@@ -152,6 +152,7 @@ generate-report:
   rules:
     - if: $ON_WEB
     - if: $ON_API
+    - if: $CI_PIPELINE_SCHEDULE_DESCRIPTION =~ /testing/
   variables:
     SUITE_0: "$[[ inputs.suite_0 ]]"
     SUITE_1: "$[[ inputs.suite_1 ]]"
