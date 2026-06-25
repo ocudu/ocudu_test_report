@@ -672,7 +672,7 @@ def parse_dir(root: Path) -> list:
     else:
         subdirs.sort()
 
-    suites = []
+    suites: list[Suite] = []
     for subdir in subdirs:
         name = subdir.name.replace("_", " ")
         url_file = subdir / "_url.txt"
