@@ -51,10 +51,10 @@ spec:
       type: string
       default: ""
       description: "Suite 9 — NAME=URL. Optional."
-    report_link:
+    commit_link:
       type: string
       default: ""
-      description: "GitLab URL shown as a link in the report header (e.g. branch or pipeline URL)."
+      description: "Commit, tag, or branch URL to embed as a link in the report header. Branch URLs are resolved to the exact commit."
     filter_status:
       type: string
       default: ""
@@ -164,7 +164,7 @@ generate-report:
     SUITE_7: "$[[ inputs.suite_7 ]]"
     SUITE_8: "$[[ inputs.suite_8 ]]"
     SUITE_9: "$[[ inputs.suite_9 ]]"
-    REPORT_LINK: "$[[ inputs.report_link ]]"
+    COMMIT_LINK: "$[[ inputs.commit_link ]]"
     FILTER_STATUS: "$[[ inputs.filter_status ]]"
     FILTER_SCOPE: "$[[ inputs.filter_scope ]]"
     FILTER_TYPE: "$[[ inputs.filter_type ]]"
@@ -186,10 +186,10 @@ generate-report:
       if [ -n "$FILTER_TYPE" ];    then IFS=',' read -ra _v <<< "$FILTER_TYPE";    FILTER_ARGS+=(--type    "${_v[@]}"); fi
       if [ -n "$FILTER_RELEASE" ]; then IFS=',' read -ra _v <<< "$FILTER_RELEASE"; FILTER_ARGS+=(--release "${_v[@]}"); fi
     - mkdir -p "${CI_PROJECT_DIR}/${OUTPUT}"
-    - python3 gitlab_fetch.py "${SUITE_ARGS[@]}" -o artifacts/
+    - python3 gitlab_fetch.py "${SUITE_ARGS[@]}" -o artifacts/ ${COMMIT_LINK:+--commit-link "$COMMIT_LINK"}
     - python3 render_report.py --data ../features/features.yaml --output ${CI_PROJECT_DIR}/${OUTPUT}/feature_list.html
     - python3 tifg_report.py --data ../tifg_test_plan/tifg_tests.yaml --output "${CI_PROJECT_DIR}/${OUTPUT}/tifg_report.html"
-    - python3 xunit_report.py --dir artifacts/ --link "$REPORT_LINK" -o "${CI_PROJECT_DIR}/${OUTPUT}" "${FILTER_ARGS[@]}"
+    - python3 xunit_report.py --dir artifacts/ -o "${CI_PROJECT_DIR}/${OUTPUT}" "${FILTER_ARGS[@]}"
     - |
       HISTORIC_LIST=()
       if [ -n "$HISTORIC_VERSIONS" ]; then

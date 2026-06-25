@@ -348,11 +348,13 @@ def _group_by_features(suites: list, features: dict[str, FeatureDef]) -> dict[st
 
 
 def _header_subtitle(link: str, duration: float) -> str:
-    duration_html = f"⏱ {_fmt_duration(duration)}"
+    duration_html = f"⏱ {_fmt_duration(duration)}" if duration else ""
     if not link:
         return duration_html
-    link_html = f"<a class='header-link' href='{html.escape(link)}'>{link.split('/')[-1]}</a>"
-    return f"{link_html} · {duration_html}"
+    link_label = link.split("?")[0].rstrip("/").rsplit("/", 1)[-1] or link
+    link_html = f"<a class='header-link' href='{html.escape(link)}'>{html.escape(link_label)}</a>"
+    sep = " · " if duration_html else ""
+    return f"{link_html}{sep}{duration_html}"
 
 
 def _feature_status(failed: int, passed: int) -> str:
@@ -658,7 +660,6 @@ def main():
     parser.add_argument(
         "--favicon", default="http://www.google.com/s2/favicons?domain=ocudu.org", metavar="URL", help="Favicon URL"
     )
-    parser.add_argument("--link", default="", metavar="URL", help="Gitlab Link")
     parser.add_argument(
         "--status",
         nargs="+",
@@ -693,6 +694,10 @@ def main():
     root = Path(args.dir)
     if not root.is_dir():
         parser.error(f"Not a directory: {root}")
+
+    rf = root / "commit_link.txt"
+    link = rf.read_text(encoding="utf-8").strip() if rf.exists() else ""
+
     suites = parse_dir(root)
 
     features: dict[str, FeatureDef] = {}
@@ -707,7 +712,7 @@ def main():
             suites,
             features=features,
             favicon=args.favicon,
-            link=args.link,
+            link=link,
             defaults=FilterDefaults(
                 statuses=args.status,
                 scopes=args.scope,
@@ -718,7 +723,7 @@ def main():
         encoding="utf-8",
     )
     (out_dir / "all.html").write_text(
-        render_all_html(suites, favicon=args.favicon, link=args.link),
+        render_all_html(suites, favicon=args.favicon, link=link),
         encoding="utf-8",
     )
 

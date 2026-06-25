@@ -21,7 +21,7 @@ import sys
 import zipfile
 from pathlib import Path
 from typing import NamedTuple
-from urllib.parse import quote
+from urllib.parse import parse_qs, quote, urlparse
 
 try:
     import requests
@@ -47,6 +47,9 @@ _API_SCHEDULE_RE = re.compile(r"(https?://[^/]+)/api/v4/projects/([^/]+)/pipelin
 
 # XUnit files we recognize inside an artifacts zip
 _XUNIT_RE = re.compile(r"(^|/)([^/]+_xunit\.xml|out\.xml)$")
+
+# Matches a GitLab /-/commits/<ref>/ URL used for branch/tag links
+_COMMITS_URL_RE = re.compile(r"^(https?://[^/]+)/(.+?)/-/commits/([^/?]+)")
 
 
 class _ParsedURL(NamedTuple):
@@ -209,6 +212,29 @@ def _fetch_suite(client: _Client, name: str, ref: _ParsedURL, suite_dir: Path) -
     return saved
 
 
+def _resolve_commit_url(url: str, token: str = "", verify_ssl: bool = True) -> str:
+    """Return a canonical commit URL, resolving branch refs to the current HEAD commit.
+
+    Tag and commit URLs are returned unchanged. Branch URLs (ref_type=heads) are
+    resolved via the GitLab API so the stored link stays valid after the branch moves.
+    """
+    ref_type = parse_qs(urlparse(url).query).get("ref_type", [""])[0]
+    if ref_type.lower() != "heads":
+        return url
+    m = _COMMITS_URL_RE.match(url)
+    if not m:
+        return url
+    base_url, project_path, branch = m.group(1), m.group(2), m.group(3)
+    session = requests.Session()
+    session.verify = verify_ssl
+    if token:
+        session.headers["PRIVATE-TOKEN"] = token
+    r = session.get(f"{base_url}/api/v4/projects/{quote(project_path, safe='')}/repository/branches/{branch}")
+    r.raise_for_status()
+    sha = r.json()["commit"]["id"]
+    return f"{base_url}/{project_path}/-/commit/{sha}"
+
+
 def main():
     """Entry point: parse arguments and download XUnit artifacts from GitLab."""
     parser = argparse.ArgumentParser(description="Download XUnit artifacts from GitLab jobs or pipelines")
@@ -233,6 +259,12 @@ def main():
         help="GitLab personal/project access token (default: $GITLAB_TOKEN)",
     )
     parser.add_argument(
+        "--commit-link",
+        default="",
+        metavar="URL",
+        help="Commit, tag, or branch URL to store as commit_link.txt. Branch URLs are resolved to the exact commit.",
+    )
+    parser.add_argument(
         "--no-verify-ssl",
         action="store_true",
         help="Disable SSL certificate verification",
@@ -240,6 +272,10 @@ def main():
     args = parser.parse_args()
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
+
+    if args.commit_link:
+        resolved = _resolve_commit_url(args.commit_link, args.token, not args.no_verify_ssl)
+        (args.output_dir / "commit_link.txt").write_text(resolved, encoding="utf-8")
 
     all_saved: list[tuple[str, Path]] = []
     suite_order: list[str] = []
