@@ -179,5 +179,15 @@
       exp.hidden = !exp.hidden;
       row.classList.toggle('open');
     });
+
+    const controls = document.querySelector('.controls');
+    const header = document.querySelector('.report-header');
+    if (controls && header) {
+      const observer = new IntersectionObserver(
+        ([entry]) => { controls.classList.toggle('stuck', !entry.isIntersecting); },
+        { threshold: 0 }
+      );
+      observer.observe(header);
+    }
   });
 })();
