@@ -187,6 +187,22 @@ body {
   border-color: var(--border);
 }
 
+.search-input {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.83em;
+  padding: 5px 10px;
+  width: 220px;
+  outline: none;
+  transition: border-color 0.12s;
+}
+
+.search-input::placeholder { color: var(--text-dim); }
+.search-input:focus { border-color: var(--accent); }
+
 
 /* ── Multi-select dropdowns ────────────────────────────────── */
 

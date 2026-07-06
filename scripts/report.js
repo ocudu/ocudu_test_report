@@ -102,12 +102,18 @@
     const rf = msGetSelected('ms-release');
     const tf = msGetSelected('ms-type');
     const scf = msGetSelected('ms-scope');
+    const searchEl = document.getElementById('feature-search');
+    const query = searchEl ? searchEl.value.toLowerCase().trim() : '';
     let vi = 0;
     document.querySelectorAll('#feature-table .feature-row').forEach(row => {
-      const ok = (!sf || sf.has(row.dataset.status))
+      const matchesFilters = (!sf || sf.has(row.dataset.status))
                && (!rf || rf.has(row.dataset.release))
                && (!tf || tf.has(row.dataset.type))
                && (!scf || scf.has(row.dataset.scope));
+      const matchesSearch = !query
+               || row.dataset.fid.toLowerCase().includes(query)
+               || row.cells[2].textContent.toLowerCase().includes(query);
+      const ok = matchesFilters && matchesSearch;
       row.hidden = !ok;
       const exp = document.getElementById(row.dataset.expand);
       if (!ok) {
@@ -131,6 +137,11 @@
     reorder(getRows());
     ['ms-status', 'ms-scope', 'ms-type', 'ms-release'].forEach(id => msUpdateLabel(id));
     applyFilters();
+
+    const searchInput = document.getElementById('feature-search');
+    if (searchInput) {
+      searchInput.addEventListener('input', applyFilters);
+    }
 
     document.querySelectorAll('#feature-table thead th[data-col]').forEach(th => {
       th.addEventListener('click', () => {
