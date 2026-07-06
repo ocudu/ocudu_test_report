@@ -10,67 +10,67 @@ tests:
     description: "SSH Server & Client"
     category: "Security Protocol & APIs Validation"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'O-Cloud needs to disallow algorithms with known vulnerabilities (e.g. SHA-1, MD5, 3DES, etc.)'
 
   - test_id: "6.3"
     description: "TLS"
     category: "Security Protocol & APIs Validation"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'O-Cloud needs to disallow AES_128/256_CBC. Only AEAD+PFS allowed.'
 
   - test_id: "6.4"
     description: "DTLS"
     category: "Security Protocol & APIs Validation"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    scope: "CU/DU"
+    comment: 'Coming in OCUDU v26.10'
 
   - test_id: "6.5.1"
     description: "IPSec security"
     category: "Security Protocol & APIs Validation"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'O-Cloud needs to configure IPsec between nodes/pods.'
 
   - test_id: "6.5.2"
     description: "IKE Header Flags Fuzzing"
     category: "Security Protocol & APIs Validation"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'O-Cloud needs to configure IPsec between nodes/pods.'
 
   - test_id: "6.5.3"
     description: "IKE Key Exchange Payload Fuzzing"
     category: "Security Protocol & APIs Validation"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'O-Cloud needs to configure IPsec between nodes/pods.'
 
   - test_id: "6.5.4"
     description: "IKE Malformed Certificate Payload"
     category: "Security Protocol & APIs Validation"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'O-Cloud needs to configure IPsec between nodes/pods.'
 
   - test_id: "6.6"
     description: "OAuth 2.0"
     category: "Security Protocol & APIs Validation"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    scope: "CU/DU"
+    comment: 'Mplane config deployed'
 
   - test_id: "6.7.1"
     description: "NACM RBAC Configuration"
     category: "Security Protocol & APIs Validation"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    scope: "CU/DU"
+    comment: 'Mplane config deployed'
 
   - test_id: "6.7.2"
     description: "NACM Logging Monitoring"
     category: "Security Protocol & APIs Validation"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    scope: "CU/DU"
+    comment: 'Mplane config deployed'
 
   - test_id: "6.9.1"
     description: "X.509 Certificate Structure Verification for TLS"
     category: "Security Protocol & APIs Validation"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'O-Clud API server certificate lacks CRLDistributionPoint'
 
   - test_id: "6.9.2"
     description: "X.509 Certificate Validity Period Verification"
@@ -81,86 +81,86 @@ tests:
   - test_id: "6.9.3"
     description: "X.509 Certificate Key Usage Verification"
     category: "Security Protocol & APIs Validation"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    scope: "CU/DU"
+    comment: 'O1 mTLS'
 
   - test_id: "6.9.4"
     description: "X.509 Certificate Chain Validation"
     category: "Security Protocol & APIs Validation"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    scope: "CU/DU"
+    comment: 'O1 mTLS config - A client certificate that lacks the required key-usage constraints is rejected. Only certificates carrying the clientAuth Extended Key Usage are authorized on the O1 interface (WG11 §6.9.3, RFC 5280 §4.2.1.3 and §4.2.1.12).'
 
   - test_id: "6.10.1"
     description: "eCPRI Session Management"
     category: "Security Protocol & APIs Validation"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
+    scope: "CU/DU"
     comment: ''
 
   - test_id: "6.10.2"
     description: "eCPRI Input Validation"
     category: "Security Protocol & APIs Validation"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
+    scope: "CU/DU"
     comment: ''
 
   - test_id: "6.10.3"
     description: "eCPRI Error Handling"
     category: "Security Protocol & APIs Validation"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
+    scope: "CU/DU"
     comment: ''
 
   - test_id: "6.10.4"
     description: "eCPRI Access Control"
     category: "Security Protocol & APIs Validation"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
+    scope: "CU/DU"
     comment: ''
 
   - test_id: "6.10.5"
     description: "eCPRI Logging and Auditing"
     category: "Security Protocol & APIs Validation"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    scope: "CU/DU"
+    comment: 'Selective logging of eCPRI messages'
 
   - test_id: "6.10.6"
     description: "eCPRI Timeout Error Handling"
     category: "Security Protocol & APIs Validation"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
+    scope: "CU/DU"
     comment: ''
 
   - test_id: "6.11.5"
     description: "SCTP DoS Prevention Rate Limiting"
     category: "Security Protocol & APIs Validation"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'Likely requires O-Cloud configuration to rate-limit SCTP connections.'
 
   - test_id: "6.11.6"
     description: "SCTP Input Validation"
     category: "Security Protocol & APIs Validation"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'Likely requires O-Cloud configuration for SCTP input validation.'
 
   - test_id: "6.12.1"
     description: "REST API Authentication"
     category: "Security Protocol & APIs Validation"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'O-Cloud'
 
   - test_id: "6.12.2"
     description: "REST Authorization and Access Control"
     category: "Security Protocol & APIs Validation"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'O-Cloud'
 
   - test_id: "6.12.3"
     description: "REST Input Validation and Sanitization"
     category: "Security Protocol & APIs Validation"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'O-Cloud'
 
   - test_id: "6.12.4"
     description: "REST Security Logging and Monitoring"
     category: "Security Protocol & APIs Validation"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'O-Cloud'
 
   # Section 7 - Common Network Security Tests for O-RAN components
   - test_id: "7.2.1"
