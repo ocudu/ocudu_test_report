@@ -112,12 +112,12 @@ tests:
   - test_id: "5.7"
     description: "5G SA registration and deregistration to single network slice"
     scope: "Functional"
+      - MVP-FUNC-SVCS-17-3-a
 
   - test_id: "5.8"
     description: "5G SA registration and deregistration to multiple network slices"
     scope: "Functional"
     ocudu_features:
-      - MVP-FUNC-SVCS-17-3-a
 
   - test_id: "5.9"
     description: "Idle Mode Intra O-DU mobility"
@@ -142,14 +142,6 @@ tests:
     ocudu_features:
       - MVP-FUNC-MOB-1-d
       - MVP-FUNC-MOB-1-e
-
-  - test_id: "5.12"
-    description: "5G/4G Inter-System mobility - 5GS to EPS handover"
-    scope: "Functional"
-
-  - test_id: "5.13"
-    description: "5G/4G Inter-System mobility - EPS to 5GS handover"
-    scope: "Functional"
 
   # Section 6 - Performance Tests
   - test_id: "6.2"
