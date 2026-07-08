@@ -2,7 +2,13 @@
 # SPDX-License-Identifier: BSD-3-Clause-Open-MPI
 
 # O-RAN TIFG E2E Test Cases applicable for 5G Standalone (SA)
+#
 # Source: O-RAN.TIFG.TS.E2E-Test.0-R005-v09.00
+# Copyright (C) O-RAN ALLIANCE e.V. All rights reserved.
+#
+# This list takes the test_id, description and scope (section and subsection number) from the specification.
+# Comment are own summaries and annotations, not verbatim reproductions of the specification text.
+
 
 tests:
   # Section 5 - Functional Tests
