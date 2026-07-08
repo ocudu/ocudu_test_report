@@ -258,37 +258,37 @@ tests:
     description: "Authenticated Time Stamping"
     category: "System security evaluation for O-RAN component"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: 'To verify that the element fulfills the optional requirement of supporting Network Time Protocol (NTP) version 4 as specified by RFC5905 for authenticated time stamping in the client role only.'
+    comment: 'Optional support of NTP'
 
   - test_id: "8.4.4"
     description: "Network Security and System Security Events"
     category: "System security evaluation for O-RAN component"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: 'The purpose of the test is to verify the logging of security events from O-Cloud as per the Security Requirements and Controls Specifications [5].'
+    comment: 'Logging of security events from O-Cloud'
 
   - test_id: "8.4.5"
     description: "Application Security Events"
     category: "System security evaluation for O-RAN component"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: 'Verify the logging of security event data from O-RAN Network Functions that is known to generate error and/or load dynamic library.'
+    comment: 'Logging of security event data from NFs that is known to generate error and/or load dynamic library.'
 
   - test_id: "8.4.6"
     description: "Data Access Security Events"
     category: "System security evaluation for O-RAN component"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: 'Logging of data access security events in O-RAN elements.'
+    comment: ''
 
   - test_id: "8.4.7"
     description: "Account and Identity Security Events"
     category: "System security evaluation for O-RAN component"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: 'Logging of account and identity security events in O-RAN elements.'
+    comment: ''
 
   - test_id: "8.4.8"
     description: "General Security Events"
     category: "System security evaluation for O-RAN component"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: 'Logging of general security events in O-RAN elements.'
+    comment: ''
 
   - test_id: "8.4.9"
     description: "Storage"
@@ -301,67 +301,67 @@ tests:
     description: "SBOM Signature"
     category: "Software security evaluation for O-RAN components"
     scope: "CU/DU"
-    comment: 'SBOM is authenticity, integrity protected and provided in a standard format.'
+    comment: ''
 
   - test_id: "9.4.2"
     description: "SBOM Data Fields"
     category: "Software security evaluation for O-RAN components"
     scope: "CU/DU"
-    comment: 'A minimum set of data fields are included in the SBOM and it is in an standard format.'
+    comment: ''
 
   - test_id: "9.4.3"
     description: "SBOM Format"
     category: "Software security evaluation for O-RAN components"
     scope: "CU/DU"
-    comment: 'SBOM is provided in a standard format.'
+    comment: ''
 
   - test_id: "9.4.4"
     description: "SBOM Depth"
     category: "Software security evaluation for O-RAN components"
     scope: "CU/DU"
-    comment: 'The SBOM Depth is the required for the different types of software.'
+    comment: ''
 
   - test_id: "9.4.5"
     description: "SBOM completeness check"
     category: "Software security evaluation for O-RAN components"
     scope: "CU/DU"
-    comment: 'Validate that the SBOM for each component comprehensively lists all subcomponents, libraries, and dependencies.'
+    comment: ''
 
   - test_id: "9.4.6"
     description: "SBOM version verification"
     category: "Software security evaluation for O-RAN components"
     scope: "CU/DU"
-    comment: 'SBOM reflects the current version of the component.'
+    comment: ''
 
   - test_id: "9.4.8"
     description: "SBOM Delivery"
     category: "Software security evaluation for O-RAN components"
     scope: "CU/DU"
-    comment: 'Provide the SBOM with every software delivery package, including patches.'
+    comment: 'SBOM for every software delivery, including patches.'
 
   - test_id: "9.4.9"
     description: "SBOM Vulnerabilities Field"
     category: "Software security evaluation for O-RAN components"
     scope: "CU/DU"
-    comment: 'Vulnerabilities shall not be included as an additional data field because it would represent a static view from a specific point in time, while vulnerabilities are constantly evolving.'
+    comment: ''
 
   - test_id: "9.4.10"
     description: "SBOM OSC Components"
     category: "Software security evaluation for O-RAN components"
     scope: "CU/DU"
-    comment: 'Commercial software containing O-RAN OSC components is associated with an SBOM with O-RAN OSC components listed.'
+    comment: ''
 
   - test_id: "9.5.1"
     description: "Software Image/Application Package Signing"
     category: "Software security evaluation for O-RAN components"
     scope: "CU/DU"
-    comment: 'Application package shall be signed and verified for integrity and authenticity protection.'
+    comment: ''
 
   - test_id: "9.5.2"
     description: "Software Signature Verification"
     category: "Software security evaluation for O-RAN components"
     scope: "CU/DU"
-    comment: 'Verify the integrity and authenticity of the software signature.'
+    comment: ''
 
   # Section 11 - Security tests of O-RAN interfaces
   - test_id: "11.1.2.1"
