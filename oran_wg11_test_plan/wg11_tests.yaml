@@ -2,7 +2,12 @@
 # SPDX-License-Identifier: BSD-3-Clause-Open-MPI
 
 # O-RAN WG11 Security Test Cases
+#
 # Source: O-RAN.WG11.Security-Test-Specifications.0-R004-v08.00
+# Copyright (C) O-RAN ALLIANCE e.V. All rights reserved.
+#
+# This list takes the test_id, description and category (section and subsection number) from the specification.
+# Comment are own summaries and annotations, not verbatim reproductions of the specification text.
 
 tests:
   # Section 6 - Security  Protocol & APIs Validation
