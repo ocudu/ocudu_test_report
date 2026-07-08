@@ -146,6 +146,15 @@ validate-tifg-test-plan:
     - pip install --quiet pyyaml jsonschema
     - python3 scripts/validate_tifg_test_plan.py --data tifg_test_plan/tifg_tests.yaml --schema tifg_test_plan/tifg_tests.schema
 
+validate-wg11-test-plan:
+  stage: static
+  image: python:3.11-slim
+  rules:
+    - if: $ON_MR
+  script:
+    - pip install --quiet pyyaml jsonschema
+    - python3 scripts/validate_wg11_test_plan.py --data oran_wg11_test_plan/wg11_tests.yaml --schema oran_wg11_test_plan/wg11_tests.schema
+
 generate-report:
   stage: build
   image: python:3.14-slim
@@ -189,6 +198,7 @@ generate-report:
     - python3 gitlab_fetch.py "${SUITE_ARGS[@]}" -o artifacts/ ${COMMIT_LINK:+--commit-link "$COMMIT_LINK"}
     - python3 render_report.py --data ../features/features.yaml --output ${CI_PROJECT_DIR}/${OUTPUT}/feature_list.html
     - python3 tifg_report.py --data ../tifg_test_plan/tifg_tests.yaml --output "${CI_PROJECT_DIR}/${OUTPUT}/tifg_report.html"
+    - python3 wg11_report.py --data ../oran_wg11_test_plan/wg11_tests.yaml --output "${CI_PROJECT_DIR}/${OUTPUT}/wg11_report.html"
     - python3 xunit_report.py --dir artifacts/ -o "${CI_PROJECT_DIR}/${OUTPUT}" "${FILTER_ARGS[@]}"
     - |
       HISTORIC_LIST=()
@@ -243,6 +253,21 @@ build-tifg-report:
     paths:
       - tifg_report.html
     expose_as: "TIFG Test Plan"
+
+build-wg11-report:
+  stage: build
+  image: python:3.11-slim
+  rules:
+    - if: $ON_MR
+    - if: $ON_WEB
+    - if: $ON_API
+  script:
+    - pip install --quiet pyyaml
+    - python3 scripts/wg11_report.py --data oran_wg11_test_plan/wg11_tests.yaml --output wg11_report.html
+  artifacts:
+    paths:
+      - wg11_report.html
+    expose_as: "WG11 Test Plan"
 
 build-feature-list:
   stage: build

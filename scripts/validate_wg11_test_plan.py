@@ -1,0 +1,100 @@
+#!/usr/bin/env python3
+
+# SPDX-FileCopyrightText: Copyright (C) 2021-2026 Software Radio Systems Limited
+# SPDX-License-Identifier: BSD-3-Clause-Open-MPI
+
+"""Validate wg11_tests.yaml against its YAML schema.
+
+Exit codes:
+  0  - validation passed
+  1  - validation failed (schema violations or duplicate IDs)
+  2  - usage / file error
+"""
+
+import argparse
+import sys
+from pathlib import Path
+from typing import Any
+
+try:
+    import jsonschema
+except ImportError:
+    print("ERROR: jsonschema is required. Install with: pip install jsonschema", file=sys.stderr)
+    sys.exit(2)
+
+try:
+    import yaml
+except ImportError:
+    print("ERROR: PyYAML is required. Install with: pip install pyyaml", file=sys.stderr)
+    sys.exit(2)
+
+DEFAULT_TESTS_FILE = str(Path(__file__).parent.parent / "oran_wg11_test_plan" / "wg11_tests.yaml")
+DEFAULT_SCHEMA_FILE = str(Path(__file__).parent.parent / "oran_wg11_test_plan" / "wg11_tests.schema")
+
+
+def _load_yaml(path: str, label: str) -> tuple[Any, int]:
+    """Load a YAML file, returning (data, exit_code). exit_code is non-zero on error."""
+    try:
+        with open(path, encoding="utf-8") as f:
+            return yaml.safe_load(f), 0
+    except FileNotFoundError:
+        print(f"ERROR: {label} not found: {path}", file=sys.stderr)
+        return None, 2
+    except yaml.YAMLError as e:
+        print(f"ERROR: failed to parse {label} '{path}': {e}", file=sys.stderr)
+        return None, 2
+
+
+def main() -> int:
+    """Validate a WG11 test plan YAML file against its schema."""
+    parser = argparse.ArgumentParser(description="Validate a WG11 test plan YAML against its YAML schema.")
+    parser.add_argument(
+        "--data",
+        default=DEFAULT_TESTS_FILE,
+        help=f"Path to the WG11 tests YAML file (default: {DEFAULT_TESTS_FILE})",
+    )
+    parser.add_argument(
+        "--schema",
+        default=DEFAULT_SCHEMA_FILE,
+        help=f"Path to the YAML schema file (default: {DEFAULT_SCHEMA_FILE})",
+    )
+    args = parser.parse_args()
+
+    schema, rc = _load_yaml(args.schema, "schema file")
+    if rc:
+        return rc
+
+    data, rc = _load_yaml(args.data, "data file")
+    if rc:
+        return rc
+
+    print(f"Validating '{args.data}' against schema '{args.schema}' ...")
+
+    try:
+        jsonschema.validate(instance=data, schema=schema)
+    except jsonschema.ValidationError as e:
+        path = " -> ".join(str(p) for p in e.absolute_path)
+        print(f"FAILED: {e.message}", file=sys.stderr)
+        if path:
+            print(f"  Path: {path}", file=sys.stderr)
+        return 1
+
+    tests = data.get("tests", [])
+    ids = [t["test_id"] for t in tests]
+    duplicates = sorted({tid for tid in ids if ids.count(tid) > 1})
+    if duplicates:
+        print(f"FAILED: duplicate test_ids: {duplicates}", file=sys.stderr)
+        return 1
+
+    scopes: dict[str, int] = {}
+    for t in tests:
+        scopes[t["scope"]] = scopes.get(t["scope"], 0) + 1
+
+    print(f"OK - {len(tests)} test cases")
+    for scope, count in sorted(scopes.items()):
+        print(f"  {scope}: {count}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
