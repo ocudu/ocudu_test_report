@@ -48,29 +48,23 @@ tests:
     scope: "Entire RAN/platform/deployment/auxiliary component"
     comment: 'O-Cloud needs to configure IPsec between nodes/pods.'
 
-  - test_id: "6.6"
-    description: "OAuth 2.0"
-    category: "Security Protocol & APIs Validation"
-    scope: "CU/DU"
-    comment: 'Mplane config deployed'
-
   - test_id: "6.7.1"
     description: "NACM RBAC Configuration"
     category: "Security Protocol & APIs Validation"
-    scope: "CU/DU"
-    comment: 'Mplane config deployed'
+    scope: "Entire RAN/platform/deployment/auxiliary component"
+    comment: 'O1 config deployed'
 
   - test_id: "6.7.2"
     description: "NACM Logging Monitoring"
     category: "Security Protocol & APIs Validation"
-    scope: "CU/DU"
-    comment: 'Mplane config deployed'
+    scope: "Entire RAN/platform/deployment/auxiliary component"
+    comment: 'O1 config deployed'
 
   - test_id: "6.9.1"
     description: "X.509 Certificate Structure Verification for TLS"
     category: "Security Protocol & APIs Validation"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: 'O-Clud API server certificate lacks CRLDistributionPoint'
+    comment: 'O-Cloud API server certificate lacks CRLDistributionPoint'
 
   - test_id: "6.9.2"
     description: "X.509 Certificate Validity Period Verification"
@@ -81,14 +75,14 @@ tests:
   - test_id: "6.9.3"
     description: "X.509 Certificate Key Usage Verification"
     category: "Security Protocol & APIs Validation"
-    scope: "CU/DU"
-    comment: 'O1 mTLS'
+    scope: "Entire RAN/platform/deployment/auxiliary component"
+    comment: 'O1 config deployed, netopeer2 implements RFC 5280 but ORAN requires stricter check'
 
   - test_id: "6.9.4"
     description: "X.509 Certificate Chain Validation"
     category: "Security Protocol & APIs Validation"
-    scope: "CU/DU"
-    comment: 'O1 mTLS config - A client certificate that lacks the required key-usage constraints is rejected. Only certificates carrying the clientAuth Extended Key Usage are authorized on the O1 interface (WG11 §6.9.3, RFC 5280 §4.2.1.3 and §4.2.1.12).'
+    scope: "Entire RAN/platform/deployment/auxiliary component"
+    comment: 'O1 config deployed - A client certificate that lacks the required key-usage constraints is rejected. Only certificates carrying the clientAuth Extended Key Usage are authorized on the O1 interface (WG11 §6.9.3, RFC 5280 §4.2.1.3 and §4.2.1.12).'
 
   - test_id: "6.10.1"
     description: "eCPRI Session Management"
@@ -167,25 +161,25 @@ tests:
     description: "Network Protocol and Service Enumeration"
     category: "Common Network Security Tests for O-RAN components"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'O-Cloud config'
 
   - test_id: "7.3.1"
     description: "Password guessing"
     category: "Common Network Security Tests for O-RAN components"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'O-Cloud config'
 
   - test_id: "7.3.2"
     description: "Unauthorized Password Reset"
     category: "Common Network Security Tests for O-RAN components"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'O-Cloud config'
 
   - test_id: "7.3.3"
     description: "Password Policy Enforcement"
     category: "Common Network Security Tests for O-RAN components"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'O-Cloud config'
 
   - test_id: "7.4"
     description: "Network Protocol Fuzzing"
@@ -208,44 +202,32 @@ tests:
   - test_id: "7.6.1"
     description: "O-CU input validation and error handling"
     category: "Common Network Security Tests for O-RAN components"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    scope: "CU/DU"
+    comment: 'Input validation over E2/O1'
 
   - test_id: "7.6.2"
     description: "O-DU input validation and error handling"
     category: "Common Network Security Tests for O-RAN components"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "7.6.3"
-    description: "Near-RT RIC input validation and error handling"
-    category: "Common Network Security Tests for O-RAN components"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "7.6.4"
-    description: "Near-RT RIC input validation and error handling of data received from xApp"
-    category: "Common Network Security Tests for O-RAN components"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    scope: "CU/DU"
+    comment: 'Input validation over E2/O1'
 
   - test_id: "7.7"
     description: "Secure configuration verification"
     category: "Common Network Security Tests for O-RAN components"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    scope: "CU/DU"
+    comment: 'Logging of authentication events'
 
   - test_id: "7.8.1"
     description: "O-CU logging and monitoring"
     category: "Common Network Security Tests for O-RAN components"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    scope: "CU/DU"
+    comment: 'O1 container logging enabled'
 
   - test_id: "7.8.2"
     description: "O-DU logging and monitoring"
     category: "Common Network Security Tests for O-RAN components"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    scope: "CU/DU"
+    comment: 'O1 container logging enabled'
 
   - test_id: "7.8.3"
     description: "O-RU logging and monitoring"
@@ -264,135 +246,135 @@ tests:
     description: "System Vulnerability Scanning"
     category: "System security evaluation for O-RAN component"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'Robustness of OS and Applications'
 
   - test_id: "8.4.2"
     description: "Security log format and related log fields"
     category: "System security evaluation for O-RAN component"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'sshd log requires date and IP address'
 
   - test_id: "8.4.3"
     description: "Authenticated Time Stamping"
     category: "System security evaluation for O-RAN component"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'To verify that the element fulfills the optional requirement of supporting Network Time Protocol (NTP) version 4 as specified by RFC5905 for authenticated time stamping in the client role only.'
 
   - test_id: "8.4.4"
     description: "Network Security and System Security Events"
     category: "System security evaluation for O-RAN component"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'The purpose of the test is to verify the logging of security events from O-Cloud as per the Security Requirements and Controls Specifications [5].'
 
   - test_id: "8.4.5"
     description: "Application Security Events"
     category: "System security evaluation for O-RAN component"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'Verify the logging of security event data from O-RAN Network Functions that is known to generate error and/or load dynamic library.'
 
   - test_id: "8.4.6"
     description: "Data Access Security Events"
     category: "System security evaluation for O-RAN component"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'Logging of data access security events in O-RAN elements.'
 
   - test_id: "8.4.7"
     description: "Account and Identity Security Events"
     category: "System security evaluation for O-RAN component"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'Logging of account and identity security events in O-RAN elements.'
 
   - test_id: "8.4.8"
     description: "General Security Events"
     category: "System security evaluation for O-RAN component"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'Logging of general security events in O-RAN elements.'
 
   - test_id: "8.4.9"
     description: "Storage"
     category: "System security evaluation for O-RAN component"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'Support for secure storage of security log data'
 
   # Section 9 - Software security evaluation for O-RAN components
   - test_id: "9.4.1"
     description: "SBOM Signature"
     category: "Software security evaluation for O-RAN components"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    scope: "CU/DU"
+    comment: 'SBOM is authenticity, integrity protected and provided in a standard format.'
 
   - test_id: "9.4.2"
     description: "SBOM Data Fields"
     category: "Software security evaluation for O-RAN components"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    scope: "CU/DU"
+    comment: 'A minimum set of data fields are included in the SBOM and it is in an standard format.'
 
   - test_id: "9.4.3"
     description: "SBOM Format"
     category: "Software security evaluation for O-RAN components"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    scope: "CU/DU"
+    comment: 'SBOM is provided in a standard format.'
 
   - test_id: "9.4.4"
     description: "SBOM Depth"
     category: "Software security evaluation for O-RAN components"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    scope: "CU/DU"
+    comment: 'The SBOM Depth is the required for the different types of software.'
 
   - test_id: "9.4.5"
     description: "SBOM completeness check"
     category: "Software security evaluation for O-RAN components"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    scope: "CU/DU"
+    comment: 'Validate that the SBOM for each component comprehensively lists all subcomponents, libraries, and dependencies.'
 
   - test_id: "9.4.6"
     description: "SBOM version verification"
     category: "Software security evaluation for O-RAN components"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    scope: "CU/DU"
+    comment: 'SBOM reflects the current version of the component.'
 
   - test_id: "9.4.8"
     description: "SBOM Delivery"
     category: "Software security evaluation for O-RAN components"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    scope: "CU/DU"
+    comment: 'Provide the SBOM with every software delivery package, including patches.'
 
   - test_id: "9.4.9"
     description: "SBOM Vulnerabilities Field"
     category: "Software security evaluation for O-RAN components"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    scope: "CU/DU"
+    comment: 'Vulnerabilities shall not be included as an additional data field because it would represent a static view from a specific point in time, while vulnerabilities are constantly evolving.'
 
   - test_id: "9.4.10"
     description: "SBOM OSC Components"
     category: "Software security evaluation for O-RAN components"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    scope: "CU/DU"
+    comment: 'Commercial software containing O-RAN OSC components is associated with an SBOM with O-RAN OSC components listed.'
 
   - test_id: "9.5.1"
     description: "Software Image/Application Package Signing"
     category: "Software security evaluation for O-RAN components"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    scope: "CU/DU"
+    comment: 'Application package shall be signed and verified for integrity and authenticity protection.'
 
   - test_id: "9.5.2"
     description: "Software Signature Verification"
     category: "Software security evaluation for O-RAN components"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    scope: "CU/DU"
+    comment: 'Verify the integrity and authenticity of the software signature.'
 
   # Section 11 - Security tests of O-RAN interfaces
   - test_id: "11.1.2.1"
     description: "FH Open Fronthaul Point-to-Point LAN Segment - Authenticator Validation"
     category: "Security tests of O-RAN interfaces - FH"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'WPA supplicant out of scope'
 
   - test_id: "11.1.2.2"
     description: "FH Open Fronthaul Point-to-Point LAN Segment - Supplicant Validation"
     category: "Security tests of O-RAN interfaces - FH"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'WPA supplicant out of scope'
 
   - test_id: "11.1.3.1.1"
     description: "FH M-Plane SSH password-based authentication and authorization"
@@ -439,13 +421,13 @@ tests:
   - test_id: "11.1.4.1.1"
     description: "FH U-Plane malformed packet"
     category: "Security tests of O-RAN interfaces - FH"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    scope: "CU/DU"
+    comment: 'Verify the O-DUs ability to handle and reject malformed or invalid user plane packets.'
 
   - test_id: "11.1.4.1.2"
     description: "FH U-Plane unexpected payload size"
     category: "Security tests of O-RAN interfaces - FH"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
+    scope: "CU/DU"
     comment: ''
 
   - test_id: "11.1.5.1.1"
@@ -458,49 +440,31 @@ tests:
     description: "FH S-Plane DoS master clock LLS C4"
     category: "Security tests of O-RAN interfaces - FH"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'Linuxptp out of scope'
 
   - test_id: "11.1.5.2.1"
     description: "FH S-Plane impersonation of master clock"
     category: "Security tests of O-RAN interfaces - FH"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'Linuxptp out of scope'
 
   - test_id: "11.1.5.2.2"
     description: "FH S-Plane rogue PTP instance"
     category: "Security tests of O-RAN interfaces - FH"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'Linuxptp out of scope'
 
   - test_id: "11.1.5.3.1"
     description: "FH S-Plane selective interception and removal of PTP timing packets"
     category: "Security tests of O-RAN interfaces - FH"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'Linuxptp out of scope'
 
   - test_id: "11.1.5.3.2"
     description: "FH S-Plane delay attack on PTP timing packets"
     category: "Security tests of O-RAN interfaces - FH"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "11.2.1"
-    description: "Y1 Authenticity"
-    category: "Security tests of O-RAN interfaces - Y1"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "11.2.2"
-    description: "Y1 confidentiality, integrity, and replay protection"
-    category: "Security tests of O-RAN interfaces - Y1"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "11.2.3"
-    description: "Y1 Authorization"
-    category: "Security tests of O-RAN interfaces - Y1"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'Linuxptp out of scope'
 
   - test_id: "11.3.1"
     description: "O1 Authenticity"
@@ -512,428 +476,55 @@ tests:
     description: "O1 confidentiality, integrity and replay protection"
     category: "Security tests of O-RAN interfaces - O1"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'Provided through netopeer2'
 
   - test_id: "11.3.3.1"
     description: "O1 Interface NACM Validation"
     category: "Security tests of O-RAN interfaces - O1"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'Provided through netopeer2'
 
   - test_id: "11.4.1"
     description: "O2 Authenticity"
     category: "Security tests of O-RAN interfaces - O2"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'O-Cloud'
 
   - test_id: "11.4.2"
     description: "O2 confidentiality, integrity and replay protection"
     category: "Security tests of O-RAN interfaces - O2"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'O-Cloud'
 
   - test_id: "11.4.3"
     description: "O2 Authorization"
     category: "Security tests of O-RAN interfaces - O2"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'O-Cloud'
 
   - test_id: "11.5.1"
     description: "E2 confidentiality, integrity and replay protection"
     category: "Security tests of O-RAN interfaces - E2"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'IPsec between Near-RT RIC and O-CU/O-DU'
 
   - test_id: "11.5.2.1"
     description: "E2 Authenticity with certificate"
     category: "Security tests of O-RAN interfaces - E2"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'IPsec between Near-RT RIC and O-CU/O-DU'
 
   - test_id: "11.5.2.2"
     description: "E2 Authenticity with PSK"
     category: "Security tests of O-RAN interfaces - E2"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'IPsec between Near-RT RIC and O-CU/O-DU'
 
   - test_id: "11.5.2.3"
     description: "E2 Interface data validation by Near-RT RIC"
     category: "Security tests of O-RAN interfaces - E2"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "11.6.1"
-    description: "A1 Authenticity"
-    category: "Security tests of O-RAN interfaces - A1"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "11.6.2"
-    description: "A1 confidentiality, integrity and replay protection"
-    category: "Security tests of O-RAN interfaces - A1"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "11.6.3"
-    description: "A1 Authorization"
-    category: "Security tests of O-RAN interfaces - A1"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "11.7.1"
-    description: "R1 Authenticity"
-    category: "Security tests of O-RAN interfaces - R1"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "11.7.2"
-    description: "R1 confidentiality, integrity and replay protection"
-    category: "Security tests of O-RAN interfaces - R1"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "11.7.3"
-    description: "R1 Authorization"
-    category: "Security tests of O-RAN interfaces - R1"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  # Section 12 - Security test of O-RU
-  - test_id: "12.2"
-    description: "SSH on M-Plane interface"
-    category: "Security test of O-RU"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "12.3"
-    description: "TLS on M-Plane interface"
-    category: "Security test of O-RU"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  # Section 13 - Security test of Near-RT RIC
-  - test_id: "13.3.2"
-    description: "TLS for transactional APIs"
-    category: "Security test of Near-RT RIC"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "13.3.3"
-    description: "mTLS for transactional APIs"
-    category: "Security test of Near-RT RIC"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "13.3.4"
-    description: "OAuth 2.0 for transactional APIs"
-    category: "Security test of Near-RT RIC"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "13.4.2"
-    description: "Near-RT RIC OAuth 2.0 Resource Owner/Server"
-    category: "Security test of Near-RT RIC"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "13.5.2"
-    description: "Near-RT RIC OAuth 2.0 client"
-    category: "Security test of Near-RT RIC"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  # Section 14 - Security test of xApps
-  - test_id: "14.3.1"
-    description: "xApp ID format check"
-    category: "Security test of xApps"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "14.3.2"
-    description: "xApp ID in xApp instance certificate"
-    category: "Security test of xApps"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  # Section 15 - Security test of Non-RT RIC
-  - test_id: "15.2.1"
-    description: "Non-RT RIC OAuth 2.0 Resource Owner/Server"
-    category: "Security test of Non-RT RIC"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "15.2.2"
-    description: "Non-RT RIC OAuth 2.0 Client"
-    category: "Security test of Non-RT RIC"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "15.2.3"
-    description: "Non-RT RIC Framework OAuth 2.0"
-    category: "Security test of Non-RT RIC"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  # Section 16 - Security test of rApps
-  - test_id: "16.3.1"
-    description: "rApp OAuth 2.0 Client"
-    category: "Security test of rApps"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  # Section 17 - Security test of SMO
-  - test_id: "17.3.1"
-    description: "SMO OAuth 2.0 Resource Owner/Server"
-    category: "Security test of SMO"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "17.3.2"
-    description: "SMO OAuth 2.0 Client"
-    category: "Security test of SMO"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "17.3.3"
-    description: "SMO mTLS for mutual authentication"
-    category: "Security test of SMO"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "17.4.1"
-    description: "TLS for SMO Internal Communications"
-    category: "Security test of SMO"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "17.4.2"
-    description: "mTLS for SMO Internal Communications - SMO Functions"
-    category: "Security test of SMO"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "17.5.1"
-    description: "TLS for SMO External Interfaces"
-    category: "Security test of SMO"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "17.5.2"
-    description: "mTLS for SMO External Interfaces"
-    category: "Security test of SMO"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "17.5.3"
-    description: "SMO Framework OAuth 2.0 Resource Owner/Server for External Interface"
-    category: "Security test of SMO"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "17.5.4"
-    description: "SMO Functions OAuth 2.0 Client"
-    category: "Security test of SMO"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "17.6.1"
-    description: "TLS for SMO Logging Export"
-    category: "Security test of SMO"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "17.6.2"
-    description: "mTLS for SMO Logging Export"
-    category: "Security test of SMO"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  # Section 18 - Security test of O-Cloud
-  - test_id: "18.3.1"
-    description: "O-Cloud virtualization layer - Secure authentication (positive case)"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "18.3.2"
-    description: "O-Cloud virtualization layer - Secure authentication (negative case)"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "18.3.3"
-    description: "O-Cloud virtualization layer - Secure authorization (positive case)"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "18.3.4"
-    description: "O-Cloud virtualization layer - Secure authorization (negative case)"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "18.3.5"
-    description: "Validate network connections allowed by network policies"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "18.3.6"
-    description: "Validate network connections not allowed by network policies"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "18.3.7"
-    description: "Validate network connections from outside the allowed network ranges"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "18.3.8"
-    description: "Exploitation of O-Cloud component vulnerabilities"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "18.3.9"
-    description: "Identification and remediation of insecure configuration settings"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "18.3.10"
-    description: "Validation of logging and monitoring for security incidents"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "18.3.11"
-    description: "O-Cloud Privilege Escalation Prevention"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "18.3.12"
-    description: "O-Cloud mutual authentication"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "18.3.13"
-    description: "O-Cloud authorization"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "18.4.1"
-    description: "Verification of Application with valid signature by O-Cloud during Instantiation"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "18.4.2"
-    description: "Verification of Application with incorrect signature by O-Cloud during Instantiation"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "18.5.1"
-    description: "O-Cloud Resource Consumption Limit Enforcement"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "18.5.2"
-    description: "O-Cloud Storage Volume Limit Enforcement"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "18.5.3"
-    description: "O-Cloud CPU Overcommit Prevention"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "18.5.4"
-    description: "O-Cloud Memory Overcommit Prevention"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "18.5.5"
-    description: "O-Cloud Network Overcommit Prevention"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "18.5.6"
-    description: "O-Cloud Storage Overcommit Prevention"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "18.6.1"
-    description: "O-Cloud Infrastructure Software Package Integrity - Positive"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "18.6.2"
-    description: "O-Cloud Infrastructure Software Package Integrity Failure - Negative"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "18.6.3"
-    description: "Secure Update procedure for O-Cloud Platform - Positive"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "18.6.4"
-    description: "Secure Update failure for O-Cloud Platform - Negative"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "18.7.1"
-    description: "Sensitive data protection in O-Cloud"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "18.7.2"
-    description: "Secure data deletion in O-Cloud"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "18.7.3"
-    description: "Data isolation in VM/Container reallocation"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "18.8.1"
-    description: "Chain of Trust verification in static O-Cloud SW"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "18.8.2"
-    description: "Chain of Trust verification of dynamic O-Cloud SW"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "18.9"
-    description: "Secure time synchronization for O-Cloud"
-    category: "Security test of O-Cloud"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'IPsec between Near-RT RIC and O-CU/O-DU'
 
   # Section 19 - Security test of VNF/CNF
   - test_id: "19.2"
@@ -990,371 +581,183 @@ tests:
     description: "O-CU-CP 3GPP specific security functional requirements and test cases"
     category: "Security test of O-CU-CP"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'IPsec out of scope'
 
   - test_id: "21.3"
     description: "O-CU-CP O-RAN specific security functional requirements and test cases"
     category: "Security test of O-CU-CP"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'IPsec out of scope'
 
   # Section 22 - Security test of O-CU-UP
   - test_id: "22.2"
     description: "O-CU-UP 3GPP specific security functional requirements and test cases"
     category: "Security test of O-CU-UP"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'IPsec out of scope'
 
   - test_id: "22.3"
     description: "O-CU-UP O-RAN specific security functional requirements and test cases"
     category: "Security test of O-CU-UP"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'IPsec out of scope'
 
   # Section 23 - Security test of O-DU
   - test_id: "23.2"
     description: "O-DU 3GPP specific security functional requirements and test cases"
     category: "Security test of O-DU"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'IPsec out of scope'
 
   - test_id: "23.3"
     description: "O-DU O-RAN specific security functional requirements and test cases"
     category: "Security test of O-DU"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'IPsec out of scope'
 
   # Section 24 - End-to-End security test cases
   # Section 24.1 - 3GPP SCAS NR end-to-end test cases
   - test_id: "SCAS_NR_E2E_24.1.1"
     description: "Integrity protection of RRC-signalling"
     category: "End-to-End security test cases - 3GPP SCAS NR"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
+    scope: "CU/DU"
     comment: ''
 
   - test_id: "SCAS_NR_E2E_24.1.2"
     description: "Integrity protection of user data"
     category: "End-to-End security test cases - 3GPP SCAS NR"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
+    scope: "CU/DU"
     comment: ''
 
   - test_id: "SCAS_NR_E2E_24.1.3"
     description: "RRC integrity check failure"
     category: "End-to-End security test cases - 3GPP SCAS NR"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
+    scope: "CU/DU"
     comment: ''
 
   - test_id: "SCAS_NR_E2E_24.1.4"
     description: "UP integrity check failure"
     category: "End-to-End security test cases - 3GPP SCAS NR"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
+    scope: "CU/DU"
     comment: ''
 
   - test_id: "SCAS_NR_E2E_24.1.5"
     description: "Ciphering of RRC-signalling"
     category: "End-to-End security test cases - 3GPP SCAS NR"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
+    scope: "CU/DU"
     comment: ''
 
   - test_id: "SCAS_NR_E2E_24.1.6"
     description: "Ciphering of user data"
     category: "End-to-End security test cases - 3GPP SCAS NR"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
+    scope: "CU/DU"
     comment: ''
 
   - test_id: "SCAS_NR_E2E_24.1.7"
     description: "Replay protection of user data"
     category: "End-to-End security test cases - 3GPP SCAS NR"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
+    scope: "CU/DU"
     comment: ''
 
   - test_id: "SCAS_NR_E2E_24.1.8"
     description: "Replay protection of RRC-signalling"
     category: "End-to-End security test cases - 3GPP SCAS NR"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
+    scope: "CU/DU"
     comment: ''
 
   - test_id: "SCAS_NR_E2E_24.1.9"
     description: "Ciphering of user data based on the security policy sent by the SMF"
     category: "End-to-End security test cases - 3GPP SCAS NR"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
+    scope: "CU/DU"
     comment: ''
 
   - test_id: "SCAS_NR_E2E_24.1.10"
     description: "Integrity of user data based on the security policy sent by the SMF"
     category: "End-to-End security test cases - 3GPP SCAS NR"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
+    scope: "CU/DU"
     comment: ''
 
   - test_id: "SCAS_NR_E2E_24.1.11"
     description: "AS algorithms selection"
     category: "End-to-End security test cases - 3GPP SCAS NR"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
+    scope: "CU/DU"
     comment: ''
 
   - test_id: "SCAS_NR_E2E_24.1.12"
     description: "Key refresh"
     category: "End-to-End security test cases - 3GPP SCAS NR"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
+    scope: "CU/DU"
     comment: ''
 
   - test_id: "SCAS_NR_E2E_24.1.13"
     description: "Bidding down prevention in Xn-handovers"
     category: "End-to-End security test cases - 3GPP SCAS NR"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
+    scope: "CU/DU"
     comment: ''
 
   - test_id: "SCAS_NR_E2E_24.1.14"
     description: "AS protection algorithm selection in O-RAN System change"
     category: "End-to-End security test cases - 3GPP SCAS NR"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
+    scope: "CU/DU"
     comment: ''
 
   - test_id: "SCAS_NR_E2E_24.1.15"
     description: "Control plane data confidentiality protection over N2/Xn interface"
     category: "End-to-End security test cases - 3GPP SCAS NR"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'IPsec out of scope'
 
   - test_id: "SCAS_NR_E2E_24.1.16"
     description: "Control plane data integrity protection over S1/NG/Xn interface"
     category: "End-to-End security test cases - 3GPP SCAS NR"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'IPsec out of scope'
 
   - test_id: "SCAS_NR_E2E_24.1.17"
     description: "Key update on dual connectivity"
     category: "End-to-End security test cases - 3GPP SCAS NR"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    scope: "CU/DU"
+    comment: 'Dual-connectivity not supported.'
 
   - test_id: "SCAS_NR_E2E_24.1.18"
     description: "UserPlane security activation in Inactive scenario"
     category: "End-to-End security test cases - 3GPP SCAS NR"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
+    scope: "CU/DU"
     comment: ''
 
   - test_id: "SCAS_NR_E2E_24.1.19"
     description: "User plane data confidentiality protection over N3/Xn interface"
     category: "End-to-End security test cases - 3GPP SCAS NR"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'IPsec out of scope'
 
   - test_id: "SCAS_NR_E2E_24.1.20"
     description: "User plane data integrity protection over N3/Xn interface"
     category: "End-to-End security test cases - 3GPP SCAS NR"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  # Section 24.1 - 3GPP SCAS LTE end-to-end test cases
-  - test_id: "SCAS_LTE_E2E_24.1.1"
-    description: "Control plane data confidentiality protection over S1/X2"
-    category: "End-to-End security test cases - 3GPP SCAS LTE"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "SCAS_LTE_E2E_24.1.2"
-    description: "Control plane data integrity protection over S1/X2"
-    category: "End-to-End security test cases - 3GPP SCAS LTE"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "SCAS_LTE_E2E_24.1.3"
-    description: "User plane data ciphering"
-    category: "End-to-End security test cases - 3GPP SCAS LTE"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "SCAS_LTE_E2E_24.1.4"
-    description: "User plane data integrity protection"
-    category: "End-to-End security test cases - 3GPP SCAS LTE"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "SCAS_LTE_E2E_24.1.5"
-    description: "AS algorithms selection"
-    category: "End-to-End security test cases - 3GPP SCAS LTE"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "SCAS_LTE_E2E_24.1.6"
-    description: "RRC integrity protection"
-    category: "End-to-End security test cases - 3GPP SCAS LTE"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "SCAS_LTE_E2E_24.1.7"
-    description: "Selection of EIA0"
-    category: "End-to-End security test cases - 3GPP SCAS LTE"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "SCAS_LTE_E2E_24.1.8"
-    description: "Key refresh (PDCP Count)"
-    category: "End-to-End security test cases - 3GPP SCAS LTE"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "SCAS_LTE_E2E_24.1.9"
-    description: "Key refresh (DRB ID)"
-    category: "End-to-End security test cases - 3GPP SCAS LTE"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "SCAS_LTE_E2E_24.1.10"
-    description: "AS integrity algorithm selection"
-    category: "End-to-End security test cases - 3GPP SCAS LTE"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "SCAS_LTE_E2E_24.1.11"
-    description: "Bidding down prevention in X2-handovers"
-    category: "End-to-End security test cases - 3GPP SCAS LTE"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "SCAS_LTE_E2E_24.1.12"
-    description: "AS protection algorithm selection in O-RAN System change"
-    category: "End-to-End security test cases - 3GPP SCAS LTE"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "SCAS_LTE_E2E_24.1.13"
-    description: "RRC and UP downlink ciphering"
-    category: "End-to-End security test cases - 3GPP SCAS LTE"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "SCAS_LTE_E2E_24.1.14"
-    description: "Map a UE NR security capability"
-    category: "End-to-End security test cases - 3GPP SCAS LTE"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "SCAS_LTE_E2E_24.1.15"
-    description: "UE NR security capability is only sent to a Secondary O-RAN System"
-    category: "End-to-End security test cases - 3GPP SCAS LTE"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "SCAS_LTE_E2E_24.1.16"
-    description: "Bidding down prevention in X2-handovers (NR capability)"
-    category: "End-to-End security test cases - 3GPP SCAS LTE"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "SCAS_LTE_E2E_24.1.17"
-    description: "Integrity protection of user data"
-    category: "End-to-End security test cases - 3GPP SCAS LTE"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "SCAS_LTE_E2E_24.1.18"
-    description: "Select the right UP integrity protection policy"
-    category: "End-to-End security test cases - 3GPP SCAS LTE"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "SCAS_LTE_E2E_24.1.19"
-    description: "Select the right UP IP policy"
-    category: "End-to-End security test cases - 3GPP SCAS LTE"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "SCAS_LTE_E2E_24.1.20"
-    description: "Select the right UP IP policy in S1 handover"
-    category: "End-to-End security test cases - 3GPP SCAS LTE"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "SCAS_LTE_E2E_24.1.21"
-    description: "Bidding down for UP IP Policy"
-    category: "End-to-End security test cases - 3GPP SCAS LTE"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'IPsec out of scope'
 
   # Section 24.2 - DoS, fuzzing and blind exploitation tests
   - test_id: "24.2.1.1"
     description: "S-Plane PTP DoS Attack"
     category: "End-to-End security test cases - DoS, fuzzing and blind exploitation"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'Linuxptp out of scope'
 
   - test_id: "24.2.1.2"
     description: "S-Plane PTP Unexpected Input"
     category: "End-to-End security test cases - DoS, fuzzing and blind exploitation"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'Linuxptp out of scope'
 
   - test_id: "24.2.2.1"
     description: "C-Plane eCPRI DoS Attack on O-DU"
     category: "End-to-End security test cases - DoS, fuzzing and blind exploitation"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
+    scope: "CU/DU"
     comment: ''
 
   - test_id: "24.2.2.2"
     description: "C-Plane eCPRI Unexpected Input on O-DU"
     category: "End-to-End security test cases - DoS, fuzzing and blind exploitation"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "24.2.2.3"
-    description: "C-Plane eCPRI DoS Attack on O-RU"
-    category: "End-to-End security test cases - DoS, fuzzing and blind exploitation"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "24.2.2.4"
-    description: "C-Plane eCPRI Unexpected Input on O-RU"
-    category: "End-to-End security test cases - DoS, fuzzing and blind exploitation"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "24.2.3.1"
-    description: "Near-RT RIC A1 Interface DoS Attack"
-    category: "End-to-End security test cases - DoS, fuzzing and blind exploitation"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "24.2.3.2"
-    description: "Near-RT RIC A1 Interface Unexpected Input"
-    category: "End-to-End security test cases - DoS, fuzzing and blind exploitation"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "24.2.3.3"
-    description: "Near-RT RIC A1 Vulnerability Assessment"
-    category: "End-to-End security test cases - DoS, fuzzing and blind exploitation"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "24.2.4.1"
-    description: "O-Cloud side-channel DoS attack"
-    category: "End-to-End security test cases - DoS, fuzzing and blind exploitation"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  # Section 25 - Security test of Shared O-RU
-  - test_id: "25.2.1"
-    description: "mTLS for mutual authentication"
-    category: "Security test of Shared O-RU"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "25.2.2"
-    description: "NACM Authorization"
-    category: "Security test of Shared O-RU"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "25.2.3"
-    description: "TLS across Open Fronthaul"
-    category: "Security test of Shared O-RU"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
-
-  - test_id: "25.2.4"
-    description: "Reject Password-based authentication"
-    category: "Security test of Shared O-RU"
-    scope: "Entire RAN/platform/deployment/auxiliary component"
+    scope: "CU/DU"
     comment: ''
