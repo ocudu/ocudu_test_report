@@ -9,6 +9,7 @@ import argparse
 import sys
 from collections import Counter
 from pathlib import Path
+from typing import Union
 
 try:
     import yaml
@@ -113,7 +114,7 @@ def _build_scope_cards(scope_counts: Counter) -> str:
     return html
 
 
-def _sort_key(test_id: str) -> list[tuple[int, int | str]]:
+def _sort_key(test_id: str) -> list[tuple[int, Union[int, str]]]:
     return [(0, int(part)) if part.isdigit() else (1, part) for part in test_id.split(".")]
 
 
