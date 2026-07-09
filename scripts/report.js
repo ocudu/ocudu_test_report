@@ -41,9 +41,18 @@
 
   function updateStats() {
     const seen = new Set();
-    let passed = 0, failed = 0, skipped = 0;
+    let tPassed = 0, tFailed = 0, tSkipped = 0;
+    let fTotal = 0, fFailed = 0, fPassed = 0, fSkipped = 0;
+
     document.querySelectorAll('#feature-table .feature-row').forEach(row => {
       if (row.hidden) return;
+
+      fTotal++;
+      const fstatus = row.dataset.status;
+      if (fstatus === 'failed' || fstatus === 'partial') fFailed++;
+      else if (fstatus === 'passed') fPassed++;
+      else if (fstatus === 'skipped') fSkipped++;
+
       const exp = document.getElementById(row.dataset.expand);
       if (!exp) return;
       exp.querySelectorAll('.tc-row').forEach(tcRow => {
@@ -55,15 +64,21 @@
         const badge = tcRow.querySelector('.badge');
         if (!badge) return;
         const status = [...badge.classList].find(c => c !== 'badge');
-        if (status === 'passed') passed++;
-        else if (status === 'failed') failed++;
-        else if (status === 'skipped') skipped++;
+        if (status === 'passed') tPassed++;
+        else if (status === 'failed') tFailed++;
+        else if (status === 'skipped') tSkipped++;
       });
     });
-    document.getElementById('stat-total').textContent   = failed + passed + skipped;
-    document.getElementById('stat-passed').textContent  = passed;
-    document.getElementById('stat-failed').textContent  = failed;
-    document.getElementById('stat-skipped').textContent = skipped;
+
+    document.getElementById('stat-fid-total').textContent   = fTotal;
+    document.getElementById('stat-fid-failed').textContent  = fFailed;
+    document.getElementById('stat-fid-passed').textContent  = fPassed;
+    document.getElementById('stat-fid-skipped').textContent = fSkipped;
+
+    document.getElementById('stat-tc-total').textContent   = tFailed + tPassed + tSkipped;
+    document.getElementById('stat-tc-passed').textContent  = tPassed;
+    document.getElementById('stat-tc-failed').textContent  = tFailed;
+    document.getElementById('stat-tc-skipped').textContent = tSkipped;
   }
 
   function msGetSelected(wrapId) {

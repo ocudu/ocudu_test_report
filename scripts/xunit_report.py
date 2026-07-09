@@ -90,13 +90,25 @@ def _read_asset(name: str) -> str:
     return (_SCRIPTS_DIR / name).read_text(encoding="utf-8")
 
 
-def _stat_html(label: str, modifier: str = "") -> str:
+def _stat_html(label: str, modifier: str = "", id_prefix: str = "") -> str:
     sid = modifier or "total"
     return (
         f'<div class="stat">'
-        f'<div class="stat-value {modifier}" id="stat-{sid}">0</div>'
+        f'<div class="stat-value {modifier}" id="stat-{id_prefix}{sid}">0</div>'
         f'<div class="stat-label">{label}</div>'
         f"</div>"
+    )
+
+
+def _stat_group_html(label: str, id_prefix: str) -> str:
+    stats = (
+        f'{_stat_html("Total", "", id_prefix)}'
+        f'{_stat_html("Failed", "failed", id_prefix)}'
+        f'{_stat_html("Passed", "passed", id_prefix)}'
+        f'{_stat_html("Skipped", "skipped", id_prefix)}'
+    )
+    return (
+        f'<div class="stat-group"><div class="stat-group-label">{label}</div><div class="stat-row">{stats}</div></div>'
     )
 
 
@@ -423,17 +435,14 @@ def _feature_status(failed: int, passed: int, skipped: int = 0) -> str:
     return "partial"
 
 
-def _report_header(title: str, link: str, duration: float) -> str:
+def _report_header(title: str, link: str, duration: float, stats_html: str) -> str:
     return (
         '<div class="report-header">'
         '<div class="header-logo"></div>'
         f'<div class="header-title"><h1>{title}</h1>'
         f"<div>{_header_subtitle(link, duration)}</div>"
         "</div>"
-        f'{_stat_html("Total")}'
-        f'{_stat_html("Failed", "failed")}'
-        f'{_stat_html("Passed", "passed")}'
-        f'{_stat_html("Skipped", "skipped")}'
+        f'<div class="stat-groups">{stats_html}</div>'
         "</div>"
     )
 
@@ -594,7 +603,8 @@ def render_html(
     else:
         body = "<p>No features defined.</p>"
 
-    header = _report_header("Results", link, duration_total)
+    stats_html = _stat_group_html("Feature IDs", "fid-") + _stat_group_html("Tests", "tc-")
+    header = _report_header("Results", link, duration_total, stats_html)
     return _html_doc("Results", favicon, header, body, "report.js")
 
 
@@ -670,7 +680,11 @@ def render_all_html(suites: list, favicon: str = "", link: str = "") -> str:
         f"</div>"
     )
 
-    header = _report_header("All test suites", link, duration_total)
+    stats_html = (
+        f'{_stat_html("Total")}{_stat_html("Failed", "failed")}{_stat_html("Passed", "passed")}'
+        f'{_stat_html("Skipped", "skipped")}'
+    )
+    header = _report_header("All test suites", link, duration_total, stats_html)
     return _html_doc("All test suites", favicon, header, body, "all.js")
 
 

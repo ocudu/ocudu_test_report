@@ -114,6 +114,36 @@ body {
   background: rgba(56, 189, 248, 0.08);
 }
 
+.stat-groups {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.stat-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.stat-group + .stat-group {
+  border-left: 1px solid var(--border);
+  padding-left: 20px;
+}
+
+.stat-group-label {
+  font-size: 0.7em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+}
+
+.stat-row {
+  display: flex;
+}
+
 .stat {
   text-align: center;
   padding: 0 8px;
@@ -602,6 +632,15 @@ details.tc-detail[open] > summary.tc-row::before {
 
   .header-title h1 {
     font-size: 1rem;
+  }
+
+  .stat-groups {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .stat-group + .stat-group {
+    padding-left: 10px;
   }
 
   .page-tab {
