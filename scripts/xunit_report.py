@@ -406,10 +406,10 @@ def _header_subtitle(link: str, duration: float) -> str:
     return f"{link_html}{sep}{duration_html}"
 
 
-def _feature_status(failed: int, passed: int) -> str:
+def _feature_status(failed: int, passed: int, skipped: int = 0) -> str:
     total = failed + passed
     if total == 0:
-        return "untested"
+        return "skipped" if skipped else "untested"
     if failed == 0:
         return "passed"
     if failed / total > 0.5:
@@ -427,6 +427,7 @@ def _report_header(title: str, link: str, duration: float) -> str:
         f'{_stat_html("Total")}'
         f'{_stat_html("Failed", "failed")}'
         f'{_stat_html("Passed", "passed")}'
+        f'{_stat_html("Skipped", "skipped")}'
         "</div>"
     )
 
@@ -499,9 +500,10 @@ def render_html(
         rows_parts = []
         for i, (fid, fg) in enumerate(grouped.items()):
             all_tcs = [tc for _, tcs in fg.suites.values() for tc in tcs]
-            nfailed = sum(1 for tc in all_tcs if tc.status in (Status.FAILED, Status.ERROR, Status.SKIPPED))
+            nfailed = sum(1 for tc in all_tcs if tc.status in (Status.FAILED, Status.ERROR))
             npassed = sum(1 for tc in all_tcs if tc.status == Status.PASSED)
-            fstatus = _feature_status(nfailed, npassed)
+            nskipped = sum(1 for tc in all_tcs if tc.status == Status.SKIPPED)
+            fstatus = _feature_status(nfailed, npassed, nskipped)
             feat_release = features[fid].release if fid in features else "unspecified"
             feat_type = features[fid].type if fid in features else ""
             feat_scope = features[fid].scope if fid in features else ""
@@ -513,12 +515,13 @@ def render_html(
             expand_id = f"exp{i}"
             failed_cls = " num-failed" if nfailed else ""
             passed_cls = " num-passed" if npassed else ""
+            skipped_cls = " num-skipped" if nskipped else ""
 
             expand_attr = f' data-expand="{expand_id}"' if expanded else ""
             expand_row = (
                 (
                     f'<tr class="expand-row" id="{expand_id}" hidden>'
-                    f'<td colspan="6"><div class="expand-body">{expanded}</div></td>'
+                    f'<td colspan="7"><div class="expand-body">{expanded}</div></td>'
                     f"</tr>"
                 )
                 if expanded
@@ -533,13 +536,15 @@ def render_html(
                 f' data-fid="{html.escape(fid, quote=True)}"'
                 f"{expand_attr}"
                 f' data-failed="{nfailed}"'
-                f' data-passed="{npassed}">'
+                f' data-passed="{npassed}"'
+                f' data-skipped="{nskipped}">'
                 f'<td class="col-fid">{html.escape(fid)}</td>'
                 f"<td>{badge}</td>"
                 f'<td class="col-desc">{html.escape(fg.description)}</td>'
                 f'<td class="col-release">{html.escape(feat_release)}</td>'
                 f'<td class="col-num{failed_cls}">{nfailed}</td>'
                 f'<td class="col-num{passed_cls}">{npassed}</td>'
+                f'<td class="col-num{skipped_cls}">{nskipped}</td>'
                 f"</tr>"
                 f"{expand_row}"
             )
@@ -574,6 +579,7 @@ def render_html(
             f'<th data-col="release">Release</th>'
             f'<th data-col="failed" class="col-num">F</th>'
             f'<th data-col="passed" class="col-num">P</th>'
+            f'<th data-col="skipped" class="col-num">S</th>'
             f"</tr></thead>"
             f"<tbody>{rows_html}</tbody>"
             f"</table>"
@@ -613,9 +619,10 @@ def render_all_html(suites: list, favicon: str = "", link: str = "") -> str:
 
     rows_parts = []
     for i, suite in enumerate(suites):
-        nfailed = suite.failed + suite.skipped
+        nfailed = suite.failed
         npassed = suite.passed
-        fstatus = _feature_status(nfailed, npassed)
+        nskipped = suite.skipped
+        fstatus = _feature_status(nfailed, npassed, nskipped)
         badge = _status_badge(fstatus)
 
         tcs = sorted(suite.testcases, key=lambda tc: (_TC_STATUS_SORT.get(tc.status, 99), tc.classname, tc.name))
@@ -624,6 +631,7 @@ def render_all_html(suites: list, favicon: str = "", link: str = "") -> str:
         expand_id = f"sexp{i}"
         failed_cls = " num-failed" if nfailed else ""
         passed_cls = " num-passed" if npassed else ""
+        skipped_cls = " num-skipped" if nskipped else ""
 
         rows_parts.append(
             f'<tr class="suite-row" data-suite="{html.escape(suite.name, quote=True)}" data-expand="{expand_id}">'
@@ -632,9 +640,10 @@ def render_all_html(suites: list, favicon: str = "", link: str = "") -> str:
             f"{_gitlab_link(suite.url)}</td>"
             f'<td class="col-num{failed_cls}">{nfailed}</td>'
             f'<td class="col-num{passed_cls}">{npassed}</td>'
+            f'<td class="col-num{skipped_cls}">{nskipped}</td>'
             f"</tr>"
             f'<tr class="expand-row" id="{expand_id}" hidden>'
-            f'<td colspan="3"><div class="expand-body">{expanded}</div></td>'
+            f'<td colspan="4"><div class="expand-body">{expanded}</div></td>'
             f"</tr>"
         )
 
@@ -648,6 +657,7 @@ def render_all_html(suites: list, favicon: str = "", link: str = "") -> str:
         f"<th>Suite</th>"
         f'<th class="col-num">F</th>'
         f'<th class="col-num">P</th>'
+        f'<th class="col-num">S</th>'
         f"</tr></thead>"
         f"<tbody>{rows_html}</tbody>"
         f"</table>"

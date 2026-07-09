@@ -127,7 +127,7 @@ body {
 
 .stat-value.passed  { color: var(--green); }
 .stat-value.failed  { color: var(--red); }
-.stat-value.skipped { color: var(--text-dim); }
+.stat-value.skipped { color: var(--orange); }
 
 .stat-label {
   font-size: 0.7em;
