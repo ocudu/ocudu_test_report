@@ -69,7 +69,7 @@ _STATUS_VALUES = [
     ("skipped", "Skipped"),
     ("untested", "Untested"),
 ]
-_TC_STATUS_VALUES = [("failed", "Failed"), ("passed", "Passed"), ("skipped", "Skipped"), ("untested", "Untested")]
+_TC_STATUS_VALUES = [("failed", "Failed"), ("passed", "Passed"), ("skipped", "Skipped")]
 
 
 def _status_checkboxes(defaults: Optional[frozenset[str]] = None, values=None) -> str:
