@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
 SPDX-FileCopyrightText: Copyright (C) 2021-2026 Software Radio Systems Limited
 SPDX-License-Identifier: BSD-3-Clause-Open-MPI
 -->
+
 <testsuites name="TIFG tests">
   <testsuite name="TIFG" errors="0" failures="4" skipped="33" tests="90" timestamp="2026-06-23T20:14:13.197757+00:00">
     <testcase name="5.3" classname="5G SA registration and deregistration of single UE" timestamp="2026-02-09T00:00:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="10/10 reg+dereg, 100% success, latency 94ms reg / 25ms dereg"/>
       </properties>
       <system-out/>
@@ -17,9 +17,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="5.4" classname="Intra-O-DU mobility" timestamp="2026-03-18T00:00:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="PASS: VAMOS Exec ID 1514, 2026-03-18. Intra-O-DU handover validated. Procedures: Registration, PDU Session Establishment, NR Handover In/Out, Deregistration — all successful. RRC Handover Complete command verified. Radio params (RSRP, RSRQ, CQI, PDSCH SINR) processed. L1 DL/UL stats (BLER, MCS, throughput, PRB, slots), MIMO Rank, L3 DL/UL throughput — all PASS. Event A3 measurement in rrcReconfiguration verified. No call drops."/>
       </properties>
       <system-out/>
@@ -27,9 +25,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="5.5" classname="Inter-O-DU mobility" timestamp="2026-05-13T00:00:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="VAMOS-2 DTMA-2 UID1/UID3 PASS 2026-05-13. Inter-O-DU mobility verified — true handover, both cells exposed via TM500 mobility profile. Builds on 2026-05-06 cell-change-via-release breakthrough."/>
       </properties>
       <system-out/>
@@ -37,9 +33,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="5.6" classname="Inter-O-CU mobility" timestamp="2026-05-16T00:00:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="VAMOS-2 DTMA-2 UID3 PASS 2026-05-16. Inter-O-CU (Xn) HO verified. Fix in image b06b7b1b. ISS-025 resolved."/>
       </properties>
       <system-out/>
@@ -47,9 +41,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="5.7" classname="Registration and deregistration to a single network slice" timestamp="2026-02-09T00:00:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="100% success rate, Static Radio Conditions"/>
       </properties>
       <system-out/>
@@ -57,9 +49,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="5.8" classname="Registration and deregistration to multiple network slices" timestamp="2026-02-09T00:00:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="100% success rate, Static Radio Conditions"/>
       </properties>
       <system-out/>
@@ -67,9 +57,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="5.9" classname="Idle Mode Intra-O-DU mobility" timestamp="2026-04-21T00:00:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="PASS on image 8de7d4b (split CU/DU dual-cell intra-freq). VAMOS-2 TLS verdict: Pass (Job 1763, 21:18-21:29 UTC). DTMA-2 UID3 @ NLA_8_20_0_REV05. Prior SIB2 issue (ISS-005) no longer reproducing. si_window_length=5 and intraFreqReselection not blockers."/>
       </properties>
       <system-out/>
@@ -77,9 +65,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="5.10" classname="Idle mode Inter-O-DU mobility" timestamp="2026-05-05T00:00:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="VAMOS-2 DTMA-2 UID3. Idle Mode Inter-O-DU mobility verified PASS 2026-05-06."/>
       </properties>
       <system-out/>
@@ -87,9 +73,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="5.11" classname="Idle mode Inter-O-CU mobility" timestamp="2026-05-13T00:00:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="VAMOS-2 DTMA-2 UID1/UID3 PASS 2026-05-13. Idle Mode Inter-O-CU mobility verified."/>
       </properties>
       <system-out/>
@@ -97,9 +81,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="6.2" classname="Downlink peak throughput" timestamp="2026-02-09T00:00:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="L1 1417.13 Mbps, App ~1380 Mbps, Rank 4, MCS 27, BLER 0%, RSRP -66 dBm, SINR 39.2 dB"/>
       </properties>
       <system-out/>
@@ -107,9 +89,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="6.3" classname="Uplink peak throughput" timestamp="2026-02-09T00:00:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="L1 103.40 Mbps, App ~101 Mbps, MCS 27, BLER 0%, RSRP -65 dBm, SINR 15 dB"/>
       </properties>
       <system-out/>
@@ -117,132 +97,114 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="6.4" classname="Downlink throughput in different radio conditions.(parent)" timestamp="-">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="All 3 sub-tests PASS (Good/Fair/Poor). Values from Tput_Calculation_v2_SRS.xlsx v4.1"/>
       </properties>
-      <skipped message="Test 6.4 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="6.4.1" classname="└─ Downlink throughput in different radio c.Sub-test 1" timestamp="2026-02-09T00:00:00+00:00">
+    <testcase name="6.4.1" classname="└─ Downlink throughput in good radio conditions" timestamp="2026-02-09T00:00:00+00:00">
       <properties>
         <property name="Radio Condition" value="Good"/>
         <property name="DUT" value="O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="L1 802.89 Mbps, MCS 18, Rank 4, BLER 9.65%, RSRP -86 dBm, SINR 18.2 dB"/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="6.4.2" classname="└─ Downlink throughput in different radio c.Sub-test 2" timestamp="2026-02-09T00:00:00+00:00">
+    <testcase name="6.4.2" classname="└─ Downlink throughput in fair radio conditions" timestamp="2026-02-09T00:00:00+00:00">
       <properties>
         <property name="Radio Condition" value="Fair"/>
         <property name="DUT" value="O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="L1 293.04 Mbps, MCS 6, Rank 4, BLER 9.62%, RSRP -96 dBm, SINR 8.0 dB"/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="6.4.3" classname="└─ Downlink throughput in different radio c.Sub-test 3" timestamp="2026-02-09T00:00:00+00:00">
+    <testcase name="6.4.3" classname="└─ Downlink throughput in poor radio conditions" timestamp="2026-02-09T00:00:00+00:00">
       <properties>
         <property name="Radio Condition" value="Poor"/>
         <property name="DUT" value="O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="L1 35.51 Mbps, MCS 2, Rank 1, BLER 9.75%, RSRP -106 dBm, SINR -2.1 dB"/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="6.5" classname="Uplink throughput in different radio conditions.(parent)" timestamp="-">
+    <testcase name="6.5" classname="Uplink throughput in different radio conditions." timestamp="-">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="All 3 sub-tests PASS (Good/Fair/Poor). Values from Tput_Calculation_v2_SRS.xlsx v4.1"/>
       </properties>
-      <skipped message="Test 6.5 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="6.5.1" classname="└─ Uplink throughput in different radio con.Sub-test 1" timestamp="2026-02-09T00:00:00+00:00">
+    <testcase name="6.5.1" classname="└─ Uplink throughput in good radio conditions" timestamp="2026-02-09T00:00:00+00:00">
       <properties>
         <property name="Radio Condition" value="Good"/>
         <property name="DUT" value="O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="L1 34.34 Mbps, MCS 9, BLER 10%, RSRP -86 dBm, SINR 18.2 dB"/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="6.5.2" classname="└─ Uplink throughput in different radio con.Sub-test 2" timestamp="2026-02-09T00:00:00+00:00">
+    <testcase name="6.5.2" classname="└─ Uplink throughput in fair radio conditions" timestamp="2026-02-09T00:00:00+00:00">
       <properties>
         <property name="Radio Condition" value="Fair"/>
         <property name="DUT" value="O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="L1 7.13 Mbps, MCS 2, BLER 10%, RSRP -96 dBm, SINR 8.0 dB"/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="6.5.3" classname="└─ Uplink throughput in different radio con.Sub-test 3" timestamp="2026-02-09T00:00:00+00:00">
+    <testcase name="6.5.3" classname="└─ Uplink throughput in poor radio conditions" timestamp="2026-02-09T00:00:00+00:00">
       <properties>
         <property name="Radio Condition" value="Poor"/>
         <property name="DUT" value="O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="L1 3.70 Mbps, MCS 0, BLER 10%, RSRP -106 dBm, SINR -2.1 dB"/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="6.6" classname="Bidirectional throughput in different radio conditions.(parent)" timestamp="-">
+    <testcase name="6.6" classname="Bidirectional throughput in different radio conditions." timestamp="-">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="PASS: All 4 radio conditions pass. DL scheduler starvation (ISS-001) resolved. Re-tested 2026-02-21."/>
       </properties>
       <skipped message="Test 6.6 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="6.6.1" classname="└─ Bidirectional throughput in different ra.Sub-test 1" timestamp="2026-02-21T00:00:00+00:00">
+    <testcase name="6.6.1" classname="└─ Bidirectional throughput in excellent radio conditions" timestamp="2026-02-21T00:00:00+00:00">
       <properties>
         <property name="Radio Condition" value="Excellent"/>
         <property name="DUT" value="O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="PASS: DL L1 1407.12 Mbps, UL L1 101.53 Mbps, DL MCS 26.8, UL MCS 27, RSRP -69 dBm, Rank 4, 787 DL slots"/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="6.6.2" classname="└─ Bidirectional throughput in different ra.Sub-test 2" timestamp="2026-02-21T00:00:00+00:00">
+    <testcase name="6.6.2" classname="└─ Bidirectional throughput in good radio conditions" timestamp="2026-02-21T00:00:00+00:00">
       <properties>
         <property name="Radio Condition" value="Good"/>
         <property name="DUT" value="O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="PASS: DL L1 786.60 Mbps, UL L1 34.70 Mbps, DL MCS 17.2, UL MCS 9.7, RSRP -86 dBm, Rank 4, 800 DL slots"/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="6.6.3" classname="└─ Bidirectional throughput in different ra.Sub-test 3" timestamp="2026-02-21T00:00:00+00:00">
+    <testcase name="6.6.3" classname="└─ Bidirectional throughput in fair radio conditions" timestamp="2026-02-21T00:00:00+00:00">
       <properties>
         <property name="Radio Condition" value="Fair"/>
         <property name="DUT" value="O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="PASS (was FAIL on Feb 10): DL L1 293.12 Mbps, UL L1 7.38 Mbps, DL MCS 6.3, UL MCS 1.6, RSRP -96 dBm, Rank 4, 800 DL slots. DL scheduler starvation (ISS-001) resolved."/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="6.6.4" classname="└─ Bidirectional throughput in different ra.Sub-test 4" timestamp="2026-02-21T00:00:00+00:00">
+    <testcase name="6.6.4" classname="└─ Bidirectional throughput in poor radio conditions" timestamp="2026-02-21T00:00:00+00:00">
       <properties>
         <property name="Radio Condition" value="Poor"/>
         <property name="DUT" value="O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="PASS: DL L1 34.48 Mbps, UL L1 3.66 Mbps, DL MCS 2.3, UL MCS 0.2, RSRP -106 dBm, Rank 1, 800 DL slots"/>
       </properties>
       <system-out/>
@@ -250,9 +212,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="6.7" classname="Downlink coverage throughput (link budget)" timestamp="2026-02-09T00:00:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="Peak: L1 1417.13 Mbps, App ~1380 Mbps. Link budget: L1 28 Mbps, RSRP -106 dBm"/>
       </properties>
       <system-out/>
@@ -260,9 +220,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="6.8" classname="Uplink coverage throughput (link budget)" timestamp="2026-02-09T00:00:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="Peak: L1 81 Mbps, App ~70 Mbps. Link budget: L1 3.70 Mbps, RSRP -106 dBm"/>
       </properties>
       <system-out/>
@@ -270,9 +228,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="6.9" classname="Downlink aggregated cell throughput (cell capacity)">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="Beam forming is not Not Supported in this release 26.04 by OCUDU"/>
       </properties>
       <skipped message="Test 6.9 skipped"/>
@@ -281,9 +237,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="6.10" classname="Uplink aggregated cell throughput (cell capacity)">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="Beam forming is not Not Supported in this release 26.04 by OCUDU"/>
       </properties>
       <skipped message="Test 6.10 skipped"/>
@@ -292,9 +246,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="6.11" classname="Impact of fronthaul latency on DL peak throughput" timestamp="2026-06-16T00:00:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value=""/>
       </properties>
       <system-out/>
@@ -302,9 +254,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="6.12" classname="Impact of fronthaul latency on UL peak throughput" timestamp="2026-06-16T00:00:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value=""/>
       </properties>
       <system-out/>
@@ -312,9 +262,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="6.13" classname="Impact of midhaul latency on DL peak throughput">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="Not Supported on single server deployment (DU+CU) on same server by SRS Team"/>
       </properties>
       <skipped message="Test 6.13 skipped"/>
@@ -323,214 +271,184 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="6.14" classname="Impact of midhaul latency on UL peak throughput">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="Not Supported on single server deployment (DU+CU) on same server by SRS Team"/>
       </properties>
       <skipped message="Test 6.14 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.1.1" classname="Web Browsing.(parent)" timestamp="2026-04-08T00:00:00+00:00">
+    <testcase name="7.1.1" classname="Web Browsing." timestamp="2026-04-08T00:00:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="VAMOS Execution ID 1734. Overall Pass. DLPOWERSTATS check removed (RUSIM N/A). Image 050a2bb7."/>
       </properties>
-      <skipped message="Test 7.1.1 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.1.1.1" classname="└─ Web Browsing.Sub-test 1" timestamp="2026-04-08T00:00:00+00:00">
+    <testcase name="7.1.1.1" classname="└─ Web Browsing. Excellent radio conditions" timestamp="2026-04-08T00:00:00+00:00">
       <properties>
         <property name="Radio Condition" value="Excellent"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="Exec ID 1734, Apr 8 2026. Excellent radio. Web Browsing PASS. DLPOWERSTATS waived (RUSIM N/A). Image 050a2bb7."/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.1.1.2" classname="└─ Web Browsing.Sub-test 2" timestamp="2026-04-08T00:00:00+00:00">
+    <testcase name="7.1.1.2" classname="└─ Web Browsing. Good radio conditions" timestamp="2026-04-08T00:00:00+00:00">
       <properties>
         <property name="Radio Condition" value="Good"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="Exec ID 1734, Apr 8 2026. Good radio. Web Browsing PASS. DLPOWERSTATS waived (RUSIM N/A). Image 050a2bb7."/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.1.1.3" classname="└─ Web Browsing.Sub-test 3" timestamp="2026-04-08T00:00:00+00:00">
+    <testcase name="7.1.1.3" classname="└─ Web Browsing. Fair radio conditions" timestamp="2026-04-08T00:00:00+00:00">
       <properties>
         <property name="Radio Condition" value="Fair"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="Exec ID 1734, Apr 8 2026. Fair radio. Web Browsing PASS. DLPOWERSTATS waived (RUSIM N/A). Image 050a2bb7."/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.1.1.4" classname="└─ Web Browsing.Sub-test 4" timestamp="2026-04-08T00:00:00+00:00">
+    <testcase name="7.1.1.4" classname="└─ Web Browsing. Poor radio conditions" timestamp="2026-04-08T00:00:00+00:00">
       <properties>
         <property name="Radio Condition" value="Poor"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="Exec ID 1734, Apr 8 2026. Poor radio. Web Browsing PASS. DLPOWERSTATS waived (RUSIM N/A). Image 050a2bb7."/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.1.2" classname="File upload/download.(parent)" timestamp="2026-04-04T00:00:00+00:00">
+    <testcase name="7.1.2" classname="File upload/download." timestamp="2026-04-04T00:00:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="VAMOS Execution ID 1729. Overall Pass. DLPOWERSTATS check removed — not supported in RUSIM environment."/>
       </properties>
-      <skipped message="Test 7.1.2 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.1.2.1" classname="└─ File upload/download.Sub-test 1" timestamp="2026-04-04T00:00:00+00:00">
+    <testcase name="7.1.2.1" classname="└─ File upload/download. Excellent radio conditions" timestamp="2026-04-04T00:00:00+00:00">
       <properties>
         <property name="Radio Condition" value="Excellent"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="Exec ID 1729, Apr 4 2026. Excellent radio. File upload/download PASS. DLPOWERSTATS waived (RUSIM N/A)."/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.1.2.2" classname="└─ File upload/download.Sub-test 2" timestamp="2026-04-04T00:00:00+00:00">
+    <testcase name="7.1.2.2" classname="└─ File upload/download. Good radio conditions" timestamp="2026-04-04T00:00:00+00:00">
       <properties>
         <property name="Radio Condition" value="Good"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="Exec ID 1729, Apr 4 2026. Good radio. File upload/download PASS. DLPOWERSTATS waived (RUSIM N/A)."/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.1.2.3" classname="└─ File upload/download.Sub-test 3" timestamp="2026-04-04T00:00:00+00:00">
+    <testcase name="7.1.2.3" classname="└─ File upload/download. Fair radio conditions" timestamp="2026-04-04T00:00:00+00:00">
       <properties>
         <property name="Radio Condition" value="Fair"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="Exec ID 1729, Apr 4 2026. Fair radio. File upload/download PASS. DLPOWERSTATS waived (RUSIM N/A)."/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.1.2.4" classname="└─ File upload/download.Sub-test 4" timestamp="2026-04-04T00:00:00+00:00">
+    <testcase name="7.1.2.4" classname="└─ File upload/download. Poor radio conditions" timestamp="2026-04-04T00:00:00+00:00">
       <properties>
         <property name="Radio Condition" value="Poor"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="Exec ID 1729, Apr 4 2026. Poor radio. File upload/download PASS. DLPOWERSTATS waived (RUSIM N/A)."/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.2.1" classname="Video Streaming - Stationary.(parent)" timestamp="-">
+    <testcase name="7.2.1" classname="Video Streaming - Stationary." timestamp="-">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="Entry 1413, Mar 4 2026. All 4 radio conditions tested in one run. DTMA session 260304_015352. TLS Artifacts_20260304_034409. Cert Badge: O-RAN.TIFG.Cert-Badge.2-R003-v09.00.docx. Global Verdict: PASS."/>
       </properties>
-      <skipped message="Test 7.2.1 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.2.1.1" classname="└─ Video Streaming - Stationary.Sub-test 1" timestamp="2026-03-04T00:00:00+00:00">
+    <testcase name="7.2.1.1" classname="└─ Video Streaming - Stationary. Excellent radio conditions" timestamp="2026-03-04T00:00:00+00:00">
       <properties>
         <property name="Radio Condition" value="Excellent"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="Entry 1413, Mar 4 2026. DTMA session 260304_015352. TLS Artifacts_20260304_034409. PASS - All radio params (RSRP, RSRQ, CQI, PDSCH SINR) processed for Excellent condition. DL PRB/MCS/BLER stats PASS. MIMO Rank/PMI PASS. L1 DL Spectral Efficiency PASS."/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.2.1.2" classname="└─ Video Streaming - Stationary.Sub-test 2" timestamp="2026-03-04T00:00:00+00:00">
+    <testcase name="7.2.1.2" classname="└─ Video Streaming - Stationary. Good radio conditions" timestamp="2026-03-04T00:00:00+00:00">
       <properties>
         <property name="Radio Condition" value="Good"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="Entry 1413, Mar 4 2026. DTMA session 260304_015352. TLS Artifacts_20260304_034409. PASS - All radio params (RSRP, RSRQ, CQI, PDSCH SINR) processed for Good condition. DL PRB/MCS/BLER stats PASS. MIMO Rank/PMI PASS. L1 DL Spectral Efficiency PASS."/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.2.1.3" classname="└─ Video Streaming - Stationary.Sub-test 3" timestamp="2026-03-04T00:00:00+00:00">
+    <testcase name="7.2.1.3" classname="└─ Video Streaming - Stationary. Fair radio conditions" timestamp="2026-03-04T00:00:00+00:00">
       <properties>
         <property name="Radio Condition" value="Fair"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="Entry 1413, Mar 4 2026. DTMA session 260304_015352. TLS Artifacts_20260304_034409. PASS - All radio params (RSRP, RSRQ, CQI, PDSCH SINR) processed for Fair condition. DL PRB/MCS/BLER stats PASS. MIMO Rank/PMI PASS. L1 DL Spectral Efficiency PASS."/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.2.1.4" classname="└─ Video Streaming - Stationary.Sub-test 4" timestamp="2026-03-04T00:00:00+00:00">
+    <testcase name="7.2.1.4" classname="└─ Video Streaming - Stationary. Poor radio conditions" timestamp="2026-03-04T00:00:00+00:00">
       <properties>
         <property name="Radio Condition" value="Poor"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="Entry 1413, Mar 4 2026. DTMA session 260304_015352. TLS Artifacts_20260304_034409. PASS - All radio params (RSRP, RSRQ, CQI, PDSCH SINR) processed for Poor condition. DL PRB/MCS/BLER stats PASS. MIMO Rank/PMI PASS. L1 DL Spectral Efficiency PASS. NAS Registration 4/4, NAS PDU Session 4/4."/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.5.1" classname="VoNR - Stationary.(parent)" timestamp="2026-03-21T00:00:00+00:00">
+    <testcase name="7.5.1" classname="VoNR - Stationary." timestamp="2026-03-21T00:00:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="VAMOS Execution ID 1653. Overall Pass"/>
       </properties>
-      <skipped message="Test 7.5.1 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.5.1.1" classname="└─ VoNR - Stationary.Sub-test 1" timestamp="2026-03-21T00:00:00+00:00">
+    <testcase name="7.5.1.1" classname="└─ VoNR - Stationary. Excellent radio conditions" timestamp="2026-03-21T00:00:00+00:00">
       <properties>
         <property name="Radio Condition" value="Excellent"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="VAMOS Execution ID 1653. UE0 (MO) + UE1 (MT): RSRP=-69 dBm, RSRQ=-10.8 dB, SINR=34.8 dB, PDSCH MCS=26.99, BLER=0%, MIMO Rank=4."/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.5.1.2" classname="└─ VoNR - Stationary.Sub-test 2" timestamp="2026-03-21T00:00:00+00:00">
+    <testcase name="7.5.1.2" classname="└─ VoNR - Stationary. Good radio conditions" timestamp="2026-03-21T00:00:00+00:00">
       <properties>
         <property name="Radio Condition" value="Good"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="VAMOS Execution ID 1653. UE2 (MO) + UE3 (MT): RSRP=-86 dBm, RSRQ=-10.9 dB, SINR=18.2 dB, PDSCH MCS=19.16, BLER=9.23%, MIMO Rank=4."/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.5.1.3" classname="└─ VoNR - Stationary.Sub-test 3" timestamp="2026-03-21T00:00:00+00:00">
+    <testcase name="7.5.1.3" classname="└─ VoNR - Stationary. Fair radio conditions" timestamp="2026-03-21T00:00:00+00:00">
       <properties>
         <property name="Radio Condition" value="Fair"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="VAMOS Execution ID 1653. UE4 (MO) + UE5 (MT): RSRP=-96 dBm, RSRQ=-11.4 dB, SINR=8.2 dB, PDSCH MCS=8.07, BLER=8.88%, MIMO Rank=4."/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.5.1.4" classname="└─ VoNR - Stationary.Sub-test 4" timestamp="2026-03-21T00:00:00+00:00">
+    <testcase name="7.5.1.4" classname="└─ VoNR - Stationary. Poor radio conditions" timestamp="2026-03-21T00:00:00+00:00">
       <properties>
         <property name="Radio Condition" value="Poor"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="VAMOS Execution ID 1653. UE6 (MO) + UE7 (MT): RSRP=-106 dBm, RSRQ=-15.2 dB, SINR=-2.4 dB, PDSCH MCS=4.15, BLER=9.18%, MIMO Rank=1."/>
       </properties>
       <system-out/>
@@ -538,9 +456,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="7.5.2" classname="VoNR - Intra-DU Handover" timestamp="2026-04-04T00:00:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-DU"/>
-        <property name="Priority" value="Medium"/>
         <property name="Comments" value="VAMOS Execution ID 1714, Apr 4 2026. VoNR Intra-DU HO with 2-cell config. UE0 (MO) + UE1 (MT). QmVoice MOS: UE0=4.621, UE1=4.62. Handover validated, no call drops."/>
       </properties>
       <system-out/>
@@ -548,9 +464,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="7.5.3" classname="VoNR - Intra-CU Inter-DU Handover" timestamp="2026-05-13T00:00:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="Medium"/>
         <property name="Comments" value="VAMOS-2 DTMA-2 UID1/UID3 PASS 2026-05-13. VoNR Intra-CU Inter-DU Handover verified."/>
       </properties>
       <system-out/>
@@ -558,60 +472,51 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="7.5.4" classname="VoNR - Inter-CU Handover" timestamp="2026-05-16T00:00:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU"/>
-        <property name="Priority" value="Medium"/>
         <property name="Comments" value="VAMOS-2 DTMA-2 UID3 PASS 2026-05-16. VoNR Inter-CU Handover verified on image b06b7b1b. Campaign 1873."/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.8.1" classname="Video over NR - Stationary.(parent)" timestamp="2026-03-22T00:00:00+00:00">
+    <testcase name="7.8.1" classname="Video over NR - Stationary." timestamp="2026-03-22T00:00:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="VAMOS Execution ID 1663. Overall Pass"/>
       </properties>
-      <skipped message="Test 7.8.1 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.8.1.1" classname="└─ Video over NR - Stationary.Sub-test 1" timestamp="2026-03-22T00:00:00+00:00">
+    <testcase name="7.8.1.1" classname="└─ Video over NR - Stationary. Excellent radio conditions" timestamp="2026-03-22T00:00:00+00:00">
       <properties>
         <property name="Radio Condition" value="Excellent"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="VAMOS Execution ID 1663. UE0 (MO) + UE1 (MT): RSRP=-68 dBm, RSRQ=-10.8 dB, SINR=35.9 dB, PDSCH MCS=26.99, BLER=0%, MIMO Rank=4."/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.8.1.2" classname="└─ Video over NR - Stationary.Sub-test 2" timestamp="2026-03-22T00:00:00+00:00">
+    <testcase name="7.8.1.2" classname="└─ Video over NR - Stationary. Good radio conditions" timestamp="2026-03-22T00:00:00+00:00">
       <properties>
         <property name="Radio Condition" value="Good"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="VAMOS Execution ID 1663. UE2 (MO) + UE3 (MT): RSRP=-86 dBm, RSRQ=-10.9 dB, SINR=18.2 dB, PDSCH MCS=19.04, BLER=9.72%, MIMO Rank=4."/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.8.1.3" classname="└─ Video over NR - Stationary.Sub-test 3" timestamp="2026-03-22T00:00:00+00:00">
+    <testcase name="7.8.1.3" classname="└─ Video over NR - Stationary. Fair radio conditions" timestamp="2026-03-22T00:00:00+00:00">
       <properties>
         <property name="Radio Condition" value="Fair"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="VAMOS Execution ID 1663. UE4 (MO) + UE5 (MT): RSRP=-96 dBm, RSRQ=-11.4 dB, SINR=8.0 dB, PDSCH MCS=8.03, BLER=9.91%, MIMO Rank=4."/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.8.1.4" classname="└─ Video over NR - Stationary.Sub-test 4" timestamp="2026-03-22T00:00:00+00:00">
+    <testcase name="7.8.1.4" classname="└─ Video over NR - Stationary. Poor radio conditions" timestamp="2026-03-22T00:00:00+00:00">
       <properties>
         <property name="Radio Condition" value="Poor"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="VAMOS Execution ID 1663. UE6 (MO) + UE7 (MT): RSRP=-105 dBm, RSRQ=-14.1 dB, SINR=-0.6 dB, PDSCH MCS=2.65, BLER=9.74%, MIMO Rank=2."/>
       </properties>
       <system-out/>
@@ -619,9 +524,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="7.8.2" classname="Video over NR - Intra-DU Handover" timestamp="2026-04-04T00:00:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-DU"/>
-        <property name="Priority" value="Medium"/>
         <property name="Comments" value="VAMOS Execution ID 1719, Apr 4 2026. ViNR Intra-DU HO with 2-cell config. UE0 (MO) + UE1 (MT). QmVideo MOS: UE0=4.848, UE1=4.059. Handover validated, no call drops."/>
       </properties>
       <system-out/>
@@ -629,9 +532,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="7.8.3" classname="Video over NR - Intra-CU Inter-DU Handover" timestamp="2026-05-13T00:00:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="Medium"/>
         <property name="Comments" value="VAMOS-2 DTMA-2 UID1/UID3 PASS 2026-05-13. Video over NR Intra-CU Inter-DU Handover verified."/>
       </properties>
       <system-out/>
@@ -639,118 +540,104 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="7.8.4" classname="Video over NR - Inter-CU Handover" timestamp="2026-05-16T00:00:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU"/>
-        <property name="Priority" value="Medium"/>
         <property name="Comments" value="VAMOS-2 DTMA-2 UID3 PASS 2026-05-16. Video over NR Inter-CU Handover verified on image b06b7b1b. Campaign 1883."/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.9.1" classname="URLLC (Augmented Reality).(parent)" timestamp="-">
+    <testcase name="7.9.1" classname="URLLC (Augmented Reality)." timestamp="-">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value=""/>
       </properties>
       <skipped message="Test 7.9.1 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.9.1.1" classname="└─ URLLC (Augmented Reality).Sub-test 1">
+    <testcase name="7.9.1.1" classname="└─ URLLC (Augmented Reality). Excellent radio conditions">
       <properties>
         <property name="Radio Condition" value="Excellent"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="Not Supported by Viavi TM500 UE"/>
       </properties>
       <skipped message="Test 7.9.1.1 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.9.1.2" classname="└─ URLLC (Augmented Reality).Sub-test 2">
+    <testcase name="7.9.1.2" classname="└─ URLLC (Augmented Reality). Good radio conditions">
       <properties>
         <property name="Radio Condition" value="Good"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="Not Supported by Viavi TM500 UE"/>
       </properties>
       <skipped message="Test 7.9.1.2 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.9.1.3" classname="└─ URLLC (Augmented Reality).Sub-test 3">
+    <testcase name="7.9.1.3" classname="└─ URLLC (Augmented Reality). Fair radio conditions">
       <properties>
         <property name="Radio Condition" value="Fair"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="Not Supported by Viavi TM500 UE"/>
       </properties>
       <skipped message="Test 7.9.1.3 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.9.1.4" classname="└─ URLLC (Augmented Reality).Sub-test 4">
+    <testcase name="7.9.1.4" classname="└─ URLLC (Augmented Reality). Poor radio conditions">
       <properties>
         <property name="Radio Condition" value="Poor"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="Not Supported by Viavi TM500 UE"/>
       </properties>
       <skipped message="Test 7.9.1.4 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.10.1" classname="mMTC (Sensors).(parent)" timestamp="-">
+    <testcase name="7.10.1" classname="mMTC (Sensors)." timestamp="-">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value=""/>
       </properties>
       <skipped message="Test 7.10.1 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.10.1.1" classname="└─ mMTC (Sensors).Sub-test 1">
+    <testcase name="7.10.1.1" classname="└─ mMTC (Sensors). Excellent radio conditions">
       <properties>
         <property name="Radio Condition" value="Excellent"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="Not Supported by Viavi TM500 UE"/>
       </properties>
       <skipped message="Test 7.10.1.1 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.10.1.2" classname="└─ mMTC (Sensors).Sub-test 2">
+    <testcase name="7.10.1.2" classname="└─ mMTC (Sensors). Good radio conditions">
       <properties>
         <property name="Radio Condition" value="Good"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="Not Supported by Viavi TM500 UE"/>
       </properties>
       <skipped message="Test 7.10.1.2 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.10.1.3" classname="└─ mMTC (Sensors).Sub-test 3">
+    <testcase name="7.10.1.3" classname="└─ mMTC (Sensors). Fair radio conditions">
       <properties>
         <property name="Radio Condition" value="Fair"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="Not Supported by Viavi TM500 UE"/>
       </properties>
       <skipped message="Test 7.10.1.3 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.10.1.4" classname="└─ mMTC (Sensors).Sub-test 4">
+    <testcase name="7.10.1.4" classname="└─ mMTC (Sensors). Poor radio conditions">
       <properties>
         <property name="Radio Condition" value="Poor"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="High"/>
         <property name="Comments" value="Not Supported by Viavi TM500 UE"/>
       </properties>
       <skipped message="Test 7.10.1.4 skipped"/>
@@ -759,63 +646,46 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="8.1" classname="Simultaneous RRC_CONNECTED UEs" timestamp="2026-05-13T00:00:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="Medium"/>
         <property name="Comments" value="VAMOS-2 DTMA-2 UID1/UID3 PASS 2026-05-13 (re-execution). Simultaneous RRC_CONNECTED UEs verified. Prior CU/DU admission mismatch (GitHub #13) no longer reproducing on current build."/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="8.2" classname="UE State Transition Rate Testing" timestamp="2026-04-15T00:00:00+00:00">
+    <testcase name="8.2" classname="UE State Transition Rate Testing" timestamp="2026-06-17T00:00:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="Medium"/>
-        <property name="Comments" value="FAIL-  UE State Transition Rate Testing. GitHub Issue #16."/>
+        <property name="Comments" value="FAIL-  UE State Transition Rate Testing. GitHub Issue #16. Rerun on 17/06 , and test case is PASS."/>
       </properties>
-      <failure message="Test 8.2 failed" type="AssertionError"/>
       <system-out/>
       <system-err/>
     </testcase>
     <testcase name="8.3" classname="Traffic Load Testing" timestamp="2026-04-15T00:00:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="Medium"/>
         <property name="Comments" value="PASS — Apr 15, 2026."/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="8.4" classname="Traffic Model Testing">
+    <testcase name="8.4" classname="Traffic Model Testing" timestamp="2026-06-21T00:00:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="Medium"/>
-        <property name="Comments" value=""/>
       </properties>
-      <skipped message="Test 8.4 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="8.5" classname="Long hours stability Testing">
+    <testcase name="8.5" classname="Long hours stability Testing" timestamp="2026-07-01T21:32:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="Medium"/>
-        <property name="Comments" value=""/>
+        <property name="Comments" value="48-hour long-hours stability run PASS. gNB stable throughout the full 48h: 0 crashes, 0 restarts; one self-limited congestion RLF episode ridden through without restart; memory plateaued. Build e7bda6e7. Started 2026-06-29 21:32 UTC, completed 2026-07-01. TVE verdict: Pass."/>
       </properties>
-      <skipped message="Test 8.5 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
     <testcase name="8.6" classname="Multi-cell Testing">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="Medium"/>
-        <property name="Comments" value=""/>
       </properties>
       <skipped message="Test 8.6 skipped"/>
       <system-out/>
@@ -823,9 +693,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="8.7" classname="Emergency call">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="Medium"/>
         <property name="Comments" value="ISS-057
 #73
 write-replace warning req (tx)     2
@@ -837,10 +705,7 @@ write-replace warning req (tx)     2
     </testcase>
     <testcase name="8.8" classname="ETWS (Earthquake and Tsunami Warning System)">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="Medium"/>
-        <property name="Comments" value=""/>
       </properties>
       <skipped message="Test 8.8 skipped"/>
       <system-out/>
@@ -848,9 +713,7 @@ write-replace warning req (tx)     2
     </testcase>
     <testcase name="8.9" classname="MPS call (Multimedia Priority Service)">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="Medium"/>
         <property name="Comments" value="ISS-058
 #74
 Under a high simultaneous-UE load (≈120 UEs, VoNR + heavy UL), the DU **control executor `du_ctrl_exec` saturates** (single serialized task latency up to **38.9 ms**, **808 deferred tasks**). UE creation and RRC-setup processing can't complete within the 2000 ms RRC-setup guard timer, so **RRC Setup Procedures time out en masse (243)**, UEs churn, and the cell **plateaus at ~90–104 connected UEs** even though `max_nof_ues = 1400` and **zero admission rejects** were issued. This is a DU-side scalability/serialization ceiling, not an admission-control or air-interface capacity limit."/>
@@ -861,10 +724,7 @@ Under a high simultaneous-UE load (≈120 UEs, VoNR + heavy UL), the DU **contro
     </testcase>
     <testcase name="9.2" classname="Traffic Steering with connected mode mobility.(parent)" timestamp="-">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU/O-DU + RIC"/>
-        <property name="Priority" value="Medium"/>
-        <property name="Comments" value=""/>
       </properties>
       <skipped message="Test 9.2 skipped"/>
       <system-out/>
@@ -872,9 +732,7 @@ Under a high simultaneous-UE load (≈120 UEs, VoNR + heavy UL), the DU **contro
     </testcase>
     <testcase name="9.2.1" classname="└─ Traffic Steering with connected mode mob.Sub-test 1">
       <properties>
-        <property name="Radio Condition" value="Functional"/>
         <property name="DUT" value="O-CU/O-DU + RIC"/>
-        <property name="Priority" value="Medium"/>
         <property name="Comments" value="Not Supported by Viavi"/>
       </properties>
       <skipped message="Test 9.2.1 skipped"/>
@@ -883,9 +741,7 @@ Under a high simultaneous-UE load (≈120 UEs, VoNR + heavy UL), the DU **contro
     </testcase>
     <testcase name="9.2.2" classname="└─ Traffic Steering with connected mode mob.Sub-test 2">
       <properties>
-        <property name="Radio Condition" value="Performance"/>
         <property name="DUT" value="O-CU/O-DU + RIC"/>
-        <property name="Priority" value="Medium"/>
         <property name="Comments" value="Not Supported by Viavi"/>
       </properties>
       <skipped message="Test 9.2.2 skipped"/>
@@ -894,10 +750,7 @@ Under a high simultaneous-UE load (≈120 UEs, VoNR + heavy UL), the DU **contro
     </testcase>
     <testcase name="9.3" classname="Network Energy Saving with Cell switch off/on.(parent)" timestamp="-">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU/O-DU + RIC"/>
-        <property name="Priority" value="Medium"/>
-        <property name="Comments" value=""/>
       </properties>
       <skipped message="Test 9.3 skipped"/>
       <system-out/>
@@ -905,9 +758,7 @@ Under a high simultaneous-UE load (≈120 UEs, VoNR + heavy UL), the DU **contro
     </testcase>
     <testcase name="9.3.1" classname="└─ Network Energy Saving with Cell switch o.Sub-test 1">
       <properties>
-        <property name="Radio Condition" value="Functional"/>
         <property name="DUT" value="O-CU/O-DU + RIC"/>
-        <property name="Priority" value="Medium"/>
         <property name="Comments" value="Not Supported by Viavi"/>
       </properties>
       <skipped message="Test 9.3.1 skipped"/>
@@ -916,9 +767,7 @@ Under a high simultaneous-UE load (≈120 UEs, VoNR + heavy UL), the DU **contro
     </testcase>
     <testcase name="9.3.2" classname="└─ Network Energy Saving with Cell switch o.Sub-test 2">
       <properties>
-        <property name="Radio Condition" value="Performance"/>
         <property name="DUT" value="O-CU/O-DU + RIC"/>
-        <property name="Priority" value="Medium"/>
         <property name="Comments" value="Not Supported by Viavi"/>
       </properties>
       <skipped message="Test 9.3.2 skipped"/>
@@ -927,9 +776,7 @@ Under a high simultaneous-UE load (≈120 UEs, VoNR + heavy UL), the DU **contro
     </testcase>
     <testcase name="10.4.1" classname="Profile-based Performance - Single Cell" timestamp="2026-06-03T00:00:00+00:00">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="Medium"/>
         <property name="Comments" value="ISS-056: CU-UP PDCP UL integrity COUNT-desync. ~14M UL PDU drops across 100 UEs / all DRBs from +48min on build 1a976144 + sr_period_ms=80. UE-side DL integrity-fail=0 (gNB UL RX only). Root-caused; SRS fix pending (#71)."/>
       </properties>
       <failure message="Test 10.4.1 failed" type="AssertionError"/>
@@ -938,10 +785,7 @@ Under a high simultaneous-UE load (≈120 UEs, VoNR + heavy UL), the DU **contro
     </testcase>
     <testcase name="10.4.2" classname="Profile-based Performance - Multiple Cells">
       <properties>
-        <property name="Radio Condition" value="-"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Priority" value="Medium"/>
-        <property name="Comments" value=""/>
       </properties>
       <skipped message="Test 10.4.2 skipped"/>
       <system-out/>
