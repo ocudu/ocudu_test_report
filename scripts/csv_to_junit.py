@@ -36,10 +36,21 @@ def result_to_outcome(result: str) -> str:
     return "skip"
 
 
-def _add_testcase(testsuite: ET.Element, row: dict[str, str]) -> None:
+_CORE_COLUMNS = ("Test ID", "Test Name", "Sub-Test", "Execution Date", "Result")
+
+
+def _sniff_dialect(sample: str) -> type[csv.Dialect]:
+    """Detect whether a CSV sample uses comma or semicolon as the delimiter."""
+    try:
+        return csv.Sniffer().sniff(sample, delimiters=",;")
+    except csv.Error:
+        return csv.excel
+
+
+def _add_testcase(testsuite: ET.Element, row: dict[str, str], extra_columns: list[str]) -> None:
     """Append a single testcase element built from a CSV row to testsuite."""
     test_id = row.get("Test ID", "").strip()
-    test_name = row.get("Test Name", "").strip()
+    test_name = " ".join(row.get("Test Name", "").split())
     sub_test = row.get("Sub-Test", "").strip()
     execution_date = parse_date(row.get("Execution Date", ""))
     result = row.get("Result", "").strip()
@@ -52,13 +63,8 @@ def _add_testcase(testsuite: ET.Element, row: dict[str, str]) -> None:
     testcase = ET.SubElement(testsuite, "testcase", attrib=tc_attrs)
 
     props = ET.SubElement(testcase, "properties")
-    for prop_name, prop_value in [
-        ("Radio Condition", row.get("Radio Condition", "").strip()),
-        ("DUT", row.get("DUT", "").strip()),
-        ("Priority", row.get("Priority", "").strip()),
-        ("Comments", row.get("Comments", "").strip()),
-    ]:
-        ET.SubElement(props, "property", name=prop_name, value=prop_value)
+    for column in extra_columns:
+        ET.SubElement(props, "property", name=column, value=row.get(column, "").strip())
 
     outcome = result_to_outcome(result)
     if outcome == "fail":
@@ -70,22 +76,31 @@ def _add_testcase(testsuite: ET.Element, row: dict[str, str]) -> None:
     ET.SubElement(testcase, "system-err")
 
 
-def csv_to_junit(csv_path: Path, output_path: Path) -> None:
+def _read_rows(csv_path: Path) -> tuple[list[dict[str, str]], list[str]]:
+    """Read CSV rows, auto-detecting the delimiter, and list columns beyond the core ones."""
+    with csv_path.open(newline="", encoding="utf-8-sig") as f:
+        dialect = _sniff_dialect(f.read(4096))
+        f.seek(0)
+        reader = csv.DictReader(f, dialect=dialect)
+        rows: list[dict[str, str]] = list(reader)
+        extra_columns = [c for c in (reader.fieldnames or []) if c not in _CORE_COLUMNS]
+    return rows, extra_columns
+
+
+def csv_to_junit(csv_path: Path, output_path: Path, suite_name: str) -> None:
     """Convert a CSV tracker file to a JUnit XML file."""
     now = datetime.now(timezone.utc).isoformat()
 
-    with csv_path.open(newline="", encoding="utf-8-sig") as f:
-        rows: list[dict[str, str]] = list(csv.DictReader(f))
-
+    rows, extra_columns = _read_rows(csv_path)
     total = len(rows)
     failures = sum(1 for r in rows if result_to_outcome(r.get("Result", "")) == "fail")
     skipped = sum(1 for r in rows if result_to_outcome(r.get("Result", "")) == "skip")
 
-    testsuites = ET.Element("testsuites", name="TIFG tests")
+    testsuites = ET.Element("testsuites", name=f"{suite_name} tests")
     testsuite = ET.SubElement(
         testsuites,
         "testsuite",
-        name="TIFG",
+        name=suite_name,
         errors="0",
         failures=str(failures),
         skipped=str(skipped),
@@ -94,7 +109,7 @@ def csv_to_junit(csv_path: Path, output_path: Path) -> None:
     )
 
     for row in rows:
-        _add_testcase(testsuite, row)
+        _add_testcase(testsuite, row, extra_columns)
 
     xml_str = minidom.parseString(ET.tostring(testsuites, encoding="unicode")).toprettyxml(indent="  ")
     # toprettyxml adds its own declaration; replace it to fix the encoding attribute
@@ -111,6 +126,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Convert Valor CSV to JUnit XML")
     parser.add_argument("-i", "--input", required=True, type=Path, metavar="CSV", help="Input CSV file")
     parser.add_argument("-o", "--output", type=Path, metavar="XML", help="Output XML file (default: <input_stem>.xml)")
+    parser.add_argument("--suite-name", required=True, metavar="NAME", help="Test suite name (e.g. TIFG, WG11)")
     args = parser.parse_args()
 
     if not args.input.exists():
@@ -118,7 +134,7 @@ def main() -> None:
         sys.exit(1)
 
     output = args.output or args.input.with_suffix(".xml")
-    csv_to_junit(args.input, output)
+    csv_to_junit(args.input, output, args.suite_name)
 
 
 if __name__ == "__main__":
