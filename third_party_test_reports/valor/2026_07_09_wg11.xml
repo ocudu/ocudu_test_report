@@ -1,0 +1,758 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2021-2026 Software Radio Systems Limited
+SPDX-License-Identifier: BSD-3-Clause-Open-MPI
+-->
+
+<testsuites name="WG11 tests">
+  <testsuite name="WG11" errors="0" failures="40" skipped="21" tests="98" timestamp="2026-07-09T10:59:48.752933+00:00">
+    <testcase name="6.2" classname="SSH Server &amp; Client" timestamp="2026-04-27T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="Phase 2 retest (2026-04-27): O-Cloud sshd offers hmac-sha1 and hmac-sha1-etm@openssh.com — both prohibited by SPS R005-v14 §4.1.2.5 Shall-not list. Verdict: FAIL."/>
+      </properties>
+      <failure message="Test 6.2 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="6.3.1" classname="TLS Support" timestamp="2026-04-27T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="Phase 2 retest (2026-04-27): traefik :443 accepts CBC cipher suites (AES_128_CBC, AES_256_CBC); violates 3GPP TS 33.210 §6.2.3 (only AEAD+PFS allowed). Verdict: FAIL."/>
+      </properties>
+      <failure message="Test 6.3.1 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="6.3.2" classname="TLS Version Negotiation" timestamp="2026-06-16T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="Phase 2 endpoint enumeration complete; full negotiation was pending client-side test-CA provisioning. Test CA now provisioned. Version negotiation conformant (TLS 1.2/1.3, forward-secret AEAD default), but the offered set includes non-AEAD CBC and static-RSA suites (10 of 16 outside SPS 4.2). GitHub #80. WG11 NWIC delivery 2026-06-16."/>
+      </properties>
+      <failure message="Test 6.3.2 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="6.3.3" classname="TLS Deprecated Versions" timestamp="2026-06-16T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="Phase 2 handshake baseline captured; deprecated-version test was pending a version-pinning TLS client. Now verified: no TLS 1.0/1.1/SSLv3 accepted; only TLS 1.2/1.3 negotiate and a server certificate is presented. WG11 NWIC delivery 2026-06-16."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="6.4" classname="DTLS Support">
+      <properties>
+        <property name="Comments" value="Not Supported in 26.04"/>
+      </properties>
+      <skipped message="Test 6.4 skipped"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="6.5.1" classname="IPSec security" timestamp="2026-04-27T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="Phase 2 retest (2026-04-27): DUT does not implement IPsec — no charon/strongswan/pluto binaries; kernel xfrm policy/state empty. SPS R005-v14 §4.4 mandates IPsec for fronthaul. Verdict: FAIL/implementation-gap."/>
+      </properties>
+      <failure message="Test 6.5.1 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="6.5.2" classname="IKE Header Flags Fuzzing">
+      <properties>
+        <property name="Comments" value="Not Supported by SRS: IPsec/IKE not deployed on the DUT (UDP 500/4500 closed, no IKE daemon). Executed 2026-06-23, Blocked on precondition. SRS confirmed security-feature work is out of current scope (per email)."/>
+      </properties>
+      <skipped message="Test 6.5.2 skipped"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="6.5.3" classname="IKE Key Exchange Payload Fuzzing">
+      <properties>
+        <property name="Comments" value="Not Supported by SRS: IPsec/IKE not deployed on the DUT (no IKE daemon for key-exchange payload fuzzing). Executed 2026-06-23, Blocked on precondition. SRS confirmed security-feature work is out of current scope (per email)."/>
+      </properties>
+      <skipped message="Test 6.5.3 skipped"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="6.5.4" classname="IKE Malformed Certificate Payload">
+      <properties>
+        <property name="Comments" value="Not Supported by SRS: IPsec/IKE not deployed on the DUT (no IKE daemon for malformed-certificate fuzzing). Executed 2026-06-23, Blocked on precondition. SRS confirmed security-feature work is out of current scope (per email)."/>
+      </properties>
+      <skipped message="Test 6.5.4 skipped"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="6.6.1" classname="OAuth 2.0 - API Consumer" timestamp="2026-05-06T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="OAuth 2.0 client-credentials grant validated; M-Plane authorization enforced. v17.1 customer package shipped 2026-05-06."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="6.6.2" classname="OAuth 2.0 - Resource Server" timestamp="2026-05-06T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="OAuth 2.0 Resource Server validates JWT bearer tokens (signature, exp, aud, iss). v17.1 shipped 2026-05-06."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="6.7.1" classname="NACM RBAC Configuration" timestamp="2026-06-16T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="Previously blocked: O1/NETCONF not deployed, port 830 closed (W20 2026-05-12, GH #49). O1 deployed by vendor. NACM RBAC now verified over O1 TLS: admin role write accepted, read-only role write denied (access-denied). WG11 NWIC delivery 2026-06-16."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="6.7.2" classname="NACM Logging Monitoring" timestamp="2026-06-16T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="Previously blocked: O1/NETCONF not deployed, port 830 closed (W20 2026-05-12, GH #50). O1 deployed by vendor. NACM decision logging now verified: deny event logged for the read-only role on a protected data model. WG11 NWIC delivery 2026-06-16."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="6.9.1" classname="X.509 Certificate Structure Verification for TLS" timestamp="2026-04-27T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="Phase 2 retest (2026-04-27): k3s API server certificate lacks CRLDistributionPoint extension required by R004-v09 §6.9.1. Verdict: FAIL."/>
+      </properties>
+      <failure message="Test 6.9.1 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="6.9.2" classname="X.509 Certificate Validity Period Verification" timestamp="2026-06-16T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="X.509 validity-period enforcement verified on O1 mTLS: in-validity certificate accepted; expired and not-yet-valid certificates rejected. WG11 NWIC delivery 2026-06-16."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="6.9.3" classname="X.509 Certificate Key Usage Verification" timestamp="2026-06-16T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="O1 mTLS accepts a client certificate carrying no KeyUsage/EKU extension (NETCONF session established over TLS 1.3); EKU type otherwise enforced. GitHub #81. WG11 NWIC delivery 2026-06-16."/>
+      </properties>
+      <failure message="Test 6.9.3 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="6.9.4" classname="X.509 Certificate Chain Validation" timestamp="2026-06-16T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="X.509 chain and required fields conformant: subject/issuer/serial present, valid window, KeyUsage extension present. WG11 NWIC delivery 2026-06-16."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="6.10.2" classname="eCPRI Input Validation" timestamp="2026-06-02T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="On-segment retest (2026-06-02): flipped FAIL to PASS. Prior FAIL was an off-segment measurement artifact. Ingestion proven by the DU eCPRI sequence-ID counter (nof_past_seqid_msg 0 to 5741 on valid replay). DU accepts valid eCPRI and rejects header-malformed + undersized frames at decode; no crash; FH continuity held (ether_rx ~1392 Mbps). Payload-size validation is a configurable option, disabled on this build. gnb.log run 20260602-171759."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="6.10.3" classname="eCPRI Error and Timeout Handling" timestamp="2026-06-02T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="On-segment retest (2026-06-02): flipped FAIL to PASS. Out-of-sequence frames detected (nof_future_seqid_msg up to 57645, nof_past_seqid_msg up to 16240); clean recovery on traffic restore (continuity ratio ~1.00); no sensitive error-information leakage; no crash. Recovery and robustness dimensions met."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="6.10.5" classname="eCPRI Logging and Auditing" timestamp="2026-05-12T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="W20 (2026-05-12): 0/1 eCPRI log events; mandatory fields (timestamp,src,action) absent; OS audit log root-only. GH #46. Ref: R004-v09 §6.10.5, §8.4.2."/>
+      </properties>
+      <failure message="Test 6.10.5 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="6.11.5" classname="SCTP DoS Prevention Rate Limiting">
+      <properties>
+        <property name="Comments" value="Not Supported by SRS: SCTP F1-C/E2 listener not exposed on the monolithic gNB (F1 in-process); the only reachable SCTP endpoint is the core emulator, not the DUT. SRS confirmed security-feature work is out of current scope (per email)."/>
+      </properties>
+      <skipped message="Test 6.11.5 skipped"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="6.11.6" classname="SCTP Input Validation">
+      <properties>
+        <property name="Comments" value="Not Supported by SRS: same as 6.11.5 - no DUT-side SCTP listener (F1-C/E2) exposed on the monolithic gNB for input-validation testing. SRS confirmed security-feature work is out of current scope (per email)."/>
+      </properties>
+      <skipped message="Test 6.11.6 skipped"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="6.12.1" classname="Transactional API Authentication – service producer role">
+      <properties>
+        <property name="Comments" value="Not Supported by SRS"/>
+      </properties>
+      <skipped message="Test 6.12.1 skipped"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="6.12.2" classname="Transactional API Authorization and Access Control">
+      <properties>
+        <property name="Comments" value="Not Supported by SRS"/>
+      </properties>
+      <skipped message="Test 6.12.2 skipped"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="6.12.3" classname="Transactional API Input Validation and Sanitization">
+      <properties>
+        <property name="Comments" value="Not Supported by SRS"/>
+      </properties>
+      <skipped message="Test 6.12.3 skipped"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="6.12.4" classname="Transactional API Security Logging and Monitoring">
+      <properties>
+        <property name="Comments" value="Not Supported by SRS"/>
+      </properties>
+      <skipped message="Test 6.12.4 skipped"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="6.13" classname="MACsec">
+      <properties>
+        <property name="Comments" value="Not Supported by SRS: no MACsec interface configured on the fronthaul NICs. Executed 2026-06-23, Blocked on precondition. SRS confirmed security-feature work is out of current scope (per email)."/>
+      </properties>
+      <skipped message="Test 6.13 skipped"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="7.2.1" classname="Network Protocol and Service Enumeration" timestamp="2026-06-23T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="Phase 2 retest (2026-06-23): enumeration of the DUT's reachable interface found 5 services beyond the documented set (SSH + O1/NETCONF management): Kubernetes API server (6443), kubelet (10250), Cilium CNI (4240/4244), and an unidentified listener (9964). Undocumented attack surface per R004-v09 §7.2.1 step 16. Verdict: FAIL."/>
+      </properties>
+      <failure message="Test 7.2.1 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="7.3.1" classname="Password guessing" timestamp="2026-04-27T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="Phase 2 retest (2026-04-27): 20 consecutive failed SSH attempts allowed at constant ~2.8s/attempt; valid login succeeded post-attack — no faillock, no progressive delay, no challenge-response. Verdict: FAIL."/>
+      </properties>
+      <failure message="Test 7.3.1 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="7.3.2" classname="Unauthorized Password Reset" timestamp="2026-04-27T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="Phase 2 retest (2026-04-27): PAM stack uses pam_unix.so nullok (null passwords accepted on password change); identity verification limited to UID match. Verdict: FAIL. [VERDICT FLIP from Phase 1]"/>
+      </properties>
+      <failure message="Test 7.3.2 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="7.3.3" classname="Password Policy Enforcement" timestamp="2026-04-27T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="Phase 2 retest (2026-04-27): pwquality.conf empty (no minlen/minclass), PASS_MAX_DAYS=99999 (aging disabled), default credentials viavi/viavi accepted. Verdict: FAIL."/>
+      </properties>
+      <failure message="Test 7.3.3 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="7.6.1" classname="O-CU input validation and error handling">
+      <properties>
+        <property name="Comments" value="Not Supported by Viavi: §7.6.1 input validation enumerates the E2 interface among the required input surfaces (E2 and O1). Exercising E2 requires a Near-RT RIC as the E2AP peer, which the VALOR test environment does not have. O1 is reachable, but the spec preconditions require E2 to be configured, so the case cannot be completed without a RIC."/>
+      </properties>
+      <skipped message="Test 7.6.1 skipped"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="7.6.2" classname="O-DU input validation and error handling">
+      <properties>
+        <property name="Comments" value="Not Supported by Viavi: §7.6.2 input validation enumerates the E2 interface among the required input surfaces (E2, O1 and FH). Exercising E2 requires a Near-RT RIC as the E2AP peer, which the VALOR test environment does not have. O1 and FH are reachable, but the spec preconditions require E2 to be configured, so the case cannot be completed without a RIC."/>
+      </properties>
+      <skipped message="Test 7.6.2 skipped"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="7.7" classname="Secure configuration enforcement" timestamp="2026-05-12T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="W20 (2026-05-12): 0/1 config enforcement events after stimulus; mandatory fields absent; OS audit log not accessible to mgmt account. GH #51. Ref: R004-v09 §7.7, §8.4.2."/>
+      </properties>
+      <failure message="Test 7.7 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="7.8.1" classname="O-CU logging and monitoring" timestamp="2026-05-12T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="W20 (2026-05-12): 3/3 pattern matches but 0/3 fully-fielded (timestamp,user,src,action absent); OS audit log inaccessible. GH #52. Ref: R004-v09 §7.8.1, §8.4.2."/>
+      </properties>
+      <failure message="Test 7.8.1 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="7.8.2" classname="O-DU logging and monitoring" timestamp="2026-05-12T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="W20 (2026-05-12): 3/3 pattern matches but 0/3 fully-fielded (timestamp,user,src,action absent); OS audit log inaccessible. GH #53. Ref: R004-v09 §7.8.2, §8.4.2."/>
+      </properties>
+      <failure message="Test 7.8.2 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="8.2.1" classname="System Vulnerability Scanning" timestamp="2026-04-27T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="Phase 2 retest (2026-04-27): O-Cloud host has 33 outstanding Important Rocky security advisories (RLSAs) with no mitigation plan. Container image clean (0 Critical/High). Verdict: FAIL on host posture. [VERDICT FLIP from Phase 1]"/>
+      </properties>
+      <failure message="Test 8.2.1 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="8.4.2" classname="Security log format and related log fields" timestamp="2026-06-09T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="FAIL 2026-06-09: DUT security events absent from gNB application logs (present only in OS-level /var/log/secure, auditd); available logs use syslog timestamps (not ISO-8601 per clause 5.3.8.8) and carry no DUT IP. GitHub #75."/>
+      </properties>
+      <failure message="Test 8.4.2 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="8.4.3" classname="Authenticated Time Stamping" timestamp="2026-05-06T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="Authenticated NTP peer identity not enumerable from DUT — ntpq/chronyc absent from image. GH issue filed; vendor P1. v17.1 shipped 2026-05-06."/>
+      </properties>
+      <failure message="Test 8.4.3 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="8.4.5" classname="Application Security Events" timestamp="2026-05-12T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="W20 (2026-05-12): VERDICT FLIP (was PASS v17.1). 2/3 event types; mandatory fields absent; OS audit log inaccessible. GH #54. Ref: R004-v09 §8.4.5, §8.4.2."/>
+      </properties>
+      <failure message="Test 8.4.5 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="8.4.6" classname="Data Access Security Events" timestamp="2026-05-12T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="W20 (2026-05-12): 3 events matched but 0/1 fully-fielded (timestamp,user,action absent); OS audit log inaccessible. GH #55. Ref: R004-v09 §8.4.6, §8.4.2."/>
+      </properties>
+      <failure message="Test 8.4.6 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="8.4.7" classname="Account and Identity Security Events" timestamp="2026-05-12T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="W20 (2026-05-12): 0/3 account/identity event types; mandatory fields absent; OS audit log inaccessible. GH #56. Ref: R004-v09 §8.4.7, §8.4.2."/>
+      </properties>
+      <failure message="Test 8.4.7 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="8.4.8" classname="General Security Events" timestamp="2026-05-12T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="W20 (2026-05-12): 2/5 event types; mandatory fields absent; OS audit log inaccessible. GH #57. Ref: R004-v09 §8.4.8, §8.4.2."/>
+      </properties>
+      <failure message="Test 8.4.8 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="9.4.1" classname="SBOM Signature" timestamp="2026-06-30T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="Phase 3 retest (2026-06-30): Vendor now publishes a detached SBOM signature (build.spdx.sig) with its public key (cosign.pub) as standalone release artifacts per build (verified on build 20260429_8c148811, MR #634). Detached signature verified against the SBOM and tamper-checked (edit breaks verification). R004-v09 §9.4.1 detached-signature requirement satisfied. Verdict: PASS. [Resolves GH #21]"/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="9.4.2" classname="SBOM Data Fields" timestamp="2026-04-27T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="Phase 2 retest (2026-04-27): Required SBOM data fields (component name, version, supplier, license) present and correctly populated. Verdict: PASS."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="9.4.3" classname="SBOM Format" timestamp="2026-04-27T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="Phase 2 retest (2026-04-27): SBOM provided in conformant SPDX 2.3 / CycloneDX format. Verdict: PASS."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="9.4.4" classname="SBOM Depth" timestamp="2026-04-27T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="Phase 2 retest (2026-04-27): SBOM enumerates transitive dependencies to required depth. Verdict: PASS."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="9.4.6" classname="SBOM Version Verification" timestamp="2026-04-27T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="Phase 2 retest (2026-04-27): SBOM version identifiers match delivered software artifact. Verdict: PASS."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="9.4.8" classname="SBOM Presence" timestamp="2026-04-27T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="Phase 2 retest (2026-04-27): SBOM files present in container filesystem but absent from Helm chart delivery package; R004-v09 §9.4.8 requires SBOM accompany delivery artifact. Verdict: FAIL."/>
+      </properties>
+      <failure message="Test 9.4.8 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="9.4.9" classname="SBOM Vulnerabilities Field" timestamp="2026-04-27T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="Phase 2 retest (2026-04-27): SBOM correctly scoped to artifact identity (no inline vulnerability fields); vulnerability state tracked separately via CSAF/VEX. Verdict: PASS."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="11.1.2.1" classname="Authenticator Validation">
+      <properties>
+        <property name="Comments" value="Not Supported by SRS: 802.1X/EAP not enabled on the DUT (authenticator validation). Executed 2026-06-23, Blocked on precondition. SRS confirmed security-feature work is out of current scope (per email)."/>
+      </properties>
+      <skipped message="Test 11.1.2.1 skipped"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="11.1.2.2" classname="Supplicant Validation">
+      <properties>
+        <property name="Comments" value="Not Supported by SRS: 802.1X/EAP not enabled on the DUT (supplicant validation). Executed 2026-06-23, Blocked on precondition. SRS confirmed security-feature work is out of current scope (per email)."/>
+      </properties>
+      <skipped message="Test 11.1.2.2 skipped"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="11.1.2.3" classname="Port-Based Access Enforcement Validation">
+      <properties>
+        <property name="Comments" value="Not Supported by SRS: 802.1X/EAP not enabled on the DUT (port-based access enforcement). Executed 2026-06-23, Blocked on precondition. SRS confirmed security-feature work is out of current scope (per email)."/>
+      </properties>
+      <skipped message="Test 11.1.2.3 skipped"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="11.1.4.1.1" classname="Open FH U-Plane Malformed Packet" timestamp="2026-05-20T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="Continuous wire capture + DU runtime gnb.log via kubectl exec. Clause 1 (detects+rejects) MET, Clause 2 (graceful) MET, Clause 3 (error msgs OR log entries) NOT MET. Evidence-clause artifact cannot be produced. | Execution: harness2 exec 17947, methodology v1.2.16 | GitHub: #61"/>
+      </properties>
+      <failure message="Test 11.1.4.1.1 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="11.1.4.1.2" classname="Open FH U-Plane Unexpected Payload Size" timestamp="2026-05-20T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="Continuous wire capture. Disjunctive Clause 2 satisfied (silent-drop is a valid 'appropriate action' per Step 5). Continuity ratio 1.00, throughput delta within steady-state noise. | Execution: harness2 exec 17948, methodology v1.2.16"/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="11.1.5.2.1" classname="Impersonation timeTransmitter" timestamp="2026-06-16T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="S-Plane PTP: impersonated grandmaster accepted (37 foreign-master events), synchronization to the legitimate master lost. No PTP message authentication. GitHub #82. WG11 NWIC delivery 2026-06-16."/>
+      </properties>
+      <failure message="Test 11.1.5.2.1 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="11.1.5.2.2" classname="Rogue PTP Instance" timestamp="2026-06-16T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="S-Plane PTP: rogue PTP instance accepted as clock source, synchronization to the legitimate master lost. No PTP message authentication. GitHub #83. WG11 NWIC delivery 2026-06-16."/>
+      </properties>
+      <failure message="Test 11.1.5.2.2 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="11.1.5.3.1" classname="Selective Interception and Removal of PTP Timing Packets" timestamp="2026-06-16T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="S-Plane PTP: on-path interception and removal of timing packets, synchronization to the legitimate master lost; PTP timing not integrity-protected. GitHub #84. WG11 NWIC delivery 2026-06-16."/>
+      </properties>
+      <failure message="Test 11.1.5.3.1 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="11.1.5.3.2" classname="Delay Attack on PTP Timing Packets" timestamp="2026-06-16T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="S-Plane PTP: on-path delay attack, synchronization to the legitimate master lost; PTP timing not protected against delay manipulation. GitHub #85. WG11 NWIC delivery 2026-06-16."/>
+      </properties>
+      <failure message="Test 11.1.5.3.2 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="11.3.1" classname="O1 Authenticity" timestamp="2026-06-16T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="Previously blocked: O1 NETCONF-over-TLS not deployed, port 830 closed (W20 2026-05-12, GH #43). O1 deployed by vendor. O1 mutual-TLS authenticity now verified: server issues CertificateRequest; no-certificate and invalid-certificate rejected, valid client certificate accepted. WG11 NWIC delivery 2026-06-16."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="11.3.2" classname="O1 confidentiality, integrity, and replay protection" timestamp="2026-06-16T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="Previously blocked: O1 not deployed (W20 2026-05-12, GH #44). O1 deployed by vendor. O1 confidentiality/integrity/replay now verified: TLS 1.2 AEAD session, application data encrypted, tampered record alerted and dropped, stale record rejected. WG11 NWIC delivery 2026-06-16."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="11.3.3.1" classname="O1 Interface NACM Validation" timestamp="2026-06-16T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="Previously blocked: NETCONF socket failed, O1 not deployed (W20 2026-05-12, GH #45). O1 deployed by vendor. O1 NACM validation now verified: authorized role permitted, unauthorized role denied with NACM deny event logged. WG11 NWIC delivery 2026-06-16."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="11.5.1" classname="E2 confidentiality, integrity, and replay protection">
+      <properties>
+        <property name="Comments" value="Not Supported by Viavi: exercising the E2 interface requires a Near-RT RIC acting as the E2AP termination peer over SCTP. The VALOR test environment has no Near-RT RIC (the SMO/O1 stack is not an E2 peer), so the E2 confidentiality, integrity and replay-protection exchange cannot be driven end-to-end."/>
+      </properties>
+      <skipped message="Test 11.5.1 skipped"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="11.5.2.1" classname="E2 Authenticity with certificate">
+      <properties>
+        <property name="Comments" value="Not Supported by Viavi: requires a Near-RT RIC as the E2AP termination peer over SCTP. The VALOR test environment has no Near-RT RIC (SMO/O1 is not an E2 peer), so E2 authenticity with an X.509 certificate cannot be exercised end-to-end."/>
+      </properties>
+      <skipped message="Test 11.5.2.1 skipped"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="11.5.2.2" classname="E2 Authenticity with PSK">
+      <properties>
+        <property name="Comments" value="Not Supported by Viavi: requires a Near-RT RIC as the E2AP termination peer over SCTP. The VALOR test environment has no Near-RT RIC (SMO/O1 is not an E2 peer), so E2 authenticity with a pre-shared key (PSK) cannot be exercised end-to-end."/>
+      </properties>
+      <skipped message="Test 11.5.2.2 skipped"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="12.4" classname="Security functional requirements and test cases 12.3 TLS on M-Plane interface" timestamp="2026-05-06T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="Week 1 customer delivery (2026-05-06): TC 12.4 verdict derived from TC 12.3 evidence (TLS on M-Plane interface). Per applicability analysis, §12.4 references §11.1.2.2 (802.1X Supplicant Validation); the broader §12 security functional requirement is not satisfied because the M-Plane TLS server does not complete a TLS handshake to Certificate stage on the candidate port. Verdict: FAIL. Tracked as ISS-024 (GH #38). P1: expose M-Plane TLS server with TLS 1.2 floor (1.3 preferred) + AEAD-only ciphers per SPS §5.4; reject TLS 1.0/1.1/SSLv3."/>
+      </properties>
+      <failure message="Test 12.4 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="20.2.2" classname="Minimum Requirements">
+      <properties>
+        <property name="Comments" value="Not Supported by SRS: minimum-requirements security dossier / signed-image attestation not provided. Executed 2026-06-23, Blocked on precondition. SRS confirmed security-feature work is out of current scope (per email)."/>
+      </properties>
+      <skipped message="Test 20.2.2 skipped"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="20.2.3" classname="App Package Change Log" timestamp="2026-06-09T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="PASS 2026-06-09: App package change-log present, dated and semver-tagged, version-aligned with the package tag."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="20.3.1" classname="Post-Decommission Report" timestamp="2026-06-09T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="PASS 2026-06-09: Post-decommission report complete (when, what, by, evidence all present)."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="20.3.2" classname="Trust Artifact Revocation" timestamp="2026-06-23T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="Phase 2 (2026-06-23): DUT certificate advertises no CRL Distribution Point and no OCSP/AIA responder — no revocation channel for relying parties to verify certificate status. Harness CA issue/revoke/CRL flow verified as control. Per R004-v09 §20.3.2. Verdict: FAIL."/>
+      </properties>
+      <failure message="Test 20.3.2 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="21.2" classname="O-CU-CP 3GPP specific security functional requirements and test cases" timestamp="2026-06-02T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="2026-06-02: O-CU-CP assessed vs 3GPP TS 33.501 matrix. 2/12 non-conformant: TLS X.509 (§5.7.1) certificate chain/validity/key-usage; IPsec on N2/Xn (§5.7.2) not verifiable end-to-end. All other applicable clauses met or N/A."/>
+      </properties>
+      <failure message="Test 21.2 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="21.3" classname="O-RAN specific security functional requirements and test cases" timestamp="2026-06-02T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="2026-06-02: O-CU-CP assessed vs O-RAN matrix. 6/11 non-conformant: SSH (§6.2) below baseline; TLS (§6.3.1); IPsec (§6.5.1); certificate validity/key-usage/chain (§6.9.2-6.9.4)."/>
+      </properties>
+      <failure message="Test 21.3 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="22.2" classname="O-CU-UP 3GPP specific security functional requirements and test cases" timestamp="2026-06-02T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="2026-06-02: O-CU-UP assessed vs 3GPP TS 33.501. E1 confidentiality (§5.7.2) non-conformant (TLS chain + IPsec)."/>
+      </properties>
+      <failure message="Test 22.2 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="22.3" classname="O-RAN specific security functional requirements and test cases" timestamp="2026-06-02T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="2026-06-02: O-CU-UP assessed vs O-RAN matrix. 4/11 non-conformant: IPsec on E1/N3 (§6.5.1); shared-endpoint TLS certificate (§6.9.2-6.9.4)."/>
+      </properties>
+      <failure message="Test 22.3 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="23.2" classname="O-DU 3GPP specific security functional requirements and test cases (as" timestamp="2026-06-02T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="2026-06-02: O-DU assessed vs 3GPP TS 33.501. 4/10 non-conformant: fronthaul rejection logging (§5.4.1, malformed FH silently discarded, not logged); :443 management TLS (§5.6.2); F1/N2 IPsec (§5.7.1/5.7.2)."/>
+      </properties>
+      <failure message="Test 23.2 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="23.3" classname="O-RAN specific security functional requirements and test cases" timestamp="2026-06-02T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="2026-06-02: O-DU assessed vs O-RAN matrix. 8/10 non-conformant: IPsec (§6.5.1); TLS certificate chain/validity (§6.9.2-6.9.4); FH rejection-event logging (§6.10.2/6.10.3, §11.1.4.1.1); C-plane rejection logging (§24.2.2.2)."/>
+      </properties>
+      <failure message="Test 23.3 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="24.1.1" classname="Integrity protection of RRC-signalling" timestamp="2026-02-21T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="PASS: NIA0 disabled, integrityProtAlgorithm=nia2, all RRC msgs after AS SMC integrity protected. 8/8 validations pass."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="24.1.2" classname="Integrity protection of user data between UE and gNB" timestamp="2026-02-21T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="PASS: integrityProtection=enabled in RrcReconfiguration, user data integrity verified. 8/8 validations pass."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="24.1.3" classname="RRC integrity check failure" timestamp="2026-02-21T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="PASS: gNB correctly verifies RRC integrity. Wrong MAC-I detected via PdcpOverrideMacI. 4/4 validations pass."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="24.1.4" classname="UP integrity check failure" timestamp="2026-02-21T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="PASS: gNB discards PDCP PDU with wrong MAC-I (0xFFFFFFFF). integrityProtection=enabled. 7/7 validations pass."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="24.1.5" classname="Ciphering of RRC-signalling" timestamp="2026-02-21T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="PASS: cipheringAlgorithm=nea2, UE security capabilities replayed correctly, ciphering activated after AS SMC. 12/12 validations pass."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="24.1.6" classname="Ciphering of user data between UE and gNB" timestamp="2026-02-21T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="PASS: cipheringDisabled absent in RrcReconfiguration, user plane confidentiality protected after RrcReconfiguration. 10/10 validations pass."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="24.1.7" classname="Replay protection of user data between UE and gNB" timestamp="2026-02-21T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="PASS: PdcpReplayPdu command successful, gNB drops replayed user plane packets. Replay protection verified. 12/12 validations pass."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="24.1.8" classname="Replay protection of RRC-signalling" timestamp="2026-02-21T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="PASS: PdcpReplayPdu for RRC signalling successful, gNB drops/ignores replayed RRC packets. 12/12 validations pass."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="24.1.9" classname="Ciphering of user data based on security policy sent by SMF" timestamp="2026-02-21T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="PASS: Ciphering AES verified, integrityProtection=enabled per SMF policy. Tested with UP ciphering required &amp; not needed. 9/9 validations pass."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="24.1.10" classname="Integrity of user data based on security policy sent by SMF" timestamp="2026-02-21T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="PASS: Integrity AES verified, integrityProtection=enabled per SMF policy. Tested with UP integrity required &amp; not needed. 9/9 validations pass."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="24.1.11" classname="AS algorithms selection" timestamp="2026-03-01T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="PASS: cipheringAlgorithm=nea2 (non-NULL), integrityProtAlgorithm=nia2 (non-NULL), securityModeComplete present. AS algorithms correctly selected. 3/3 validations pass. Entry 1358, DTMA session 260301_084345."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="24.1.12" classname="Key refresh" timestamp="2026-04-04T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="Re-run on VAMOS-2, Apr 4 2026. Key refresh fix in srs image 4c5a2088. ISS-006 resolved. KgNB refresh completes without losing security context."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="24.1.13" classname="Bidding down prevention in Xn-handovers" timestamp="2026-05-22T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="PASS: gnb2 forwarded UESecurityCapabilities (c000/c000) in PathSwitchRequest intact — matches XnAP HandoverRequest. NCC=2, UP security required/required. PDCP integrity 0 failures post-HO. Build: b06b7b1b."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="24.1.14" classname="AS protection algorithm selection" timestamp="2026-05-22T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="PASS: gnb2 selected nea0 (top of nea_pref_list) and nia2 (highest priority matching UE caps NIA1+NIA2). securityAlgorithmConfig present in HandoverRequestAcknowledge RRC container. PDCP integrity 0 failures. Build: b06b7b1b."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="24.1.15" classname="Control plane data confidentiality protection over N2/Xn interface" timestamp="2026-05-23T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="FAIL: N2 has no IPsec policy (ISS-SEC-020); Xn on loopback 127.0.50.x bypasses XFRM (ISS-SEC-021); replay-window=0 on all SAs (ISS-SEC-022). 0 ESP frames in 743KB capture; 17 NGAP + 4 XnAP in plaintext. Build: b06b7b1b."/>
+      </properties>
+      <failure message="Test 24.1.15 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="24.1.16" classname="Control plane data integrity protection over S1/NG/Xn interface" timestamp="2026-05-23T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="FAIL: Same root cause as TC 24.1.15. N2/Xn carry NGAP/XnAP without integrity or replay protection. All SAs replay-window=0 (ISS-SEC-022). PathSwitchRequest and XnAP HandoverRequest tamperable by MITM. Build: b06b7b1b."/>
+      </properties>
+      <failure message="Test 24.1.16 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="24.1.17" classname="Key update on dual connectivity" timestamp="2026-05-23T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="NOT SUPPORTED: NR-DC SN Addition procedure not implemented in srsRAN b06b7b1b. gnb2 (SN) zero UE activity; XnAP pcaps 177B (XnSetup only). xnap_sn_addition_procedure.cpp absent from source. Feature gap."/>
+      </properties>
+      <skipped message="Test 24.1.17 skipped"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="24.1.18" classname="User plane security activation in Inactive scenario" timestamp="2026-05-23T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="FAIL: gNB never produces rrcRelease with suspendConfig — falls back to AMF UEContextReleaseRequest (srsRAN Issue #168, F1AP UE context broken). RRC_INACTIVE not reachable. Confirmed on 2 sessions. Build: b06b7b1b."/>
+      </properties>
+      <failure message="Test 24.1.18 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="24.2.1.1" classname="S-Plane PTP DoS Attack" timestamp="2026-06-09T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="FAIL 2026-06-09: S-Plane PTP DoS drove ptp4l to UNCALIBRATED/fault, servo offset ~15 to ~447 ns; timing noticeably degraded vs TIFG 5.6/6.1 baseline. GitHub #76."/>
+      </properties>
+      <failure message="Test 24.2.1.1 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="24.2.1.2" classname="S-Plane PTP Unexpected Input" timestamp="2026-06-09T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="FAIL 2026-06-09: rogue grandmaster accepted via BMCA (87 foreign-master events, servo ~4 to ~938 ns) plus ~40s user-plane outage. GitHub #77."/>
+      </properties>
+      <failure message="Test 24.2.1.2 failed" type="AssertionError"/>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="24.2.2.1" classname="C-Plane eCPRI DoS Attack" timestamp="2026-06-02T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="2026-06-02: C-Plane eCPRI DoS, on-segment 10/100/1000 Mbps volumetric ramp with kill-switch at 80% of baseline. SUT maintained service: ether_tx ~5115 Mbps, total_dl_brate 1.42 Gbps, nof_ues=1 throughout; recovered after flood, no crash (restart count unchanged). gnb.log run 20260602-171759."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+    <testcase name="24.2.2.2" classname="C-Plane eCPRI Unexpected Input" timestamp="2026-06-02T00:00:00+00:00">
+      <properties>
+        <property name="Comments" value="2026-06-02: C-Plane eCPRI unexpected/mutated input. Clause-24 criterion is service-availability robustness (not logging). Mutated C-plane input rejected; full service held (DL 1.42 Gbps, nof_ues=1)."/>
+      </properties>
+      <system-out/>
+      <system-err/>
+    </testcase>
+  </testsuite>
+</testsuites>
