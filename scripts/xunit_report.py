@@ -35,6 +35,12 @@ except ImportError:
 
 _ANSI_CONVERTER = Ansi2HTMLConverter(inline=True, escaped=False)
 CAPTURE_HEADER_RE = re.compile(r"^-+\s+Captured \w+\s+-+$", re.MULTILINE)
+_NATURAL_CHUNK_RE = re.compile(r"(\d+)")
+
+
+def _natural_key(text: str) -> list:
+    """Split into alternating text/number chunks so e.g. '9.3.1' sorts between '9.3' and '10.4.2'."""
+    return [int(chunk) if chunk.isdigit() else chunk.lower() for chunk in _NATURAL_CHUNK_RE.split(text)]
 
 
 class Status(Enum):
@@ -625,7 +631,7 @@ def render_all_html(suites: list, favicon: str = "", link: str = "") -> str:
         fstatus = _feature_status(nfailed, npassed, nskipped)
         badge = _status_badge(fstatus)
 
-        tcs = sorted(suite.testcases, key=lambda tc: (_TC_STATUS_SORT.get(tc.status, 99), tc.classname, tc.name))
+        tcs = sorted(suite.testcases, key=lambda tc: _natural_key(tc.name))
         expanded = "".join(_render_testcase(tc, j) for j, tc in enumerate(tcs))
 
         expand_id = f"sexp{i}"
