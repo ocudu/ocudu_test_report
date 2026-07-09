@@ -118,12 +118,12 @@ tests:
   - test_id: "5.7"
     description: "5G SA registration and deregistration to single network slice"
     scope: "Functional"
+    ocudu_features:
       - MVP-FUNC-SVCS-17-3-a
 
   - test_id: "5.8"
     description: "5G SA registration and deregistration to multiple network slices"
     scope: "Functional"
-    ocudu_features:
 
   - test_id: "5.9"
     description: "Idle Mode Intra O-DU mobility"
