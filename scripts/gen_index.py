@@ -40,6 +40,7 @@ def _generate(historic: list[str]) -> str:
     nav_version_tabs = "\n".join(
         f'      <a class="tab" data-version="{v}" href="#">{"Latest" if v == "latest" else v}</a>' for v in versions
     )
+    third_party_tab_html = '      <a class="tab" data-fixed="third_party" href="#">Third Party</a>'
 
     versions_js = json.dumps(versions)
     version_pages_js = json.dumps(version_pages)
@@ -177,6 +178,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
   <nav>
     <div class="nav-left">
 {nav_version_tabs}
+{third_party_tab_html}
     </div>
     <div class="nav-right">
       <a class="tab" data-fixed="features" href="#">Features</a>
@@ -193,7 +195,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     (function () {{
       var VERSIONS = {versions_js};
       var VERSION_PAGES = {version_pages_js};
-      var FIXED_PAGES = {{ features: 'feature_list.html', tifg: 'tifg_report.html', wg11: 'wg11_report.html' }};
+      var FIXED_PAGES = {{ features: 'feature_list.html', tifg: 'tifg_report.html', wg11: 'wg11_report.html', third_party: 'third_party.html' }};
 
       var frame   = document.getElementById('frame');
       var subnav  = document.getElementById('subnav');

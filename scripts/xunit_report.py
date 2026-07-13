@@ -608,7 +608,7 @@ def render_html(
     return _html_doc("Results", favicon, header, body, "report.js")
 
 
-def render_all_html(suites: list, favicon: str = "", link: str = "") -> str:
+def render_all_html(suites: list, favicon: str = "", link: str = "", title: str = "All test suites") -> str:
     """Render the all-tests HTML report: one accordion per suite, tests inside."""
     # pylint: disable=too-many-locals
     duration_total = sum(s.duration for s in suites)
@@ -684,8 +684,8 @@ def render_all_html(suites: list, favicon: str = "", link: str = "") -> str:
         f'{_stat_html("Total")}{_stat_html("Failed", "failed")}{_stat_html("Passed", "passed")}'
         f'{_stat_html("Skipped", "skipped")}'
     )
-    header = _report_header("All test suites", link, duration_total, stats_html)
-    return _html_doc("All test suites", favicon, header, body, "all.js")
+    header = _report_header(title, link, duration_total, stats_html)
+    return _html_doc(title, favicon, header, body, "all.js")
 
 
 def parse_dir(root: Path) -> list:
@@ -720,14 +720,39 @@ def parse_dir(root: Path) -> list:
     return suites
 
 
+def parse_third_party_dir(root: Path) -> list:
+    """Return one Suite per XML file under root (e.g. lab/venue/run.xml), named by its path.
+
+    Each XML file is its own test run and stays its own suite — e.g. "valor / 2026_07_09_tifg"
+    — so unrelated test runs dropped in the same lab/venue folder are never blended together.
+    XML files sitting directly in root itself are ignored, since they don't belong to any lab.
+    """
+    suites: list[Suite] = []
+    for xml_path in sorted(root.rglob("*.xml")):
+        if xml_path.parent == root:
+            continue
+        name = " / ".join(xml_path.relative_to(root).with_suffix("").parts)
+        suite = parse_xml(name, xml_path)
+        if suite.testcases:
+            suites.append(suite)
+    return suites
+
+
 def main():
     """Entry point: parse arguments and write the HTML report."""
     parser = argparse.ArgumentParser(description="Generate HTML report from XUnit XML files")
     parser.add_argument(
         "--dir",
         metavar="FOLDER",
-        required=True,
+        default=None,
         help="Root artifacts folder: each subfolder becomes a suite (underscores→spaces)",
+    )
+    parser.add_argument(
+        "--third-party",
+        type=Path,
+        default=None,
+        metavar="DIR",
+        help="Third-party report folder (lab/venue subfolders of XUnit XML files) — writes third_party.html",
     )
     parser.add_argument(
         "-o",
@@ -770,47 +795,62 @@ def main():
     )
     args = parser.parse_args()
 
-    root = Path(args.dir)
-    if not root.is_dir():
-        parser.error(f"Not a directory: {root}")
-
-    rf = root / "commit_link.txt"
-    link = rf.read_text(encoding="utf-8").strip() if rf.exists() else ""
-
-    suites = parse_dir(root)
-
-    tifg_yaml = Path(__file__).parent.parent / "tifg_test_plan" / "tifg_tests.yaml"
-    if tifg_yaml.exists():
-        _apply_tifg_labels(suites, _load_tifg_map(tifg_yaml))
-
-    features: dict[str, FeatureDef] = {}
-    with (Path(__file__).parent.parent / "features" / "features.yaml").open(encoding="utf-8") as f:
-        features.update(_parse_features(yaml.safe_load(f)))
+    if not args.dir and not args.third_party:
+        parser.error("at least one of --dir or --third-party is required")
 
     out_dir = args.output_dir
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    (out_dir / "report.html").write_text(
-        render_html(
-            suites,
-            features=features,
-            favicon=args.favicon,
-            link=link,
-            defaults=FilterDefaults(
-                statuses=args.status,
-                scopes=args.scope,
-                types=args.type,
-                releases=args.release,
-            ),
-        ),
-        encoding="utf-8",
-    )
-    (out_dir / "all.html").write_text(
-        render_all_html(suites, favicon=args.favicon, link=link),
-        encoding="utf-8",
-    )
+    if args.dir:
+        root = Path(args.dir)
+        if not root.is_dir():
+            parser.error(f"Not a directory: {root}")
 
-    print(f"report.html + all.html written to {out_dir}/")
+        rf = root / "commit_link.txt"
+        link = rf.read_text(encoding="utf-8").strip() if rf.exists() else ""
+
+        suites = parse_dir(root)
+
+        tifg_yaml = Path(__file__).parent.parent / "tifg_test_plan" / "tifg_tests.yaml"
+        if tifg_yaml.exists():
+            _apply_tifg_labels(suites, _load_tifg_map(tifg_yaml))
+
+        features: dict[str, FeatureDef] = {}
+        with (Path(__file__).parent.parent / "features" / "features.yaml").open(encoding="utf-8") as f:
+            features.update(_parse_features(yaml.safe_load(f)))
+
+        (out_dir / "report.html").write_text(
+            render_html(
+                suites,
+                features=features,
+                favicon=args.favicon,
+                link=link,
+                defaults=FilterDefaults(
+                    statuses=args.status,
+                    scopes=args.scope,
+                    types=args.type,
+                    releases=args.release,
+                ),
+            ),
+            encoding="utf-8",
+        )
+        (out_dir / "all.html").write_text(
+            render_all_html(suites, favicon=args.favicon, link=link),
+            encoding="utf-8",
+        )
+        print(f"report.html + all.html written to {out_dir}/")
+
+    if args.third_party:
+        tp_root = args.third_party
+        if not tp_root.is_dir():
+            parser.error(f"Not a directory: {tp_root}")
+
+        tp_suites = parse_third_party_dir(tp_root)
+        (out_dir / "third_party.html").write_text(
+            render_all_html(tp_suites, favicon=args.favicon, title="Third Party Results"),
+            encoding="utf-8",
+        )
+        print(f"third_party.html written to {out_dir}/ ({len(tp_suites)} suites)")
 
 
 if __name__ == "__main__":

@@ -199,7 +199,7 @@ generate-report:
     - python3 render_report.py --data ../features/features.yaml --output ${CI_PROJECT_DIR}/${OUTPUT}/feature_list.html
     - python3 tifg_report.py --data ../tifg_test_plan/tifg_tests.yaml --output "${CI_PROJECT_DIR}/${OUTPUT}/tifg_report.html"
     - python3 wg11_report.py --data ../oran_wg11_test_plan/wg11_tests.yaml --output "${CI_PROJECT_DIR}/${OUTPUT}/wg11_report.html"
-    - python3 xunit_report.py --dir artifacts/ -o "${CI_PROJECT_DIR}/${OUTPUT}" "${FILTER_ARGS[@]}"
+    - python3 xunit_report.py --dir artifacts/ --third-party ../third_party_test_reports -o "${CI_PROJECT_DIR}/${OUTPUT}" "${FILTER_ARGS[@]}"
     - |
       HISTORIC_LIST=()
       if [ -n "$HISTORIC_VERSIONS" ]; then
@@ -283,3 +283,18 @@ build-feature-list:
     paths:
       - feature_list.html
     expose_as: "Feature List"
+
+build-third-party-report:
+  stage: build
+  image: python:3.11-slim
+  rules:
+    - if: $ON_MR
+    - if: $ON_WEB
+    - if: $ON_API
+  script:
+    - pip install --quiet -r scripts/requirements.txt
+    - python3 scripts/xunit_report.py --third-party third_party_test_reports -o .
+  artifacts:
+    paths:
+      - third_party.html
+    expose_as: "Third Party Results"
