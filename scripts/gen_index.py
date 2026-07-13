@@ -195,7 +195,12 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     (function () {{
       var VERSIONS = {versions_js};
       var VERSION_PAGES = {version_pages_js};
-      var FIXED_PAGES = {{ features: 'feature_list.html', tifg: 'tifg_report.html', wg11: 'wg11_report.html', third_party: 'third_party.html' }};
+      var FIXED_PAGES = {{
+        features: 'feature_list.html',
+        tifg: 'tifg_report.html',
+        wg11: 'wg11_report.html',
+        third_party: 'third_party.html'
+      }};
 
       var frame   = document.getElementById('frame');
       var subnav  = document.getElementById('subnav');
