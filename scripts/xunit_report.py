@@ -145,6 +145,7 @@ class Suite:
     name: str
     testcases: list = field(default_factory=list)
     url: str = ""
+    kind: str = ""  # inner <testsuite name="..."> value (e.g. "TIFG", "WG11") — identifies the test plan
 
     @property
     def total(self) -> int:
@@ -224,9 +225,12 @@ def parse_xml(name: str, path: Path) -> Suite:
     suite = Suite(name=name)
 
     if root.tag == "testsuites":
-        elems = [tc for ts in root.findall("testsuite") for tc in ts.findall("testcase")]
+        testsuite_elems = root.findall("testsuite")
+        elems = [tc for ts in testsuite_elems for tc in ts.findall("testcase")]
+        suite.kind = testsuite_elems[0].get("name", "") if testsuite_elems else ""
     elif root.tag == "testsuite":
         elems = root.findall("testcase")
+        suite.kind = root.get("name", "")
     else:
         elems = root.findall(".//testcase")
 
@@ -367,8 +371,8 @@ def _parse_features(raw: dict) -> dict[str, FeatureDef]:
     return result
 
 
-def _load_tifg_map(yaml_path: Path) -> dict[str, list[str]]:
-    """Return {test_id: [feature_ids]} from tifg_tests.yaml."""
+def _load_feature_map(yaml_path: Path) -> dict[str, list[str]]:
+    """Return {test_id: [feature_ids]} from a test-plan YAML (tifg_tests.yaml, wg11_tests.yaml, ...)."""
     with yaml_path.open(encoding="utf-8") as f:
         data = yaml.safe_load(f)
     result: dict[str, list[str]] = {}
@@ -380,18 +384,24 @@ def _load_tifg_map(yaml_path: Path) -> dict[str, list[str]]:
     return result
 
 
-def _apply_tifg_labels(suites: list, tifg_map: dict[str, list[str]]) -> None:
-    """Inject feature labels derived from tifg_tests.yaml into matching test cases.
+def _apply_feature_labels(suites: list, feature_map: dict[str, list[str]]) -> None:
+    """Inject feature labels derived from a test-plan YAML into matching test cases.
 
-    Test cases whose name matches a TIFG test_id receive the corresponding
+    Test cases whose name matches a test_id in feature_map receive the corresponding
     ocudu_features as labels, making them visible in the feature overview.
     """
     for suite in suites:
         for tc in suite.testcases:
-            feature_ids = tifg_map.get(tc.name)
+            feature_ids = feature_map.get(tc.name)
             if feature_ids:
                 existing = set(tc.labels)
                 tc.labels.extend(fid for fid in feature_ids if fid not in existing)
+
+
+_THIRD_PARTY_TEST_PLANS = {
+    "TIFG": Path(__file__).parent.parent / "tifg_test_plan" / "tifg_tests.yaml",
+    "WG11": Path(__file__).parent.parent / "oran_wg11_test_plan" / "wg11_tests.yaml",
+}
 
 
 def _group_by_features(suites: list, features: dict[str, FeatureDef]) -> dict[str, FeatureGroup]:
@@ -726,6 +736,11 @@ def parse_third_party_dir(root: Path) -> list:
     Each XML file is its own test run and stays its own suite — e.g. "valor / 2026_07_09_tifg"
     — so unrelated test runs dropped in the same lab/venue folder are never blended together.
     XML files sitting directly in root itself are ignored, since they don't belong to any lab.
+
+    Each suite's test cases are labeled with the OCUDU feature IDs they cover, looked up from
+    the test plan named by the XML's inner <testsuite name="..."> (e.g. "TIFG", "WG11") — this
+    avoids mismatches from test IDs that collide across test plans (e.g. both TIFG and WG11 have
+    a test "6.2", covering entirely different things).
     """
     suites: list[Suite] = []
     for xml_path in sorted(root.rglob("*.xml")):
@@ -735,6 +750,15 @@ def parse_third_party_dir(root: Path) -> list:
         suite = parse_xml(name, xml_path)
         if suite.testcases:
             suites.append(suite)
+
+    feature_maps: dict[str, dict[str, list[str]]] = {}
+    for suite in suites:
+        yaml_path = _THIRD_PARTY_TEST_PLANS.get(suite.kind.upper())
+        if not yaml_path or not yaml_path.exists():
+            continue
+        if suite.kind not in feature_maps:
+            feature_maps[suite.kind] = _load_feature_map(yaml_path)
+        _apply_feature_labels([suite], feature_maps[suite.kind])
     return suites
 
 
@@ -811,9 +835,9 @@ def main():
 
         suites = parse_dir(root)
 
-        tifg_yaml = Path(__file__).parent.parent / "tifg_test_plan" / "tifg_tests.yaml"
+        tifg_yaml = _THIRD_PARTY_TEST_PLANS["TIFG"]
         if tifg_yaml.exists():
-            _apply_tifg_labels(suites, _load_tifg_map(tifg_yaml))
+            _apply_feature_labels(suites, _load_feature_map(tifg_yaml))
 
         features: dict[str, FeatureDef] = {}
         with (Path(__file__).parent.parent / "features" / "features.yaml").open(encoding="utf-8") as f:
