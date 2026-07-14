@@ -170,7 +170,6 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
         <property name="DUT" value="O-DU"/>
         <property name="Comments" value="PASS: All 4 radio conditions pass. DL scheduler starvation (ISS-001) resolved. Re-tested 2026-02-21."/>
       </properties>
-      <skipped message="Test 6.6 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
@@ -229,18 +228,16 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     <testcase name="6.9" classname="Downlink aggregated cell throughput (cell capacity)">
       <properties>
         <property name="DUT" value="O-DU"/>
-        <property name="Comments" value="Beam forming is not Not Supported in this release 26.04 by OCUDU"/>
       </properties>
-      <skipped message="Test 6.9 skipped"/>
+      <skipped message="Test 6.9 not executed yet"/>
       <system-out/>
       <system-err/>
     </testcase>
     <testcase name="6.10" classname="Uplink aggregated cell throughput (cell capacity)">
       <properties>
         <property name="DUT" value="O-DU"/>
-        <property name="Comments" value="Beam forming is not Not Supported in this release 26.04 by OCUDU"/>
       </properties>
-      <skipped message="Test 6.10 skipped"/>
+      <skipped message="Test 6.10 not executed yet"/>
       <system-out/>
       <system-err/>
     </testcase>
@@ -263,18 +260,16 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     <testcase name="6.13" classname="Impact of midhaul latency on DL peak throughput">
       <properties>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Comments" value="Not Supported on single server deployment (DU+CU) on same server by SRS Team"/>
       </properties>
-      <skipped message="Test 6.13 skipped"/>
+      <skipped message="Test 6.13 not executed on single server deployment"/>
       <system-out/>
       <system-err/>
     </testcase>
     <testcase name="6.14" classname="Impact of midhaul latency on UL peak throughput">
       <properties>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Comments" value="Not Supported on single server deployment (DU+CU) on same server by SRS Team"/>
       </properties>
-      <skipped message="Test 6.14 skipped"/>
+      <skipped message="Test 6.14 not executed on single server deployment"/>
       <system-out/>
       <system-err/>
     </testcase>
@@ -546,12 +541,11 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.9.1" classname="URLLC (Augmented Reality)." timestamp="-">
+    <testcase name="7.9.1" classname="URLLC (Augmented Reality).">
       <properties>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Comments" value=""/>
       </properties>
-      <skipped message="Test 7.9.1 skipped"/>
+      <skipped message="Test 7.9.1 not supported by Viavi TM500 UE"/>
       <system-out/>
       <system-err/>
     </testcase>
@@ -559,9 +553,8 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
       <properties>
         <property name="Radio Condition" value="Excellent"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Comments" value="Not Supported by Viavi TM500 UE"/>
       </properties>
-      <skipped message="Test 7.9.1.1 skipped"/>
+      <skipped message="Test 7.9.1.1 not supported by Viavi TM500 UE"/>
       <system-out/>
       <system-err/>
     </testcase>
@@ -569,9 +562,8 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
       <properties>
         <property name="Radio Condition" value="Good"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Comments" value="Not Supported by Viavi TM500 UE"/>
       </properties>
-      <skipped message="Test 7.9.1.2 skipped"/>
+      <skipped message="Test 7.9.1.2 not supported by Viavi TM500 UE"/>
       <system-out/>
       <system-err/>
     </testcase>
@@ -579,9 +571,8 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
       <properties>
         <property name="Radio Condition" value="Fair"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Comments" value="Not Supported by Viavi TM500 UE"/>
       </properties>
-      <skipped message="Test 7.9.1.3 skipped"/>
+      <skipped message="Test 7.9.1.3 not supported by Viavi TM500 UE"/>
       <system-out/>
       <system-err/>
     </testcase>
@@ -589,18 +580,16 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
       <properties>
         <property name="Radio Condition" value="Poor"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Comments" value="Not Supported by Viavi TM500 UE"/>
       </properties>
-      <skipped message="Test 7.9.1.4 skipped"/>
+      <skipped message="Test 7.9.1.4 not supported by Viavi TM500 UE"/>
       <system-out/>
       <system-err/>
     </testcase>
     <testcase name="7.10.1" classname="mMTC (Sensors)." timestamp="-">
       <properties>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Comments" value=""/>
       </properties>
-      <skipped message="Test 7.10.1 skipped"/>
+      <skipped message="Test 7.10.1 not supported by Viavi TM500 UE"/>
       <system-out/>
       <system-err/>
     </testcase>
@@ -608,9 +597,8 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
       <properties>
         <property name="Radio Condition" value="Excellent"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Comments" value="Not Supported by Viavi TM500 UE"/>
       </properties>
-      <skipped message="Test 7.10.1.1 skipped"/>
+      <skipped message="Test 7.10.1.1 not supported by Viavi TM500 UE"/>
       <system-out/>
       <system-err/>
     </testcase>
@@ -618,9 +606,8 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
       <properties>
         <property name="Radio Condition" value="Good"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Comments" value="Not Supported by Viavi TM500 UE"/>
       </properties>
-      <skipped message="Test 7.10.1.2 skipped"/>
+      <skipped message="Test 7.10.1.2 not supported by Viavi TM500 UE"/>
       <system-out/>
       <system-err/>
     </testcase>
@@ -628,9 +615,8 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
       <properties>
         <property name="Radio Condition" value="Fair"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Comments" value="Not Supported by Viavi TM500 UE"/>
       </properties>
-      <skipped message="Test 7.10.1.3 skipped"/>
+      <skipped message="Test 7.10.1.3 not supported by Viavi TM500 UE"/>
       <system-out/>
       <system-err/>
     </testcase>
@@ -638,16 +624,15 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
       <properties>
         <property name="Radio Condition" value="Poor"/>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Comments" value="Not Supported by Viavi TM500 UE"/>
       </properties>
-      <skipped message="Test 7.10.1.4 skipped"/>
+      <skipped message="Test 7.10.1.4 not supported by Viavi TM500 UE"/>
       <system-out/>
       <system-err/>
     </testcase>
     <testcase name="8.1" classname="Simultaneous RRC_CONNECTED UEs" timestamp="2026-05-13T00:00:00+00:00">
       <properties>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Comments" value="VAMOS-2 DTMA-2 UID1/UID3 PASS 2026-05-13 (re-execution). Simultaneous RRC_CONNECTED UEs verified. Prior CU/DU admission mismatch (GitHub #13) no longer reproducing on current build."/>
+        <property name="Comments" value="VAMOS-2 DTMA-2 UID1/UID3 PASS 2026-05-13 (re-execution). Simultaneous RRC_CONNECTED UEs verified."/>
       </properties>
       <system-out/>
       <system-err/>
@@ -655,7 +640,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     <testcase name="8.2" classname="UE State Transition Rate Testing" timestamp="2026-06-17T00:00:00+00:00">
       <properties>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Comments" value="FAIL-  UE State Transition Rate Testing. GitHub Issue #16. Rerun on 17/06 , and test case is PASS."/>
+        <property name="Comments" value="UE State Transition Rate Testing. GitHub Issue #16. Rerun on 17/06, and test case is PASS."/>
       </properties>
       <system-out/>
       <system-err/>
@@ -663,7 +648,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     <testcase name="8.3" classname="Traffic Load Testing" timestamp="2026-04-15T00:00:00+00:00">
       <properties>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Comments" value="PASS — Apr 15, 2026."/>
+        <property name="Comments" value="PASS - Apr 15, 2026."/>
       </properties>
       <system-out/>
       <system-err/>
@@ -687,64 +672,57 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
       <properties>
         <property name="DUT" value="O-CU/O-DU"/>
       </properties>
-      <skipped message="Test 8.6 skipped"/>
+      <skipped message="Test 8.6 not executed"/>
       <system-out/>
       <system-err/>
     </testcase>
     <testcase name="8.7" classname="Emergency call">
       <properties>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Comments" value="ISS-057
-#73
-write-replace warning req (tx)     2
- write-replace warning rsp (rx)     0"/>
       </properties>
-      <failure message="Test 8.7 failed" type="AssertionError"/>
+      <skipped message="Test 8.7 not executed"/>
       <system-out/>
       <system-err/>
     </testcase>
     <testcase name="8.8" classname="ETWS (Earthquake and Tsunami Warning System)">
       <properties>
         <property name="DUT" value="O-CU/O-DU"/>
+        <property name="Comments" value="WriteReplaceWarning() not implemented."/>
       </properties>
-      <skipped message="Test 8.8 skipped"/>
+      <failure message="Test 8.8 failed"/>
       <system-out/>
       <system-err/>
     </testcase>
     <testcase name="8.9" classname="MPS call (Multimedia Priority Service)">
       <properties>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Comments" value="ISS-058
-#74
-Under a high simultaneous-UE load (≈120 UEs, VoNR + heavy UL), the DU **control executor `du_ctrl_exec` saturates** (single serialized task latency up to **38.9 ms**, **808 deferred tasks**). UE creation and RRC-setup processing can't complete within the 2000 ms RRC-setup guard timer, so **RRC Setup Procedures time out en masse (243)**, UEs churn, and the cell **plateaus at ~90–104 connected UEs** even though `max_nof_ues = 1400` and **zero admission rejects** were issued. This is a DU-side scalability/serialization ceiling, not an admission-control or air-interface capacity limit."/>
+        <property name="Comments" value="Priority Voice or Video in 26.10"/>
       </properties>
       <failure message="Test 8.9 failed" type="AssertionError"/>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="9.2" classname="Traffic Steering with connected mode mobility.(parent)" timestamp="-">
+    <testcase name="9.2" classname="Traffic Steering with connected mode mobility.(parent)">
       <properties>
         <property name="DUT" value="O-CU/O-DU + RIC"/>
       </properties>
-      <skipped message="Test 9.2 skipped"/>
+      <skipped message="Test 9.2 not supported by Viavi TM500 UE"/>
       <system-out/>
       <system-err/>
     </testcase>
     <testcase name="9.2.1" classname="└─ Traffic Steering with connected mode mob.Sub-test 1">
       <properties>
         <property name="DUT" value="O-CU/O-DU + RIC"/>
-        <property name="Comments" value="Not Supported by Viavi"/>
       </properties>
-      <skipped message="Test 9.2.1 skipped"/>
+      <skipped message="Test 9.2.1 not supported by Viavi TM500 UE"/>
       <system-out/>
       <system-err/>
     </testcase>
     <testcase name="9.2.2" classname="└─ Traffic Steering with connected mode mob.Sub-test 2">
       <properties>
         <property name="DUT" value="O-CU/O-DU + RIC"/>
-        <property name="Comments" value="Not Supported by Viavi"/>
       </properties>
-      <skipped message="Test 9.2.2 skipped"/>
+      <skipped message="Test 9.2.2 not supported by Viavi TM500 UE"/>
       <system-out/>
       <system-err/>
     </testcase>
@@ -752,25 +730,23 @@ Under a high simultaneous-UE load (≈120 UEs, VoNR + heavy UL), the DU **contro
       <properties>
         <property name="DUT" value="O-CU/O-DU + RIC"/>
       </properties>
-      <skipped message="Test 9.3 skipped"/>
+      <skipped message="Test 9.3 not supported by Viavi TM500 UE"/>
       <system-out/>
       <system-err/>
     </testcase>
     <testcase name="9.3.1" classname="└─ Network Energy Saving with Cell switch o.Sub-test 1">
       <properties>
         <property name="DUT" value="O-CU/O-DU + RIC"/>
-        <property name="Comments" value="Not Supported by Viavi"/>
       </properties>
-      <skipped message="Test 9.3.1 skipped"/>
+      <skipped message="Test 9.3.1 not supported by Viavi TM500 UE"/>
       <system-out/>
       <system-err/>
     </testcase>
     <testcase name="9.3.2" classname="└─ Network Energy Saving with Cell switch o.Sub-test 2">
       <properties>
         <property name="DUT" value="O-CU/O-DU + RIC"/>
-        <property name="Comments" value="Not Supported by Viavi"/>
       </properties>
-      <skipped message="Test 9.3.2 skipped"/>
+      <skipped message="Test 9.3.2 not supported by Viavi TM500 UE"/>
       <system-out/>
       <system-err/>
     </testcase>
