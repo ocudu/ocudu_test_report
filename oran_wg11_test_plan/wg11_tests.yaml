@@ -75,7 +75,7 @@ tests:
     description: "X.509 Certificate Validity Period Verification"
     category: "Security Protocol & APIs Validation"
     scope: "Entire RAN/platform/deployment/auxiliary component"
-    comment: ''
+    comment: 'Requires certificate provisioning.'
 
   - test_id: "6.9.3"
     description: "X.509 Certificate Key Usage Verification"
