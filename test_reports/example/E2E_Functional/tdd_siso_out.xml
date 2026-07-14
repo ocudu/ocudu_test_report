@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="tdd_siso" errors="0" failures="0" skipped="0" tests="6" time="605.938" timestamp="2026-07-13T22:55:59.576685+00:00" hostname="runner-5dn-jsny--project-78028160-concurrent-2-dhf7g4o3"><properties><property name="ocudu_commit" value="65cbdb66cb726c6cdae97ec37e0c5dfd1f50eeca" /><property name="test_commit" value="cb0f2542c0a944aac3ad4fe271a9f94651fa1aa1" /><property name="url" value="https://gitlab.com/ocudu/ocudu_infra_srs/-/jobs/15323277312" /></properties><testcase classname="tests.ue_simulator" name="test_gnb[functional.singleue.tdd_siso.rlm_ssb_only]" time="81.288"><properties><property name="markers" value="zmq_mme;MVP-FUNC-RLM-16-1" /></properties><system-out>--------------------------------- Captured Log ---------------------------------
+
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2021-2026 Software Radio Systems Limited
+SPDX-License-Identifier: BSD-3-Clause-Open-MPI
+-->
+
+2026-07-13 22:56:50 [#x1B[32mINFO#x1B[0m] 5GC [133029672903088] started
+2026-07-13 22:56:53 [#x1B[32mINFO#x1B[0m] GNB [133029672906160] started
+2026-07-13 22:56:54 [#x1B[32mINFO#x1B[0m] UE [133029664758896] started
+2026-07-13 22:57:08 [#x1B[32mINFO#x1B[0m] UE [133029664758896] stopped
+2026-07-13 22:57:16 [#x1B[32mINFO#x1B[0m] GNB [133029672906160] stopped
+2026-07-13 22:57:16 [#x1B[32mINFO#x1B[0m] 5GC [133029672903088] stopped
+2026-07-13 22:57:16 [#x1B[32mINFO#x1B[0m] 
+#x1B[3m                      Pass/Fail Criteria                       #x1B[0m
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━┳━━━━━━┓
+┃#x1B[1m #x1B[0m#x1B[1mCriteria Name                   #x1B[0m#x1B[1m #x1B[0m┃#x1B[1m #x1B[0m#x1B[1mResult#x1B[0m#x1B[1m #x1B[0m┃#x1B[1m #x1B[0m#x1B[1mExpected#x1B[0m#x1B[1m #x1B[0m┃#x1B[1m #x1B[0m#x1B[1mPass#x1B[0m#x1B[1m #x1B[0m┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━╇━━━━━━┩
+│#x1B[32m #x1B[0m#x1B[32mDL Bitrate                      #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  7.6M#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   &gt; 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mUL Bitrate                      #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  9.9M#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   &gt; 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mDL KOs                          #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mUL KOs                          #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mReestablishments                #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  == 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mPDU Session Establishment Accept#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   1.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  == 1.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mError Indications               #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mRLM SSB Resources               #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   1.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &gt;= 1.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mRLM CSI-RS Resources            #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  == 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mErrors                          #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mWarnings                        #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+└──────────────────────────────────┴────────┴──────────┴──────┘
+--------------------------------- Captured Out ---------------------------------
+
+</system-out><system-err>--------------------------------- Captured Err ---------------------------------
+
+</system-err></testcase><testcase classname="tests.ue_simulator" name="test_gnb[functional.singleue.tdd_siso.rlm_csi_rs_only]" time="85.595"><properties><property name="markers" value="zmq_mme;MVP-FUNC-RLM-16-1" /></properties><system-out>--------------------------------- Captured Log ---------------------------------
+2026-07-13 22:58:16 [#x1B[32mINFO#x1B[0m] 5GC [133029679375632] started
+2026-07-13 22:58:20 [#x1B[32mINFO#x1B[0m] GNB [133029671708064] started
+2026-07-13 22:58:21 [#x1B[32mINFO#x1B[0m] UE [133029671712192] started
+2026-07-13 22:58:35 [#x1B[32mINFO#x1B[0m] UE [133029671712192] stopped
+2026-07-13 22:58:43 [#x1B[32mINFO#x1B[0m] GNB [133029671708064] stopped
+2026-07-13 22:58:43 [#x1B[32mINFO#x1B[0m] 5GC [133029679375632] stopped
+2026-07-13 22:58:43 [#x1B[32mINFO#x1B[0m] 
+#x1B[3m                      Pass/Fail Criteria                       #x1B[0m
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━┳━━━━━━┓
+┃#x1B[1m #x1B[0m#x1B[1mCriteria Name                   #x1B[0m#x1B[1m #x1B[0m┃#x1B[1m #x1B[0m#x1B[1mResult#x1B[0m#x1B[1m #x1B[0m┃#x1B[1m #x1B[0m#x1B[1mExpected#x1B[0m#x1B[1m #x1B[0m┃#x1B[1m #x1B[0m#x1B[1mPass#x1B[0m#x1B[1m #x1B[0m┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━╇━━━━━━┩
+│#x1B[32m #x1B[0m#x1B[32mDL Bitrate                      #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  8.0M#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   &gt; 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mUL Bitrate                      #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  9.7M#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   &gt; 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mDL KOs                          #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mUL KOs                          #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mReestablishments                #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  == 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mPDU Session Establishment Accept#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   1.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  == 1.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mError Indications               #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mRLM CSI-RS Resources            #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   4.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &gt;= 1.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mRLM SSB Resources               #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  == 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mErrors                          #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mWarnings                        #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+└──────────────────────────────────┴────────┴──────────┴──────┘
+--------------------------------- Captured Out ---------------------------------
+
+</system-out><system-err>--------------------------------- Captured Err ---------------------------------
+
+</system-err></testcase><testcase classname="tests.ue_simulator" name="test_gnb[functional.singleue.tdd_siso.tdd_dl_heavy]" time="103.807"><properties><property name="markers" value="zmq_mme;MVP-FUNC-TDD-16-5" /></properties><system-out>--------------------------------- Captured Log ---------------------------------
+2026-07-13 22:59:54 [#x1B[32mINFO#x1B[0m] 5GC [133029672953680] started
+2026-07-13 22:59:58 [#x1B[32mINFO#x1B[0m] GNB [133029664272944] started
+2026-07-13 22:59:59 [#x1B[32mINFO#x1B[0m] UE [133029664269776] started
+2026-07-13 23:00:18 [#x1B[32mINFO#x1B[0m] UE [133029664269776] stopped
+2026-07-13 23:00:26 [#x1B[32mINFO#x1B[0m] GNB [133029664272944] stopped
+2026-07-13 23:00:27 [#x1B[32mINFO#x1B[0m] 5GC [133029672953680] stopped
+2026-07-13 23:00:27 [#x1B[32mINFO#x1B[0m] 
+#x1B[3m                      Pass/Fail Criteria                       #x1B[0m
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━┳━━━━━━┓
+┃#x1B[1m #x1B[0m#x1B[1mCriteria Name                   #x1B[0m#x1B[1m #x1B[0m┃#x1B[1m #x1B[0m#x1B[1mResult#x1B[0m#x1B[1m #x1B[0m┃#x1B[1m #x1B[0m#x1B[1mExpected#x1B[0m#x1B[1m #x1B[0m┃#x1B[1m #x1B[0m#x1B[1mPass#x1B[0m#x1B[1m #x1B[0m┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━╇━━━━━━┩
+│#x1B[32m #x1B[0m#x1B[32mDL Bitrate                      #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  7.7M#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   &gt; 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mUL Bitrate                      #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  7.5M#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   &gt; 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mDL KOs                          #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mUL KOs                          #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mReestablishments                #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  == 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mPDU Session Establishment Accept#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   1.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  == 1.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mError Indications               #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mDL max MCS                      #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  27.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m &gt;= 27.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mUL max MCS                      #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  27.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m &gt;= 27.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mErrors                          #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mWarnings                        #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+└──────────────────────────────────┴────────┴──────────┴──────┘
+--------------------------------- Captured Out ---------------------------------
+
+</system-out><system-err>--------------------------------- Captured Err ---------------------------------
+
+</system-err></testcase><testcase classname="tests.ue_simulator" name="test_gnb[functional.singleue.tdd_siso.tdd_mixed]" time="83.041"><properties><property name="markers" value="zmq_mme;MVP-FUNC-TDD-16-4" /></properties><system-out>--------------------------------- Captured Log ---------------------------------
+2026-07-13 23:01:20 [#x1B[32mINFO#x1B[0m] 5GC [133029661927440] started
+2026-07-13 23:01:23 [#x1B[32mINFO#x1B[0m] GNB [133029661742992] started
+2026-07-13 23:01:24 [#x1B[32mINFO#x1B[0m] UE [133029661745824] started
+2026-07-13 23:01:38 [#x1B[32mINFO#x1B[0m] UE [133029661745824] stopped
+2026-07-13 23:01:46 [#x1B[32mINFO#x1B[0m] GNB [133029661742992] stopped
+2026-07-13 23:01:47 [#x1B[32mINFO#x1B[0m] 5GC [133029661927440] stopped
+2026-07-13 23:01:47 [#x1B[32mINFO#x1B[0m] 
+#x1B[3m                      Pass/Fail Criteria                       #x1B[0m
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━┳━━━━━━┓
+┃#x1B[1m #x1B[0m#x1B[1mCriteria Name                   #x1B[0m#x1B[1m #x1B[0m┃#x1B[1m #x1B[0m#x1B[1mResult#x1B[0m#x1B[1m #x1B[0m┃#x1B[1m #x1B[0m#x1B[1mExpected#x1B[0m#x1B[1m #x1B[0m┃#x1B[1m #x1B[0m#x1B[1mPass#x1B[0m#x1B[1m #x1B[0m┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━╇━━━━━━┩
+│#x1B[32m #x1B[0m#x1B[32mDL Bitrate                      #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  7.9M#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   &gt; 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mUL Bitrate                      #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m 10.9M#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   &gt; 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mDL KOs                          #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mUL KOs                          #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mReestablishments                #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  == 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mPDU Session Establishment Accept#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   1.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  == 1.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mError Indications               #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mDL max MCS                      #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  26.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m &gt;= 26.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mUL max MCS                      #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  27.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m &gt;= 27.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mErrors                          #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mWarnings                        #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+└──────────────────────────────────┴────────┴──────────┴──────┘
+--------------------------------- Captured Out ---------------------------------
+
+</system-out><system-err>--------------------------------- Captured Err ---------------------------------
+
+</system-err></testcase><testcase classname="tests.ue_simulator" name="test_cucp_cuup[functional.singleue.tdd_siso.baseline_cu_du]" time="152.639"><properties><property name="markers" value="zmq_cucp_cuup;MVP-ARCH-INTF-6;MVP-ARCH-INTF-7;MVP-ARCH-INTF-9;MVP-ARCH-INTF-10;MVP-ARCH-INTF-11" /></properties><system-out>--------------------------------- Captured Log ---------------------------------
+2026-07-13 23:03:39 [#x1B[32mINFO#x1B[0m] 5GC [133029656815824] started
+2026-07-13 23:03:40 [#x1B[32mINFO#x1B[0m] CU-CP [133029660264496] started
+2026-07-13 23:03:40 [#x1B[32mINFO#x1B[0m] CU-UP [133029660276640] started
+2026-07-13 23:03:44 [#x1B[32mINFO#x1B[0m] DU [133029656817504] started
+2026-07-13 23:03:45 [#x1B[32mINFO#x1B[0m] UE [133029660273808] started
+2026-07-13 23:04:09 [#x1B[32mINFO#x1B[0m] UE [133029660273808] stopped
+2026-07-13 23:04:16 [#x1B[32mINFO#x1B[0m] DU [133029656817504] stopped
+2026-07-13 23:04:17 [#x1B[32mINFO#x1B[0m] CU-UP [133029660276640] stopped
+2026-07-13 23:04:19 [#x1B[32mINFO#x1B[0m] CU-CP [133029660264496] stopped
+2026-07-13 23:04:20 [#x1B[32mINFO#x1B[0m] 5GC [133029656815824] stopped
+2026-07-13 23:04:20 [#x1B[32mINFO#x1B[0m] 
+#x1B[3m                      Pass/Fail Criteria                       #x1B[0m
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━┳━━━━━━┓
+┃#x1B[1m #x1B[0m#x1B[1mCriteria Name                   #x1B[0m#x1B[1m #x1B[0m┃#x1B[1m #x1B[0m#x1B[1mResult#x1B[0m#x1B[1m #x1B[0m┃#x1B[1m #x1B[0m#x1B[1mExpected#x1B[0m#x1B[1m #x1B[0m┃#x1B[1m #x1B[0m#x1B[1mPass#x1B[0m#x1B[1m #x1B[0m┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━╇━━━━━━┩
+│#x1B[32m #x1B[0m#x1B[32mDL Bitrate                      #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  8.3M#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   &gt; 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mUL Bitrate                      #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  9.7M#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   &gt; 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mDL KOs                          #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mUL KOs                          #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mReestablishments                #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  == 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mPDU Session Establishment Accept#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   1.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  == 1.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mError Indications               #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mSIB1 Transmissions              #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   1.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &gt;= 1.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mSIB2 Transmissions              #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   1.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &gt;= 1.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mDL max MCS                      #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  27.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m &gt;= 27.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mUL max MCS                      #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  27.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m &gt;= 27.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mErrors                          #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mWarnings                        #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+└──────────────────────────────────┴────────┴──────────┴──────┘
+--------------------------------- Captured Out ---------------------------------
+
+</system-out><system-err>--------------------------------- Captured Err ---------------------------------
+
+</system-err></testcase><testcase classname="tests.ue_simulator" name="test_gnb[functional.singleue.tdd_siso.baseline_gnb]" time="97.330"><properties><property name="markers" value="zmq_mme;MVP-ARCH-INTF-4;MVP-FUNC-ARCH-16-1;MVP-FUNC-PHY-16-13;MVP-FUNC-PHY-16-15;MVP-FUNC-BAS-16-2;MVP-FUNC-TDD-16-1;MVP-FUNC-TDD-16-2;MVP-FUNC-RLM-16-1;MVP-FUNC-RACH-16-1;MVP-FUNC-MOB-9;MVP-ARCH-GEN-1;MVP-ARCH-GEN-2;DU-GEN-1;DU-PHY-2;DU-GEN-5;DU-PHY-5;DU-PHY-6;DU-PHY-4;MVP-FUNC-SVCS-17-1;MVP-FUNC-BW-16-1" /></properties><system-out>--------------------------------- Captured Log ---------------------------------
+2026-07-13 23:05:21 [#x1B[32mINFO#x1B[0m] 5GC [133029665658912] started
+2026-07-13 23:05:25 [#x1B[32mINFO#x1B[0m] GNB [133029656744096] started
+2026-07-13 23:05:26 [#x1B[32mINFO#x1B[0m] UE [133029656750480] started
+2026-07-13 23:05:50 [#x1B[32mINFO#x1B[0m] UE [133029656750480] stopped
+2026-07-13 23:05:59 [#x1B[32mINFO#x1B[0m] GNB [133029656744096] stopped
+2026-07-13 23:06:00 [#x1B[32mINFO#x1B[0m] 5GC [133029665658912] stopped
+2026-07-13 23:06:00 [#x1B[32mINFO#x1B[0m] 
+#x1B[3m                      Pass/Fail Criteria                       #x1B[0m
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━┳━━━━━━┓
+┃#x1B[1m #x1B[0m#x1B[1mCriteria Name                   #x1B[0m#x1B[1m #x1B[0m┃#x1B[1m #x1B[0m#x1B[1mResult#x1B[0m#x1B[1m #x1B[0m┃#x1B[1m #x1B[0m#x1B[1mExpected#x1B[0m#x1B[1m #x1B[0m┃#x1B[1m #x1B[0m#x1B[1mPass#x1B[0m#x1B[1m #x1B[0m┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━╇━━━━━━┩
+│#x1B[32m #x1B[0m#x1B[32mDL Bitrate                      #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  8.2M#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   &gt; 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mUL Bitrate                      #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  9.7M#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   &gt; 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mDL KOs                          #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mUL KOs                          #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mReestablishments                #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  == 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mPDU Session Establishment Accept#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   1.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  == 1.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mError Indications               #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mSIB1 Transmissions              #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   1.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &gt;= 1.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mSIB2 Transmissions              #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   1.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &gt;= 1.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mDL max MCS                      #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  27.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m &gt;= 27.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mUL max MCS                      #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  27.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m &gt;= 27.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mRLM SSB Resources               #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   1.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &gt;= 1.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mRLM CSI-RS Resources            #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   3.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &gt;= 1.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mErrors                          #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mWarnings                        #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+└──────────────────────────────────┴────────┴──────────┴──────┘
+--------------------------------- Captured Out ---------------------------------
+
+</system-out><system-err>--------------------------------- Captured Err ---------------------------------
+
+</system-err></testcase></testsuite></testsuites>

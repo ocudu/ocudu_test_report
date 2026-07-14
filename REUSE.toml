@@ -6,4 +6,5 @@ SPDX-License-Identifier = "BSD-3-Clause-Open-MPI"
 path = [
   "**/*.md",
   "**/*.mdx",
+  "test_reports/**/*.txt",
 ]

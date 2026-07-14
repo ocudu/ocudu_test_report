@@ -253,7 +253,7 @@ generate-report-preview:
     - python3 render_report.py --data ../features/features.yaml --output ${CI_PROJECT_DIR}/${OUTPUT}/feature_list.html
     - python3 tifg_report.py --data ../tifg_test_plan/tifg_tests.yaml --output "${CI_PROJECT_DIR}/${OUTPUT}/tifg_report.html"
     - python3 wg11_report.py --data ../oran_wg11_test_plan/wg11_tests.yaml --output "${CI_PROJECT_DIR}/${OUTPUT}/wg11_report.html"
-    - python3 xunit_report.py --dir artifacts/ --third-party ../test_reports/third_party -o "${CI_PROJECT_DIR}/${OUTPUT}"
+    - python3 xunit_report.py --dir ../test_reports/example --third-party ../test_reports/third_party -o "${CI_PROJECT_DIR}/${OUTPUT}" --scope "CU/DU"
     - python3 gen_index.py -o "${CI_PROJECT_DIR}/${OUTPUT}/index.html"
   after_script:
     - |

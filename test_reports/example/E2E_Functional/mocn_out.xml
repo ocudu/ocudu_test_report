@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="mocn" errors="0" failures="0" skipped="0" tests="2" time="224.657" timestamp="2026-07-13T22:31:58.491780+00:00" hostname="runner-5dn-jsny--project-78028160-concurrent-0-oydmo95j"><properties><property name="ocudu_commit" value="65cbdb66cb726c6cdae97ec37e0c5dfd1f50eeca" /><property name="test_commit" value="cb0f2542c0a944aac3ad4fe271a9f94651fa1aa1" /><property name="url" value="https://gitlab.com/ocudu/ocudu_infra_srs/-/jobs/15323277304" /></properties><testcase classname="tests.mocn" name="test[functional.singleue.mocn.moran]" time="143.108"><properties><property name="markers" value="zmq_2mme;MVP-FUNC-RANS-16-2" /></properties><system-out>--------------------------------- Captured Log ---------------------------------
+
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2021-2026 Software Radio Systems Limited
+SPDX-License-Identifier: BSD-3-Clause-Open-MPI
+-->
+
+2026-07-13 22:33:44 [#x1B[32mINFO#x1B[0m] 5GC [128823294414288] started
+2026-07-13 22:33:45 [#x1B[32mINFO#x1B[0m] 5GC [128823294414672] started
+2026-07-13 22:33:49 [#x1B[32mINFO#x1B[0m] GNB [128823295650384] started
+2026-07-13 22:33:50 [#x1B[32mINFO#x1B[0m] UE [128823281733984] started
+2026-07-13 22:34:05 [#x1B[32mINFO#x1B[0m] Ping [10.45.0.2] 5GC -&gt; UE:
+  status: true
+  sent: 10
+  received: 10
+  min: 14.341
+  avg: 30.0
+  max: 45.167
+  mdev: 8.147
+
+2026-07-13 22:34:05 [#x1B[32mINFO#x1B[0m] Ping [10.46.0.2] 5GC -&gt; UE:
+  status: true
+  sent: 10
+  received: 10
+  min: 20.768
+  avg: 37.648
+  max: 51.357
+  mdev: 8.07
+
+2026-07-13 22:34:05 [#x1B[32mINFO#x1B[0m] Ping [10.45.0.2] UE -&gt; 5GC:
+  status: true
+  sent: 10
+  received: 10
+  min: 24.555
+  avg: 41.393
+  max: 53.736
+  mdev: 8.119
+
+2026-07-13 22:34:05 [#x1B[32mINFO#x1B[0m] Ping [10.46.0.2] UE -&gt; 5GC:
+  status: true
+  sent: 10
+  received: 10
+  min: 29.071
+  avg: 48.163
+  max: 63.774
+  mdev: 9.726
+
+2026-07-13 22:34:11 [#x1B[32mINFO#x1B[0m] UE [128823281733984] stopped
+2026-07-13 22:34:15 [#x1B[32mINFO#x1B[0m] GNB [128823295650384] stopped
+2026-07-13 22:34:15 [#x1B[33mWARNING#x1B[0m] 5GC 1 has 0 errors and 2 warnings. First warning is: #x1B[32m07/13 22:33:51.345#x1B[0m: [#x1B[33mgmm#x1B[0m] #x1B[1;36mWARNING#x1B[0m: [suci-0-001-01-0-0-0-0123456790] Authentication failure [21] (../src/amf/gmm-sm.c:1796)
+2026-07-13 22:34:15 [#x1B[32mINFO#x1B[0m] 5GC [128823294414288] stopped
+2026-07-13 22:34:15 [#x1B[33mWARNING#x1B[0m] 5GC 2 has 0 errors and 5 warnings. First warning is: #x1B[32m07/13 22:33:51.411#x1B[0m: [#x1B[33mgmm#x1B[0m] #x1B[1;36mWARNING#x1B[0m: [suci-0-001-01-0-0-0-0123456790] Authentication failure [21] (../src/amf/gmm-sm.c:1796)
+2026-07-13 22:34:15 [#x1B[32mINFO#x1B[0m] 5GC [128823294414672] stopped
+2026-07-13 22:34:15 [#x1B[32mINFO#x1B[0m] 
+#x1B[3m                      Pass/Fail Criteria                       #x1B[0m
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━┳━━━━━━┓
+┃#x1B[1m #x1B[0m#x1B[1mCriteria Name                   #x1B[0m#x1B[1m #x1B[0m┃#x1B[1m #x1B[0m#x1B[1mResult#x1B[0m#x1B[1m #x1B[0m┃#x1B[1m #x1B[0m#x1B[1mExpected#x1B[0m#x1B[1m #x1B[0m┃#x1B[1m #x1B[0m#x1B[1mPass#x1B[0m#x1B[1m #x1B[0m┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━╇━━━━━━┩
+│#x1B[32m #x1B[0m#x1B[32mDL Bitrate                      #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m 78.5K#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   &gt; 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mUL Bitrate                      #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m 31.7K#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   &gt; 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mDL KOs                          #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mUL KOs                          #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mReestablishments                #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  == 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mPDU Session Establishment Accept#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   2.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  == 2.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mError Indications               #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mErrors                          #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mWarnings                        #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+└──────────────────────────────────┴────────┴──────────┴──────┘
+--------------------------------- Captured Out ---------------------------------
+
+</system-out><system-err>--------------------------------- Captured Err ---------------------------------
+
+</system-err></testcase><testcase classname="tests.mocn" name="test[functional.singleue.mocn.mocn]" time="79.529"><properties><property name="markers" value="zmq_2mme;MVP-FUNC-RANS-16-1" /></properties><system-out>--------------------------------- Captured Log ---------------------------------
+2026-07-13 22:35:05 [#x1B[32mINFO#x1B[0m] 5GC [128823279853664] started
+2026-07-13 22:35:06 [#x1B[32mINFO#x1B[0m] 5GC [128823279845696] started
+2026-07-13 22:35:10 [#x1B[32mINFO#x1B[0m] GNB [128823286577344] started
+2026-07-13 22:35:11 [#x1B[32mINFO#x1B[0m] UE [128823286570624] started
+2026-07-13 22:35:25 [#x1B[32mINFO#x1B[0m] Ping [10.46.0.2] 5GC -&gt; UE:
+  status: true
+  sent: 10
+  received: 10
+  min: 10.402
+  avg: 18.498
+  max: 27.598
+  mdev: 5.628
+
+2026-07-13 22:35:25 [#x1B[32mINFO#x1B[0m] Ping [10.45.0.2] 5GC -&gt; UE:
+  status: true
+  sent: 10
+  received: 10
+  min: 11.582
+  avg: 17.106
+  max: 23.229
+  mdev: 4.25
+
+2026-07-13 22:35:25 [#x1B[32mINFO#x1B[0m] Ping [10.46.0.2] UE -&gt; 5GC:
+  status: true
+  sent: 10
+  received: 10
+  min: 14.124
+  avg: 21.611
+  max: 30.954
+  mdev: 5.463
+
+2026-07-13 22:35:25 [#x1B[32mINFO#x1B[0m] Ping [10.45.0.2] UE -&gt; 5GC:
+  status: true
+  sent: 10
+  received: 10
+  min: 16.132
+  avg: 23.285
+  max: 28.027
+  mdev: 4.116
+
+2026-07-13 22:35:31 [#x1B[32mINFO#x1B[0m] UE [128823286570624] stopped
+2026-07-13 22:35:34 [#x1B[32mINFO#x1B[0m] GNB [128823286577344] stopped
+2026-07-13 22:35:35 [#x1B[33mWARNING#x1B[0m] 5GC 1 has 0 errors and 2 warnings. First warning is: #x1B[32m07/13 22:35:11.417#x1B[0m: [#x1B[33mgmm#x1B[0m] #x1B[1;36mWARNING#x1B[0m: [suci-0-001-01-0-0-0-0123456790] Authentication failure [21] (../src/amf/gmm-sm.c:1796)
+2026-07-13 22:35:35 [#x1B[32mINFO#x1B[0m] 5GC [128823279853664] stopped
+2026-07-13 22:35:35 [#x1B[33mWARNING#x1B[0m] 5GC 2 has 0 errors and 5 warnings. First warning is: #x1B[32m07/13 22:35:11.299#x1B[0m: [#x1B[33mgmm#x1B[0m] #x1B[1;36mWARNING#x1B[0m: [suci-0-001-01-0-0-0-0123456790] Authentication failure [21] (../src/amf/gmm-sm.c:1796)
+2026-07-13 22:35:35 [#x1B[32mINFO#x1B[0m] 5GC [128823279845696] stopped
+2026-07-13 22:35:35 [#x1B[32mINFO#x1B[0m] 
+#x1B[3m                      Pass/Fail Criteria                       #x1B[0m
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━┳━━━━━━┓
+┃#x1B[1m #x1B[0m#x1B[1mCriteria Name                   #x1B[0m#x1B[1m #x1B[0m┃#x1B[1m #x1B[0m#x1B[1mResult#x1B[0m#x1B[1m #x1B[0m┃#x1B[1m #x1B[0m#x1B[1mExpected#x1B[0m#x1B[1m #x1B[0m┃#x1B[1m #x1B[0m#x1B[1mPass#x1B[0m#x1B[1m #x1B[0m┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━╇━━━━━━┩
+│#x1B[32m #x1B[0m#x1B[32mDL Bitrate                      #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m 76.5K#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   &gt; 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mUL Bitrate                      #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m 15.4K#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   &gt; 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mDL KOs                          #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mUL KOs                          #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mReestablishments                #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  == 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mPDU Session Establishment Accept#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   2.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  == 2.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mError Indications               #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mErrors                          #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+│#x1B[32m #x1B[0m#x1B[32mWarnings                        #x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m   0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m  &lt;= 0.0#x1B[0m#x1B[32m #x1B[0m│#x1B[32m #x1B[0m#x1B[32m ✅ #x1B[0m#x1B[32m #x1B[0m│
+└──────────────────────────────────┴────────┴──────────┴──────┘
+--------------------------------- Captured Out ---------------------------------
+
+</system-out><system-err>--------------------------------- Captured Err ---------------------------------
+
+</system-err></testcase></testsuite></testsuites>
