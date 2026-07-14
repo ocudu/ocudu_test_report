@@ -580,6 +580,7 @@ def render_html(
             f'<div class="controls">'
             f'<input type="text" id="feature-search" class="search-input"'
             f' placeholder="Search features\u2026" autocomplete="off">'
+            f'<span id="search-count" class="search-count"></span>'
             f'<div class="ms-wrap" id="ms-status">'
             f'<button type="button" class="ms-btn">Status: <span class="ms-label">All</span></button>'
             f'<div class="ms-panel" hidden>{_status_checkboxes(default_statuses)}</div>'

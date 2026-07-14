@@ -203,6 +203,12 @@ body {
 .search-input::placeholder { color: var(--text-dim); }
 .search-input:focus { border-color: var(--accent); }
 
+.search-count {
+  font-size: 0.78em;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
 
 /* ── Multi-select dropdowns ────────────────────────────────── */
 

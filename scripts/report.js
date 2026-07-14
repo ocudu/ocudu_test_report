@@ -45,7 +45,7 @@
     let fTotal = 0, fFailed = 0, fPassed = 0, fSkipped = 0;
 
     document.querySelectorAll('#feature-table .feature-row').forEach(row => {
-      if (row.hidden) return;
+      if (row.dataset.filteredOut === '1') return;
 
       fTotal++;
       const fstatus = row.dataset.status;
@@ -115,6 +115,7 @@
                || row.cells[2].textContent.toLowerCase().includes(query);
       const ok = matchesFilters && matchesSearch;
       row.hidden = !ok;
+      row.dataset.filteredOut = ok ? '' : '1';
       const exp = document.getElementById(row.dataset.expand);
       if (!ok) {
         if (exp) exp.hidden = true;
@@ -126,6 +127,18 @@
       }
     });
     updateStats();
+    updateSearchCount(vi, query);
+  }
+
+  function updateSearchCount(visible, query) {
+    const el = document.getElementById('search-count');
+    if (!el) return;
+    if (!query) {
+      el.textContent = '';
+      return;
+    }
+    const total = document.querySelectorAll('#feature-table .feature-row').length;
+    el.textContent = `Showing ${visible} of ${total}`;
   }
 
   document.addEventListener('DOMContentLoaded', function () {
