@@ -50,6 +50,7 @@ module "settings" {
   source           = "git::https://${var.ocudu_path}.git//.gitlab/ci-shared/gitlab_settings?ref=${var.ocudu_ref}"
   ci_project_id    = var.ci_project_id
   ci_project_title = var.ci_project_title
+  description      = "https://ocudu.gitlab.io/ocudu_test_report"
 
   # =============================================================================
   # Basic Project Settings
@@ -172,6 +173,28 @@ module "settings" {
   # Pipeline Schedules Configuration
   # =============================================================================
   schedules = {
+    report = {
+      description = "report nightly"
+      cron        = "00 09 * * *"
+      timezone    = "Europe/Madrid"
+      ref         = "refs/heads/main"
+      active      = true
+      variables   = {}
+      inputs = {
+        suite_0           = "Units and Integration=https://gitlab.com/api/v4/projects/76776423/pipeline_schedules/4105089",
+        suite_1           = "Matlab Even=https://gitlab.com/api/v4/projects/80607116/pipeline_schedules/4182594",
+        suite_2           = "Matlab Odd=https://gitlab.com/api/v4/projects/80607116/pipeline_schedules/4182595",
+        suite_3           = "O1=https://gitlab.com/api/v4/projects/79417060/pipeline_schedules/4225520",
+        suite_4           = "E2E Functional=https://gitlab.com/api/v4/projects/78028160/pipeline_schedules/4119331",
+        suite_5           = "E2E Emulated Nightly=https://gitlab.com/api/v4/projects/78028160/pipeline_schedules/4119329",
+        suite_6           = "E2E RF Nightly=https://gitlab.com/api/v4/projects/78028160/pipeline_schedules/4119330",
+        suite_7           = "E2E Emulated Weekly=https://gitlab.com/api/v4/projects/78028160/pipeline_schedules/4119328",
+        filter_scope      = "CU/DU",
+        filter_type       = "Functional,Security",
+        filter_release    = "26.04 (v1.0)",
+        historic_versions = "26.04"
+      }
+    }
   }
 
 }
