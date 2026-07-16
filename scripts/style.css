@@ -1,5 +1,6 @@
 /*
  * SPDX-FileCopyrightText: Copyright (C) 2021-2026 Software Radio Systems Limited
+ * SPDX-FileCopyrightText: 2026 Modifications (C) OpenInfra Foundation Europe. All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause-Open-MPI
  */
 
@@ -303,6 +304,33 @@ body {
 }
 
 .ms-action-btn:hover { color: var(--accent); border-color: var(--accent); }
+
+/* ── Failures-only toggle button ───────────────────────────── */
+
+.failures-toggle {
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 4px 12px;
+  font-size: 0.83em;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.12s, border-color 0.12s, background 0.12s;
+}
+
+.failures-toggle:hover {
+  color: var(--red);
+  border-color: var(--red);
+}
+
+.failures-toggle.active {
+  color: #fff;
+  background: var(--red);
+  border-color: var(--red);
+}
 
 /* ── Feature table wrapper ─────────────────────────────────── */
 

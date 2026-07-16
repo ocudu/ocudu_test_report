@@ -1,9 +1,12 @@
 // SPDX-FileCopyrightText: Copyright (C) 2021-2026 Software Radio Systems Limited
+// SPDX-FileCopyrightText: 2026 Modifications (C) OpenInfra Foundation Europe. All rights reserved.
 // SPDX-License-Identifier: BSD-3-Clause-Open-MPI
 
 (function () {
   const STATUS_ORDER = { untested: 0, skipped: 1, failed: 2, partial: 3, passed: 4 };
+  const FAILURE_STATUSES = new Set(['failed', 'partial']);
   let sortCol = null, sortDir = 1;
+  let savedStatusState = null;
 
   function cmp(a, b) {
     if (typeof a === 'number' && typeof b === 'number') return a - b;
@@ -156,6 +159,26 @@
       searchInput.addEventListener('input', applyFilters);
     }
 
+    const failuresToggle = document.getElementById('failures-toggle');
+    if (failuresToggle) {
+      failuresToggle.addEventListener('click', () => {
+        const boxes = [...document.querySelectorAll('#ms-status .ms-panel input')];
+        const isActive = failuresToggle.classList.contains('active');
+        if (!isActive) {
+          savedStatusState = boxes.map(b => b.checked);
+          boxes.forEach(b => { b.checked = FAILURE_STATUSES.has(b.value); });
+          failuresToggle.classList.add('active');
+        } else {
+          if (savedStatusState) boxes.forEach((b, i) => { b.checked = savedStatusState[i]; });
+          else boxes.forEach(b => { b.checked = true; });
+          savedStatusState = null;
+          failuresToggle.classList.remove('active');
+        }
+        msUpdateLabel('ms-status');
+        applyFilters();
+      });
+    }
+
     document.querySelectorAll('#feature-table thead th[data-col]').forEach(th => {
       th.addEventListener('click', () => {
         const col = th.dataset.col;
@@ -182,11 +205,21 @@
         ab.addEventListener('click', () => {
           const all = ab.dataset.action === 'all';
           wrap.querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = all);
+          if (id === 'ms-status' && failuresToggle) {
+            failuresToggle.classList.remove('active');
+            savedStatusState = null;
+          }
           msUpdateLabel(id); applyFilters();
         });
       });
       wrap.querySelectorAll('input[type=checkbox]').forEach(cb => {
-        cb.addEventListener('change', () => { msUpdateLabel(id); applyFilters(); });
+        cb.addEventListener('change', () => {
+          if (id === 'ms-status' && failuresToggle) {
+            failuresToggle.classList.remove('active');
+            savedStatusState = null;
+          }
+          msUpdateLabel(id); applyFilters();
+        });
       });
     });
 

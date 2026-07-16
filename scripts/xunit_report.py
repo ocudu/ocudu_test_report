@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 # SPDX-FileCopyrightText: Copyright (C) 2021-2026 Software Radio Systems Limited
+# SPDX-FileCopyrightText: 2026 Modifications (C) OpenInfra Foundation Europe. All rights reserved.
 # SPDX-License-Identifier: BSD-3-Clause-Open-MPI
 
 """
@@ -585,6 +586,9 @@ def render_html(
             f'<button type="button" class="ms-btn">Status: <span class="ms-label">All</span></button>'
             f'<div class="ms-panel" hidden>{_status_checkboxes(default_statuses)}</div>'
             f"</div>"
+            f'<button type="button" class="failures-toggle" id="failures-toggle"'
+            f' title="Show only failed and partial features">'
+            f"\u2717 Failures only</button>"
             f'<div class="ms-wrap" id="ms-scope">'
             f'<button type="button" class="ms-btn">Scope: <span class="ms-label">All</span></button>'
             f'<div class="ms-panel" hidden>{scope_checkboxes}</div>'
@@ -639,6 +643,9 @@ def render_all_html(suites: list, favicon: str = "", link: str = "", title: str 
         f'<button type="button" class="ms-btn">Status: <span class="ms-label">All</span></button>'
         f'<div class="ms-panel" hidden>{_status_checkboxes(values=_TC_STATUS_VALUES)}</div>'
         f"</div>"
+        f'<button type="button" class="failures-toggle" id="failures-toggle"'
+        f' title="Show only failed and errored tests">'
+        f"\u2717 Failures only</button>"
         f'<div class="ms-wrap" id="ms-suite">'
         f'<button type="button" class="ms-btn">Suite: <span class="ms-label">All</span></button>'
         f'<div class="ms-panel" hidden>{suite_checkboxes}</div>'
