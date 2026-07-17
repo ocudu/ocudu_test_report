@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 # SPDX-FileCopyrightText: Copyright (C) 2021-2026 Software Radio Systems Limited
+# SPDX-FileCopyrightText: 2026 Modifications (C) OpenInfra Foundation Europe. All rights reserved.
 # SPDX-License-Identifier: BSD-3-Clause-Open-MPI
 
 """
@@ -298,8 +299,8 @@ def main():
     (args.output_dir / "_order.txt").write_text("\n".join(suite_order), encoding="utf-8")
 
     if not all_saved:
-        print("\nNo XUnit files downloaded.")
-        return
+        print("\nNo XUnit files downloaded.", file=sys.stderr)
+        sys.exit(1)
 
     print("\nDownloaded files.")
 
