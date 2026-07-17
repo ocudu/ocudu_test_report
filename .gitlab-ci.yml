@@ -1,4 +1,5 @@
 # SPDX-FileCopyrightText: Copyright (C) 2021-2026 Software Radio Systems Limited
+# SPDX-FileCopyrightText: 2026 Modifications (C) OpenInfra Foundation Europe. All rights reserved.
 # SPDX-License-Identifier: BSD-3-Clause-Open-MPI
 
 spec:
@@ -238,6 +239,26 @@ pages:
       echo "*******************************************************************************************************************************"
       echo "Deployed to Pages: ${CI_PAGES_URL}"
       echo "*******************************************************************************************************************************"
+
+trigger-report-regen:
+  stage: build
+  image: alpine:3.20
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"
+  script:
+    - apk add --no-cache curl
+    - |
+      echo "Triggering report schedule (ID: ${REPORT_SCHEDULE_ID})..."
+      HTTP_CODE=$(curl --silent --output /dev/null --write-out "%{http_code}" \
+        --request POST \
+        --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
+        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/pipeline_schedules/${REPORT_SCHEDULE_ID}/play")
+      echo "API response: HTTP ${HTTP_CODE}"
+      if [ "$HTTP_CODE" -ne 201 ]; then
+        echo "ERROR: Failed to trigger schedule. Expected HTTP 201, got ${HTTP_CODE}."
+        exit 1
+      fi
+      echo "Report schedule triggered successfully."
 
 generate-report-preview:
   stage: build
