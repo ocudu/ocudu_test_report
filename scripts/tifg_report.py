@@ -3,7 +3,7 @@
 # SPDX-FileCopyrightText: Copyright (C) 2021-2026 Software Radio Systems Limited
 # SPDX-License-Identifier: BSD-3-Clause-Open-MPI
 
-"""Render tifg_tests.yaml into a self-contained HTML report."""
+"""Render tifg.yaml into a self-contained HTML report."""
 
 import argparse
 import sys
@@ -16,15 +16,21 @@ except ImportError:
     print("ERROR: PyYAML is required. Install with: pip install pyyaml", file=sys.stderr)
     sys.exit(2)
 
-DEFAULT_DATA_FILE = str(Path(__file__).parent.parent / "tifg_test_plan" / "tifg_tests.yaml")
+DEFAULT_DATA_FILE = str(Path(__file__).parent.parent / "testplans" / "tifg.yaml")
 DEFAULT_OUTPUT_FILE = "tifg_report.html"
 
-SCOPE_COLORS = {
+CATEGORY_COLORS = {
     "Functional": "#34d399",
     "Performance": "#f59e0b",
     "Service": "#38bdf8",
     "Load and Stress": "#f87171",
     "RIC-enabled": "#a78bfa",
+    "Security": "#fb7185",
+}
+
+SCOPE_COLORS = {
+    "CU/DU": "#38bdf8",
+    "Entire RAN/platform/deployment/auxiliary component": "#a78bfa",
 }
 
 
@@ -44,13 +50,13 @@ def _badge(text: str, color: str, small: bool = False) -> str:
     )
 
 
-def _bar_chart(counts: dict[str, int], total: int) -> str:
+def _bar_chart(counts: dict[str, int], total: int, colors: dict[str, str]) -> str:
     if total == 0:
         return ""
     rows = ""
     for label, count in sorted(counts.items(), key=lambda x: -x[1]):
         pct = count / total * 100
-        color = SCOPE_COLORS.get(label, "#64748b")
+        color = colors.get(label, "#64748b")
         rows += f"""
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
           <div style="width:200px;font-size:0.85rem;color:#cbd5e1;text-align:right">{label}</div>
@@ -71,10 +77,10 @@ def _summary_card(value: str, label: str) -> str:
         </div>"""
 
 
-def _build_scope_cards(scope_counts: Counter) -> str:
+def _build_count_cards(counts: Counter, colors: dict[str, str]) -> str:
     html = ""
-    for label, count in sorted(scope_counts.items(), key=lambda x: -x[1]):
-        color = SCOPE_COLORS.get(label, "#64748b")
+    for label, count in sorted(counts.items(), key=lambda x: -x[1]):
+        color = colors.get(label, "#64748b")
         html += f"""
         <div style="background:#1e293b;border-radius:10px;padding:16px 20px;
                     min-width:140px;border-left:4px solid {color}">
@@ -87,6 +93,8 @@ def _build_scope_cards(scope_counts: Counter) -> str:
 def _build_rows(tests: list[dict]) -> str:
     html = ""
     for t in sorted(tests, key=lambda t: tuple(int(x) for x in t["test_id"].split("."))):
+        category = t.get("category", "")
+        category_color = CATEGORY_COLORS.get(category, "#64748b")
         scope = t.get("scope", "")
         scope_color = SCOPE_COLORS.get(scope, "#64748b")
         features = t.get("ocudu_features") or []
@@ -98,6 +106,7 @@ def _build_rows(tests: list[dict]) -> str:
           <td style="font-family:monospace;font-size:0.85rem;color:#93c5fd;
                      white-space:nowrap;font-weight:600">{t['test_id']}</td>
           <td style="color:#e2e8f0;font-size:0.88rem">{t.get('description', '')}</td>
+          <td>{_badge(category, category_color, small=True)}</td>
           <td style="white-space:nowrap">{_badge(scope, scope_color)}</td>
           <td style="line-height:1.8">{feature_chips}</td>
         </tr>"""
@@ -106,6 +115,7 @@ def _build_rows(tests: list[dict]) -> str:
 
 def _render(tests: list[dict]) -> str:
     total = len(tests)
+    category_counts = Counter(t["category"] for t in tests)
     scope_counts = Counter(t["scope"] for t in tests)
     with_features = sum(1 for t in tests if t.get("ocudu_features"))
     without_features = total - with_features
@@ -113,18 +123,26 @@ def _render(tests: list[dict]) -> str:
 
     cards = (
         _summary_card(str(total), "Test Cases")
+        + _summary_card(str(len(category_counts)), "Categories")
         + _summary_card(str(len(scope_counts)), "Scopes")
         + _summary_card(str(with_features), "With features")
         + _summary_card(str(without_features), "Without features")
         + _summary_card(str(total_feature_refs), "Feature refs")
     )
-    scope_cards = _build_scope_cards(scope_counts)
-    chart_bars = _bar_chart(scope_counts, total)
-    chart = f"""
+    scope_cards = _build_count_cards(scope_counts, SCOPE_COLORS)
+    category_chart_bars = _bar_chart(category_counts, total, CATEGORY_COLORS)
+    scope_chart_bars = _bar_chart(scope_counts, total, SCOPE_COLORS)
+    category_chart = f"""
+    <div style="background:#1e293b;border-radius:10px;padding:20px 24px;max-width:600px">
+      <h3 style="margin:0 0 14px;font-size:0.95rem;color:#94a3b8;
+                 text-transform:uppercase;letter-spacing:.06em">By category</h3>
+      {category_chart_bars}
+    </div>"""
+    scope_chart = f"""
     <div style="background:#1e293b;border-radius:10px;padding:20px 24px;max-width:600px">
       <h3 style="margin:0 0 14px;font-size:0.95rem;color:#94a3b8;
                  text-transform:uppercase;letter-spacing:.06em">By scope</h3>
-      {chart_bars}
+      {scope_chart_bars}
     </div>"""
     rows = _build_rows(tests)
 
@@ -166,7 +184,7 @@ def _render(tests: list[dict]) -> str:
   <h1>TIFG Test Plan Report</h1>
   <p style="color:#64748b;font-size:0.85rem;margin-top:4px">
     Auto-generated from
-    <code style="color:#94a3b8">tifg_tests.yaml</code> &mdash;
+    <code style="color:#94a3b8">tifg.yaml</code> &mdash;
     O-RAN.TIFG.TS.E2E-Test.0-R005-v09.00, 5G Standalone applicable test cases
   </p>
 
@@ -181,11 +199,14 @@ def _render(tests: list[dict]) -> str:
   </div>
 
   <h2>Distribution</h2>
-  {chart}
+  <div style="display:flex;flex-wrap:wrap;gap:20px">
+    {category_chart}
+    {scope_chart}
+  </div>
 
   <h2>Test Cases</h2>
   <div style="margin-bottom:14px">
-    <input id="search" type="search" placeholder="Filter by test ID, description or feature ID&hellip;">
+    <input id="search" type="search" placeholder="Filter by test ID, description, category, scope or feature ID&hellip;">
   </div>
   <div style="overflow-x:auto">
     <table id="tifg-table">
@@ -193,6 +214,7 @@ def _render(tests: list[dict]) -> str:
         <tr>
           <th>Test ID</th>
           <th>Description</th>
+          <th>Category</th>
           <th>Scope</th>
           <th>OCUDU Features</th>
         </tr>
@@ -224,7 +246,7 @@ def _render(tests: list[dict]) -> str:
 
 def main() -> None:
     """Entrypoint"""
-    parser = argparse.ArgumentParser(description="Render tifg_tests.yaml to an HTML report.")
+    parser = argparse.ArgumentParser(description="Render tifg.yaml to an HTML report.")
     parser.add_argument("--data", default=DEFAULT_DATA_FILE, help=f"Input YAML file (default: {DEFAULT_DATA_FILE})")
     parser.add_argument(
         "--output", default=DEFAULT_OUTPUT_FILE, help=f"Output HTML file (default: {DEFAULT_OUTPUT_FILE})"

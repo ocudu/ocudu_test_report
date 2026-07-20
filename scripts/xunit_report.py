@@ -373,7 +373,7 @@ def _parse_features(raw: dict) -> dict[str, FeatureDef]:
 
 
 def _load_feature_map(yaml_path: Path) -> dict[str, list[str]]:
-    """Return {test_id: [feature_ids]} from a test-plan YAML (tifg_tests.yaml, wg11_tests.yaml, ...)."""
+    """Return {test_id: [feature_ids]} from a test-plan YAML (tifg.yaml, wg11.yaml, ...)."""
     with yaml_path.open(encoding="utf-8") as f:
         data = yaml.safe_load(f)
     result: dict[str, list[str]] = {}
@@ -400,8 +400,8 @@ def _apply_feature_labels(suites: list, feature_map: dict[str, list[str]]) -> No
 
 
 _THIRD_PARTY_TEST_PLANS = {
-    "TIFG": Path(__file__).parent.parent / "tifg_test_plan" / "tifg_tests.yaml",
-    "WG11": Path(__file__).parent.parent / "oran_wg11_test_plan" / "wg11_tests.yaml",
+    "TIFG": Path(__file__).parent.parent / "testplans" / "tifg.yaml",
+    "WG11": Path(__file__).parent.parent / "testplans" / "wg11.yaml",
 }
 
 

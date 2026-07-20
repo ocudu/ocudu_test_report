@@ -3,7 +3,7 @@
 # SPDX-FileCopyrightText: Copyright (C) 2021-2026 Software Radio Systems Limited
 # SPDX-License-Identifier: BSD-3-Clause-Open-MPI
 
-"""Validate wg11_tests.yaml against its YAML schema.
+"""Validate wg11.yaml against its YAML schema.
 
 Exit codes:
   0  - validation passed
@@ -28,8 +28,8 @@ except ImportError:
     print("ERROR: PyYAML is required. Install with: pip install pyyaml", file=sys.stderr)
     sys.exit(2)
 
-DEFAULT_TESTS_FILE = str(Path(__file__).parent.parent / "oran_wg11_test_plan" / "wg11_tests.yaml")
-DEFAULT_SCHEMA_FILE = str(Path(__file__).parent.parent / "oran_wg11_test_plan" / "wg11_tests.schema")
+DEFAULT_TESTS_FILE = str(Path(__file__).parent.parent / "testplans" / "wg11.yaml")
+DEFAULT_SCHEMA_FILE = str(Path(__file__).parent.parent / "testplans" / "testplan.schema")
 
 
 def _load_yaml(path: str, label: str) -> tuple[Any, int]:

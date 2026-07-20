@@ -144,7 +144,7 @@ validate-tifg-test-plan:
     - if: $ON_MR
   script:
     - pip install --quiet pyyaml jsonschema
-    - python3 scripts/validate_tifg_test_plan.py --data tifg_test_plan/tifg_tests.yaml --schema tifg_test_plan/tifg_tests.schema
+    - python3 scripts/validate_tifg_test_plan.py --data testplans/tifg.yaml --schema testplans/testplan.schema
 
 validate-wg11-test-plan:
   stage: static
@@ -153,7 +153,7 @@ validate-wg11-test-plan:
     - if: $ON_MR
   script:
     - pip install --quiet pyyaml jsonschema
-    - python3 scripts/validate_wg11_test_plan.py --data oran_wg11_test_plan/wg11_tests.yaml --schema oran_wg11_test_plan/wg11_tests.schema
+    - python3 scripts/validate_wg11_test_plan.py --data testplans/wg11.yaml --schema testplans/testplan.schema
 
 generate-report:
   stage: build
@@ -197,8 +197,8 @@ generate-report:
     - mkdir -p "${CI_PROJECT_DIR}/${OUTPUT}"
     - python3 gitlab_fetch.py "${SUITE_ARGS[@]}" -o artifacts/ ${COMMIT_LINK:+--commit-link "$COMMIT_LINK"}
     - python3 render_report.py --data ../features/features.yaml --output ${CI_PROJECT_DIR}/${OUTPUT}/feature_list.html
-    - python3 tifg_report.py --data ../tifg_test_plan/tifg_tests.yaml --output "${CI_PROJECT_DIR}/${OUTPUT}/tifg_report.html"
-    - python3 wg11_report.py --data ../oran_wg11_test_plan/wg11_tests.yaml --output "${CI_PROJECT_DIR}/${OUTPUT}/wg11_report.html"
+    - python3 tifg_report.py --data ../testplans/tifg.yaml --output "${CI_PROJECT_DIR}/${OUTPUT}/tifg_report.html"
+    - python3 wg11_report.py --data ../testplans/wg11.yaml --output "${CI_PROJECT_DIR}/${OUTPUT}/wg11_report.html"
     - python3 xunit_report.py --dir artifacts/ --third-party ../test_reports/third_party -o "${CI_PROJECT_DIR}/${OUTPUT}" "${FILTER_ARGS[@]}"
     - |
       HISTORIC_LIST=()
@@ -251,8 +251,8 @@ generate-report-preview:
     - pip install -r requirements.txt
     - mkdir -p artifacts "${CI_PROJECT_DIR}/${OUTPUT}"
     - python3 render_report.py --data ../features/features.yaml --output ${CI_PROJECT_DIR}/${OUTPUT}/feature_list.html
-    - python3 tifg_report.py --data ../tifg_test_plan/tifg_tests.yaml --output "${CI_PROJECT_DIR}/${OUTPUT}/tifg_report.html"
-    - python3 wg11_report.py --data ../oran_wg11_test_plan/wg11_tests.yaml --output "${CI_PROJECT_DIR}/${OUTPUT}/wg11_report.html"
+    - python3 tifg_report.py --data ../testplans/tifg.yaml --output "${CI_PROJECT_DIR}/${OUTPUT}/tifg_report.html"
+    - python3 wg11_report.py --data ../testplans/wg11.yaml --output "${CI_PROJECT_DIR}/${OUTPUT}/wg11_report.html"
     - python3 xunit_report.py --dir ../test_reports/example --third-party ../test_reports/third_party -o "${CI_PROJECT_DIR}/${OUTPUT}" --scope "CU/DU"
     - python3 gen_index.py -o "${CI_PROJECT_DIR}/${OUTPUT}/index.html"
   after_script:
@@ -275,7 +275,7 @@ build-tifg-report:
     - if: $ON_API
   script:
     - pip install --quiet pyyaml
-    - python3 scripts/tifg_report.py --data tifg_test_plan/tifg_tests.yaml --output tifg_report.html
+    - python3 scripts/tifg_report.py --data testplans/tifg.yaml --output tifg_report.html
   artifacts:
     paths:
       - tifg_report.html
@@ -290,7 +290,7 @@ build-wg11-report:
     - if: $ON_API
   script:
     - pip install --quiet pyyaml
-    - python3 scripts/wg11_report.py --data oran_wg11_test_plan/wg11_tests.yaml --output wg11_report.html
+    - python3 scripts/wg11_report.py --data testplans/wg11.yaml --output wg11_report.html
   artifacts:
     paths:
       - wg11_report.html

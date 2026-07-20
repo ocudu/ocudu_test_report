@@ -2,8 +2,8 @@
 # SPDX-License-Identifier: BSD-3-Clause-Open-MPI
 
 $schema: "http://json-schema.org/draft-07/schema#"
-title: TIFG Test Plan
-description: O-RAN TIFG E2E test cases applicable for 5G Standalone
+title: OCUDU Test Plan
+description: Shared schema for OCUDU O-RAN test plans (WG11, TIFG, ...)
 type: object
 required:
   - tests
@@ -17,26 +17,48 @@ properties:
       required:
         - test_id
         - description
+        - category
         - scope
       additionalProperties: false
+      if:
+        properties:
+          category:
+            const: Security
+      then:
+        required:
+          - category_description
       properties:
         test_id:
           type: string
-          description: Test case identifier matching the section number in the TIFG spec
-          pattern: "^[0-9]+(\\.[0-9]+)*$"
+          description: Test case identifier matching the section number in the test spec
+          pattern: "^[A-Za-z_0-9]+(\\.[0-9]+)*$"
         description:
           type: string
           description: Human-readable test case description
           minLength: 1
-        scope:
+        category:
           type: string
-          description: Scope / category of the test
+          description: Category of the test
           enum:
             - Functional
             - Performance
             - Service
             - Load and Stress
             - RIC-enabled
+            - Security
+        category_description:
+          type: string
+          description: Detailed description of the test category
+          minLength: 1
+        scope:
+          type: string
+          description: Scope of the test, as defined for OCUDU features
+          enum:
+            - "CU/DU"
+            - "Entire RAN/platform/deployment/auxiliary component"
+        comment:
+          type: string
+          description: Free-form comment for this test case
         ocudu_features:
           type: array
           description: OCUDU feature IDs covered by this test case

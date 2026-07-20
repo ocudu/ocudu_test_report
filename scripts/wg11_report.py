@@ -3,7 +3,7 @@
 # SPDX-FileCopyrightText: Copyright (C) 2021-2026 Software Radio Systems Limited
 # SPDX-License-Identifier: BSD-3-Clause-Open-MPI
 
-"""Render wg11_tests.yaml into a self-contained HTML report."""
+"""Render wg11.yaml into a self-contained HTML report."""
 
 import argparse
 import sys
@@ -17,7 +17,7 @@ except ImportError:
     print("ERROR: PyYAML is required. Install with: pip install pyyaml", file=sys.stderr)
     sys.exit(2)
 
-DEFAULT_DATA_FILE = str(Path(__file__).parent.parent / "oran_wg11_test_plan" / "wg11_tests.yaml")
+DEFAULT_DATA_FILE = str(Path(__file__).parent.parent / "testplans" / "wg11.yaml")
 DEFAULT_OUTPUT_FILE = "wg11_report.html"
 
 SCOPE_COLORS = {
@@ -61,8 +61,8 @@ def _load_tests(path: str) -> list[dict]:
     return result
 
 
-def _category_colors(categories: list[str]) -> dict[str, str]:
-    return {cat: CATEGORY_PALETTE[i % len(CATEGORY_PALETTE)] for i, cat in enumerate(sorted(categories))}
+def _subcategory_colors(subcategories: list[str]) -> dict[str, str]:
+    return {cat: CATEGORY_PALETTE[i % len(CATEGORY_PALETTE)] for i, cat in enumerate(sorted(subcategories))}
 
 
 def _badge(text: str, color: str, small: bool = False) -> str:
@@ -118,13 +118,13 @@ def _sort_key(test_id: str) -> list[tuple[int, Union[int, str]]]:
     return [(0, int(part)) if part.isdigit() else (1, part) for part in test_id.split(".")]
 
 
-def _build_rows(tests: list[dict], category_colors: dict[str, str]) -> str:
+def _build_rows(tests: list[dict], subcategory_colors: dict[str, str]) -> str:
     html = ""
     for t in sorted(tests, key=lambda t: _sort_key(t["test_id"])):
         scope = t.get("scope", "")
         scope_color = SCOPE_COLORS.get(scope, "#64748b")
-        category = t.get("category", "")
-        category_color = category_colors.get(category, "#64748b")
+        subcategory = t.get("category_description") or t.get("category", "")
+        subcategory_color = subcategory_colors.get(subcategory, "#64748b")
         comment = t.get("comment") or ""
         comment_html = comment if comment else '<span style="color:#475569;font-size:0.8rem">—</span>'
         html += f"""
@@ -132,7 +132,7 @@ def _build_rows(tests: list[dict], category_colors: dict[str, str]) -> str:
           <td style="font-family:monospace;font-size:0.85rem;color:#93c5fd;
                      white-space:nowrap;font-weight:600">{t['test_id']}</td>
           <td style="color:#e2e8f0;font-size:0.88rem">{t.get('description', '')}</td>
-          <td>{_badge(category, category_color, small=True)}</td>
+          <td>{_badge(subcategory, subcategory_color, small=True)}</td>
           <td style="white-space:nowrap">{_badge(scope, scope_color)}</td>
           <td style="color:#cbd5e1;font-size:0.85rem">{comment_html}</td>
         </tr>"""
@@ -142,17 +142,17 @@ def _build_rows(tests: list[dict], category_colors: dict[str, str]) -> str:
 def _render(tests: list[dict]) -> str:
     total = len(tests)
     scope_counts = Counter(t["scope"] for t in tests)
-    category_counts = Counter(t["category"] for t in tests)
-    category_colors = _category_colors(list(category_counts))
+    subcategory_counts = Counter(t.get("category_description") or t["category"] for t in tests)
+    subcategory_colors = _subcategory_colors(list(subcategory_counts))
 
     cards = (
         _summary_card(str(total), "Test Cases")
-        + _summary_card(str(len(category_counts)), "Categories")
+        + _summary_card(str(len(subcategory_counts)), "Subcategories")
         + _summary_card(str(len(scope_counts)), "Scopes")
     )
     scope_cards = _build_scope_cards(scope_counts)
     scope_chart_bars = _bar_chart(scope_counts, total, SCOPE_COLORS)
-    category_chart_bars = _bar_chart(category_counts, total, category_colors)
+    subcategory_chart_bars = _bar_chart(subcategory_counts, total, subcategory_colors)
     scope_chart = f"""
     <div style="background:#1e293b;border-radius:10px;padding:20px 24px;max-width:700px">
       <h3 style="margin:0 0 14px;font-size:0.95rem;color:#94a3b8;
@@ -162,10 +162,10 @@ def _render(tests: list[dict]) -> str:
     category_chart = f"""
     <div style="background:#1e293b;border-radius:10px;padding:20px 24px;max-width:700px">
       <h3 style="margin:0 0 14px;font-size:0.95rem;color:#94a3b8;
-                 text-transform:uppercase;letter-spacing:.06em">By category</h3>
-      {category_chart_bars}
+                 text-transform:uppercase;letter-spacing:.06em">By subcategory</h3>
+      {subcategory_chart_bars}
     </div>"""
-    rows = _build_rows(tests, category_colors)
+    rows = _build_rows(tests, subcategory_colors)
 
     # ── full page ─────────────────────────────────────────────────────────────
     return f"""<!DOCTYPE html>
@@ -205,7 +205,7 @@ def _render(tests: list[dict]) -> str:
   <h1>O-RAN WG11 Security Test Plan Report</h1>
   <p style="color:#64748b;font-size:0.85rem;margin-top:4px">
     Auto-generated from
-    <code style="color:#94a3b8">wg11_tests.yaml</code> &mdash;
+    <code style="color:#94a3b8">wg11.yaml</code> &mdash;
     O-RAN.WG11.Security-Test-Specifications.0-R004-v08.00, O-CU/O-DU related test cases only.
   </p>
 
@@ -227,7 +227,7 @@ def _render(tests: list[dict]) -> str:
 
   <h2>Test Cases</h2>
   <div style="margin-bottom:14px">
-    <input id="search" type="search" placeholder="Filter by test ID, description, category, scope or comment&hellip;">
+    <input id="search" type="search" placeholder="Filter by test ID, description, subcategory, scope or comment&hellip;">
   </div>
   <div style="overflow-x:auto">
     <table id="wg11-table">
@@ -235,7 +235,7 @@ def _render(tests: list[dict]) -> str:
         <tr>
           <th>Test ID</th>
           <th>Description</th>
-          <th>Category</th>
+          <th>Subcategory</th>
           <th>Scope</th>
           <th>Comment</th>
         </tr>
@@ -267,7 +267,7 @@ def _render(tests: list[dict]) -> str:
 
 def main() -> None:
     """Entrypoint"""
-    parser = argparse.ArgumentParser(description="Render wg11_tests.yaml to an HTML report.")
+    parser = argparse.ArgumentParser(description="Render wg11.yaml to an HTML report.")
     parser.add_argument("--data", default=DEFAULT_DATA_FILE, help=f"Input YAML file (default: {DEFAULT_DATA_FILE})")
     parser.add_argument(
         "--output", default=DEFAULT_OUTPUT_FILE, help=f"Output HTML file (default: {DEFAULT_OUTPUT_FILE})"

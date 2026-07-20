@@ -14,7 +14,8 @@ tests:
   # Section 5 - Functional Tests
   - test_id: "5.3"
     description: "5G SA Registration and deregistration of single UE"
-    scope: "Functional"
+    category: "Functional"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-ARCH-INTF-4
       - MVP-ARCH-INTF-5
@@ -64,7 +65,8 @@ tests:
 
   - test_id: "5.4"
     description: "Intra O-DU mobility (connected mode)"
-    scope: "Functional"
+    category: "Functional"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-PERF-MOB-1
       - MVP-PERF-MOB-2
@@ -80,7 +82,8 @@ tests:
 
   - test_id: "5.5"
     description: "Inter O-DU mobility (connected mode)"
-    scope: "Functional"
+    category: "Functional"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-FUNC-MOB-1
       - MVP-FUNC-MOB-2
@@ -99,7 +102,8 @@ tests:
 
   - test_id: "5.6"
     description: "Inter O-CU mobility (connected mode)"
-    scope: "Functional"
+    category: "Functional"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-FUNC-MOB-3
       - MVP-FUNC-MOB-4
@@ -117,24 +121,28 @@ tests:
 
   - test_id: "5.7"
     description: "5G SA registration and deregistration to single network slice"
-    scope: "Functional"
+    category: "Functional"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-FUNC-SVCS-17-3-a
 
   - test_id: "5.8"
     description: "5G SA registration and deregistration to multiple network slices"
-    scope: "Functional"
+    category: "Functional"
+    scope: "CU/DU"
 
   - test_id: "5.9"
     description: "Idle Mode Intra O-DU mobility"
-    scope: "Functional"
+    category: "Functional"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-FUNC-MOB-1-a
       - MVP-FUNC-MOB-1-b
 
   - test_id: "5.10"
     description: "Idle Mode Inter O-DU mobility"
-    scope: "Functional"
+    category: "Functional"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-FUNC-MOB-1-c
       - MVP-FUNC-MOB-1-d
@@ -144,7 +152,8 @@ tests:
 
   - test_id: "5.11"
     description: "Idle Mode Inter O-CU mobility"
-    scope: "Functional"
+    category: "Functional"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-FUNC-MOB-1-d
       - MVP-FUNC-MOB-1-e
@@ -152,7 +161,8 @@ tests:
   # Section 6 - Performance Tests
   - test_id: "6.2"
     description: "Downlink peak throughput"
-    scope: "Performance"
+    category: "Performance"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-FUNC-MIMO-16-4
       - MVP-FUNC-MIMO-16-5
@@ -169,7 +179,8 @@ tests:
 
   - test_id: "6.3"
     description: "Uplink peak throughput"
-    scope: "Performance"
+    category: "Performance"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-FUNC-MIMO-16-4
       - MVP-FUNC-MIMO-16-5
@@ -186,15 +197,18 @@ tests:
 
   - test_id: "6.4"
     description: "Downlink throughput in different radio conditions"
-    scope: "Performance"
+    category: "Performance"
+    scope: "CU/DU"
 
   - test_id: "6.5"
     description: "Uplink throughput in different radio conditions"
-    scope: "Performance"
+    category: "Performance"
+    scope: "CU/DU"
 
   - test_id: "6.6"
     description: "Bidirectional throughput in different radio conditions"
-    scope: "Performance"
+    category: "Performance"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-PERF-THR-3a
       - MVP-PERF-THR-3b
@@ -202,7 +216,8 @@ tests:
 
   - test_id: "6.7"
     description: "Downlink coverage throughput (link budget)"
-    scope: "Performance"
+    category: "Performance"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-PERF-THR-4a
       - MVP-PERF-THR-4b
@@ -210,7 +225,8 @@ tests:
 
   - test_id: "6.8"
     description: "Uplink coverage throughput (link budget)"
-    scope: "Performance"
+    category: "Performance"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-PERF-THR-5a
       - MVP-PERF-THR-5b
@@ -218,7 +234,8 @@ tests:
 
   - test_id: "6.9"
     description: "Downlink aggregated cell throughput (cell capacity)"
-    scope: "Performance"
+    category: "Performance"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-FUNC-MIMO-16-7
       - MVP-FUNC-MIMO-16-8
@@ -228,7 +245,8 @@ tests:
 
   - test_id: "6.10"
     description: "Uplink aggregated cell throughput (cell capacity)"
-    scope: "Performance"
+    category: "Performance"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-FUNC-MIMO-16-6
       - MVP-FUNC-MIMO-16-8
@@ -238,28 +256,34 @@ tests:
 
   - test_id: "6.11"
     description: "Impact of fronthaul latency on DL peak throughput"
-    scope: "Performance"
+    category: "Performance"
+    scope: "CU/DU"
 
   - test_id: "6.12"
     description: "Impact of fronthaul latency on UL peak throughput"
-    scope: "Performance"
+    category: "Performance"
+    scope: "CU/DU"
 
   - test_id: "6.13"
     description: "Impact of midhaul latency on DL peak throughput"
-    scope: "Performance"
+    category: "Performance"
+    scope: "CU/DU"
 
   - test_id: "6.14"
     description: "Impact of midhaul latency on UL peak throughput"
-    scope: "Performance"
+    category: "Performance"
+    scope: "CU/DU"
 
   - test_id: "6.15"
     description: "End-to-end user plane latency"
-    scope: "Performance"
+    category: "Performance"
+    scope: "CU/DU"
 
   # Section 7 - Services Tests
   - test_id: "7.1.1"
     description: "Web Browsing"
-    scope: "Service"
+    category: "Service"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-PERF-WEB-1
       - MVP-PERF-WEB-2
@@ -268,7 +292,8 @@ tests:
 
   - test_id: "7.1.2"
     description: "File upload/download"
-    scope: "Service"
+    category: "Service"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-PERF-FILDL-1
       - MVP-PERF-FILDL-2
@@ -277,23 +302,27 @@ tests:
 
   - test_id: "7.2.1"
     description: "Video Streaming - Stationary Test"
-    scope: "Service"
+    category: "Service"
+    scope: "CU/DU"
 
   - test_id: "7.3.3"
     description: "Voice Service - LTE to NR / NR to LTE handover"
-    scope: "Service"
+    category: "Service"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-FUNC-SVCS-16-1
 
   - test_id: "7.4.1"
     description: "EPS Fallback (voice, N26 and without N26)"
-    scope: "Service"
+    category: "Service"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-FUNC-SVCS-16-7
 
   - test_id: "7.5.1"
     description: "Voice over NR - Stationary"
-    scope: "Service"
+    category: "Service"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-FUNC-SVCS-16-8-a
       - MVP-FUNC-SVCS-16-8-b
@@ -309,7 +338,8 @@ tests:
 
   - test_id: "7.5.2"
     description: "VoNR - Intra O-DU handover"
-    scope: "Service"
+    category: "Service"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-PERF-RET-2
       - MVP-PERF-VNR-1
@@ -325,7 +355,8 @@ tests:
 
   - test_id: "7.5.3"
     description: "VoNR - Intra O-CU/Inter O-DU handover"
-    scope: "Service"
+    category: "Service"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-PERF-RET-2
       - MVP-PERF-VNR-1
@@ -341,7 +372,8 @@ tests:
 
   - test_id: "7.5.4"
     description: "VoNR - Inter O-CU handover"
-    scope: "Service"
+    category: "Service"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-PERF-RET-2
       - MVP-PERF-VNR-1
@@ -357,44 +389,53 @@ tests:
 
   - test_id: "7.6.3"
     description: "ViLTE - LTE to NR / NR to LTE handover"
-    scope: "Service"
+    category: "Service"
+    scope: "CU/DU"
 
   - test_id: "7.7.1"
     description: "Video Service EPS Fallback"
-    scope: "Service"
+    category: "Service"
+    scope: "CU/DU"
 
   - test_id: "7.8.1"
     description: "Video over NR - Stationary"
-    scope: "Service"
+    category: "Service"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-FUNC-SVCS-16-8-c
 
   - test_id: "7.8.2"
     description: "Video over NR - Intra O-DU handover"
-    scope: "Service"
+    category: "Service"
+    scope: "CU/DU"
 
   - test_id: "7.8.3"
     description: "Video over NR - Intra O-CU/Inter O-DU handover"
-    scope: "Service"
+    category: "Service"
+    scope: "CU/DU"
 
   - test_id: "7.8.4"
     description: "Video over NR - Inter O-CU handover"
-    scope: "Service"
+    category: "Service"
+    scope: "CU/DU"
 
   - test_id: "7.9.1"
     description: "URLLC - Augmented Reality"
-    scope: "Service"
+    category: "Service"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-FUNC-SVCS-17-3-a
 
   - test_id: "7.10.1"
     description: "mMTC - Sensors"
-    scope: "Service"
+    category: "Service"
+    scope: "CU/DU"
 
   # Section 8 - Load and Stress Tests
   - test_id: "8.1"
     description: "Simultaneous RRC_CONNECTED UEs"
-    scope: "Load and Stress"
+    category: "Load and Stress"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-PERF-ACC-2
       - MVP-PERF-LAT-1
@@ -405,55 +446,65 @@ tests:
 
   - test_id: "8.2"
     description: "UE State Transition Rate Testing"
-    scope: "Load and Stress"
+    category: "Load and Stress"
+    scope: "CU/DU"
 
   - test_id: "8.3"
     description: "Traffic Load Testing"
-    scope: "Load and Stress"
+    category: "Load and Stress"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-PERF-LOAD-2
       - MVP-PERF-LOAD-3
 
   - test_id: "8.4"
     description: "Traffic Model Testing"
-    scope: "Load and Stress"
+    category: "Load and Stress"
+    scope: "CU/DU"
 
   - test_id: "8.5"
     description: "Long hours stability Testing"
-    scope: "Load and Stress"
+    category: "Load and Stress"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-PERF-LOAD-1
 
   - test_id: "8.6"
     description: "Multi-cell Testing"
-    scope: "Load and Stress"
+    category: "Load and Stress"
+    scope: "CU/DU"
 
   - test_id: "8.7"
     description: "Emergency call"
-    scope: "Load and Stress"
+    category: "Load and Stress"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-FUNC-SVCS-16-3
 
   - test_id: "8.8"
     description: "ETWS (Earthquake and Tsunami Warning System)"
-    scope: "Load and Stress"
+    category: "Load and Stress"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-FUNC-SVCS-16-5
 
   - test_id: "8.9"
     description: "MPS Call"
-    scope: "Load and Stress"
+    category: "Load and Stress"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-FUNC-SVCS-16-4
 
   - test_id: "8.10"
     description: "Simultaneous RRC_CONNECTED UEs Stability"
-    scope: "Load and Stress"
+    category: "Load and Stress"
+    scope: "CU/DU"
 
   # Section 9 - RIC-enabled End-to-end Use Case Tests
   - test_id: "9.2"
     description: "Traffic steering with connected mode mobility control"
-    scope: "RIC-enabled"
+    category: "RIC-enabled"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-FUNC-SMO-17-1-a
       - MVP-FUNC-SMO-17-1-b
@@ -464,7 +515,8 @@ tests:
 
   - test_id: "9.3"
     description: "Network Energy Saving with Carrier and Cell switch off/on using Non-RT RIC"
-    scope: "RIC-enabled"
+    category: "RIC-enabled"
+    scope: "CU/DU"
     ocudu_features:
       - MVP-FUNC-SMO-17-1-a
       - MVP-FUNC-SMO-17-1-b
