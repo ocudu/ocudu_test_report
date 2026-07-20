@@ -140,6 +140,7 @@ def _sort_key(test_id: str) -> list[tuple[int, Union[int, str]]]:
     return [(0, int(part)) if part.isdigit() else (1, part) for part in test_id.split(".")]
 
 
+# pylint: disable=too-many-locals
 def _build_rows(
     tests: list[dict],
     subcategory_colors: dict[str, str],
@@ -185,6 +186,7 @@ def _build_rows(
     return html
 
 
+# pylint: disable=too-many-locals
 def _render(tests: list[dict], title: str, subtitle: str, source_name: str) -> str:
     total = len(tests)
     category_counts = Counter(t["category"] for t in tests)
@@ -222,15 +224,12 @@ def _render(tests: list[dict], title: str, subtitle: str, source_name: str) -> s
     if show_subcategory:
         charts.append(("By subcategory", _bar_chart(subcategory_counts, total, subcategory_colors)))
 
-    chart_html = "".join(
-        f"""
+    chart_html = "".join(f"""
     <div style="background:#1e293b;border-radius:10px;padding:20px 24px;max-width:700px">
       <h3 style="margin:0 0 14px;font-size:0.95rem;color:#94a3b8;
                  text-transform:uppercase;letter-spacing:.06em">{label}</h3>
       {bars}
-    </div>"""
-        for label, bars in charts
-    )
+    </div>""" for label, bars in charts)
 
     headers = ["Test ID", "Description", "Category", "Scope"]
     if show_subcategory:
