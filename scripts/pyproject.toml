@@ -37,8 +37,8 @@ envlist =
 [testenv:format]
 skip_install = true
 deps =
-  black
-  isort
+  black==25.11.0
+  isort==6.1.0
 commands =
   black .
   isort .
