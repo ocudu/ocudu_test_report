@@ -1,4 +1,5 @@
 # SPDX-FileCopyrightText: Copyright (C) 2021-2026 Software Radio Systems Limited
+# SPDX-FileCopyrightText: 2026 Modifications (C) OpenInfra Foundation Europe. All rights reserved.
 # SPDX-License-Identifier: BSD-3-Clause-Open-MPI
 
 # O-RAN TIFG E2E Test Cases applicable for 5G Standalone (SA)
@@ -85,8 +86,16 @@ tests:
     category: "Functional"
     scope: "CU/DU"
     ocudu_features:
-      - MVP-FUNC-MOB-1
-      - MVP-FUNC-MOB-2
+      - MVP-FUNC-MOB-1-a
+      - MVP-FUNC-MOB-1-b
+      - MVP-FUNC-MOB-1-c
+      - MVP-FUNC-MOB-1-d
+      - MVP-FUNC-MOB-1-e
+      - MVP-FUNC-MOB-2-a
+      - MVP-FUNC-MOB-2-b
+      - MVP-FUNC-MOB-2-c
+      - MVP-FUNC-MOB-2-d
+      - MVP-FUNC-MOB-2-e
       - MVP-FUNC-MOB-9
       - MVP-PERF-MOB-1
       - MVP-PERF-MOB-2

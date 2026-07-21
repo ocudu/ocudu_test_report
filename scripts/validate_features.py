@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 # SPDX-FileCopyrightText: Copyright (C) 2021-2026 Software Radio Systems Limited
+# SPDX-FileCopyrightText: 2026 Modifications (C) OpenInfra Foundation Europe. All rights reserved.
 # SPDX-License-Identifier: BSD-3-Clause-Open-MPI
 
 """Validate features.yaml against features.schama (JSON Schema in YAML format).
@@ -10,6 +11,8 @@ Exit codes:
   1  - validation failed (schema violations)
   2  - usage / file error
 """
+
+from __future__ import annotations
 
 import argparse
 import sys
@@ -38,6 +41,26 @@ def load_file(path: str) -> Any:
         return yaml.safe_load(f)
 
 
+def check_duplicate_ids(data: dict) -> list[str]:
+    """Check for duplicate feature IDs. Return list of error messages."""
+    features = data.get("features", [])
+    if not isinstance(features, list):
+        return []
+    seen: dict[str, int] = {}
+    duplicates: list[str] = []
+    for idx, feature in enumerate(features):
+        if not isinstance(feature, dict):
+            continue
+        fid = feature.get("id", "")
+        if not fid:
+            continue
+        if fid in seen:
+            duplicates.append(f"  Duplicate feature id '{fid}' at index {idx}" f" (first seen at index {seen[fid]})")
+        else:
+            seen[fid] = idx
+    return duplicates
+
+
 def validate(data_path: str, schema_path: str) -> list[str]:
     """Return a list of validation error messages (empty = valid)."""
     try:
@@ -64,6 +87,8 @@ def validate(data_path: str, schema_path: str) -> list[str]:
             feature_id = data["features"][path[1]].get("id", "")
         id_part = f" (id: {feature_id})" if feature_id else ""
         messages.append(f"  [{' -> '.join(str(p) for p in path) or '/'}]{id_part} {err.message}")
+
+    messages.extend(check_duplicate_ids(data))
     return messages
 
 
