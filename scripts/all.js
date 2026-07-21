@@ -16,7 +16,8 @@
     const checked = boxes.filter(b => b.checked);
     const label = document.querySelector(`#${wrapId} .ms-label`);
     if (!label) return;
-    if (checked.length === 0 || checked.length === boxes.length) label.textContent = 'All';
+    if (checked.length === boxes.length) label.textContent = 'All';
+    else if (checked.length === 0) label.textContent = 'None';
     else if (checked.length === 1) label.textContent = checked[0].value;
     else label.textContent = `${checked.length} selected`;
   }
