@@ -224,12 +224,15 @@ def _render(tests: list[dict], title: str, subtitle: str, source_name: str) -> s
     if show_subcategory:
         charts.append(("By subcategory", _bar_chart(subcategory_counts, total, subcategory_colors)))
 
-    chart_html = "".join(f"""
+    chart_html = "".join(
+        f"""
     <div style="background:#1e293b;border-radius:10px;padding:20px 24px;max-width:700px">
       <h3 style="margin:0 0 14px;font-size:0.95rem;color:#94a3b8;
                  text-transform:uppercase;letter-spacing:.06em">{label}</h3>
       {bars}
-    </div>""" for label, bars in charts)
+    </div>"""
+        for label, bars in charts
+    )
 
     headers = ["Test ID", "Description", "Category", "Scope"]
     if show_subcategory:
