@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 # SPDX-FileCopyrightText: Copyright (C) 2021-2026 Software Radio Systems Limited
-# SPDX-FileCopyrightText: 2026 Modifications (C) OpenInfra Foundation Europe. All rights reserved.
 # SPDX-License-Identifier: BSD-3-Clause-Open-MPI
 
 """Validate features.yaml against features.schama (JSON Schema in YAML format).
@@ -111,11 +110,11 @@ def main() -> None:
     errors = validate(args.data, args.schema)
 
     if errors:
-        print(f"FAILED — {len(errors)} error(s) found:\n")
+        print(f"FAILED â€” {len(errors)} error(s) found:\n")
         print("\n".join(errors))
         sys.exit(1)
     else:
-        print("OK — features file is valid.")
+        print("OK â€” features file is valid.")
         sys.exit(0)
 
 

@@ -1,5 +1,4 @@
 # SPDX-FileCopyrightText: Copyright (C) 2021-2026 Software Radio Systems Limited
-# SPDX-FileCopyrightText: 2026 Modifications (C) OpenInfra Foundation Europe. All rights reserved.
 # SPDX-License-Identifier: BSD-3-Clause-Open-MPI
 features:
   - id: MVP-ARCH-GEN-1
@@ -1642,7 +1641,7 @@ features:
       evaluate this performance metric. However, test methods and procedures in clauses
       6.4/6.7/8.3 could be leveraged to develop the procedure/configuration for this
       performance metric (Note 2). | Performance Value Range: <= 25ms (Note 1).'
-    short_description: RRC Setup Time ≤25 ms
+    short_description: RRC Setup Time â‰¤25 ms
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
@@ -1657,7 +1656,7 @@ features:
       facilitate configuration of different size of ping messages of up to 1340 bytes
       (Note 2). | Performance Value Range: Lab: <= 23 ms; Field: <= 60 ms, <= 25 ms
       median (Note 1).'
-    short_description: Ping RTT ≤23 ms (lab) / ≤60 ms (field)
+    short_description: Ping RTT â‰¤23 ms (lab) / â‰¤60 ms (field)
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
@@ -1750,9 +1749,9 @@ features:
     scope: CU/DU
     description: 'Handover Success Rate: Measure of sustaining an active connection
       as the user moves across coverage of different cells for the following scenarios:
-      – Intra-O-RU, Intra-O-DU, Intra-O-CU (Central Unit) handover; - Inter-O-RU, Intra-O-DU,
-      Intra-O-CU handover; – Inter-RU, Inter-O-DU, Intra-O-CU handover; – Inter-RU,
-      Inter-DU, Inter-CU Xn handovers; – Inter-RU, Inter-DU, Inter-CU N2 handovers.
+      â€“ Intra-O-RU, Intra-O-DU, Intra-O-CU (Central Unit) handover; - Inter-O-RU, Intra-O-DU,
+      Intra-O-CU handover; â€“ Inter-RU, Inter-O-DU, Intra-O-CU handover; â€“ Inter-RU,
+      Inter-DU, Inter-CU Xn handovers; â€“ Inter-RU, Inter-DU, Inter-CU N2 handovers.
       | Test Method: O-RAN.TIFG.E2E-Test.0-R003-v06.00, Clauses 5.4, 5.5, 5.6 (Note
       2) | Performance Value Range: >99.99% (Note 1).'
     short_description: Handover Success Rate >99.99%
@@ -1766,12 +1765,12 @@ features:
     description: 'Handover Interruption Time: Measure of service interruption during
       a handover. It is time difference between the RRCReconfiguration message (to initiate
       Handover) received by the UE to RRC reconfiguration complete received at the target
-      cell for the following scenarios: – Intra-O-RU, Intra-O-DU, Intra-O-CU handover;
-      – Inter-O-RU, Intra-O-DU, Intra-O-CU handover; – Inter-RU, Inter-O-DU, Intra-O-CU
-      handover; – Inter-RU, Inter-DU, Inter-CU Xn handovers; – Inter-RU, Inter-DU, Inter-CU
+      cell for the following scenarios: â€“ Intra-O-RU, Intra-O-DU, Intra-O-CU handover;
+      â€“ Inter-O-RU, Intra-O-DU, Intra-O-CU handover; â€“ Inter-RU, Inter-O-DU, Intra-O-CU
+      handover; â€“ Inter-RU, Inter-DU, Inter-CU Xn handovers; â€“ Inter-RU, Inter-DU, Inter-CU
       N2 handovers. | Test Method: O-RAN.TIFG.E2E-Test.0-R003-v06.00, Clauses 5.4, 5.5,
-      5.6 (Note 2) | Performance Value Range: <= 52 ms for FR1 – FR1; <= 72 ms for FR2
-      – FR1; <= 157 ms for FR2 – FR2; <= 177 ms for FR1 – FR2. For field: As specified
+      5.6 (Note 2) | Performance Value Range: <= 52 ms for FR1 â€“ FR1; <= 72 ms for FR2
+      â€“ FR1; <= 157 ms for FR2 â€“ FR2; <= 177 ms for FR1 â€“ FR2. For field: As specified
       in TS 38.133, Clause 6.1.'
     short_description: Handover Interruption Time by band combination
     type: Performance
@@ -1782,9 +1781,9 @@ features:
     source: ATIS-MVP
     scope: CU/DU
     description: 'DL packet loss during handover: Measure of DL packet loss during a
-      handover for the following scenarios: – Intra-O-RU, Intra-O-DU, Intra-O-CU handover;
-      – Inter-O-RU, Intra-O-DU, Intra-O-CU handover; – Inter-RU, Inter-O-DU, Intra-O-CU
-      handover; – Inter-RU, Inter-DU, Inter-CU Xn handovers; – Inter-RU, Inter-DU, Inter-CU
+      handover for the following scenarios: â€“ Intra-O-RU, Intra-O-DU, Intra-O-CU handover;
+      â€“ Inter-O-RU, Intra-O-DU, Intra-O-CU handover; â€“ Inter-RU, Inter-O-DU, Intra-O-CU
+      handover; â€“ Inter-RU, Inter-DU, Inter-CU Xn handovers; â€“ Inter-RU, Inter-DU, Inter-CU
       N2 handovers. | Test Method: O-RAN.TIFG.E2E-Test.0-R003-v06.00, Clauses 5.4, 5.5,
       5.6 (Note 2) | Performance Value Range: (none specified).'
     short_description: DL packet loss during handover
@@ -1796,9 +1795,9 @@ features:
     source: ATIS-MVP
     scope: CU/DU
     description: 'UL packet loss during handover: Measure of UL packet loss during a
-      handover for the following scenarios: – Intra-O-RU, Intra-O-DU, Intra-O-CU handover;
-      – Inter-O-RU, Intra-O-DU, Intra-O-CU handover; – Inter-RU, Inter-O-DU, Intra-O-CU
-      handover; – Inter-RU, Inter-DU, Inter-CU Xn handovers; – Inter-RU, Inter-DU, Inter-CU
+      handover for the following scenarios: â€“ Intra-O-RU, Intra-O-DU, Intra-O-CU handover;
+      â€“ Inter-O-RU, Intra-O-DU, Intra-O-CU handover; â€“ Inter-RU, Inter-O-DU, Intra-O-CU
+      handover; â€“ Inter-RU, Inter-DU, Inter-CU Xn handovers; â€“ Inter-RU, Inter-DU, Inter-CU
       N2 handovers. | Test Method: O-RAN.TIFG.E2E-Test.0-R003-v06.00, Clauses 5.4, 5.5,
       5.6 (Note 2) | Performance Value Range: (none specified).'
     short_description: UL packet loss during handover
@@ -1810,10 +1809,10 @@ features:
     source: ATIS-MVP
     scope: CU/DU
     description: 'Call drop due to unsuccessful handover: Measure of session failure
-      due to unsuccessful handover procedure for the following scenarios: – Intra-O-RU,
-      Intra-O-DU, Intra-O-CU handover; – Inter-O-RU, Intra-O-DU, Intra-O-CU handover;
-      – Inter-RU, Inter-O-DU, Intra-O-CU handover; – Inter-RU, Inter-DU, Inter-CU Xn
-      handovers; – Inter-RU, Inter-DU, Inter-CU N2 handovers. | Test Method: O-RAN.TIFG.E2E-Test.0-R003-v06.00,
+      due to unsuccessful handover procedure for the following scenarios: â€“ Intra-O-RU,
+      Intra-O-DU, Intra-O-CU handover; â€“ Inter-O-RU, Intra-O-DU, Intra-O-CU handover;
+      â€“ Inter-RU, Inter-O-DU, Intra-O-CU handover; â€“ Inter-RU, Inter-DU, Inter-CU Xn
+      handovers; â€“ Inter-RU, Inter-DU, Inter-CU N2 handovers. | Test Method: O-RAN.TIFG.E2E-Test.0-R003-v06.00,
       Clauses 5.4, 5.5, 5.6 (Note 2) | Performance Value Range: (none specified).'
     short_description: Call drop due to failed handover
     type: Performance
@@ -1825,9 +1824,9 @@ features:
     scope: CU/DU
     description: 'Application DL Throughput before and after a successful handover:
       Measure of to ensure application level DL throughput before and after a successful
-      handover for the following scenarios: – Intra-O-RU, Intra-O-DU, Intra-O-CU handover;
-      – Inter-O-RU, Intra-O-DU, Intra-O-CU handover; – Inter-RU, Inter-O-DU, Intra-O-CU
-      handover; – Inter-RU, Inter-DU, Inter-CU Xn handovers; – Inter-RU, Inter-DU, Inter-CU
+      handover for the following scenarios: â€“ Intra-O-RU, Intra-O-DU, Intra-O-CU handover;
+      â€“ Inter-O-RU, Intra-O-DU, Intra-O-CU handover; â€“ Inter-RU, Inter-O-DU, Intra-O-CU
+      handover; â€“ Inter-RU, Inter-DU, Inter-CU Xn handovers; â€“ Inter-RU, Inter-DU, Inter-CU
       N2 handovers. | Test Method: O-RAN.TIFG.E2E-Test.0-R003-v06.00, Clauses 5.4, 5.5,
       5.6 (Note 2) | Performance Value Range: Throughput_after >= Throughput_before.'
     short_description: App DL throughput after HO > before HO
@@ -1840,9 +1839,9 @@ features:
     scope: CU/DU
     description: 'L1 DL Throughput before and after a successful handover: Measure of
       L1 DL throughput before and after a successful handover for the following scenarios:
-      – Intra-O-RU, Intra-O-DU, Intra-O-CU handover; – Inter-O-RU, Intra-O-DU, Intra-O-CU
-      handover; – Inter-RU, Inter-O-DU, Intra-O-CU handover; – Inter-RU, Inter-DU, Inter-CU
-      Xn handovers; – Inter-RU, Inter-DU, Inter-CU N2 handovers. | Test Method: O-RAN.TIFG.E2E-Test.0-R003-v06.00,
+      â€“ Intra-O-RU, Intra-O-DU, Intra-O-CU handover; â€“ Inter-O-RU, Intra-O-DU, Intra-O-CU
+      handover; â€“ Inter-RU, Inter-O-DU, Intra-O-CU handover; â€“ Inter-RU, Inter-DU, Inter-CU
+      Xn handovers; â€“ Inter-RU, Inter-DU, Inter-CU N2 handovers. | Test Method: O-RAN.TIFG.E2E-Test.0-R003-v06.00,
       Clauses 5.4, 5.5, 5.6 (Note 2) | Performance Value Range: Throughput_after >=
       Throughput_before.'
     short_description: L1 DL throughput after HO > before HO
@@ -1855,9 +1854,9 @@ features:
     scope: CU/DU
     description: 'L3 DL Throughput before and after a successful handover: Measure of
       L3 DL throughput before and after a successful handover or the following scenarios:
-      – Intra-O-RU, Intra-O-DU, Intra-O-CU handover; – Inter-O-RU, Intra-O-DU, Intra-O-CU
-      handover; – Inter-RU, Inter-O-DU, Intra-O-CU handover; – Inter-RU, Inter-DU, Inter-CU
-      Xn handovers; – Inter-RU, Inter-DU, Inter-CU N2 handovers. | Test Method: O-RAN.TIFG.E2E-Test.0-R003-v06.00,
+      â€“ Intra-O-RU, Intra-O-DU, Intra-O-CU handover; â€“ Inter-O-RU, Intra-O-DU, Intra-O-CU
+      handover; â€“ Inter-RU, Inter-O-DU, Intra-O-CU handover; â€“ Inter-RU, Inter-DU, Inter-CU
+      Xn handovers; â€“ Inter-RU, Inter-DU, Inter-CU N2 handovers. | Test Method: O-RAN.TIFG.E2E-Test.0-R003-v06.00,
       Clauses 5.4, 5.5, 5.6 (Note 2) | Performance Value Range: Throughput_after >=
       Throughput_before.'
     short_description: L3 DL throughput after HO > before HO
@@ -1870,9 +1869,9 @@ features:
     scope: CU/DU
     description: 'Application UL Throughput before and after a successful handover:
       Measure of application level UL throughput before and after a successful handover
-      for the following scenarios: – Intra-O-RU, Intra-O-DU, Intra-O-CU handover; –
-      Inter-O-RU, Intra-O-DU, Intra-O-CU handover; – Inter-RU, Inter-O-DU, Intra-O-CU
-      handover; – Inter-RU, Inter-DU, Inter-CU Xn handovers; – Inter-RU, Inter-DU, Inter-CU
+      for the following scenarios: â€“ Intra-O-RU, Intra-O-DU, Intra-O-CU handover; â€“
+      Inter-O-RU, Intra-O-DU, Intra-O-CU handover; â€“ Inter-RU, Inter-O-DU, Intra-O-CU
+      handover; â€“ Inter-RU, Inter-DU, Inter-CU Xn handovers; â€“ Inter-RU, Inter-DU, Inter-CU
       N2 handovers. | Test Method: O-RAN.TIFG.E2E-Test.0-R003-v06.00, Clauses 5.4, 5.5,
       5.6 (Note 2) | Performance Value Range: Throughput_after >= Throughput_before.'
     short_description: App UL throughput after HO > before HO
@@ -1885,9 +1884,9 @@ features:
     scope: CU/DU
     description: 'L1 UL Throughput before and after a successful handover: Measure of
       L1 UL throughput before and after a successful handover for the following scenarios:
-      – Intra-O-RU, Intra-O-DU, Intra-O-CU handover; – Inter-O-RU, Intra-O-DU, Intra-O-CU
-      handover; – Inter-RU, Inter-O-DU, Intra-O-CU handover; – Inter-RU, Inter-DU, Inter-CU
-      Xn handovers; – Inter-RU, Inter-DU, Inter-CU N2 handovers. | Test Method: O-RAN.TIFG.E2E-Test.0-R003-v06.00,
+      â€“ Intra-O-RU, Intra-O-DU, Intra-O-CU handover; â€“ Inter-O-RU, Intra-O-DU, Intra-O-CU
+      handover; â€“ Inter-RU, Inter-O-DU, Intra-O-CU handover; â€“ Inter-RU, Inter-DU, Inter-CU
+      Xn handovers; â€“ Inter-RU, Inter-DU, Inter-CU N2 handovers. | Test Method: O-RAN.TIFG.E2E-Test.0-R003-v06.00,
       Clauses 5.4, 5.5, 5.6 (Note 2) | Performance Value Range: Throughput_after >=
       Throughput_before.'
     short_description: L1 UL throughput after HO > before HO
@@ -1899,10 +1898,10 @@ features:
     source: ATIS-MVP
     scope: CU/DU
     description: 'L3 UL Throughput before and after a successful handover: Measure of
-      L3 UL throughput before and after a successful or the following scenarios: – Intra-O-RU,
-      Intra-O-DU, Intra-O-CU handover; – Inter-O-RU, Intra-O-DU, Intra-O-CU handover;
-      – Inter-RU, Inter-O-DU, Intra-O-CU handover; – Inter-RU, Inter-DU, Inter-CU Xn
-      handovers; – Inter-RU, Inter-DU, Inter-CU N2 handovers. | Test Method: O-RAN.TIFG.E2E-Test.0-R003-v06.00,
+      L3 UL throughput before and after a successful or the following scenarios: â€“ Intra-O-RU,
+      Intra-O-DU, Intra-O-CU handover; â€“ Inter-O-RU, Intra-O-DU, Intra-O-CU handover;
+      â€“ Inter-RU, Inter-O-DU, Intra-O-CU handover; â€“ Inter-RU, Inter-DU, Inter-CU Xn
+      handovers; â€“ Inter-RU, Inter-DU, Inter-CU N2 handovers. | Test Method: O-RAN.TIFG.E2E-Test.0-R003-v06.00,
       Clauses 5.4, 5.5, 5.6 (Note 2) | Performance Value Range: Throughput_after >=
       Throughput_before.'
     short_description: L3 UL throughput after HO > before HO
@@ -1939,9 +1938,9 @@ features:
     scope: CU/DU
     description: 'VoNR Handover Success Rate: Measure of sustaining voice media and
       signaling radio bearers as the user moves across coverage of different sites for
-      the following scenarios: – Intra-O-RU, Intra-O-DU, Intra-O-CU handover; – Inter-O-RU,
-      Intra-O-DU, Intra-O-CU handover; – Inter-RU, Inter-O-DU, Intra-O-CU handover;
-      – Inter-RU, Inter-DU, Inter-CU Xn based handovers; – Inter-RU, Inter-DU, Inter-CU
+      the following scenarios: â€“ Intra-O-RU, Intra-O-DU, Intra-O-CU handover; â€“ Inter-O-RU,
+      Intra-O-DU, Intra-O-CU handover; â€“ Inter-RU, Inter-O-DU, Intra-O-CU handover;
+      â€“ Inter-RU, Inter-DU, Inter-CU Xn based handovers; â€“ Inter-RU, Inter-DU, Inter-CU
       N2 based handovers. | Test Method: O-RAN.TIFG.E2E-Test.0-R003-v06.00, Clauses
       7.5.2, 7.5.3, 7.5.4 (Note 2) | Performance Value Range: >= 99.99% (Note 1).'
     short_description: VoNR Handover Success Rate >99.99%
@@ -1954,9 +1953,9 @@ features:
     scope: CU/DU
     description: 'VoNR Handover - Real-time Transport Protocol (RTP) Packet loss %:
       Measure of DL and UL RTP packets lost during a handover for the following scenarios:
-      – Intra-O-RU, Intra-O-DU, Intra-O-CU handover; – Inter-O-RU, Intra-O-DU, Intra-O-CU
-      handover; – Inter-RU, Inter-O-DU, Intra-O-CU handover; – Inter-RU, Inter-DU, Inter-CU
-      Xn handovers; – Inter-RU, Inter-DU, Inter-CU N2 handovers. | Test Method: O-RAN.TIFG.E2E-Test.0-R003-v06.00,
+      â€“ Intra-O-RU, Intra-O-DU, Intra-O-CU handover; â€“ Inter-O-RU, Intra-O-DU, Intra-O-CU
+      handover; â€“ Inter-RU, Inter-O-DU, Intra-O-CU handover; â€“ Inter-RU, Inter-DU, Inter-CU
+      Xn handovers; â€“ Inter-RU, Inter-DU, Inter-CU N2 handovers. | Test Method: O-RAN.TIFG.E2E-Test.0-R003-v06.00,
       Clauses 7.5.2, 7.5.3, 7.5.4 (Note 2) | Performance Value Range: (none specified).'
     short_description: VoNR Handover RTP Packet Loss
     type: Performance
@@ -1967,10 +1966,10 @@ features:
     source: ATIS-MVP
     scope: CU/DU
     description: 'VoNR Handover - UE Packet delay: Measure of DL and UL delay experienced
-      for voice media packets during a handover for the following scenarios: – Intra-O-RU,
-      Intra-O-DU, Intra-O-CU handover; – Inter-O-RU, Intra-O-DU, Intra-O-CU handover;
-      – Inter-RU, Inter-O-DU, Intra-O-CU handover; – Inter-RU, Inter-DU, Inter-CU Xn
-      handovers; – Inter-RU, Inter-DU, Inter-CU N2 handovers. | Test Method: O-RAN.TIFG.E2E-Test.0-R003-v06.00,
+      for voice media packets during a handover for the following scenarios: â€“ Intra-O-RU,
+      Intra-O-DU, Intra-O-CU handover; â€“ Inter-O-RU, Intra-O-DU, Intra-O-CU handover;
+      â€“ Inter-RU, Inter-O-DU, Intra-O-CU handover; â€“ Inter-RU, Inter-DU, Inter-CU Xn
+      handovers; â€“ Inter-RU, Inter-DU, Inter-CU N2 handovers. | Test Method: O-RAN.TIFG.E2E-Test.0-R003-v06.00,
       Clauses 7.5.2, 7.5.3, 7.5.4 (Note 2) | Performance Value Range: (none specified).'
     short_description: VoNR Handover UE Packet Delay
     type: Performance
