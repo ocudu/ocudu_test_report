@@ -331,7 +331,7 @@ trigger-report-regen:
   stage: build
   image: curlimages/curl:8.10.1
   rules:
-    - if: $CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push" && $CI_PROJECT_PATH == "ocudu/ocudu_test_report"
   script:
     - |
       RESPONSE=$(curl --silent --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
