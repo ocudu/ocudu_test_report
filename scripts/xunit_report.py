@@ -11,6 +11,8 @@ Usage:
     python xunit_report.py --dir FOLDER -o ./report/
 """
 
+from __future__ import annotations
+
 import argparse
 import html
 import re
@@ -42,6 +44,24 @@ _NATURAL_CHUNK_RE = re.compile(r"(\d+)")
 def _natural_key(text: str) -> list:
     """Split into alternating text/number chunks so e.g. '9.3.1' sorts between '9.3' and '10.4.2'."""
     return [int(chunk) if chunk.isdigit() else chunk.lower() for chunk in _NATURAL_CHUNK_RE.split(text)]
+
+
+_DEFAULT_PREVIEW_LINES = 20
+
+
+def _truncate_log(text: str, max_lines: int = _DEFAULT_PREVIEW_LINES) -> tuple[str, str, bool]:
+    """Split log text into a preview and remainder.
+
+    Returns:
+        (preview, remainder, was_truncated) — if the text has fewer than
+        *max_lines* lines, remainder is empty and was_truncated is False.
+    """
+    lines = text.split("\n")
+    if len(lines) <= max_lines:
+        return text, "", False
+    preview = "\n".join(lines[:max_lines])
+    remainder = "\n".join(lines[max_lines:])
+    return preview, remainder, True
 
 
 class Status(Enum):
