@@ -501,6 +501,7 @@ def render_html(
     favicon: str = "",
     link: str = "",
     defaults: Optional[FilterDefaults] = None,
+    log_mode: str = "inline",
 ) -> str:
     """Render the full HTML report from a list of Suite objects."""
     # pylint: disable=too-many-locals
@@ -639,7 +640,7 @@ def render_html(
     return _html_doc("Results", favicon, header, body, "report.js")
 
 
-def render_all_html(suites: list, favicon: str = "", link: str = "", title: str = "All test suites") -> str:
+def render_all_html(suites: list, favicon: str = "", link: str = "", title: str = "All test suites", log_mode: str = "inline") -> str:
     """Render the all-tests HTML report: one accordion per suite, tests inside."""
     # pylint: disable=too-many-locals
     duration_total = sum(s.duration for s in suites)
@@ -845,6 +846,17 @@ def main():
         default=None,
         help="Pre-select release filter (space-separate multiple values)",
     )
+    parser.add_argument(
+        "--log-output-strategy",
+        choices=["inline", "preview", "external"],
+        default="inline",
+        help=(
+            "How to embed test log output. "
+            "'inline' (default): full logs in HTML. "
+            "'preview': first N lines inline, rest in a collapsible. "
+            "'external': first N lines inline, full logs in sidecar files."
+        ),
+    )
     args = parser.parse_args()
 
     if not args.dir and not args.third_party:
@@ -883,11 +895,12 @@ def main():
                     types=args.type,
                     releases=args.release,
                 ),
+                log_mode=args.log_output_strategy,
             ),
             encoding="utf-8",
         )
         (out_dir / "all.html").write_text(
-            render_all_html(suites, favicon=args.favicon, link=link),
+            render_all_html(suites, favicon=args.favicon, link=link, log_mode=args.log_output_strategy),
             encoding="utf-8",
         )
         print(f"report.html + all.html written to {out_dir}/")
@@ -899,7 +912,7 @@ def main():
 
         tp_suites = parse_third_party_dir(tp_root)
         (out_dir / "third_party.html").write_text(
-            render_all_html(tp_suites, favicon=args.favicon, title="Third Party Results"),
+            render_all_html(tp_suites, favicon=args.favicon, title="Third Party Results", log_mode=args.log_output_strategy),
             encoding="utf-8",
         )
         print(f"third_party.html written to {out_dir}/ ({len(tp_suites)} suites)")
