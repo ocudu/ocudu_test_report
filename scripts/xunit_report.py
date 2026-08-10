@@ -304,7 +304,7 @@ def _gitlab_link(url: str, title: str = "GitLab") -> str:
 
 
 # pylint: disable=too-many-locals
-def _render_testcase(tc: TestCase, idx: int) -> str:
+def _render_testcase(tc: TestCase, idx: int, log_mode: str = "inline") -> str:
     parity = "even" if idx % 2 == 0 else "odd"
     display_status = Status.FAILED if tc.status == Status.ERROR else tc.status
 
@@ -336,11 +336,33 @@ def _render_testcase(tc: TestCase, idx: int) -> str:
 
     out_html = ""
     if tc.system_out.strip():
-        out_html = f'<pre class="system-out">{tc.system_out.strip()}</pre>'
+        if log_mode == "preview":
+            preview, remainder, was_truncated = _truncate_log(tc.system_out.strip())
+            out_html = f'<pre class="system-out">{preview}</pre>'
+            if was_truncated:
+                out_html += (
+                    f'<details class="log-remainder">'
+                    f"<summary>Show full log</summary>"
+                    f'<pre class="system-out">{remainder}</pre>'
+                    f"</details>"
+                )
+        else:
+            out_html = f'<pre class="system-out">{tc.system_out.strip()}</pre>'
 
     err_html = ""
     if tc.system_err.strip():
-        err_html = f'<pre class="system-err">{tc.system_err.strip()}</pre>'
+        if log_mode == "preview":
+            preview, remainder, was_truncated = _truncate_log(tc.system_err.strip())
+            err_html = f'<pre class="system-err">{preview}</pre>'
+            if was_truncated:
+                err_html += (
+                    f'<details class="log-remainder">'
+                    f"<summary>Show full error log</summary>"
+                    f'<pre class="system-err">{remainder}</pre>'
+                    f"</details>"
+                )
+        else:
+            err_html = f'<pre class="system-err">{tc.system_err.strip()}</pre>'
 
     detail_body = labels_html + meta_html + msg_html + out_html + err_html
 
@@ -571,7 +593,7 @@ def render_html(
 
             badge = _status_badge(fstatus)
             all_tcs.sort(key=lambda tc: (_TC_STATUS_SORT.get(tc.status, 99), tc.classname, tc.name))
-            expanded = "".join(_render_testcase(tc, j) for j, tc in enumerate(all_tcs))
+            expanded = "".join(_render_testcase(tc, j, log_mode=log_mode) for j, tc in enumerate(all_tcs))
 
             expand_id = f"exp{i}"
             failed_cls = " num-failed" if nfailed else ""
@@ -697,7 +719,7 @@ def render_all_html(suites: list, favicon: str = "", link: str = "", title: str 
         badge = _status_badge(fstatus)
 
         tcs = sorted(suite.testcases, key=lambda tc: _natural_key(tc.name))
-        expanded = "".join(_render_testcase(tc, j) for j, tc in enumerate(tcs))
+        expanded = "".join(_render_testcase(tc, j, log_mode=log_mode) for j, tc in enumerate(tcs))
 
         expand_id = f"sexp{i}"
         failed_cls = " num-failed" if nfailed else ""
