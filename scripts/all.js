@@ -150,5 +150,44 @@
       );
       observer.observe(header);
     }
+
+    // Fetch sidecar logs inline on click instead of navigating away.
+    document.addEventListener('click', function (e) {
+      const link = e.target.closest('.log-link');
+      if (!link) return;
+      e.preventDefault();
+
+      // Toggle: if already loaded, show/hide the expanded block.
+      const expanded = link.nextElementSibling;
+      if (expanded && expanded.classList.contains('log-expanded')) {
+        expanded.hidden = !expanded.hidden;
+        link.textContent = expanded.hidden
+          ? link.dataset.showLabel
+          : 'Hide full log';
+        return;
+      }
+
+      // Store original label for toggle.
+      link.dataset.showLabel = link.textContent;
+      link.textContent = 'Loading\u2026';
+
+      fetch(link.href)
+        .then(function (res) {
+          if (!res.ok) throw new Error(res.status);
+          return res.text();
+        })
+        .then(function (text) {
+          const pre = document.createElement('pre');
+          pre.className = 'system-out log-expanded';
+          pre.textContent = text;
+          link.after(pre);
+          link.textContent = 'Hide full log';
+        })
+        .catch(function () {
+          // Fallback: open in new tab if fetch fails.
+          link.textContent = link.dataset.showLabel;
+          window.open(link.href, '_blank');
+        });
+    });
   });
 })();

@@ -643,6 +643,27 @@ body {
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
 
+.log-link {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 4px 10px;
+  font-size: 0.8em;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.log-link:hover {
+  background: var(--accent);
+  color: var(--bg-body);
+}
+
+.log-expanded {
+  max-height: none;
+}
+
 /* ── details/summary collapse arrow ───────────────────────── */
 
 details > summary::-webkit-details-marker { display: none; }
