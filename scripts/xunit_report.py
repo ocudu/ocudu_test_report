@@ -14,6 +14,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import html
 import re
 import sys
@@ -62,6 +63,21 @@ def _truncate_log(text: str, max_lines: int = _DEFAULT_PREVIEW_LINES) -> tuple[s
     preview = "\n".join(lines[:max_lines])
     remainder = "\n".join(lines[max_lines:])
     return preview, remainder, True
+
+
+_SAFE_FILENAME_RE = re.compile(r"[^a-zA-Z0-9_\-.]")
+
+
+def _safe_filename(classname: str, name: str, suffix: str = ".txt") -> str:
+    """Generate a filesystem-safe filename from a test case's classname and name.
+
+    Format: ``<slug>_<hash><suffix>`` where slug is up to 80 characters of the
+    slugified classname.name and hash is 8 hex characters for collision avoidance.
+    """
+    raw = f"{classname}.{name}" if classname else name
+    slug = _SAFE_FILENAME_RE.sub("_", raw)[:80].rstrip("_")
+    short_hash = hashlib.sha256(raw.encode()).hexdigest()[:8]
+    return f"{slug}_{short_hash}{suffix}"
 
 
 class Status(Enum):
@@ -304,7 +320,32 @@ def _gitlab_link(url: str, title: str = "GitLab") -> str:
 
 
 # pylint: disable=too-many-locals
-def _render_testcase(tc: TestCase, idx: int, log_mode: str = "inline") -> str:
+def _render_external_log(
+    text: str, classname: str, name: str, kind: str, css_class: str, log_dir: Path
+) -> str:
+    """Write full log to a sidecar file and return HTML with preview + link.
+
+    *kind* is "out" or "err" — appended to the filename to distinguish
+    system-out from system-err for the same test case.
+    """
+    filename = _safe_filename(classname, name, suffix=f"_{kind}.txt")
+    log_path = log_dir / filename
+
+    line_count = text.count("\n") + 1
+    preview, _remainder, was_truncated = _truncate_log(text)
+    result = f'<pre class="{css_class}">{preview}</pre>'
+    if was_truncated:
+        log_path.write_text(text, encoding="utf-8")
+        rel_href = f"logs/{filename}"
+        result += (
+            f'<a class="log-link" href="{html.escape(rel_href)}"'
+            f' target="_blank">View full log ({line_count} lines)</a>'
+        )
+    return result
+
+
+# pylint: disable=too-many-locals
+def _render_testcase(tc: TestCase, idx: int, log_mode: str = "inline", log_dir: Path | None = None) -> str:
     parity = "even" if idx % 2 == 0 else "odd"
     display_status = Status.FAILED if tc.status == Status.ERROR else tc.status
 
@@ -336,7 +377,11 @@ def _render_testcase(tc: TestCase, idx: int, log_mode: str = "inline") -> str:
 
     out_html = ""
     if tc.system_out.strip():
-        if log_mode == "preview":
+        if log_mode == "external" and log_dir is not None:
+            out_html = _render_external_log(
+                tc.system_out.strip(), tc.classname, tc.name, "out", "system-out", log_dir
+            )
+        elif log_mode == "preview":
             preview, remainder, was_truncated = _truncate_log(tc.system_out.strip())
             out_html = f'<pre class="system-out">{preview}</pre>'
             if was_truncated:
@@ -351,7 +396,11 @@ def _render_testcase(tc: TestCase, idx: int, log_mode: str = "inline") -> str:
 
     err_html = ""
     if tc.system_err.strip():
-        if log_mode == "preview":
+        if log_mode == "external" and log_dir is not None:
+            err_html = _render_external_log(
+                tc.system_err.strip(), tc.classname, tc.name, "err", "system-err", log_dir
+            )
+        elif log_mode == "preview":
             preview, remainder, was_truncated = _truncate_log(tc.system_err.strip())
             err_html = f'<pre class="system-err">{preview}</pre>'
             if was_truncated:
@@ -544,6 +593,7 @@ def render_html(
     link: str = "",
     defaults: Optional[FilterDefaults] = None,
     log_mode: str = "inline",
+    log_dir: Path | None = None,
 ) -> str:
     """Render the full HTML report from a list of Suite objects."""
     # pylint: disable=too-many-locals
@@ -593,7 +643,7 @@ def render_html(
 
             badge = _status_badge(fstatus)
             all_tcs.sort(key=lambda tc: (_TC_STATUS_SORT.get(tc.status, 99), tc.classname, tc.name))
-            expanded = "".join(_render_testcase(tc, j, log_mode=log_mode) for j, tc in enumerate(all_tcs))
+            expanded = "".join(_render_testcase(tc, j, log_mode=log_mode, log_dir=log_dir) for j, tc in enumerate(all_tcs))
 
             expand_id = f"exp{i}"
             failed_cls = " num-failed" if nfailed else ""
@@ -682,7 +732,7 @@ def render_html(
     return _html_doc("Results", favicon, header, body, "report.js")
 
 
-def render_all_html(suites: list, favicon: str = "", link: str = "", title: str = "All test suites", log_mode: str = "inline") -> str:
+def render_all_html(suites: list, favicon: str = "", link: str = "", title: str = "All test suites", log_mode: str = "inline", log_dir: Path | None = None) -> str:
     """Render the all-tests HTML report: one accordion per suite, tests inside."""
     # pylint: disable=too-many-locals
     duration_total = sum(s.duration for s in suites)
@@ -719,7 +769,7 @@ def render_all_html(suites: list, favicon: str = "", link: str = "", title: str 
         badge = _status_badge(fstatus)
 
         tcs = sorted(suite.testcases, key=lambda tc: _natural_key(tc.name))
-        expanded = "".join(_render_testcase(tc, j, log_mode=log_mode) for j, tc in enumerate(tcs))
+        expanded = "".join(_render_testcase(tc, j, log_mode=log_mode, log_dir=log_dir) for j, tc in enumerate(tcs))
 
         expand_id = f"sexp{i}"
         failed_cls = " num-failed" if nfailed else ""
@@ -907,6 +957,11 @@ def main():
     out_dir = args.output_dir
     out_dir.mkdir(parents=True, exist_ok=True)
 
+    log_dir: Path | None = None
+    if args.log_output_strategy == "external":
+        log_dir = out_dir / "logs"
+        log_dir.mkdir(parents=True, exist_ok=True)
+
     if args.dir:
         root = Path(args.dir)
         if not root.is_dir():
@@ -938,11 +993,12 @@ def main():
                     releases=args.release,
                 ),
                 log_mode=args.log_output_strategy,
+                log_dir=log_dir,
             ),
             encoding="utf-8",
         )
         (out_dir / "all.html").write_text(
-            render_all_html(suites, favicon=args.favicon, link=link, log_mode=args.log_output_strategy),
+            render_all_html(suites, favicon=args.favicon, link=link, log_mode=args.log_output_strategy, log_dir=log_dir),
             encoding="utf-8",
         )
         print(f"report.html + all.html written to {out_dir}/")
@@ -954,7 +1010,7 @@ def main():
 
         tp_suites = parse_third_party_dir(tp_root)
         (out_dir / "third_party.html").write_text(
-            render_all_html(tp_suites, favicon=args.favicon, title="Third Party Results", log_mode=args.log_output_strategy),
+            render_all_html(tp_suites, favicon=args.favicon, title="Third Party Results", log_mode=args.log_output_strategy, log_dir=log_dir),
             encoding="utf-8",
         )
         print(f"third_party.html written to {out_dir}/ ({len(tp_suites)} suites)")
