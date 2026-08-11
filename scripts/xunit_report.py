@@ -320,9 +320,7 @@ def _gitlab_link(url: str, title: str = "GitLab") -> str:
 
 
 # pylint: disable=too-many-locals
-def _render_external_log(
-    text: str, classname: str, name: str, kind: str, css_class: str, log_dir: Path
-) -> str:
+def _render_external_log(text: str, classname: str, name: str, kind: str, css_class: str, log_dir: Path) -> str:
     """Write full log to a sidecar file and return HTML with preview + link.
 
     *kind* is "out" or "err" — appended to the filename to distinguish
@@ -378,9 +376,7 @@ def _render_testcase(tc: TestCase, idx: int, log_mode: str = "inline", log_dir: 
     out_html = ""
     if tc.system_out.strip():
         if log_mode == "external" and log_dir is not None:
-            out_html = _render_external_log(
-                tc.system_out.strip(), tc.classname, tc.name, "out", "system-out", log_dir
-            )
+            out_html = _render_external_log(tc.system_out.strip(), tc.classname, tc.name, "out", "system-out", log_dir)
         elif log_mode == "preview":
             preview, remainder, was_truncated = _truncate_log(tc.system_out.strip())
             out_html = f'<pre class="system-out">{preview}</pre>'
@@ -397,9 +393,7 @@ def _render_testcase(tc: TestCase, idx: int, log_mode: str = "inline", log_dir: 
     err_html = ""
     if tc.system_err.strip():
         if log_mode == "external" and log_dir is not None:
-            err_html = _render_external_log(
-                tc.system_err.strip(), tc.classname, tc.name, "err", "system-err", log_dir
-            )
+            err_html = _render_external_log(tc.system_err.strip(), tc.classname, tc.name, "err", "system-err", log_dir)
         elif log_mode == "preview":
             preview, remainder, was_truncated = _truncate_log(tc.system_err.strip())
             err_html = f'<pre class="system-err">{preview}</pre>'
@@ -643,7 +637,9 @@ def render_html(
 
             badge = _status_badge(fstatus)
             all_tcs.sort(key=lambda tc: (_TC_STATUS_SORT.get(tc.status, 99), tc.classname, tc.name))
-            expanded = "".join(_render_testcase(tc, j, log_mode=log_mode, log_dir=log_dir) for j, tc in enumerate(all_tcs))
+            expanded = "".join(
+                _render_testcase(tc, j, log_mode=log_mode, log_dir=log_dir) for j, tc in enumerate(all_tcs)
+            )
 
             expand_id = f"exp{i}"
             failed_cls = " num-failed" if nfailed else ""
@@ -732,7 +728,14 @@ def render_html(
     return _html_doc("Results", favicon, header, body, "report.js")
 
 
-def render_all_html(suites: list, favicon: str = "", link: str = "", title: str = "All test suites", log_mode: str = "inline", log_dir: Path | None = None) -> str:
+def render_all_html(
+    suites: list,
+    favicon: str = "",
+    link: str = "",
+    title: str = "All test suites",
+    log_mode: str = "inline",
+    log_dir: Path | None = None,
+) -> str:
     """Render the all-tests HTML report: one accordion per suite, tests inside."""
     # pylint: disable=too-many-locals
     duration_total = sum(s.duration for s in suites)
@@ -998,7 +1001,9 @@ def main():
             encoding="utf-8",
         )
         (out_dir / "all.html").write_text(
-            render_all_html(suites, favicon=args.favicon, link=link, log_mode=args.log_output_strategy, log_dir=log_dir),
+            render_all_html(
+                suites, favicon=args.favicon, link=link, log_mode=args.log_output_strategy, log_dir=log_dir
+            ),
             encoding="utf-8",
         )
         print(f"report.html + all.html written to {out_dir}/")
@@ -1010,7 +1015,13 @@ def main():
 
         tp_suites = parse_third_party_dir(tp_root)
         (out_dir / "third_party.html").write_text(
-            render_all_html(tp_suites, favicon=args.favicon, title="Third Party Results", log_mode=args.log_output_strategy, log_dir=log_dir),
+            render_all_html(
+                tp_suites,
+                favicon=args.favicon,
+                title="Third Party Results",
+                log_mode=args.log_output_strategy,
+                log_dir=log_dir,
+            ),
             encoding="utf-8",
         )
         print(f"third_party.html written to {out_dir}/ ({len(tp_suites)} suites)")
