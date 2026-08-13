@@ -269,6 +269,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
       <a class="tab" data-fixed="features" href="#">Features</a>
       <a class="tab" data-fixed="tifg" href="#">TIFG Test Plan</a>
       <a class="tab" data-fixed="wg11" href="#">WG11 Test Plan</a>
+      <a class="tab" data-fixed="comparison" href="#">Comparison</a>
     </div>
   </nav>
   <div class="subnav hidden" id="subnav">
@@ -284,7 +285,8 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
         features: 'feature_list.html',
         tifg: 'tifg_report.html',
         wg11: 'wg11_report.html',
-        third_party: 'third_party.html'
+        third_party: 'third_party.html',
+        comparison: 'comparison.html'
       }};
 
       var frame   = document.getElementById('frame');
