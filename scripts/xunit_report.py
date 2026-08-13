@@ -269,6 +269,42 @@ def _build_run_metadata(
     }
 
 
+def _build_results_json(
+    suites: list[Suite],
+    *,
+    pipeline_id: str = "",
+    commit_sha: str = "",
+) -> dict:
+    """Build a per-test-case results dictionary for the comparison engine.
+
+    Unlike ``_build_run_metadata`` which only stores aggregate counts, this
+    function emits every test case with its composite key, status, duration,
+    and labels.  The output is consumed by the diff engine to compare two runs.
+    """
+    suite_results = []
+    for s in suites:
+        tests = []
+        for tc in s.testcases:
+            key = f"{tc.classname}.{tc.name}" if tc.classname else tc.name
+            tests.append(
+                {
+                    "key": key,
+                    "status": tc.status.value,
+                    "duration_s": round(tc.duration, 3),
+                    "labels": tc.labels,
+                }
+            )
+        suite_results.append({"name": s.name, "tests": tests})
+
+    return {
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "pipeline_id": pipeline_id,
+        "commit_sha": commit_sha,
+        "suites": suite_results,
+    }
+
+
 # pylint: disable=too-many-locals
 def _parse_testcase(elem) -> TestCase:
     name = elem.get("name", "")
@@ -1092,6 +1128,17 @@ def main():
         metadata_path = out_dir / "run_metadata.json"
         metadata_path.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
         print(f"run_metadata.json written to {out_dir}/")
+
+        results = _build_results_json(
+            suites,
+            pipeline_id=args.pipeline_id,
+            commit_sha=args.commit_sha,
+        )
+        results_path = out_dir / "results.json"
+        results_path.write_text(
+            json.dumps(results, indent=2) + "\n", encoding="utf-8"
+        )
+        print(f"results.json written to {out_dir}/")
 
     if args.third_party:
         tp_root = args.third_party

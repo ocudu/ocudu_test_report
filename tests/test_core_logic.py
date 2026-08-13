@@ -665,3 +665,150 @@ class TestBuildRunMetadata:
         # Should not raise
         output = json.dumps(result, indent=2)
         assert "deadbeef" in output
+
+
+# ---------------------------------------------------------------------------
+# _build_results_json — per-test-case structured output for comparison engine
+# ---------------------------------------------------------------------------
+
+
+class TestBuildResultsJson:
+    def _make_tc(self, name, classname="tests.module", status=xunit_report.Status.PASSED,
+                 duration=1.0, labels=None):
+        return xunit_report.TestCase(
+            name=name, classname=classname, duration=duration,
+            status=status, labels=labels or [],
+        )
+
+    def _make_suite(self, name, testcases):
+        s = xunit_report.Suite(name=name)
+        s.testcases = testcases
+        return s
+
+    def test_basic_structure(self):
+        """Result has all required top-level keys."""
+        tc = self._make_tc("test_a")
+        suite = self._make_suite("E2E", [tc])
+        result = xunit_report._build_results_json([suite], pipeline_id="42", commit_sha="abc")
+
+        assert result["schema_version"] == 1
+        assert result["pipeline_id"] == "42"
+        assert result["commit_sha"] == "abc"
+        assert "generated_at" in result
+        assert "suites" in result
+
+    def test_composite_key_format(self):
+        """Test key is classname.name."""
+        tc = self._make_tc("test_add", classname="math_tests.arithmetic")
+        suite = self._make_suite("Unit", [tc])
+        result = xunit_report._build_results_json([suite])
+
+        entry = result["suites"][0]["tests"][0]
+        assert entry["key"] == "math_tests.arithmetic.test_add"
+
+    def test_empty_classname_key(self):
+        """When classname is empty, key is just the name."""
+        tc = self._make_tc("test_standalone", classname="")
+        suite = self._make_suite("Unit", [tc])
+        result = xunit_report._build_results_json([suite])
+
+        entry = result["suites"][0]["tests"][0]
+        assert entry["key"] == "test_standalone"
+
+    def test_status_values(self):
+        """All status types are serialised correctly."""
+        tcs = [
+            self._make_tc("t1", status=xunit_report.Status.PASSED),
+            self._make_tc("t2", status=xunit_report.Status.FAILED),
+            self._make_tc("t3", status=xunit_report.Status.ERROR),
+            self._make_tc("t4", status=xunit_report.Status.SKIPPED),
+        ]
+        suite = self._make_suite("Mixed", tcs)
+        result = xunit_report._build_results_json([suite])
+
+        statuses = [t["status"] for t in result["suites"][0]["tests"]]
+        assert statuses == ["passed", "failed", "error", "skipped"]
+
+    def test_duration_rounded_to_3dp(self):
+        """Duration is rounded to 3 decimal places (millisecond precision)."""
+        tc = self._make_tc("t1", duration=1.23456789)
+        suite = self._make_suite("E2E", [tc])
+        result = xunit_report._build_results_json([suite])
+
+        assert result["suites"][0]["tests"][0]["duration_s"] == 1.235
+
+    def test_labels_preserved(self):
+        """Labels are included in test entries."""
+        tc = self._make_tc("t1", labels=["MVP-FUNC-1", "phy", "tsan"])
+        suite = self._make_suite("E2E", [tc])
+        result = xunit_report._build_results_json([suite])
+
+        assert result["suites"][0]["tests"][0]["labels"] == ["MVP-FUNC-1", "phy", "tsan"]
+
+    def test_empty_labels(self):
+        """Tests with no labels have an empty list."""
+        tc = self._make_tc("t1", labels=[])
+        suite = self._make_suite("E2E", [tc])
+        result = xunit_report._build_results_json([suite])
+
+        assert result["suites"][0]["tests"][0]["labels"] == []
+
+    def test_multiple_suites(self):
+        """Multiple suites each have their own test list."""
+        tc1 = self._make_tc("t1")
+        tc2 = self._make_tc("t2")
+        tc3 = self._make_tc("t3")
+        s1 = self._make_suite("Unit", [tc1, tc2])
+        s2 = self._make_suite("E2E", [tc3])
+        result = xunit_report._build_results_json([s1, s2])
+
+        assert len(result["suites"]) == 2
+        assert result["suites"][0]["name"] == "Unit"
+        assert len(result["suites"][0]["tests"]) == 2
+        assert result["suites"][1]["name"] == "E2E"
+        assert len(result["suites"][1]["tests"]) == 1
+
+    def test_empty_suites(self):
+        """Empty suite list produces empty suites array."""
+        result = xunit_report._build_results_json([])
+        assert result["suites"] == []
+
+    def test_suite_with_no_tests(self):
+        """A suite with no test cases produces an empty tests array."""
+        suite = self._make_suite("Empty", [])
+        result = xunit_report._build_results_json([suite])
+        assert result["suites"][0]["tests"] == []
+
+    def test_defaults_for_pipeline_and_commit(self):
+        """Pipeline ID and commit SHA default to empty strings."""
+        result = xunit_report._build_results_json([])
+        assert result["pipeline_id"] == ""
+        assert result["commit_sha"] == ""
+
+    def test_generated_at_is_utc(self):
+        """Timestamp is UTC ISO 8601."""
+        result = xunit_report._build_results_json([])
+        ts = result["generated_at"]
+        assert "+00:00" in ts or "Z" in ts
+
+    def test_json_serialisable(self):
+        """The returned dict can be serialised to JSON without errors."""
+        import json
+
+        tc = self._make_tc("test_a", labels=["MVP-FUNC-1"])
+        suite = self._make_suite("E2E", [tc])
+        result = xunit_report._build_results_json([suite], pipeline_id="999", commit_sha="deadbeef")
+        output = json.dumps(result, indent=2)
+        assert "deadbeef" in output
+        assert "MVP-FUNC-1" in output
+
+    def test_large_suite_performance(self):
+        """Handles a large number of test cases without issues."""
+        tcs = [self._make_tc(f"test_{i}", classname=f"module.sub_{i % 10}") for i in range(1000)]
+        suite = self._make_suite("Large", tcs)
+        result = xunit_report._build_results_json([suite])
+
+        assert len(result["suites"][0]["tests"]) == 1000
+        # Spot check a few entries
+        assert result["suites"][0]["tests"][0]["key"] == "module.sub_0.test_0"
+        assert result["suites"][0]["tests"][999]["key"] == "module.sub_9.test_999"
