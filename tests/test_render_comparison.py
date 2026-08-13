@@ -143,8 +143,8 @@ class TestRenderEntryRow:
         html = render_comparison._render_entry_row(entry)
 
         assert "mod.test_a" in html
-        assert "✓" in html  # passed icon
-        assert "✗" in html  # failed icon
+        assert "cmp-pill passed" in html
+        assert "cmp-pill failed" in html
         assert "cmp-row" in html
 
     def test_labels_rendered(self):
@@ -165,7 +165,7 @@ class TestRenderEntryRow:
         entry = {"key": "test", "status_base": None, "status_head": "failed", "duration_base": None, "duration_head": 5.0, "labels": []}
         html = render_comparison._render_entry_row(entry)
 
-        assert "—" in html  # none rendered as dash
+        assert "absent" in html  # None rendered as 'absent' pill
 
     def test_html_escaping(self):
         entry = {"key": "mod.<script>alert(1)</script>", "status_base": "passed", "status_head": "failed", "duration_base": 1.0, "duration_head": 2.0, "labels": []}
