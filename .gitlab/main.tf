@@ -186,12 +186,13 @@ module "settings" {
         suite_2           = "Matlab Odd=https://gitlab.com/api/v4/projects/80607116/pipeline_schedules/4182595",
         suite_3           = "O1=https://gitlab.com/api/v4/projects/79417060/pipeline_schedules/4225520",
         suite_4           = "E2E Functional=https://gitlab.com/api/v4/projects/78028160/pipeline_schedules/4119331",
-        suite_5           = "E2E Emulated Nightly=https://gitlab.com/api/v4/projects/78028160/pipeline_schedules/4119329",
-        suite_6           = "E2E RF Nightly=https://gitlab.com/api/v4/projects/78028160/pipeline_schedules/4119330",
-        suite_7           = "E2E Emulated Weekly=https://gitlab.com/api/v4/projects/78028160/pipeline_schedules/4119328",
+        suite_5           = "E2E Performance=https://gitlab.com/api/v4/projects/78028160/pipeline_schedules/4294014",
+        suite_6           = "E2E RF=https://gitlab.com/api/v4/projects/78028160/pipeline_schedules/4119330",
+        suite_7           = "E2E Interop=https://gitlab.com/api/v4/projects/78028160/pipeline_schedules/4386399",
+        suite_8           = "E2E viavi nightly=https://gitlab.com/api/v4/projects/78028160/pipeline_schedules/4119329",
+        suite_9           = "E2E viavi weekly=https://gitlab.com/api/v4/projects/78028160/pipeline_schedules/4119328",
         filter_scope      = "CU/DU",
-        filter_type       = "Functional,Security",
-        filter_release    = "26.04 (v1.0)",
+        filter_release    = "26.04 (v1.0),26.10 (v2.1)",
         historic_versions = "26.04"
       }
     }
