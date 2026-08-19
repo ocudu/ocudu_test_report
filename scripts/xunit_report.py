@@ -149,11 +149,21 @@ def _stat_group_html(label: str, id_prefix: str) -> str:
     )
 
 
-def _clean_output(text: str) -> str:
-    """Strip capture headers and convert ANSI escape codes to HTML."""
+def _strip_headers(text: str) -> str:
+    """Strip pytest capture headers and normalise escape sequences.
+
+    Returns cleaned text with raw ANSI codes still intact (not converted
+    to HTML).  The ansi2html conversion is deferred to render time so that
+    sidecar files can store plain text while inline previews get styled HTML.
+    """
     text = CAPTURE_HEADER_RE.sub("", text)
     text = text.replace("#x1B", "\x1b")  # pytest XML writer drops the & from &#x1B;
-    result: str = _ANSI_CONVERTER.convert(text.strip(), full=False)
+    return text.strip()
+
+
+def _ansi_to_html(text: str) -> str:
+    """Convert ANSI escape codes in *text* to inline-styled HTML spans."""
+    result: str = _ANSI_CONVERTER.convert(text, full=False)
     return result
 
 
@@ -234,8 +244,8 @@ def _parse_testcase(elem) -> TestCase:
         status = Status.PASSED
         message = ""
 
-    system_out = _clean_output(elem.findtext("system-out", ""))
-    system_err = _clean_output(elem.findtext("system-err", ""))
+    system_out = _strip_headers(elem.findtext("system-out", ""))
+    system_err = _strip_headers(elem.findtext("system-err", ""))
 
     labels: list[str] = []
     properties: dict[str, str] = {}
@@ -323,6 +333,11 @@ def _gitlab_link(url: str, title: str = "GitLab") -> str:
 def _render_external_log(text: str, classname: str, name: str, kind: str, css_class: str, log_dir: Path) -> str:
     """Write full log to a sidecar file and return HTML with preview + link.
 
+    *text* is the raw log content (ANSI codes intact, not HTML-converted).
+    The sidecar file stores this raw text so that JS can insert it via
+    textContent without HTML escaping issues.  The inline preview is
+    converted to HTML for ANSI colour rendering.
+
     *kind* is "out" or "err" — appended to the filename to distinguish
     system-out from system-err for the same test case.
     """
@@ -331,7 +346,7 @@ def _render_external_log(text: str, classname: str, name: str, kind: str, css_cl
 
     line_count = text.count("\n") + 1
     preview, _remainder, was_truncated = _truncate_log(text)
-    result = f'<pre class="{css_class}">{preview}</pre>'
+    result = f'<pre class="{css_class}">{_ansi_to_html(preview)}</pre>'
     if was_truncated:
         log_path.write_text(text, encoding="utf-8")
         rel_href = f"logs/{filename}"
@@ -379,16 +394,16 @@ def _render_testcase(tc: TestCase, idx: int, log_mode: str = "inline", log_dir: 
             out_html = _render_external_log(tc.system_out.strip(), tc.classname, tc.name, "out", "system-out", log_dir)
         elif log_mode == "preview":
             preview, remainder, was_truncated = _truncate_log(tc.system_out.strip())
-            out_html = f'<pre class="system-out">{preview}</pre>'
+            out_html = f'<pre class="system-out">{_ansi_to_html(preview)}</pre>'
             if was_truncated:
                 out_html += (
                     f'<details class="log-remainder">'
                     f"<summary>Show full log</summary>"
-                    f'<pre class="system-out">{remainder}</pre>'
+                    f'<pre class="system-out">{_ansi_to_html(remainder)}</pre>'
                     f"</details>"
                 )
         else:
-            out_html = f'<pre class="system-out">{tc.system_out.strip()}</pre>'
+            out_html = f'<pre class="system-out">{_ansi_to_html(tc.system_out.strip())}</pre>'
 
     err_html = ""
     if tc.system_err.strip():
@@ -396,16 +411,16 @@ def _render_testcase(tc: TestCase, idx: int, log_mode: str = "inline", log_dir: 
             err_html = _render_external_log(tc.system_err.strip(), tc.classname, tc.name, "err", "system-err", log_dir)
         elif log_mode == "preview":
             preview, remainder, was_truncated = _truncate_log(tc.system_err.strip())
-            err_html = f'<pre class="system-err">{preview}</pre>'
+            err_html = f'<pre class="system-err">{_ansi_to_html(preview)}</pre>'
             if was_truncated:
                 err_html += (
                     f'<details class="log-remainder">'
                     f"<summary>Show full error log</summary>"
-                    f'<pre class="system-err">{remainder}</pre>'
+                    f'<pre class="system-err">{_ansi_to_html(remainder)}</pre>'
                     f"</details>"
                 )
         else:
-            err_html = f'<pre class="system-err">{tc.system_err.strip()}</pre>'
+            err_html = f'<pre class="system-err">{_ansi_to_html(tc.system_err.strip())}</pre>'
 
     detail_body = labels_html + meta_html + msg_html + out_html + err_html
 

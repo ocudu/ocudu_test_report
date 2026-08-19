@@ -364,3 +364,187 @@ class TestTruncateLog:
         assert preview == "first"
         assert remainder == "second\nthird"
         assert was_truncated is True
+
+
+# ---------------------------------------------------------------------------
+# _strip_headers — capture header removal and escape normalisation
+# ---------------------------------------------------------------------------
+
+
+class TestStripHeaders:
+    def test_removes_capture_header(self):
+        text = "---- Captured stdout ----\nhello world"
+        assert xunit_report._strip_headers(text) == "hello world"
+
+    def test_removes_multiple_headers(self):
+        text = "---- Captured stdout ----\nfirst\n---- Captured stderr ----\nsecond"
+        result = xunit_report._strip_headers(text)
+        assert "Captured stdout" not in result
+        assert "Captured stderr" not in result
+        assert "first" in result
+        assert "second" in result
+
+    def test_normalises_escape_sequence(self):
+        """pytest XML writer encodes ESC as #x1B (missing the &)."""
+        text = "#x1B[31mred text#x1B[0m"
+        result = xunit_report._strip_headers(text)
+        assert "\x1b[31m" in result
+        assert "#x1B" not in result
+
+    def test_strips_surrounding_whitespace(self):
+        text = "  \n  hello  \n  "
+        assert xunit_report._strip_headers(text) == "hello"
+
+    def test_preserves_ansi_codes(self):
+        """ANSI escape codes should remain as-is (not converted to HTML)."""
+        text = "\x1b[32mPASSED\x1b[0m"
+        result = xunit_report._strip_headers(text)
+        assert "\x1b[32m" in result
+        assert "<span" not in result
+
+    def test_empty_string(self):
+        assert xunit_report._strip_headers("") == ""
+
+
+# ---------------------------------------------------------------------------
+# _ansi_to_html — ANSI code to HTML span conversion
+# ---------------------------------------------------------------------------
+
+
+class TestAnsiToHtml:
+    def test_plain_text_unchanged(self):
+        result = xunit_report._ansi_to_html("hello world")
+        assert "hello world" in result
+
+    def test_ansi_codes_converted_to_spans(self):
+        text = "\x1b[31mERROR\x1b[0m"
+        result = xunit_report._ansi_to_html(text)
+        assert "<span" in result
+        assert "ERROR" in result
+        # Raw ANSI code should not appear in output
+        assert "\x1b[" not in result
+
+    def test_empty_string(self):
+        result = xunit_report._ansi_to_html("")
+        # Should not crash; result is either empty or minimal wrapper
+        assert isinstance(result, str)
+
+
+# ---------------------------------------------------------------------------
+# _safe_filename — collision-resistant filename from test identity
+# ---------------------------------------------------------------------------
+
+
+class TestSafeFilename:
+    def test_basic_filename(self):
+        result = xunit_report._safe_filename("com.example.TestClass", "test_method")
+        assert result.endswith(".txt")
+        assert len(result) <= 100  # slug(80) + _ + hash(8) + suffix
+
+    def test_includes_hash_for_collision_avoidance(self):
+        """Different inputs produce different filenames even if slugs collide."""
+        a = xunit_report._safe_filename("a.b", "test (1)")
+        b = xunit_report._safe_filename("a.b", "test_1_")
+        assert a != b
+
+    def test_custom_suffix(self):
+        result = xunit_report._safe_filename("cls", "name", suffix="_out.txt")
+        assert result.endswith("_out.txt")
+
+    def test_long_name_truncated(self):
+        """Slug is capped at 80 chars."""
+        long_name = "a" * 200
+        result = xunit_report._safe_filename("", long_name)
+        # Total: slug(<=80) + "_" + hash(8) + suffix
+        slug_part = result.rsplit("_", 1)[0]
+        assert len(slug_part) <= 80
+
+    def test_special_chars_replaced(self):
+        result = xunit_report._safe_filename("pkg::cls", "test<foo>/bar")
+        # No special characters in the filename
+        assert "::" not in result
+        assert "<" not in result
+        assert "/" not in result
+
+    def test_empty_classname(self):
+        """When classname is empty, uses just the name."""
+        result = xunit_report._safe_filename("", "test_simple")
+        assert "test_simple" in result
+
+    def test_deterministic(self):
+        """Same inputs always produce the same filename."""
+        a = xunit_report._safe_filename("cls", "name")
+        b = xunit_report._safe_filename("cls", "name")
+        assert a == b
+
+
+# ---------------------------------------------------------------------------
+# _render_external_log — sidecar file writing and preview rendering
+# ---------------------------------------------------------------------------
+
+
+class TestRenderExternalLog:
+    def test_short_log_no_sidecar(self, tmp_path):
+        """Logs under 20 lines stay fully inline with no file written."""
+        log_dir = tmp_path / "logs"
+        log_dir.mkdir()
+        text = "short log\nonly two lines"
+        result = xunit_report._render_external_log(text, "cls", "test", "out", "system-out", log_dir)
+        assert "<pre" in result
+        assert "short log" in result
+        # No link, no file
+        assert "log-link" not in result
+        assert len(list(log_dir.iterdir())) == 0
+
+    def test_long_log_writes_sidecar(self, tmp_path):
+        """Logs over 20 lines get written to a sidecar file."""
+        log_dir = tmp_path / "logs"
+        log_dir.mkdir()
+        lines = [f"line {i}" for i in range(30)]
+        text = "\n".join(lines)
+        result = xunit_report._render_external_log(text, "cls", "test", "out", "system-out", log_dir)
+        # Sidecar file created
+        files = list(log_dir.iterdir())
+        assert len(files) == 1
+        assert files[0].suffix == ".txt"
+        # Link present in HTML
+        assert "log-link" in result
+        assert "View full log (30 lines)" in result
+
+    def test_sidecar_contains_raw_text(self, tmp_path):
+        """The sidecar file stores raw text, not HTML."""
+        log_dir = tmp_path / "logs"
+        log_dir.mkdir()
+        # Include ANSI codes in the text
+        lines = [f"\x1b[32mline {i}\x1b[0m" for i in range(25)]
+        text = "\n".join(lines)
+        xunit_report._render_external_log(text, "cls", "test", "out", "system-out", log_dir)
+        sidecar = list(log_dir.iterdir())[0]
+        content = sidecar.read_text(encoding="utf-8")
+        # Raw ANSI codes preserved — no HTML conversion
+        assert "\x1b[32m" in content
+        assert "<span" not in content
+
+    def test_preview_contains_html(self, tmp_path):
+        """The inline preview has ANSI codes converted to HTML spans."""
+        log_dir = tmp_path / "logs"
+        log_dir.mkdir()
+        lines = [f"\x1b[31mERROR line {i}\x1b[0m" for i in range(25)]
+        text = "\n".join(lines)
+        result = xunit_report._render_external_log(text, "cls", "test", "out", "system-out", log_dir)
+        # Preview portion should have HTML spans (ANSI converted)
+        assert "<span" in result
+        # Raw ANSI codes should NOT be in the HTML output
+        assert "\x1b[" not in result
+
+    def test_out_vs_err_different_files(self, tmp_path):
+        """system-out and system-err for the same test get separate files."""
+        log_dir = tmp_path / "logs"
+        log_dir.mkdir()
+        text = "\n".join(f"line {i}" for i in range(25))
+        xunit_report._render_external_log(text, "cls", "test", "out", "system-out", log_dir)
+        xunit_report._render_external_log(text, "cls", "test", "err", "system-err", log_dir)
+        files = sorted(f.name for f in log_dir.iterdir())
+        assert len(files) == 2
+        assert any("_out.txt" in f for f in files)
+        assert any("_err.txt" in f for f in files)
