@@ -548,3 +548,120 @@ class TestRenderExternalLog:
         assert len(files) == 2
         assert any("_out.txt" in f for f in files)
         assert any("_err.txt" in f for f in files)
+
+
+# ---------------------------------------------------------------------------
+# _build_run_metadata — run summary JSON construction
+# ---------------------------------------------------------------------------
+
+
+class TestBuildRunMetadata:
+    def _make_suite(self, name, passed=0, failed=0, skipped=0):
+        """Create a Suite with dummy test cases matching the given counts."""
+        tcs = []
+        for i in range(passed):
+            tcs.append(xunit_report.TestCase(
+                name=f"pass_{i}", classname="test", duration=1.0, status=xunit_report.Status.PASSED
+            ))
+        for i in range(failed):
+            tcs.append(xunit_report.TestCase(
+                name=f"fail_{i}", classname="test", duration=2.0, status=xunit_report.Status.FAILED
+            ))
+        for i in range(skipped):
+            tcs.append(xunit_report.TestCase(
+                name=f"skip_{i}", classname="test", duration=0.0, status=xunit_report.Status.SKIPPED
+            ))
+        s = xunit_report.Suite(name=name)
+        s.testcases = tcs
+        return s
+
+    def test_basic_metadata_structure(self):
+        """Metadata has all required top-level keys."""
+        suites = [self._make_suite("E2E", passed=5, failed=2, skipped=1)]
+        result = xunit_report._build_run_metadata(suites, pipeline_id="123", commit_sha="abc123")
+
+        assert result["schema_version"] == 1
+        assert result["pipeline_id"] == "123"
+        assert result["commit_sha"] == "abc123"
+        assert "generated_at" in result
+        assert "suites" in result
+        assert "totals" in result
+
+    def test_suite_summaries(self):
+        """Each suite has correct per-suite counts."""
+        suites = [
+            self._make_suite("Unit", passed=10, failed=1, skipped=2),
+            self._make_suite("E2E", passed=3, failed=0, skipped=0),
+        ]
+        result = xunit_report._build_run_metadata(suites)
+
+        assert len(result["suites"]) == 2
+        unit_meta = result["suites"][0]
+        assert unit_meta["name"] == "Unit"
+        assert unit_meta["total"] == 13
+        assert unit_meta["passed"] == 10
+        assert unit_meta["failed"] == 1
+        assert unit_meta["skipped"] == 2
+        assert unit_meta["duration_s"] == 12.0  # 10*1 + 1*2 + 2*0
+
+    def test_totals_aggregated(self):
+        """Totals section sums across all suites."""
+        suites = [
+            self._make_suite("Unit", passed=10, failed=1, skipped=2),
+            self._make_suite("E2E", passed=3, failed=2, skipped=0),
+        ]
+        result = xunit_report._build_run_metadata(suites)
+
+        totals = result["totals"]
+        assert totals["suites"] == 2
+        assert totals["tests"] == 18
+        assert totals["passed"] == 13
+        assert totals["failed"] == 3
+        assert totals["skipped"] == 2
+
+    def test_empty_suites(self):
+        """Handles empty suite list gracefully."""
+        result = xunit_report._build_run_metadata([])
+
+        assert result["suites"] == []
+        assert result["totals"]["suites"] == 0
+        assert result["totals"]["tests"] == 0
+
+    def test_empty_pipeline_id_and_commit_sha_default(self):
+        """Pipeline ID and commit SHA default to empty string."""
+        result = xunit_report._build_run_metadata([])
+
+        assert result["pipeline_id"] == ""
+        assert result["commit_sha"] == ""
+
+    def test_generated_at_is_utc_iso_format(self):
+        """Timestamp is ISO 8601 with UTC timezone."""
+        result = xunit_report._build_run_metadata([])
+        ts = result["generated_at"]
+        # Should end with +00:00 (UTC)
+        assert "+00:00" in ts or "Z" in ts
+
+    def test_duration_rounded_to_2dp(self):
+        """Duration values are rounded to 2 decimal places."""
+        # Create a suite with durations that would produce floating point noise
+        s = xunit_report.Suite(name="Precision")
+        s.testcases = [
+            xunit_report.TestCase(name="t1", classname="c", duration=0.1, status=xunit_report.Status.PASSED),
+            xunit_report.TestCase(name="t2", classname="c", duration=0.2, status=xunit_report.Status.PASSED),
+            xunit_report.TestCase(name="t3", classname="c", duration=0.3, status=xunit_report.Status.PASSED),
+        ]
+        result = xunit_report._build_run_metadata([s])
+
+        # 0.1 + 0.2 + 0.3 can produce 0.6000000000000001 without rounding
+        assert result["suites"][0]["duration_s"] == 0.6
+        assert result["totals"]["duration_s"] == 0.6
+
+    def test_json_serialisable(self):
+        """The returned dict can be serialised to JSON without errors."""
+        import json
+
+        suites = [self._make_suite("E2E", passed=5, failed=2, skipped=1)]
+        result = xunit_report._build_run_metadata(suites, pipeline_id="999", commit_sha="deadbeef")
+        # Should not raise
+        output = json.dumps(result, indent=2)
+        assert "deadbeef" in output

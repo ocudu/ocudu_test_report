@@ -16,9 +16,11 @@ from __future__ import annotations
 import argparse
 import hashlib
 import html
+import json
 import re
 import sys
 import xml.etree.ElementTree as ET
+from datetime import datetime, timezone
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
@@ -218,6 +220,53 @@ class Suite:
     def duration(self) -> float:
         """Total duration in seconds."""
         return float(sum(t.duration for t in self.testcases))
+
+
+def _build_run_metadata(
+    suites: list[Suite],
+    *,
+    pipeline_id: str = "",
+    commit_sha: str = "",
+) -> dict:
+    """Build a metadata dictionary summarising a test run.
+
+    The returned dict is JSON-serialisable and intended to be written as
+    ``run_metadata.json`` alongside the HTML report.
+    """
+    suite_summaries = []
+    for s in suites:
+        suite_summaries.append(
+            {
+                "name": s.name,
+                "total": s.total,
+                "passed": s.passed,
+                "failed": s.failed,
+                "skipped": s.skipped,
+                "duration_s": round(s.duration, 2),
+            }
+        )
+
+    total_tests = sum(s.total for s in suites)
+    total_passed = sum(s.passed for s in suites)
+    total_failed = sum(s.failed for s in suites)
+    total_skipped = sum(s.skipped for s in suites)
+    total_duration = round(sum(s.duration for s in suites), 2)
+
+    return {
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "pipeline_id": pipeline_id,
+        "commit_sha": commit_sha,
+        "suites": suite_summaries,
+        "totals": {
+            "suites": len(suites),
+            "tests": total_tests,
+            "passed": total_passed,
+            "failed": total_failed,
+            "skipped": total_skipped,
+            "duration_s": total_duration,
+        },
+    }
 
 
 # pylint: disable=too-many-locals
@@ -967,6 +1016,18 @@ def main():
             "'external': first N lines inline, full logs in sidecar files."
         ),
     )
+    parser.add_argument(
+        "--pipeline-id",
+        default="",
+        metavar="ID",
+        help="CI pipeline ID to record in run_metadata.json",
+    )
+    parser.add_argument(
+        "--commit-sha",
+        default="",
+        metavar="SHA",
+        help="Git commit SHA to record in run_metadata.json",
+    )
     args = parser.parse_args()
 
     if not args.dir and not args.third_party:
@@ -1022,6 +1083,17 @@ def main():
             encoding="utf-8",
         )
         print(f"report.html + all.html written to {out_dir}/")
+
+        metadata = _build_run_metadata(
+            suites,
+            pipeline_id=args.pipeline_id,
+            commit_sha=args.commit_sha,
+        )
+        metadata_path = out_dir / "run_metadata.json"
+        metadata_path.write_text(
+            json.dumps(metadata, indent=2) + "\n", encoding="utf-8"
+        )
+        print(f"run_metadata.json written to {out_dir}/")
 
     if args.third_party:
         tp_root = args.third_party
