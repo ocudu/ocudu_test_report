@@ -231,6 +231,14 @@ generate-report:
       else
         echo "WARNING: Archive upload failed (HTTP ${HTTP_CODE}). Report generation succeeded but run was not persisted." >&2
       fi
+    - |
+      echo "Building runs manifest..."
+      cd "${CI_PROJECT_DIR}/scripts"
+      python3 build_manifest.py \
+        --project-id "${CI_PROJECT_ID}" \
+        --gitlab-url "${CI_SERVER_URL}" \
+        --token-type job \
+        -o "${CI_PROJECT_DIR}/${OUTPUT}/runs.json" || echo "WARNING: Manifest build failed. Report is still valid." >&2
   after_script:
     - |
       echo "*******************************************************************************************************************************"
