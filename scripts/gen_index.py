@@ -376,9 +376,18 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
                 return;
               }}
               list.innerHTML = data.runs.map(function (run) {{
-                var date = run.generated_at ? new Date(run.generated_at).toLocaleDateString('en-GB', {{ day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }}) : 'Unknown date';
+                var date = run.generated_at
+                  ? new Date(run.generated_at).toLocaleDateString('en-GB', {{
+                      day: '2-digit', month: 'short', year: 'numeric',
+                      hour: '2-digit', minute: '2-digit'
+                    }})
+                  : 'Unknown date';
                 var t = run.totals || {{}};
-                var stats = t.tests ? '<span class="pass">' + (t.passed || 0) + ' passed</span>, <span class="fail">' + (t.failed || 0) + ' failed</span>, ' + (t.skipped || 0) + ' skipped / ' + t.tests + ' total' : '';
+                var stats = t.tests
+                  ? '<span class="pass">' + (t.passed || 0) + ' passed</span>, '
+                    + '<span class="fail">' + (t.failed || 0) + ' failed</span>, '
+                    + (t.skipped || 0) + ' skipped / ' + t.tests + ' total'
+                  : '';
                 var pid = run.pipeline_id || run.package_version || '?';
                 return '<a class="run-item" href="' + (run.download_url || '#') + '" target="_blank">'
                   + '<div class="run-item-date">Pipeline ' + pid + ' &mdash; ' + date + '</div>'

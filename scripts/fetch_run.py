@@ -52,7 +52,7 @@ def resolve_latest_version(
     Returns the version string of the most recent package.
     """
     url = f"{api_url}/projects/{project_id}/packages"
-    params = {
+    params: dict[str, str | int] = {
         "package_name": _PACKAGE_NAME,
         "package_type": "generic",
         "per_page": 1,
@@ -65,7 +65,7 @@ def resolve_latest_version(
     if not packages:
         print("ERROR: No archived runs found in the registry.", file=sys.stderr)
         sys.exit(1)
-    return packages[0]["version"]
+    return str(packages[0]["version"])
 
 
 def download_run(
@@ -78,10 +78,7 @@ def download_run(
 
     Returns the raw zip bytes.
     """
-    url = (
-        f"{api_url}/projects/{project_id}/packages/generic"
-        f"/{_PACKAGE_NAME}/{version}/report.zip"
-    )
+    url = f"{api_url}/projects/{project_id}/packages/generic" f"/{_PACKAGE_NAME}/{version}/report.zip"
     print(f"Downloading test-report-runs/{version}/report.zip...", file=sys.stderr)
     resp = requests.get(url, headers=headers, timeout=_HTTP_TIMEOUT, stream=True)
     resp.raise_for_status()
@@ -107,7 +104,7 @@ def extract_run(zip_bytes: bytes, output_dir: Path) -> list[str]:
             # Strip leading "public/" prefix if present so files land directly in output_dir
             relative = member
             if relative.startswith("public/"):
-                relative = relative[len("public/"):]
+                relative = relative[len("public/") :]
             target = output_dir / relative
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(zf.read(member))
@@ -117,9 +114,7 @@ def extract_run(zip_bytes: bytes, output_dir: Path) -> list[str]:
 
 def main():
     """Entry point: parse arguments, download, and extract a historical run."""
-    parser = argparse.ArgumentParser(
-        description="Fetch a historical report run from the Generic Package Registry"
-    )
+    parser = argparse.ArgumentParser(description="Fetch a historical report run from the Generic Package Registry")
     parser.add_argument(
         "--project-id",
         required=True,

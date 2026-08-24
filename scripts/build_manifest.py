@@ -58,7 +58,7 @@ def _list_package_versions(
     page = 1
     while True:
         url = f"{api_url}/projects/{project_id}/packages"
-        params = {
+        params: dict[str, str | int] = {
             "package_name": _PACKAGE_NAME,
             "package_type": "generic",
             "per_page": 100,
@@ -87,10 +87,7 @@ def _download_metadata_from_zip(
     Returns the parsed metadata dict, or None if the metadata file is not
     found in the zip or the download fails.
     """
-    url = (
-        f"{api_url}/projects/{project_id}/packages/generic"
-        f"/{_PACKAGE_NAME}/{version}/report.zip"
-    )
+    url = f"{api_url}/projects/{project_id}/packages/generic" f"/{_PACKAGE_NAME}/{version}/report.zip"
     try:
         resp = requests.get(url, headers=headers, timeout=_HTTP_TIMEOUT)
         resp.raise_for_status()
@@ -103,7 +100,8 @@ def _download_metadata_from_zip(
             # The metadata may be at public/run_metadata.json or run_metadata.json
             for candidate in [f"public/{_METADATA_FILENAME}", _METADATA_FILENAME]:
                 if candidate in zf.namelist():
-                    return json.loads(zf.read(candidate))
+                    result: dict = json.loads(zf.read(candidate))
+                    return result
     except (zipfile.BadZipFile, json.JSONDecodeError, KeyError) as exc:
         print(f"  WARNING: Failed to read metadata from {version}/report.zip: {exc}", file=sys.stderr)
         return None
@@ -153,8 +151,7 @@ def build_manifest(
         # Add the download URL so consumers know where to fetch the full archive
         metadata["package_version"] = version
         metadata["download_url"] = (
-            f"{api_url}/projects/{project_id}/packages/generic"
-            f"/{_PACKAGE_NAME}/{version}/report.zip"
+            f"{api_url}/projects/{project_id}/packages/generic" f"/{_PACKAGE_NAME}/{version}/report.zip"
         )
         runs.append(metadata)
 
@@ -167,9 +164,7 @@ def build_manifest(
 
 def main():
     """Entry point: parse arguments and write the manifest."""
-    parser = argparse.ArgumentParser(
-        description="Build runs.json manifest from the Generic Package Registry"
-    )
+    parser = argparse.ArgumentParser(description="Build runs.json manifest from the Generic Package Registry")
     parser.add_argument(
         "--project-id",
         required=True,

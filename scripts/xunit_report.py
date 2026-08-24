@@ -20,8 +20,8 @@ import json
 import re
 import sys
 import xml.etree.ElementTree as ET
-from datetime import datetime, timezone
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
 from enum import Enum
 from pathlib import Path
 from typing import Optional, Union
@@ -1090,9 +1090,7 @@ def main():
             commit_sha=args.commit_sha,
         )
         metadata_path = out_dir / "run_metadata.json"
-        metadata_path.write_text(
-            json.dumps(metadata, indent=2) + "\n", encoding="utf-8"
-        )
+        metadata_path.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
         print(f"run_metadata.json written to {out_dir}/")
 
     if args.third_party:
