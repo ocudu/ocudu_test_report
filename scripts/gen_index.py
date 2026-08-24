@@ -172,6 +172,83 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
       border: none;
       display: block;
     }}
+
+    .run-selector {{
+      position: relative;
+    }}
+
+    .run-selector .tab {{
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }}
+
+    .run-selector .tab::after {{
+      content: '\\25BE';
+      font-size: 0.7em;
+    }}
+
+    .run-panel {{
+      display: none;
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 8px 0;
+      min-width: 320px;
+      max-height: 400px;
+      overflow-y: auto;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }}
+
+    .run-panel.open {{
+      display: block;
+    }}
+
+    .run-panel-title {{
+      padding: 6px 14px;
+      font-size: .75em;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }}
+
+    .run-item {{
+      display: block;
+      padding: 8px 14px;
+      text-decoration: none;
+      color: #e2e8f0;
+      font-size: .82em;
+      border-bottom: 1px solid #1e293b;
+      transition: background .1s;
+    }}
+
+    .run-item:hover {{
+      background: #334155;
+    }}
+
+    .run-item-date {{
+      font-weight: 600;
+    }}
+
+    .run-item-stats {{
+      color: #94a3b8;
+      font-size: .9em;
+      margin-top: 2px;
+    }}
+
+    .run-item-stats .pass {{ color: #4ade80; }}
+    .run-item-stats .fail {{ color: #f87171; }}
+
+    .run-panel-empty {{
+      padding: 12px 14px;
+      color: #64748b;
+      font-size: .82em;
+    }}
   </style>
 </head>
 
@@ -182,6 +259,13 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
 {third_party_tab_html}
     </div>
     <div class="nav-right">
+      <div class="run-selector">
+        <a class="tab" id="run-selector-btn" href="#">Run History</a>
+        <div class="run-panel" id="run-panel">
+          <div class="run-panel-title">Archived Runs</div>
+          <div id="run-list"><div class="run-panel-empty">Loading...</div></div>
+        </div>
+      </div>
       <a class="tab" data-fixed="features" href="#">Features</a>
       <a class="tab" data-fixed="tifg" href="#">TIFG Test Plan</a>
       <a class="tab" data-fixed="wg11" href="#">WG11 Test Plan</a>
@@ -270,6 +354,49 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
       window.addEventListener('hashchange', function () {{ activate(parseHash(location.hash)); }});
 
       activate(parseHash(location.hash));
+    }}());
+  </script>
+  <script>
+    (function () {{
+      var btn = document.getElementById('run-selector-btn');
+      var panel = document.getElementById('run-panel');
+      var list = document.getElementById('run-list');
+      var loaded = false;
+
+      btn.addEventListener('click', function (e) {{
+        e.preventDefault();
+        panel.classList.toggle('open');
+        if (!loaded) {{
+          loaded = true;
+          fetch('runs.json')
+            .then(function (r) {{ if (!r.ok) throw new Error(r.status); return r.json(); }})
+            .then(function (data) {{
+              if (!data.runs || data.runs.length === 0) {{
+                list.innerHTML = '<div class="run-panel-empty">No archived runs found.</div>';
+                return;
+              }}
+              list.innerHTML = data.runs.map(function (run) {{
+                var date = run.generated_at ? new Date(run.generated_at).toLocaleDateString('en-GB', {{ day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }}) : 'Unknown date';
+                var t = run.totals || {{}};
+                var stats = t.tests ? '<span class="pass">' + (t.passed || 0) + ' passed</span>, <span class="fail">' + (t.failed || 0) + ' failed</span>, ' + (t.skipped || 0) + ' skipped / ' + t.tests + ' total' : '';
+                var pid = run.pipeline_id || run.package_version || '?';
+                return '<a class="run-item" href="' + (run.download_url || '#') + '" target="_blank">'
+                  + '<div class="run-item-date">Pipeline ' + pid + ' &mdash; ' + date + '</div>'
+                  + (stats ? '<div class="run-item-stats">' + stats + '</div>' : '')
+                  + '</a>';
+              }}).join('');
+            }})
+            .catch(function () {{
+              list.innerHTML = '<div class="run-panel-empty">Could not load run history.</div>';
+            }});
+        }}
+      }});
+
+      document.addEventListener('click', function (e) {{
+        if (!btn.contains(e.target) && !panel.contains(e.target)) {{
+          panel.classList.remove('open');
+        }}
+      }});
     }}());
   </script>
 </body>
