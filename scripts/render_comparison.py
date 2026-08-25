@@ -231,8 +231,7 @@ def render_comparison_html(diff: dict, favicon: str = _FAVICON_DEFAULT) -> str:
     cards_html = _render_summary_cards(summary)
 
     sections_html = "\n".join(
-        _render_section(title, diff.get(key, []), css_class)
-        for title, key, css_class in _SECTIONS
+        _render_section(title, diff.get(key, []), css_class) for title, key, css_class in _SECTIONS
     )
 
     # Empty state
@@ -453,11 +452,15 @@ _COMPARISON_CSS = """
 
 def main():
     """Entry point: parse arguments, load diff, write HTML."""
-    parser = argparse.ArgumentParser(
-        description="Render a comparison HTML page from diff.json"
-    )
+    parser = argparse.ArgumentParser(description="Render a comparison HTML page from diff.json")
     parser.add_argument("diff", type=Path, help="Path to diff.json (produced by diff_runs.py)")
-    parser.add_argument("-o", "--output", type=Path, default=Path("comparison.html"), help="Output HTML file path (default: comparison.html)")
+    parser.add_argument(
+        "-o",
+        "--output",
+        type=Path,
+        default=Path("comparison.html"),
+        help="Output HTML file path (default: comparison.html)",
+    )
     parser.add_argument("--favicon", default=_FAVICON_DEFAULT, metavar="URL", help="Favicon URL")
     args = parser.parse_args()
 

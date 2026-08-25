@@ -27,13 +27,13 @@ from pathlib import Path
 class DiffClass(Enum):
     """Classification of a test case difference between two runs."""
 
-    REGRESSION = "regression"       # pass/skip -> fail/error
-    FIX = "fix"                     # fail/error -> pass
-    NEW_FAILURE = "new_failure"     # absent -> fail/error
-    NEW_PASS = "new_pass"          # absent -> pass
-    NEW_SKIP = "new_skip"          # absent -> skip
-    REMOVED = "removed"            # present -> absent
-    UNCHANGED = "unchanged"        # same status both runs
+    REGRESSION = "regression"  # pass/skip -> fail/error
+    FIX = "fix"  # fail/error -> pass
+    NEW_FAILURE = "new_failure"  # absent -> fail/error
+    NEW_PASS = "new_pass"  # absent -> pass
+    NEW_SKIP = "new_skip"  # absent -> skip
+    REMOVED = "removed"  # present -> absent
+    UNCHANGED = "unchanged"  # same status both runs
 
 
 _FAIL_STATUSES = frozenset({"failed", "error"})
@@ -256,9 +256,7 @@ def build_diff_output(
 
 def main():
     """Entry point: parse arguments, load files, write diff."""
-    parser = argparse.ArgumentParser(
-        description="Compare two test run results and produce a structured diff"
-    )
+    parser = argparse.ArgumentParser(description="Compare two test run results and produce a structured diff")
     parser.add_argument(
         "base",
         type=Path,
