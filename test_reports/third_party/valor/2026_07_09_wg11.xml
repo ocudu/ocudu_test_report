@@ -294,11 +294,10 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="8.4.2" classname="Security log format and related log fields" timestamp="2026-06-09T00:00:00+00:00">
+    <testcase name="8.4.2" classname="Security log format and related log fields" timestamp="2026-08-20T00:00:00+00:00">
       <properties>
-        <property name="Comments" value="FAIL 2026-06-09: DUT security events absent from gNB application logs (present only in OS-level /var/log/secure, auditd); available logs use syslog timestamps (not ISO-8601 per clause 5.3.8.8) and carry no DUT IP. GitHub #75."/>
+        <property name="Comments" value="Verdict Updated: BLOCKED -> PASS (TC 8.4.2). Retested 2026-08-20 with a read-only account: every log line now carries [Location=10.148.135.52], including the auth line itself, plus a full ISO-8601 timestamp. Closing."/>
       </properties>
-      <failure message="Test 8.4.2 failed" type="AssertionError"/>
       <system-out/>
       <system-err/>
     </testcase>

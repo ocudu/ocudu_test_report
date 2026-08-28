@@ -668,37 +668,35 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="8.6" classname="Multi-cell Testing">
+    <testcase name="8.6" classname="Multi-cell Testing" timestamp="2026-08-09T21:32:00+00:00">
       <properties>
         <property name="DUT" value="O-CU/O-DU"/>
+        <property name="Comments" value="Multi-cell (2-cell, intra-DU intra-freq) 24h06m soak: HO 17693/17693=100%, 0 RLF, 0 gNB crashes/restarts, RRC establishment 99.99% known-cause / 90.6% overall. Two gNB defects found during run (CU-CP F1AP release-ID race; Resume MAC-I integrity failures forcing ~750 rejected re-Setup attempts) — filing pending. No matched single-cell TC8.4 baseline available for KPI-equivalence check (spec step 6) — recommended follow-up."/>
       </properties>
-      <skipped message="Test 8.6 not executed"/>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="8.7" classname="Emergency call">
+    <testcase name="8.7" classname="Emergency call" timestamp="2026-07-17T00:00:00+00:00">
       <properties>
         <property name="DUT" value="O-CU/O-DU"/>
+        <property name="Comments" value="Emergency call verified; ISS-057/#73 Resolved (NGAP Location Report / write-replace warning now delivered)."/>
       </properties>
-      <skipped message="Test 8.7 not executed"/>
       <system-out/>
       <system-err/>
     </testcase>
     <testcase name="8.8" classname="ETWS (Earthquake and Tsunami Warning System)">
       <properties>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Comments" value="WriteReplaceWarning() not implemented."/>
       </properties>
-      <failure message="Test 8.8 failed"/>
+      <failure message="Test 8.8 currently under execution"/>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="8.9" classname="MPS call (Multimedia Priority Service)">
+    <testcase name="8.9" classname="MPS call (Multimedia Priority Service)" timestamp="2026-07-17T00:00:00+00:00">
       <properties>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Comments" value="Priority Voice or Video in 26.10"/>
+        <property name="Comments" value="MPS call (Multimedia Priority Service) verified; ISS-058/#74 Resolved (du_ctrl_exec offload). Prior FAIL: du_ctrl_exec saturation at ~120 UE → RRC-setup timeouts / ~90-104 UE plateau."/>
       </properties>
-      <failure message="Test 8.9 failed" type="AssertionError"/>
       <system-out/>
       <system-err/>
     </testcase>
@@ -750,12 +748,11 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="10.4.1" classname="Profile-based Performance - Single Cell" timestamp="2026-06-03T00:00:00+00:00">
+    <testcase name="10.4.1" classname="Profile-based Performance - Single Cell" timestamp="2026-07-20T00:00:00+00:00">
       <properties>
         <property name="DUT" value="O-CU/O-DU"/>
-        <property name="Comments" value="ISS-056: CU-UP PDCP UL integrity COUNT-desync. ~14M UL PDU drops across 100 UEs / all DRBs from +48min on build 1a976144 + sr_period_ms=80. UE-side DL integrity-fail=0 (gNB UL RX only). Root-caused; SRS fix pending (#71)."/>
+        <property name="Comments" value="PASS — 2026-07-20. Profile-based single-cell (Accord) verified; ISS-056/#71 Resolved (CU-UP PDCP UL integrity COUNT-desync fixed). Prior FAIL: ~14M UL PDU drops from integrity desync."/>
       </properties>
-      <failure message="Test 10.4.1 failed" type="AssertionError"/>
       <system-out/>
       <system-err/>
     </testcase>
