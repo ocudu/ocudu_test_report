@@ -129,6 +129,8 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
       }}
 
       function activate(state) {{
+        // Clear srcdoc so frame.src works again when leaving History
+        frame.removeAttribute('srcdoc');
         if (state.type === 'fixed') {{
           subnav.classList.add('hidden');
           vTabs.forEach(function (t) {{ t.classList.remove('active'); }});
