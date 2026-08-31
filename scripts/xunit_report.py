@@ -986,7 +986,7 @@ def parse_third_party_dir(root: Path) -> list:
     return suites
 
 
-def main():
+def main():  # pylint: disable=too-many-statements
     """Entry point: parse arguments and write the HTML report."""
     parser = argparse.ArgumentParser(description="Generate HTML report from XUnit XML files")
     parser.add_argument(
@@ -1135,9 +1135,7 @@ def main():
             commit_sha=args.commit_sha,
         )
         results_path = out_dir / "results.json"
-        results_path.write_text(
-            json.dumps(results, indent=2) + "\n", encoding="utf-8"
-        )
+        results_path.write_text(json.dumps(results, indent=2) + "\n", encoding="utf-8")
         print(f"results.json written to {out_dir}/")
 
     if args.third_party:

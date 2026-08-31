@@ -55,7 +55,7 @@ class DiffEntry:
 
 
 @dataclass
-class DiffSummary:
+class DiffSummary:  # pylint: disable=too-many-instance-attributes
     """Aggregate counts for each diff classification."""
 
     total_base: int = 0
@@ -82,7 +82,9 @@ def _flatten_results(results: dict) -> dict[str, dict]:
     return flat
 
 
-def _classify(status_base: str | None, status_head: str | None) -> DiffClass:
+def _classify(  # pylint: disable=too-many-return-statements
+    status_base: str | None, status_head: str | None
+) -> DiffClass:
     """Classify the transition between two statuses."""
     if status_base is None:
         # New test in head
@@ -109,7 +111,7 @@ def _classify(status_base: str | None, status_head: str | None) -> DiffClass:
     return DiffClass.UNCHANGED
 
 
-def diff_runs(base: dict, head: dict) -> tuple[list[DiffEntry], DiffSummary]:
+def diff_runs(base: dict, head: dict) -> tuple[list[DiffEntry], DiffSummary]:  # pylint: disable=too-many-locals
     """Compare two results.json structures and return classified differences.
 
     Args:
@@ -222,7 +224,7 @@ def build_diff_output(
         "removed": [],
     }
 
-    _CLASS_TO_GROUP = {
+    class_to_group = {
         "regression": "regressions",
         "fix": "fixes",
         "new_failure": "new_failures",
@@ -234,7 +236,7 @@ def build_diff_output(
     for entry in entries:
         entry_dict = asdict(entry)
         del entry_dict["diff_class"]  # redundant once grouped
-        group_key = _CLASS_TO_GROUP.get(entry.diff_class)
+        group_key = class_to_group.get(entry.diff_class)
         if group_key:
             grouped[group_key].append(entry_dict)
 
