@@ -218,6 +218,34 @@ generate-report:
       fi
       python3 gen_index.py --historic "${HISTORIC_LIST[@]}" -o "${CI_PROJECT_DIR}/${OUTPUT}/index.html"
     - |
+      echo "Generating run comparison..."
+      PREV_DIR="${CI_PROJECT_DIR}/_prev_run"
+      if python3 fetch_run.py \
+           --project-id "${CI_PROJECT_ID}" \
+           --gitlab-url "${CI_SERVER_URL}" \
+           --run latest \
+           --token-type job \
+           -o "${PREV_DIR}"; then
+        if [ -f "${PREV_DIR}/results.json" ] && [ -f "${CI_PROJECT_DIR}/${OUTPUT}/results.json" ]; then
+          if python3 diff_runs.py \
+               "${PREV_DIR}/results.json" \
+               "${CI_PROJECT_DIR}/${OUTPUT}/results.json" \
+               -o "${CI_PROJECT_DIR}/_diff.json" \
+               --summary && \
+             python3 render_comparison.py \
+               "${CI_PROJECT_DIR}/_diff.json" \
+               -o "${CI_PROJECT_DIR}/${OUTPUT}/comparison.html"; then
+            echo "Comparison generated successfully."
+          else
+            echo "WARNING: Comparison generation failed. Report is still valid." >&2
+          fi
+        else
+          echo "WARNING: results.json not found in previous or current run. Skipping comparison." >&2
+        fi
+      else
+        echo "WARNING: Could not fetch previous run (first run?). Skipping comparison." >&2
+      fi
+    - |
       echo "Archiving report to Generic Package Registry..."
       cd "${CI_PROJECT_DIR}"
       apt-get update -qq && apt-get install -y -qq zip curl > /dev/null 2>&1
