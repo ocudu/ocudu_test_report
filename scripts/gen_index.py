@@ -205,8 +205,12 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
         var html = '<!DOCTYPE html><html><head><meta charset="utf-8"><style>' + CSS + '</style></head><body>';
         html += '<h2 style="margin-bottom:20px">History</h2>';
 
+        /* ── Compare picker (top) ────────────────────────── */
+        html += '<h3 style="margin-bottom:12px;font-size:1em;color:#94a3b8">Compare Two Runs</h3>';
+        html += renderComparePicker(runs);
+
         /* ── Latest vs Previous comparison ───────────────── */
-        html += '<h3 style="margin-bottom:12px;font-size:1em;color:#94a3b8">Latest vs Previous</h3>';
+        html += '<h3 style="margin:24px 0 12px;font-size:1em;color:#94a3b8">Latest vs Previous</h3>';
         html += '<div id="comparison-slot" style="margin-bottom:32px"><p style="color:#64748b;font-size:.9em">Loading comparison...</p></div>';
 
         /* ── Trends chart ────────────────────────────────── */
@@ -217,14 +221,80 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
         html += '<h3 style="margin:24px 0 12px;font-size:1em;color:#94a3b8">Archived Runs</h3>';
         html += renderRunList(runs);
 
-        /* ── Compare picker ──────────────────────────────── */
-        html += '<h3 style="margin:24px 0 12px;font-size:1em;color:#94a3b8">Compare Two Runs</h3>';
-        html += renderComparePicker(runs);
-
         html += '<scr' + 'ipt>' + comparisonLoaderJS() + '</scr' + 'ipt>';
-        html += '<scr' + 'ipt>' + comparePickerJS() + '</scr' + 'ipt>';
         html += '</body></html>';
         frame.srcdoc = html;
+
+        // Attach compare handler after srcdoc renders
+        setTimeout(function() {{
+          var inner = frame.contentDocument;
+          if (!inner) return;
+          var btn = inner.getElementById('cmp-go');
+          if (!btn) return;
+          btn.addEventListener('click', function() {{
+            var bp = inner.getElementById('cmp-base').value;
+            var hp = inner.getElementById('cmp-head').value;
+            var res = inner.getElementById('cmp-result');
+            if (!bp || !hp) {{ alert('Select both runs.'); return; }}
+            if (bp === hp) {{ alert('Pick two different runs.'); return; }}
+            res.innerHTML = '<p style="color:#94a3b8">Comparing...</p>';
+            Promise.all([
+              fetch('runs/' + bp + '/results.json').then(function(r) {{ return r.ok ? r.json() : null; }}),
+              fetch('runs/' + hp + '/results.json').then(function(r) {{ return r.ok ? r.json() : null; }})
+            ]).then(function(p) {{
+              var base = p[0], head = p[1];
+              if (!base || !head) {{ res.innerHTML = '<p style="color:#f87171">Could not load results.json. Only the 5 most recent runs are available.</p>'; return; }}
+              function flat(d) {{ var m = {{}}; (d.suites||[]).forEach(function(s) {{ (s.tests||[]).forEach(function(t) {{ m[t.key] = t; }}); }}); return m; }}
+              var bm = flat(base), hm = flat(head), ak = {{}};
+              Object.keys(bm).forEach(function(k) {{ ak[k] = 1; }});
+              Object.keys(hm).forEach(function(k) {{ ak[k] = 1; }});
+              var regs=[], fixes=[], nf=[], np=[], rem=[];
+              Object.keys(ak).sort().forEach(function(k) {{
+                var b = bm[k], h = hm[k];
+                var sb = b ? b.status : null, sh = h ? h.status : null;
+                if (!b && (sh === 'failed' || sh === 'error')) nf.push({{key:k, head:sh}});
+                else if (!b && sh === 'passed') np.push({{key:k, head:sh}});
+                else if (!h) rem.push({{key:k, base:sb}});
+                else if (sb === sh) return;
+                else if ((sh === 'failed' || sh === 'error') && sb !== 'failed' && sb !== 'error') regs.push({{key:k, base:sb, head:sh}});
+                else if (sh === 'passed' && (sb === 'failed' || sb === 'error')) fixes.push({{key:k, base:sb, head:sh}});
+              }});
+              function pill(s) {{
+                var c = (s === 'failed' || s === 'error') ? '#f87171' : s === 'passed' ? '#4ade80' : '#fb923c';
+                return '<span style="color:' + c + ';font-weight:600">' + s + '</span>';
+              }}
+              function sect(title, items, color) {{
+                if (!items.length) return '';
+                var rows = items.map(function(i) {{
+                  var key = i.key.replace(/</g, '&lt;');
+                  var detail = (i.base ? pill(i.base) + ' &rarr; ' : '') + (i.head ? pill(i.head) : '<span style="color:#64748b">removed</span>');
+                  return '<tr style="border-top:1px solid #1e293b"><td style="padding:6px 10px;font-family:monospace;font-size:.85em">' + key + '</td><td style="padding:6px 10px">' + detail + '</td></tr>';
+                }}).join('');
+                return '<details open style="margin-bottom:12px;background:#1e293b;border:1px solid #334155;border-radius:8px;overflow:hidden">'
+                  + '<summary style="padding:12px 16px;cursor:pointer;font-weight:600;border-left:4px solid ' + color + '">' + title
+                  + ' <span style="background:#0f172a;border-radius:12px;padding:2px 10px;font-size:.82em;margin-left:8px">' + items.length + '</span>'
+                  + '</summary><table style="width:100%;border-collapse:collapse;font-size:.85em">' + rows + '</table></details>';
+              }}
+              function card(count, label, color) {{
+                return '<div class="card"><div class="card-val" style="color:' + (count ? color : '#64748b') + '">' + count + '</div><div class="card-lbl">' + label + '</div></div>';
+              }}
+              var h = '<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px">'
+                + card(regs.length, 'Regressions', '#f87171')
+                + card(fixes.length, 'Fixes', '#4ade80')
+                + card(nf.length, 'New Failures', '#f87171')
+                + card(np.length, 'New Passes', '#4ade80')
+                + card(rem.length, 'Removed', '#fb923c')
+                + '</div>'
+                + sect('Regressions', regs, '#f87171') + sect('Fixes', fixes, '#4ade80')
+                + sect('New Failures', nf, '#f87171') + sect('New Passes', np, '#4ade80')
+                + sect('Removed', rem, '#fb923c');
+              if (!regs.length && !fixes.length && !nf.length && !np.length && !rem.length) {{
+                h += '<p style="color:#94a3b8;text-align:center;padding:20px">No differences found.</p>';
+              }}
+              res.innerHTML = '<h4 style="margin-bottom:12px">Pipeline ' + bp + ' &rarr; ' + hp + '</h4>' + h;
+            }}).catch(function() {{ res.innerHTML = '<p style="color:#f87171">Comparison failed.</p>'; }});
+          }});
+        }}, 100);
       }}
 
       /* ── Trends ────────────────────────────────────────── */
@@ -322,55 +392,6 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
           + '}});';
       }}
 
-      /* ── JS for the compare picker ─────────────────────── */
-      function comparePickerJS() {{
-        return 'var FAIL={{failed:1,error:1}};'
-          + 'var btn=document.getElementById("cmp-go");'
-          + 'if(btn)btn.addEventListener("click",function(){{'
-          + 'var bp=document.getElementById("cmp-base").value;'
-          + 'var hp=document.getElementById("cmp-head").value;'
-          + 'var res=document.getElementById("cmp-result");'
-          + 'if(!bp||!hp){{alert("Select both runs.");return}}'
-          + 'if(bp===hp){{alert("Pick two different runs.");return}}'
-          + 'res.innerHTML="<p style=\\"color:#94a3b8\\">Comparing...</p>";'
-          + 'Promise.all(['
-          + 'fetch("runs/"+bp+"/results.json").then(function(r){{return r.ok?r.json():null}}),'
-          + 'fetch("runs/"+hp+"/results.json").then(function(r){{return r.ok?r.json():null}})'
-          + ']).then(function(p){{'
-          + 'var base=p[0],head=p[1];'
-          + 'if(!base||!head){{res.innerHTML="<p style=\\"color:#f87171\\">Could not load results.json. Only the 5 most recent runs are available.</p>";return}}'
-          + 'function flat(d){{var m={{}};(d.suites||[]).forEach(function(s){{(s.tests||[]).forEach(function(t){{m[t.key]=t}})}});return m}}'
-          + 'var bm=flat(base),hm=flat(head),ak={{}};'
-          + 'Object.keys(bm).forEach(function(k){{ak[k]=1}});Object.keys(hm).forEach(function(k){{ak[k]=1}});'
-          + 'var regs=[],fixes=[],nf=[],np=[],rem=[];'
-          + 'Object.keys(ak).sort().forEach(function(k){{'
-          + 'var b=bm[k],h=hm[k],sb=b?b.status:null,sh=h?h.status:null;'
-          + 'if(!b&&sh in FAIL)nf.push({{key:k,head:sh}});'
-          + 'else if(!b&&sh==="passed")np.push({{key:k,head:sh}});'
-          + 'else if(!h)rem.push({{key:k,base:sb}});'
-          + 'else if(sb===sh)return;'
-          + 'else if(sh in FAIL&&!(sb in FAIL))regs.push({{key:k,base:sb,head:sh}});'
-          + 'else if(sh==="passed"&&sb in FAIL)fixes.push({{key:k,base:sb,head:sh}})'
-          + '}});'
-          + 'function pill(s){{var c=s in FAIL?"#f87171":s==="passed"?"#4ade80":"#fb923c";return "<span style=\\"color:"+c+";font-weight:600\\">"+s+"</span>"}}'
-          + 'function sect(t,items,color){{'
-          + 'if(!items.length)return"";'
-          + 'var rows=items.map(function(i){{return "<tr style=\\"border-top:1px solid #1e293b\\"><td style=\\"padding:6px 10px;font-family:monospace;font-size:.85em\\">"+i.key.replace(/</g,"&lt;")+"</td><td style=\\"padding:6px 10px\\">"+(i.base?pill(i.base)+" &rarr; ":"")+(i.head?pill(i.head):"<span style=\\"color:#64748b\\">removed</span>")+"</td></tr>"}}).join("");'
-          + 'return "<details open style=\\"margin-bottom:12px;background:#1e293b;border:1px solid #334155;border-radius:8px;overflow:hidden\\"><summary style=\\"padding:12px 16px;cursor:pointer;font-weight:600;border-left:4px solid "+color+"\\">"+t+" <span style=\\"background:#0f172a;border-radius:12px;padding:2px 10px;font-size:.82em;margin-left:8px\\">"+items.length+"</span></summary><table style=\\"width:100%;border-collapse:collapse;font-size:.85em\\">"+rows+"</table></details>"'
-          + '}}'
-          + 'var h="<div style=\\"display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px\\">"'
-          + '+"<div class=\\"card\\"><div class=\\"card-val\\" style=\\"color:"+(regs.length?"#f87171":"#64748b")+"\\">"+regs.length+"</div><div class=\\"card-lbl\\">Regressions</div></div>"'
-          + '+"<div class=\\"card\\"><div class=\\"card-val\\" style=\\"color:"+(fixes.length?"#4ade80":"#64748b")+"\\">"+fixes.length+"</div><div class=\\"card-lbl\\">Fixes</div></div>"'
-          + '+"<div class=\\"card\\"><div class=\\"card-val\\" style=\\"color:"+(nf.length?"#f87171":"#64748b")+"\\">"+nf.length+"</div><div class=\\"card-lbl\\">New Failures</div></div>"'
-          + '+"<div class=\\"card\\"><div class=\\"card-val\\" style=\\"color:"+(np.length?"#4ade80":"#64748b")+"\\">"+np.length+"</div><div class=\\"card-lbl\\">New Passes</div></div>"'
-          + '+"<div class=\\"card\\"><div class=\\"card-val\\" style=\\"color:"+(rem.length?"#fb923c":"#64748b")+"\\">"+rem.length+"</div><div class=\\"card-lbl\\">Removed</div></div>"'
-          + '+"</div>"'
-          + '+sect("Regressions",regs,"#f87171")+sect("Fixes",fixes,"#4ade80")+sect("New Failures",nf,"#f87171")+sect("New Passes",np,"#4ade80")+sect("Removed",rem,"#fb923c");'
-          + 'if(!regs.length&&!fixes.length&&!nf.length&&!np.length&&!rem.length)h+="<p style=\\"color:#94a3b8;text-align:center;padding:20px\\">No differences found.</p>";'
-          + 'res.innerHTML="<h3 style=\\"margin-bottom:12px;font-size:1em\\">Pipeline "+bp+" &rarr; "+hp+"</h3>"+h'
-          + '}}).catch(function(){{res.innerHTML="<p style=\\"color:#f87171\\">Comparison failed.</p>"}})'
-          + '}});';
-      }}
     }}());
   </script>
 </body>
