@@ -377,6 +377,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
                 list.innerHTML = '<div class="run-panel-empty">No archived runs found.</div>';
                 return;
               }}
+              var frame = document.getElementById('frame');
               list.innerHTML = data.runs.map(function (run) {{
                 var date = run.generated_at
                   ? new Date(run.generated_at).toLocaleDateString('en-GB', {{
@@ -391,11 +392,21 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
                     + (t.skipped || 0) + ' skipped / ' + t.tests + ' total'
                   : '';
                 var pid = run.pipeline_id || run.package_version || '?';
-                return '<a class="run-item" href="' + (run.download_url || '#') + '" target="_blank">'
+                var runUrl = 'runs/' + pid + '/report.html';
+                return '<a class="run-item" href="' + runUrl + '" data-run-url="' + runUrl + '">'
                   + '<div class="run-item-date">Pipeline ' + pid + ' &mdash; ' + date + '</div>'
                   + (stats ? '<div class="run-item-stats">' + stats + '</div>' : '')
                   + '</a>';
               }}).join('');
+              list.querySelectorAll('.run-item').forEach(function (item) {{
+                item.addEventListener('click', function (e) {{
+                  e.preventDefault();
+                  frame.src = item.dataset.runUrl;
+                  panel.classList.remove('open');
+                  document.querySelectorAll('.tab').forEach(function (t) {{ t.classList.remove('active'); }});
+                  document.getElementById('subnav').classList.add('hidden');
+                }});
+              }});
             }})
             .catch(function () {{
               list.innerHTML = '<div class="run-panel-empty">Could not load run history.</div>';

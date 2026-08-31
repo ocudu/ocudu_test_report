@@ -267,6 +267,32 @@ generate-report:
         --gitlab-url "${CI_SERVER_URL}" \
         --token-type job \
         -o "${CI_PROJECT_DIR}/${OUTPUT}/runs.json" || echo "WARNING: Manifest build failed. Report is still valid." >&2
+    - |
+      echo "Extracting recent runs for inline browsing..."
+      cd "${CI_PROJECT_DIR}/scripts"
+      MAX_RUNS=5
+      RUNS_DIR="${CI_PROJECT_DIR}/${OUTPUT}/runs"
+      mkdir -p "${RUNS_DIR}"
+      if [ -f "${CI_PROJECT_DIR}/${OUTPUT}/runs.json" ]; then
+        PIPELINE_IDS=$(python3 -c "import json,sys;[print(r.get('pipeline_id') or r.get('package_version','')) for r in json.load(open(sys.argv[1])).get('runs',[])[:${MAX_RUNS}] if r.get('pipeline_id') or r.get('package_version')]" "${CI_PROJECT_DIR}/${OUTPUT}/runs.json" 2>/dev/null)
+        for pid in $PIPELINE_IDS; do
+          echo "  Extracting run ${pid}..."
+          if python3 fetch_run.py \
+               --project-id "${CI_PROJECT_ID}" \
+               --gitlab-url "${CI_SERVER_URL}" \
+               --run "${pid}" \
+               --token-type job \
+               -o "${RUNS_DIR}/${pid}" 2>&1; then
+            echo "  Run ${pid} extracted."
+          else
+            echo "  WARNING: Could not extract run ${pid}. Skipping." >&2
+          fi
+        done
+        EXTRACTED=$(ls -d "${RUNS_DIR}"/*/ 2>/dev/null | wc -l)
+        echo "Extracted ${EXTRACTED} of ${MAX_RUNS} recent runs."
+      else
+        echo "WARNING: runs.json not found. Skipping run extraction." >&2
+      fi
   after_script:
     - |
       echo "*******************************************************************************************************************************"
