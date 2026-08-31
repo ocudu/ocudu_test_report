@@ -60,22 +60,20 @@ class TestGenerate:
         assert 'data-fixed="third_party"' in html
 
     def test_comparison_tab_present(self):
-        """The comparison tab is included in the navigator."""
+        """The history tab is included in the navigator."""
         html = gen_index._generate([])
-        assert 'data-fixed="comparison"' in html
-        assert ">Comparison<" in html
-        assert "comparison.html" in html
+        assert 'data-fixed="history"' in html
+        assert ">History<" in html
 
     def test_comparison_in_fixed_pages_js(self):
-        """FIXED_PAGES JS object includes comparison mapping."""
+        """FIXED_PAGES JS object includes history mapping."""
         html = gen_index._generate([])
-        assert "comparison: 'comparison.html'" in html
+        assert "history:" in html
 
     def test_run_history_present(self):
         html = gen_index._generate([])
-        assert "run-selector-btn" in html
-        assert "Run History" in html
         assert "runs.json" in html
+        assert "loadHistory" in html
 
     def test_subnav_present(self):
         html = gen_index._generate([])
