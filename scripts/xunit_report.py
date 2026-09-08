@@ -70,13 +70,16 @@ def _truncate_log(text: str, max_lines: int = _DEFAULT_PREVIEW_LINES) -> tuple[s
 _SAFE_FILENAME_RE = re.compile(r"[^a-zA-Z0-9_\-.]")
 
 
-def _safe_filename(classname: str, name: str, suffix: str = ".txt") -> str:
-    """Generate a filesystem-safe filename from a test case's classname and name.
+def _safe_filename(suite: str, classname: str, name: str, suffix: str = ".txt") -> str:
+    """Generate a filesystem-safe filename from a test case's suite, classname, and name.
 
     Format: ``<slug>_<hash><suffix>`` where slug is up to 80 characters of the
-    slugified classname.name and hash is 8 hex characters for collision avoidance.
+    slugified suite.classname.name and hash is 8 hex characters for collision
+    avoidance. The suite name is included so that tests sharing the same
+    ``classname.name`` in different suites do not collide on the same file.
     """
-    raw = f"{classname}.{name}" if classname else name
+    parts = [p for p in (suite, f"{classname}.{name}" if classname else name) if p]
+    raw = ".".join(parts)
     slug = _SAFE_FILENAME_RE.sub("_", raw)[:80].rstrip("_")
     short_hash = hashlib.sha256(raw.encode()).hexdigest()[:8]
     return f"{slug}_{short_hash}{suffix}"
@@ -185,6 +188,7 @@ class TestCase:
     url: str = ""
     timestamp: str = ""
     properties: dict[str, str] = field(default_factory=dict)
+    suite_name: str = ""
 
 
 @dataclass
@@ -367,7 +371,9 @@ def parse_xml(name: str, path: Path) -> Suite:
         elems = root.findall(".//testcase")
 
     for elem in elems:
-        suite.testcases.append(_parse_testcase(elem))
+        tc = _parse_testcase(elem)
+        tc.suite_name = name
+        suite.testcases.append(tc)
     suite.testcases.sort(key=lambda tc: f"{tc.classname}.{tc.name}")
     return suite
 
@@ -415,7 +421,9 @@ def _gitlab_link(url: str, title: str = "GitLab") -> str:
 
 
 # pylint: disable=too-many-locals
-def _render_external_log(text: str, classname: str, name: str, kind: str, css_class: str, log_dir: Path) -> str:
+def _render_external_log(
+    text: str, suite: str, classname: str, name: str, kind: str, css_class: str, log_dir: Path
+) -> str:
     """Write full log to a sidecar file and return HTML with preview + link.
 
     *text* is the raw log content (ANSI codes intact, not HTML-converted).
@@ -426,7 +434,7 @@ def _render_external_log(text: str, classname: str, name: str, kind: str, css_cl
     *kind* is "out" or "err" — appended to the filename to distinguish
     system-out from system-err for the same test case.
     """
-    filename = _safe_filename(classname, name, suffix=f"_{kind}.txt")
+    filename = _safe_filename(suite, classname, name, suffix=f"_{kind}.txt")
     log_path = log_dir / filename
 
     line_count = text.count("\n") + 1
@@ -476,7 +484,9 @@ def _render_testcase(tc: TestCase, idx: int, log_mode: str = "inline", log_dir: 
     out_html = ""
     if tc.system_out.strip():
         if log_mode == "external" and log_dir is not None:
-            out_html = _render_external_log(tc.system_out.strip(), tc.classname, tc.name, "out", "system-out", log_dir)
+            out_html = _render_external_log(
+                tc.system_out.strip(), tc.suite_name, tc.classname, tc.name, "out", "system-out", log_dir
+            )
         elif log_mode == "preview":
             preview, remainder, was_truncated = _truncate_log(tc.system_out.strip())
             out_html = f'<pre class="system-out">{_ansi_to_html(preview)}</pre>'
@@ -493,7 +503,9 @@ def _render_testcase(tc: TestCase, idx: int, log_mode: str = "inline", log_dir: 
     err_html = ""
     if tc.system_err.strip():
         if log_mode == "external" and log_dir is not None:
-            err_html = _render_external_log(tc.system_err.strip(), tc.classname, tc.name, "err", "system-err", log_dir)
+            err_html = _render_external_log(
+                tc.system_err.strip(), tc.suite_name, tc.classname, tc.name, "err", "system-err", log_dir
+            )
         elif log_mode == "preview":
             preview, remainder, was_truncated = _truncate_log(tc.system_err.strip())
             err_html = f'<pre class="system-err">{_ansi_to_html(preview)}</pre>'

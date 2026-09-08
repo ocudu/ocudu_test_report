@@ -437,44 +437,50 @@ class TestAnsiToHtml:
 
 class TestSafeFilename:
     def test_basic_filename(self):
-        result = xunit_report._safe_filename("com.example.TestClass", "test_method")
+        result = xunit_report._safe_filename("E2E", "com.example.TestClass", "test_method")
         assert result.endswith(".txt")
         assert len(result) <= 100  # slug(80) + _ + hash(8) + suffix
 
     def test_includes_hash_for_collision_avoidance(self):
         """Different inputs produce different filenames even if slugs collide."""
-        a = xunit_report._safe_filename("a.b", "test (1)")
-        b = xunit_report._safe_filename("a.b", "test_1_")
+        a = xunit_report._safe_filename("s", "a.b", "test (1)")
+        b = xunit_report._safe_filename("s", "a.b", "test_1_")
+        assert a != b
+
+    def test_same_test_in_different_suites_does_not_collide(self):
+        """Same classname.name in two suites must map to different files."""
+        a = xunit_report._safe_filename("E2E", "a.b", "test")
+        b = xunit_report._safe_filename("Integration", "a.b", "test")
         assert a != b
 
     def test_custom_suffix(self):
-        result = xunit_report._safe_filename("cls", "name", suffix="_out.txt")
+        result = xunit_report._safe_filename("suite", "cls", "name", suffix="_out.txt")
         assert result.endswith("_out.txt")
 
     def test_long_name_truncated(self):
         """Slug is capped at 80 chars."""
         long_name = "a" * 200
-        result = xunit_report._safe_filename("", long_name)
+        result = xunit_report._safe_filename("suite", "", long_name)
         # Total: slug(<=80) + "_" + hash(8) + suffix
         slug_part = result.rsplit("_", 1)[0]
         assert len(slug_part) <= 80
 
     def test_special_chars_replaced(self):
-        result = xunit_report._safe_filename("pkg::cls", "test<foo>/bar")
+        result = xunit_report._safe_filename("pkg suite", "pkg::cls", "test<foo>/bar")
         # No special characters in the filename
         assert "::" not in result
         assert "<" not in result
         assert "/" not in result
 
     def test_empty_classname(self):
-        """When classname is empty, uses just the name."""
-        result = xunit_report._safe_filename("", "test_simple")
+        """When classname is empty, uses just the suite and name."""
+        result = xunit_report._safe_filename("suite", "", "test_simple")
         assert "test_simple" in result
 
     def test_deterministic(self):
         """Same inputs always produce the same filename."""
-        a = xunit_report._safe_filename("cls", "name")
-        b = xunit_report._safe_filename("cls", "name")
+        a = xunit_report._safe_filename("suite", "cls", "name")
+        b = xunit_report._safe_filename("suite", "cls", "name")
         assert a == b
 
 
@@ -489,7 +495,7 @@ class TestRenderExternalLog:
         log_dir = tmp_path / "logs"
         log_dir.mkdir()
         text = "short log\nonly two lines"
-        result = xunit_report._render_external_log(text, "cls", "test", "out", "system-out", log_dir)
+        result = xunit_report._render_external_log(text, "suite", "cls", "test", "out", "system-out", log_dir)
         assert "<pre" in result
         assert "short log" in result
         # No link, no file
@@ -502,7 +508,7 @@ class TestRenderExternalLog:
         log_dir.mkdir()
         lines = [f"line {i}" for i in range(30)]
         text = "\n".join(lines)
-        result = xunit_report._render_external_log(text, "cls", "test", "out", "system-out", log_dir)
+        result = xunit_report._render_external_log(text, "suite", "cls", "test", "out", "system-out", log_dir)
         # Sidecar file created
         files = list(log_dir.iterdir())
         assert len(files) == 1
@@ -518,7 +524,7 @@ class TestRenderExternalLog:
         # Include ANSI codes in the text
         lines = [f"\x1b[32mline {i}\x1b[0m" for i in range(25)]
         text = "\n".join(lines)
-        xunit_report._render_external_log(text, "cls", "test", "out", "system-out", log_dir)
+        xunit_report._render_external_log(text, "suite", "cls", "test", "out", "system-out", log_dir)
         sidecar = list(log_dir.iterdir())[0]
         content = sidecar.read_text(encoding="utf-8")
         # Raw ANSI codes preserved — no HTML conversion
@@ -531,7 +537,7 @@ class TestRenderExternalLog:
         log_dir.mkdir()
         lines = [f"\x1b[31mERROR line {i}\x1b[0m" for i in range(25)]
         text = "\n".join(lines)
-        result = xunit_report._render_external_log(text, "cls", "test", "out", "system-out", log_dir)
+        result = xunit_report._render_external_log(text, "suite", "cls", "test", "out", "system-out", log_dir)
         # Preview portion should have HTML spans (ANSI converted)
         assert "<span" in result
         # Raw ANSI codes should NOT be in the HTML output
@@ -542,8 +548,8 @@ class TestRenderExternalLog:
         log_dir = tmp_path / "logs"
         log_dir.mkdir()
         text = "\n".join(f"line {i}" for i in range(25))
-        xunit_report._render_external_log(text, "cls", "test", "out", "system-out", log_dir)
-        xunit_report._render_external_log(text, "cls", "test", "err", "system-err", log_dir)
+        xunit_report._render_external_log(text, "suite", "cls", "test", "out", "system-out", log_dir)
+        xunit_report._render_external_log(text, "suite", "cls", "test", "err", "system-err", log_dir)
         files = sorted(f.name for f in log_dir.iterdir())
         assert len(files) == 2
         assert any("_out.txt" in f for f in files)
