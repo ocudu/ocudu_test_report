@@ -34,6 +34,7 @@ envlist =
   format
   lint
   type
+  test
 
 [testenv:format]
 skip_install = true
@@ -57,4 +58,15 @@ deps =
   mypy
 commands =
   mypy --check-untyped-defs .
+
+[testenv:test]
+skip_install = true
+deps =
+  pytest
+  pyyaml
+  jsonschema
+  ansi2html
+  requests
+commands =
+  pytest ../tests
 """
