@@ -273,10 +273,12 @@
           if (!res.ok) throw new Error(res.status);
           return res.text();
         })
-        .then(function (text) {
+        .then(function (logHtml) {
           const pre = document.createElement('pre');
           pre.className = 'system-out log-expanded';
-          pre.textContent = text;
+          // Sidecar is pre-rendered, HTML-escaped ANSI (colour spans) from
+          // xunit_report.py, so innerHTML renders the colours safely.
+          pre.innerHTML = logHtml;
           link.after(pre);
           link.textContent = 'Hide full log';
         })

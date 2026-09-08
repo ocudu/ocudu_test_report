@@ -40,6 +40,10 @@ except ImportError:
 
 
 _ANSI_CONVERTER = Ansi2HTMLConverter(inline=True, escaped=False)
+# Separate converter for content injected into the DOM via innerHTML: escaped=True
+# HTML-escapes the log text so a log line cannot inject markup, while still
+# emitting the colour spans.
+_ANSI_CONVERTER_ESCAPED = Ansi2HTMLConverter(inline=True, escaped=True)
 CAPTURE_HEADER_RE = re.compile(r"^-+\s+Captured \w+\s+-+$", re.MULTILINE)
 _NATURAL_CHUNK_RE = re.compile(r"(\d+)")
 
@@ -158,8 +162,9 @@ def _strip_headers(text: str) -> str:
     """Strip pytest capture headers and normalise escape sequences.
 
     Returns cleaned text with raw ANSI codes still intact (not converted
-    to HTML).  The ansi2html conversion is deferred to render time so that
-    sidecar files can store plain text while inline previews get styled HTML.
+    to HTML). The ansi2html conversion is deferred to render time so both
+    the inline preview and the sidecar file get styled HTML from the same
+    source text.
     """
     text = CAPTURE_HEADER_RE.sub("", text)
     text = text.replace("#x1B", "\x1b")  # pytest XML writer drops the & from &#x1B;
@@ -169,6 +174,16 @@ def _strip_headers(text: str) -> str:
 def _ansi_to_html(text: str) -> str:
     """Convert ANSI escape codes in *text* to inline-styled HTML spans."""
     result: str = _ANSI_CONVERTER.convert(text, full=False)
+    return result
+
+
+def _ansi_to_html_escaped(text: str) -> str:
+    """Convert ANSI codes to HTML spans, HTML-escaping the log text.
+
+    Used for sidecar log content, which the browser injects via innerHTML.
+    Escaping means a log line cannot inject markup while colours still render.
+    """
+    result: str = _ANSI_CONVERTER_ESCAPED.convert(text, full=False)
     return result
 
 
@@ -426,22 +441,22 @@ def _render_external_log(
 ) -> str:
     """Write full log to a sidecar file and return HTML with preview + link.
 
-    *text* is the raw log content (ANSI codes intact, not HTML-converted).
-    The sidecar file stores this raw text so that JS can insert it via
-    textContent without HTML escaping issues.  The inline preview is
-    converted to HTML for ANSI colour rendering.
+    *text* is the raw log content (ANSI codes intact). The sidecar file stores
+    the log pre-rendered to HTML (ANSI converted to colour spans, log text
+    HTML-escaped) so the browser can inject it via innerHTML and show the same
+    colours as the inline preview. The inline preview is converted the same way.
 
     *kind* is "out" or "err" — appended to the filename to distinguish
     system-out from system-err for the same test case.
     """
-    filename = _safe_filename(suite, classname, name, suffix=f"_{kind}.txt")
+    filename = _safe_filename(suite, classname, name, suffix=f"_{kind}.html")
     log_path = log_dir / filename
 
     line_count = text.count("\n") + 1
     preview, _remainder, was_truncated = _truncate_log(text)
     result = f'<pre class="{css_class}">{_ansi_to_html(preview)}</pre>'
     if was_truncated:
-        log_path.write_text(text, encoding="utf-8")
+        log_path.write_text(_ansi_to_html_escaped(text), encoding="utf-8")
         rel_href = f"logs/{filename}"
         result += (
             f'<a class="log-link" href="{html.escape(rel_href)}"'

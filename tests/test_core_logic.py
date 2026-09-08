@@ -512,13 +512,13 @@ class TestRenderExternalLog:
         # Sidecar file created
         files = list(log_dir.iterdir())
         assert len(files) == 1
-        assert files[0].suffix == ".txt"
+        assert files[0].suffix == ".html"
         # Link present in HTML
         assert "log-link" in result
         assert "View full log (30 lines)" in result
 
-    def test_sidecar_contains_raw_text(self, tmp_path):
-        """The sidecar file stores raw text, not HTML."""
+    def test_sidecar_contains_rendered_html(self, tmp_path):
+        """The sidecar stores ANSI converted to HTML colour spans, not raw text."""
         log_dir = tmp_path / "logs"
         log_dir.mkdir()
         # Include ANSI codes in the text
@@ -527,9 +527,21 @@ class TestRenderExternalLog:
         xunit_report._render_external_log(text, "suite", "cls", "test", "out", "system-out", log_dir)
         sidecar = list(log_dir.iterdir())[0]
         content = sidecar.read_text(encoding="utf-8")
-        # Raw ANSI codes preserved — no HTML conversion
-        assert "\x1b[32m" in content
-        assert "<span" not in content
+        # ANSI converted to colour spans, raw escape codes gone
+        assert "<span" in content
+        assert "\x1b[32m" not in content
+
+    def test_sidecar_escapes_log_markup(self, tmp_path):
+        """Log content that looks like HTML is escaped, so innerHTML is safe."""
+        log_dir = tmp_path / "logs"
+        log_dir.mkdir()
+        lines = ["<script>alert(1)</script>"] + [f"line {i}" for i in range(25)]
+        text = "\n".join(lines)
+        xunit_report._render_external_log(text, "suite", "cls", "test", "out", "system-out", log_dir)
+        sidecar = list(log_dir.iterdir())[0]
+        content = sidecar.read_text(encoding="utf-8")
+        assert "<script>" not in content
+        assert "&lt;script&gt;" in content
 
     def test_preview_contains_html(self, tmp_path):
         """The inline preview has ANSI codes converted to HTML spans."""
@@ -552,8 +564,8 @@ class TestRenderExternalLog:
         xunit_report._render_external_log(text, "suite", "cls", "test", "err", "system-err", log_dir)
         files = sorted(f.name for f in log_dir.iterdir())
         assert len(files) == 2
-        assert any("_out.txt" in f for f in files)
-        assert any("_err.txt" in f for f in files)
+        assert any("_out.html" in f for f in files)
+        assert any("_err.html" in f for f in files)
 
 
 # ---------------------------------------------------------------------------
