@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: Copyright (C) 2021-2026 Software Radio Systems Limited
 # SPDX-License-Identifier: BSD-3-Clause-Open-MPI
 
-"""Tests for validate_features.py â€” duplicate ID detection."""
+"""Tests for validate_features.py — duplicate ID detection."""
 
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ import validate_features  # noqa: E402
 
 
 # ---------------------------------------------------------------------------
-# check_duplicate_ids â€” detect repeated feature IDs
+# check_duplicate_ids — detect repeated feature IDs
 # ---------------------------------------------------------------------------
 
 

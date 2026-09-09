@@ -110,11 +110,11 @@ def main() -> None:
     errors = validate(args.data, args.schema)
 
     if errors:
-        print(f"FAILED â€” {len(errors)} error(s) found:\n")
+        print(f"FAILED — {len(errors)} error(s) found:\n")
         print("\n".join(errors))
         sys.exit(1)
     else:
-        print("OK â€” features file is valid.")
+        print("OK — features file is valid.")
         sys.exit(0)
 
 
