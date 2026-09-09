@@ -152,7 +152,7 @@ def _fetch_job(
     client: _Client, job_id: int, report_name: str, suite_dir: Path, job_url: str = ""
 ) -> list[tuple[str, Path]]:
     """Download artifacts for one job into suite_dir. report_name is used as the xunit-report suite label."""
-    print(f"  job {job_id} ({report_name}) â€” downloading artifacts ...", flush=True)
+    print(f"  job {job_id} ({report_name}) — downloading artifacts ...", flush=True)
     try:
         zip_bytes = client.artifacts_zip(job_id, label=report_name)
     except requests.HTTPError as exc:
@@ -183,7 +183,7 @@ def _fetch_suite(client: _Client, name: str, ref: _ParsedURL, suite_dir: Path) -
     """Resolve a suite entry and download its XUnit artifacts. Returns list of (name, path) saved."""
     kind, id_ = ref.kind, ref.id_
     if kind == "schedule":
-        print(f"'{name}' â€” schedule {id_}, resolving latest pipeline ...")
+        print(f"'{name}' — schedule {id_}, resolving latest pipeline ...")
         try:
             id_, pipeline_url = client.latest_scheduled_pipeline(id_)
             print(f"  latest pipeline: {id_} ({pipeline_url})")
@@ -196,10 +196,10 @@ def _fetch_suite(client: _Client, name: str, ref: _ParsedURL, suite_dir: Path) -
         (suite_dir / "_url.txt").write_text(ref.url, encoding="utf-8")
 
     if kind == "job":
-        print(f"'{name}' â€” job {id_}")
+        print(f"'{name}' — job {id_}")
         return _fetch_job(client, id_, name, suite_dir, ref.url)
 
-    print(f"'{name}' â€” pipeline {id_}")
+    print(f"'{name}' — pipeline {id_}")
     try:
         jobs = client.pipeline_jobs(id_)
     except requests.HTTPError as exc:
