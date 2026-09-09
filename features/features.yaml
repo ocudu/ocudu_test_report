@@ -1641,7 +1641,7 @@ features:
       evaluate this performance metric. However, test methods and procedures in clauses
       6.4/6.7/8.3 could be leveraged to develop the procedure/configuration for this
       performance metric (Note 2). | Performance Value Range: <= 25ms (Note 1).'
-    short_description: RRC Setup Time â‰¤25 ms
+    short_description: RRC Setup Time ≤25 ms
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
@@ -1656,7 +1656,7 @@ features:
       facilitate configuration of different size of ping messages of up to 1340 bytes
       (Note 2). | Performance Value Range: Lab: <= 23 ms; Field: <= 60 ms, <= 25 ms
       median (Note 1).'
-    short_description: Ping RTT â‰¤23 ms (lab) / â‰¤60 ms (field)
+    short_description: Ping RTT ≤23 ms (lab) / ≤60 ms (field)
     type: Performance
     release: 26.04 (v1.0)
     primary_test_type: []
