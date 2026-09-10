@@ -6,7 +6,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
 -->
 
 <testsuites name="TIFG tests">
-  <testsuite name="TIFG" errors="0" failures="4" skipped="33" tests="90" timestamp="2026-06-23T20:14:13.197757+00:00">
+  <testsuite name="TIFG" timestamp="2026-06-23T20:14:13.197757+00:00">
     <testcase name="5.3" classname="5G SA registration and deregistration of single UE" timestamp="2026-02-09T00:00:00+00:00">
       <properties>
         <property name="DUT" value="O-CU/O-DU"/>
@@ -684,11 +684,11 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="8.8" classname="ETWS (Earthquake and Tsunami Warning System)">
+    <testcase name="8.8" classname="ETWS (Earthquake and Tsunami Warning System)" timestamp="2026-09-04T00:00:00+00:00">
       <properties>
         <property name="DUT" value="O-CU/O-DU"/>
+        <property name="Comments" value="Re-executed and test case passing. Getting ETWS message correctly."/>
       </properties>
-      <failure message="Test 8.8 currently under execution"/>
       <system-out/>
       <system-err/>
     </testcase>
