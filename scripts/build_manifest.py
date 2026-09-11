@@ -4,26 +4,29 @@
 # SPDX-License-Identifier: BSD-3-Clause-Open-MPI
 
 """
-Build a runs.json manifest from the Generic Package Registry.
+Build a runs.json manifest incrementally in the Generic Package Registry.
 
-Queries GitLab for all versions of the test-report-runs package, downloads
-run_metadata.json from each, and assembles a manifest listing all available
-report runs. The manifest is used by the UI to offer run selection and by
-the comparison engine to identify runs for diffing.
+The manifest is kept as its own file in the registry (package
+test-report-runs, version "index", file runs.json). Each run downloads the
+previous manifest, appends its own metadata, and re-uploads it. The manifest
+is used by the UI to offer run selection and by the comparison engine to
+identify runs for diffing.
+
+This avoids listing packages via GET /projects/:id/packages, which the CI job
+token is not authorised to call. Downloading and uploading a package file by
+version both work with the job token, so the whole flow stays job-token-only.
 
 Usage:
-    python build_manifest.py --project-id 12345 -o public/runs.json
+    python build_manifest.py --project-id 12345 --current-run public/run_metadata.json -o public/runs.json
     python build_manifest.py --project-id 12345 --gitlab-url https://gitlab.example.com -o runs.json
 """
 
 from __future__ import annotations
 
 import argparse
-import io
 import json
 import os
 import sys
-import zipfile
 from pathlib import Path
 
 try:
@@ -33,8 +36,10 @@ except ImportError:
     sys.exit(2)
 
 _PACKAGE_NAME = "test-report-runs"
-_METADATA_FILENAME = "run_metadata.json"
+_INDEX_VERSION = "index"
+_INDEX_FILENAME = "runs.json"
 _HTTP_TIMEOUT = 30
+_SCHEMA_VERSION = 1
 
 
 def _get_auth_headers(token: str, token_type: str = "private") -> dict[str, str]:
@@ -44,127 +49,146 @@ def _get_auth_headers(token: str, token_type: str = "private") -> dict[str, str]
     return {"PRIVATE-TOKEN": token}
 
 
-def _list_package_versions(
+def _index_url(api_url: str, project_id: str) -> str:
+    """Return the generic-package URL for the runs.json index file."""
+    return f"{api_url}/projects/{project_id}/packages/generic" f"/{_PACKAGE_NAME}/{_INDEX_VERSION}/{_INDEX_FILENAME}"
+
+
+def _run_download_url(api_url: str, project_id: str, version: str) -> str:
+    """Return the generic-package URL for a run's report.zip."""
+    return f"{api_url}/projects/{project_id}/packages/generic" f"/{_PACKAGE_NAME}/{version}/report.zip"
+
+
+def download_index(
     api_url: str,
     project_id: str,
     headers: dict[str, str],
-) -> list[dict]:
-    """Fetch all versions of the test-report-runs package from the registry.
+) -> dict:
+    """Download the existing runs.json index from the registry.
 
-    Returns a list of package dicts sorted by pipeline_id (descending, newest first).
-    Each dict contains at minimum: id, version, created_at.
+    Returns the parsed manifest dict. If the index does not exist yet (the
+    first run, HTTP 404) or cannot be parsed, returns a fresh empty manifest.
+    Only genuine transport errors are raised to the caller.
     """
-    packages = []
-    page = 1
-    while True:
-        url = f"{api_url}/projects/{project_id}/packages"
-        params: dict[str, str | int] = {
-            "package_name": _PACKAGE_NAME,
-            "package_type": "generic",
-            "per_page": 100,
-            "page": page,
-            "order_by": "version",
-            "sort": "desc",
-        }
-        resp = requests.get(url, headers=headers, params=params, timeout=_HTTP_TIMEOUT)
-        resp.raise_for_status()
-        batch = resp.json()
-        if not batch:
-            break
-        packages.extend(batch)
-        page += 1
-    return packages
-
-
-def _download_metadata_from_zip(
-    api_url: str,
-    project_id: str,
-    version: str,
-    headers: dict[str, str],
-) -> dict | None:
-    """Download report.zip for a given version and extract run_metadata.json.
-
-    Returns the parsed metadata dict, or None if the metadata file is not
-    found in the zip or the download fails.
-    """
-    url = f"{api_url}/projects/{project_id}/packages/generic" f"/{_PACKAGE_NAME}/{version}/report.zip"
+    url = _index_url(api_url, project_id)
     try:
         resp = requests.get(url, headers=headers, timeout=_HTTP_TIMEOUT)
-        resp.raise_for_status()
     except requests.RequestException as exc:
-        print(f"  WARNING: Failed to download {version}/report.zip: {exc}", file=sys.stderr)
-        return None
+        print(f"WARNING: Could not reach the registry to read the index: {exc}", file=sys.stderr)
+        return _empty_manifest()
+
+    if resp.status_code == 404:
+        print("No existing index found (first run). Starting a new manifest.", file=sys.stderr)
+        return _empty_manifest()
+
+    resp.raise_for_status()
 
     try:
-        with zipfile.ZipFile(io.BytesIO(resp.content)) as zf:
-            # The metadata may be at public/run_metadata.json or run_metadata.json
-            for candidate in [f"public/{_METADATA_FILENAME}", _METADATA_FILENAME]:
-                if candidate in zf.namelist():
-                    result: dict = json.loads(zf.read(candidate))
-                    return result
-    except (zipfile.BadZipFile, json.JSONDecodeError, KeyError) as exc:
-        print(f"  WARNING: Failed to read metadata from {version}/report.zip: {exc}", file=sys.stderr)
-        return None
+        manifest: dict = json.loads(resp.content)
+    except json.JSONDecodeError as exc:
+        print(f"WARNING: Existing index is not valid JSON ({exc}). Starting fresh.", file=sys.stderr)
+        return _empty_manifest()
 
-    print(f"  WARNING: {_METADATA_FILENAME} not found in {version}/report.zip", file=sys.stderr)
-    return None
+    runs = manifest.get("runs")
+    if not isinstance(runs, list):
+        print("WARNING: Existing index has no runs list. Starting fresh.", file=sys.stderr)
+        return _empty_manifest()
+
+    return manifest
 
 
-def build_manifest(
+def upload_index(
     api_url: str,
     project_id: str,
     headers: dict[str, str],
+    manifest: dict,
+) -> bool:
+    """Upload the manifest back to the registry as the runs.json index.
+
+    Returns True on success (HTTP 200/201), False otherwise. Uploading a
+    generic package file is permitted with the CI job token.
+    """
+    url = _index_url(api_url, project_id)
+    payload = (json.dumps(manifest, indent=2) + "\n").encode("utf-8")
+    try:
+        resp = requests.put(url, headers=headers, data=payload, timeout=_HTTP_TIMEOUT)
+    except requests.RequestException as exc:
+        print(f"WARNING: Failed to upload the index: {exc}", file=sys.stderr)
+        return False
+
+    if resp.status_code in (200, 201):
+        return True
+
+    print(f"WARNING: Index upload returned HTTP {resp.status_code}.", file=sys.stderr)
+    return False
+
+
+def _empty_manifest() -> dict:
+    """Return a fresh, empty manifest structure."""
+    return {"schema_version": _SCHEMA_VERSION, "total_runs": 0, "runs": []}
+
+
+def _run_sort_key(run: dict) -> int:
+    """Sort key for a run: numeric pipeline_id descending, unknowns last."""
+    value = run.get("pipeline_id") or run.get("package_version") or ""
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return -1
+
+
+def add_run(
+    manifest: dict,
+    run_metadata: dict,
+    api_url: str,
+    project_id: str,
     max_runs: int = 0,
 ) -> dict:
-    """Build the complete runs.json manifest.
+    """Return a new manifest with run_metadata added (or replacing a duplicate).
 
-    Args:
-        api_url: GitLab API base URL (e.g. https://gitlab.com/api/v4)
-        project_id: Numeric project ID
-        headers: Auth headers for API requests
-        max_runs: Maximum number of runs to include (0 = all)
-
-    Returns:
-        A dict with schema_version and a runs list ready for JSON serialisation.
+    Runs are keyed by pipeline_id. A run with the same pipeline_id as an
+    existing entry replaces it, so re-running a pipeline does not create
+    duplicates. Runs are sorted newest-first and capped at max_runs (0 = all).
     """
-    print(f"Fetching package list for {_PACKAGE_NAME}...", file=sys.stderr)
-    packages = _list_package_versions(api_url, project_id, headers)
+    version = str(run_metadata.get("pipeline_id", "")).strip()
+    entry = dict(run_metadata)
+    if version:
+        entry["package_version"] = version
+        entry["download_url"] = _run_download_url(api_url, project_id, version)
+
+    existing = manifest.get("runs", [])
+    kept = [r for r in existing if str(r.get("pipeline_id", "")).strip() != version or not version]
+    kept.append(entry)
+    kept.sort(key=_run_sort_key, reverse=True)
 
     if max_runs > 0:
-        packages = packages[:max_runs]
-
-    print(f"Found {len(packages)} archived run(s). Downloading metadata...", file=sys.stderr)
-
-    runs = []
-    for pkg in packages:
-        version = pkg["version"]
-        print(f"  Fetching metadata for run {version}...", file=sys.stderr)
-        metadata = _download_metadata_from_zip(api_url, project_id, version, headers)
-        if metadata is None:
-            # Still include the run in the manifest with minimal info from the package
-            metadata = {
-                "pipeline_id": version,
-                "generated_at": pkg.get("created_at", ""),
-                "totals": {},
-                "suites": [],
-            }
-        # Add the download URL so consumers know where to fetch the full archive
-        metadata["package_version"] = version
-        metadata["download_url"] = (
-            f"{api_url}/projects/{project_id}/packages/generic" f"/{_PACKAGE_NAME}/{version}/report.zip"
-        )
-        runs.append(metadata)
+        kept = kept[:max_runs]
 
     return {
-        "schema_version": 1,
-        "total_runs": len(runs),
-        "runs": runs,
+        "schema_version": _SCHEMA_VERSION,
+        "total_runs": len(kept),
+        "runs": kept,
     }
 
 
+def _load_current_run(path: Path) -> dict | None:
+    """Load the current run's metadata from a local run_metadata.json file."""
+    try:
+        metadata: dict = json.loads(path.read_text(encoding="utf-8"))
+        return metadata
+    except FileNotFoundError:
+        print(f"WARNING: Current run metadata not found at {path}.", file=sys.stderr)
+        return None
+    except json.JSONDecodeError as exc:
+        print(f"WARNING: Current run metadata is not valid JSON ({exc}).", file=sys.stderr)
+        return None
+
+
 def main():
-    """Entry point: parse arguments and write the manifest."""
-    parser = argparse.ArgumentParser(description="Build runs.json manifest from the Generic Package Registry")
+    """Entry point: parse arguments, update the index, and write the manifest."""
+    parser = argparse.ArgumentParser(
+        description="Build the runs.json manifest incrementally in the Generic Package Registry"
+    )
     parser.add_argument(
         "--project-id",
         required=True,
@@ -187,10 +211,21 @@ def main():
         help="Token type: 'private' for PRIVATE-TOKEN, 'job' for JOB-TOKEN (default: private)",
     )
     parser.add_argument(
+        "--current-run",
+        type=Path,
+        default=None,
+        help="Path to the current run's run_metadata.json to append to the index",
+    )
+    parser.add_argument(
         "--max-runs",
         type=int,
         default=0,
-        help="Maximum number of runs to include in the manifest (0 = all, default: 0)",
+        help="Maximum number of runs to keep in the manifest (0 = all, default: 0)",
+    )
+    parser.add_argument(
+        "--no-upload",
+        action="store_true",
+        help="Do not upload the updated index back to the registry (write locally only)",
     )
     parser.add_argument(
         "-o",
@@ -210,7 +245,22 @@ def main():
     api_url = f"{args.gitlab_url.rstrip('/')}/api/v4"
     headers = _get_auth_headers(token, args.token_type)
 
-    manifest = build_manifest(api_url, args.project_id, headers, max_runs=args.max_runs)
+    print("Downloading existing runs index...", file=sys.stderr)
+    manifest = download_index(api_url, args.project_id, headers)
+    print(f"Existing index has {len(manifest.get('runs', []))} run(s).", file=sys.stderr)
+
+    if args.current_run is not None:
+        run_metadata = _load_current_run(args.current_run)
+        if run_metadata is not None:
+            manifest = add_run(manifest, run_metadata, api_url, args.project_id, max_runs=args.max_runs)
+            print(f"Added current run. Index now has {manifest['total_runs']} run(s).", file=sys.stderr)
+            if not args.no_upload:
+                if upload_index(api_url, args.project_id, headers, manifest):
+                    print("Index uploaded to the registry.", file=sys.stderr)
+                else:
+                    print("WARNING: Index upload failed. Local manifest is still written.", file=sys.stderr)
+    else:
+        print("No --current-run given. Writing the index as-is.", file=sys.stderr)
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")

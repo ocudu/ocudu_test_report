@@ -1,22 +1,20 @@
 # SPDX-FileCopyrightText: Copyright (C) 2021-2026 Software Radio Systems Limited
 # SPDX-License-Identifier: BSD-3-Clause-Open-MPI
 
-"""Tests for scripts/build_manifest.py — run manifest building logic."""
+"""Tests for scripts/build_manifest.py — incremental runs index logic."""
 
 from __future__ import annotations
 
-import io
 import json
 import sys
-import zipfile
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-import pytest
-
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
-import build_manifest  # noqa: E402
+import build_manifest  # noqa: E402  # isort: skip
+
+_API = "https://gitlab.com/api/v4"
 
 
 # ---------------------------------------------------------------------------
@@ -26,246 +24,221 @@ import build_manifest  # noqa: E402
 
 class TestGetAuthHeaders:
     def test_private_token(self):
-        headers = build_manifest._get_auth_headers("my-token", "private")
-        assert headers == {"PRIVATE-TOKEN": "my-token"}
+        assert build_manifest._get_auth_headers("my-token", "private") == {"PRIVATE-TOKEN": "my-token"}
 
     def test_job_token(self):
-        headers = build_manifest._get_auth_headers("job-tok", "job")
-        assert headers == {"JOB-TOKEN": "job-tok"}
+        assert build_manifest._get_auth_headers("job-tok", "job") == {"JOB-TOKEN": "job-tok"}
 
 
 # ---------------------------------------------------------------------------
-# _download_metadata_from_zip
+# download_index
 # ---------------------------------------------------------------------------
 
 
-def _make_zip_bytes(files: dict[str, bytes]) -> bytes:
-    """Create an in-memory zip with the given filename->content mapping."""
-    buf = io.BytesIO()
-    with zipfile.ZipFile(buf, "w") as zf:
-        for name, content in files.items():
-            zf.writestr(name, content)
-    return buf.getvalue()
-
-
-class TestDownloadMetadataFromZip:
+class TestDownloadIndex:
     @patch("build_manifest.requests.get")
-    def test_extracts_metadata_from_public_path(self, mock_get):
-        metadata = {"schema_version": 1, "pipeline_id": "100", "totals": {"tests": 50}}
-        zip_bytes = _make_zip_bytes({"public/run_metadata.json": json.dumps(metadata).encode()})
+    def test_returns_existing_manifest(self, mock_get):
+        manifest = {"schema_version": 1, "total_runs": 1, "runs": [{"pipeline_id": "100"}]}
+        resp = MagicMock()
+        resp.status_code = 200
+        resp.content = json.dumps(manifest).encode()
+        resp.raise_for_status = MagicMock()
+        mock_get.return_value = resp
 
-        mock_resp = MagicMock()
-        mock_resp.status_code = 200
-        mock_resp.content = zip_bytes
-        mock_resp.raise_for_status = MagicMock()
-        mock_get.return_value = mock_resp
-
-        result = build_manifest._download_metadata_from_zip(
-            "https://gitlab.com/api/v4", "123", "999", {}
-        )
-        assert result == metadata
+        result = build_manifest.download_index(_API, "123", {})
+        assert result == manifest
 
     @patch("build_manifest.requests.get")
-    def test_extracts_metadata_from_root_path(self, mock_get):
-        metadata = {"schema_version": 1, "pipeline_id": "200"}
-        zip_bytes = _make_zip_bytes({"run_metadata.json": json.dumps(metadata).encode()})
+    def test_404_returns_empty_manifest(self, mock_get):
+        resp = MagicMock()
+        resp.status_code = 404
+        mock_get.return_value = resp
 
-        mock_resp = MagicMock()
-        mock_resp.content = zip_bytes
-        mock_resp.raise_for_status = MagicMock()
-        mock_get.return_value = mock_resp
-
-        result = build_manifest._download_metadata_from_zip(
-            "https://gitlab.com/api/v4", "123", "200", {}
-        )
-        assert result == metadata
+        result = build_manifest.download_index(_API, "123", {})
+        assert result == {"schema_version": 1, "total_runs": 0, "runs": []}
 
     @patch("build_manifest.requests.get")
-    def test_returns_none_on_missing_metadata(self, mock_get):
-        zip_bytes = _make_zip_bytes({"public/report.html": b"<html></html>"})
+    def test_bad_json_returns_empty_manifest(self, mock_get):
+        resp = MagicMock()
+        resp.status_code = 200
+        resp.content = b"not json"
+        resp.raise_for_status = MagicMock()
+        mock_get.return_value = resp
 
-        mock_resp = MagicMock()
-        mock_resp.content = zip_bytes
-        mock_resp.raise_for_status = MagicMock()
-        mock_get.return_value = mock_resp
-
-        result = build_manifest._download_metadata_from_zip(
-            "https://gitlab.com/api/v4", "123", "300", {}
-        )
-        assert result is None
+        result = build_manifest.download_index(_API, "123", {})
+        assert result["runs"] == []
 
     @patch("build_manifest.requests.get")
-    def test_returns_none_on_bad_zip(self, mock_get):
-        mock_resp = MagicMock()
-        mock_resp.content = b"not a zip file"
-        mock_resp.raise_for_status = MagicMock()
-        mock_get.return_value = mock_resp
+    def test_missing_runs_list_returns_empty_manifest(self, mock_get):
+        resp = MagicMock()
+        resp.status_code = 200
+        resp.content = json.dumps({"schema_version": 1}).encode()
+        resp.raise_for_status = MagicMock()
+        mock_get.return_value = resp
 
-        result = build_manifest._download_metadata_from_zip(
-            "https://gitlab.com/api/v4", "123", "400", {}
-        )
-        assert result is None
+        result = build_manifest.download_index(_API, "123", {})
+        assert result["runs"] == []
 
     @patch("build_manifest.requests.get")
-    def test_returns_none_on_request_failure(self, mock_get):
+    def test_transport_error_returns_empty_manifest(self, mock_get):
         import requests
 
-        mock_get.side_effect = requests.RequestException("timeout")
-
-        result = build_manifest._download_metadata_from_zip(
-            "https://gitlab.com/api/v4", "123", "500", {}
-        )
-        assert result is None
-
-
-# ---------------------------------------------------------------------------
-# _list_package_versions
-# ---------------------------------------------------------------------------
-
-
-class TestListPackageVersions:
-    @patch("build_manifest.requests.get")
-    def test_single_page(self, mock_get):
-        packages = [
-            {"id": 1, "version": "1000", "created_at": "2026-08-01T00:00:00Z"},
-            {"id": 2, "version": "999", "created_at": "2026-07-31T00:00:00Z"},
-        ]
-        mock_resp = MagicMock()
-        mock_resp.json.side_effect = [packages, []]
-        mock_resp.raise_for_status = MagicMock()
-        mock_get.return_value = mock_resp
-
-        result = build_manifest._list_package_versions(
-            "https://gitlab.com/api/v4", "123", {}
-        )
-        assert len(result) == 2
-        assert result[0]["version"] == "1000"
+        mock_get.side_effect = requests.RequestException("boom")
+        result = build_manifest.download_index(_API, "123", {})
+        assert result["runs"] == []
 
     @patch("build_manifest.requests.get")
-    def test_multi_page_pagination(self, mock_get):
-        page1 = [{"id": i, "version": str(1000 - i)} for i in range(100)]
-        page2 = [{"id": 100, "version": "900"}]
+    def test_does_not_hit_package_list_endpoint(self, mock_get):
+        resp = MagicMock()
+        resp.status_code = 404
+        mock_get.return_value = resp
 
-        mock_resp_1 = MagicMock()
-        mock_resp_1.json.return_value = page1
-        mock_resp_1.raise_for_status = MagicMock()
+        build_manifest.download_index(_API, "123", {})
 
-        mock_resp_2 = MagicMock()
-        mock_resp_2.json.return_value = page2
-        mock_resp_2.raise_for_status = MagicMock()
-
-        mock_resp_3 = MagicMock()
-        mock_resp_3.json.return_value = []
-        mock_resp_3.raise_for_status = MagicMock()
-
-        mock_get.side_effect = [mock_resp_1, mock_resp_2, mock_resp_3]
-
-        result = build_manifest._list_package_versions(
-            "https://gitlab.com/api/v4", "123", {}
-        )
-        assert len(result) == 101
-
-    @patch("build_manifest.requests.get")
-    def test_empty_registry(self, mock_get):
-        mock_resp = MagicMock()
-        mock_resp.json.return_value = []
-        mock_resp.raise_for_status = MagicMock()
-        mock_get.return_value = mock_resp
-
-        result = build_manifest._list_package_versions(
-            "https://gitlab.com/api/v4", "123", {}
-        )
-        assert result == []
+        called_url = mock_get.call_args[0][0]
+        assert "/packages/generic/test-report-runs/index/runs.json" in called_url
+        assert called_url.endswith("runs.json")
+        # It must not use the unauthorised package-list endpoint.
+        assert not called_url.endswith("/packages")
 
 
 # ---------------------------------------------------------------------------
-# build_manifest — integration of the pieces
+# upload_index
 # ---------------------------------------------------------------------------
 
 
-class TestBuildManifest:
-    @patch("build_manifest._download_metadata_from_zip")
-    @patch("build_manifest._list_package_versions")
-    def test_assembles_manifest_from_metadata(self, mock_list, mock_download):
-        mock_list.return_value = [
-            {"id": 1, "version": "1000", "created_at": "2026-08-01T00:00:00Z"},
-            {"id": 2, "version": "999", "created_at": "2026-07-31T00:00:00Z"},
-        ]
-        mock_download.side_effect = [
-            {"schema_version": 1, "pipeline_id": "1000", "generated_at": "2026-08-01T10:00:00+00:00", "totals": {"tests": 100}, "suites": []},
-            {"schema_version": 1, "pipeline_id": "999", "generated_at": "2026-07-31T10:00:00+00:00", "totals": {"tests": 95}, "suites": []},
-        ]
+class TestUploadIndex:
+    @patch("build_manifest.requests.put")
+    def test_success_201(self, mock_put):
+        resp = MagicMock()
+        resp.status_code = 201
+        mock_put.return_value = resp
 
-        result = build_manifest.build_manifest(
-            "https://gitlab.com/api/v4", "123", {}, max_runs=0
-        )
+        assert build_manifest.upload_index(_API, "123", {}, {"runs": []}) is True
 
-        assert result["schema_version"] == 1
-        assert result["total_runs"] == 2
-        assert len(result["runs"]) == 2
-        assert result["runs"][0]["pipeline_id"] == "1000"
-        assert result["runs"][1]["pipeline_id"] == "999"
-        assert "download_url" in result["runs"][0]
-        assert "package_version" in result["runs"][0]
+    @patch("build_manifest.requests.put")
+    def test_success_200(self, mock_put):
+        resp = MagicMock()
+        resp.status_code = 200
+        mock_put.return_value = resp
 
-    @patch("build_manifest._download_metadata_from_zip")
-    @patch("build_manifest._list_package_versions")
-    def test_max_runs_limits_output(self, mock_list, mock_download):
-        mock_list.return_value = [
-            {"id": i, "version": str(1000 - i), "created_at": "2026-08-01T00:00:00Z"}
-            for i in range(10)
-        ]
-        mock_download.return_value = {"schema_version": 1, "pipeline_id": "x", "totals": {}, "suites": []}
+        assert build_manifest.upload_index(_API, "123", {}, {"runs": []}) is True
 
-        result = build_manifest.build_manifest(
-            "https://gitlab.com/api/v4", "123", {}, max_runs=3
-        )
+    @patch("build_manifest.requests.put")
+    def test_failure_status(self, mock_put):
+        resp = MagicMock()
+        resp.status_code = 403
+        mock_put.return_value = resp
 
-        assert result["total_runs"] == 3
-        assert mock_download.call_count == 3
+        assert build_manifest.upload_index(_API, "123", {}, {"runs": []}) is False
 
-    @patch("build_manifest._download_metadata_from_zip")
-    @patch("build_manifest._list_package_versions")
-    def test_fallback_when_metadata_missing(self, mock_list, mock_download):
-        mock_list.return_value = [
-            {"id": 1, "version": "500", "created_at": "2026-08-01T12:00:00Z"},
-        ]
-        mock_download.return_value = None  # metadata extraction failed
+    @patch("build_manifest.requests.put")
+    def test_transport_error(self, mock_put):
+        import requests
 
-        result = build_manifest.build_manifest(
-            "https://gitlab.com/api/v4", "123", {}, max_runs=0
-        )
+        mock_put.side_effect = requests.RequestException("network")
+        assert build_manifest.upload_index(_API, "123", {}, {"runs": []}) is False
+
+    @patch("build_manifest.requests.put")
+    def test_uploads_to_index_path(self, mock_put):
+        resp = MagicMock()
+        resp.status_code = 201
+        mock_put.return_value = resp
+
+        build_manifest.upload_index(_API, "456", {}, {"runs": []})
+        called_url = mock_put.call_args[0][0]
+        assert called_url.endswith("/packages/generic/test-report-runs/index/runs.json")
+
+
+# ---------------------------------------------------------------------------
+# add_run
+# ---------------------------------------------------------------------------
+
+
+class TestAddRun:
+    def test_appends_to_empty_manifest(self):
+        manifest = build_manifest._empty_manifest()
+        run = {"pipeline_id": "100", "totals": {"tests": 10}}
+
+        result = build_manifest.add_run(manifest, run, _API, "123")
 
         assert result["total_runs"] == 1
-        run = result["runs"][0]
-        assert run["pipeline_id"] == "500"
-        assert run["generated_at"] == "2026-08-01T12:00:00Z"
-        assert "download_url" in run
-
-    @patch("build_manifest._download_metadata_from_zip")
-    @patch("build_manifest._list_package_versions")
-    def test_empty_registry_produces_empty_manifest(self, mock_list, mock_download):
-        mock_list.return_value = []
-
-        result = build_manifest.build_manifest(
-            "https://gitlab.com/api/v4", "123", {}, max_runs=0
+        assert result["runs"][0]["pipeline_id"] == "100"
+        assert result["runs"][0]["package_version"] == "100"
+        assert (
+            result["runs"][0]["download_url"]
+            == "https://gitlab.com/api/v4/projects/123/packages/generic/test-report-runs/100/report.zip"
         )
 
-        assert result["total_runs"] == 0
-        assert result["runs"] == []
-        mock_download.assert_not_called()
+    def test_sorts_newest_first(self):
+        manifest = {"schema_version": 1, "total_runs": 1, "runs": [{"pipeline_id": "100"}]}
+        run = {"pipeline_id": "200"}
 
-    @patch("build_manifest._download_metadata_from_zip")
-    @patch("build_manifest._list_package_versions")
-    def test_download_url_format(self, mock_list, mock_download):
-        mock_list.return_value = [
-            {"id": 1, "version": "777", "created_at": "2026-08-01T00:00:00Z"},
-        ]
-        mock_download.return_value = {"schema_version": 1, "pipeline_id": "777", "totals": {}, "suites": []}
+        result = build_manifest.add_run(manifest, run, _API, "123")
 
-        result = build_manifest.build_manifest(
-            "https://gitlab.com/api/v4", "456", {}, max_runs=0
-        )
+        assert [r["pipeline_id"] for r in result["runs"]] == ["200", "100"]
 
-        expected_url = "https://gitlab.com/api/v4/projects/456/packages/generic/test-report-runs/777/report.zip"
-        assert result["runs"][0]["download_url"] == expected_url
+    def test_inserts_older_run_in_order(self):
+        manifest = {"schema_version": 1, "total_runs": 1, "runs": [{"pipeline_id": "200"}]}
+        run = {"pipeline_id": "150"}
+
+        result = build_manifest.add_run(manifest, run, _API, "123")
+
+        assert [r["pipeline_id"] for r in result["runs"]] == ["200", "150"]
+
+    def test_replaces_duplicate_pipeline_id(self):
+        manifest = {
+            "schema_version": 1,
+            "total_runs": 1,
+            "runs": [{"pipeline_id": "100", "totals": {"tests": 1}}],
+        }
+        run = {"pipeline_id": "100", "totals": {"tests": 99}}
+
+        result = build_manifest.add_run(manifest, run, _API, "123")
+
+        assert result["total_runs"] == 1
+        assert result["runs"][0]["totals"]["tests"] == 99
+
+    def test_max_runs_caps_and_keeps_newest(self):
+        manifest = {
+            "schema_version": 1,
+            "total_runs": 3,
+            "runs": [{"pipeline_id": "300"}, {"pipeline_id": "200"}, {"pipeline_id": "100"}],
+        }
+        run = {"pipeline_id": "400"}
+
+        result = build_manifest.add_run(manifest, run, _API, "123", max_runs=2)
+
+        assert result["total_runs"] == 2
+        assert [r["pipeline_id"] for r in result["runs"]] == ["400", "300"]
+
+    def test_non_numeric_pipeline_ids_sort_last(self):
+        manifest = {"schema_version": 1, "total_runs": 1, "runs": [{"pipeline_id": "abc"}]}
+        run = {"pipeline_id": "100"}
+
+        result = build_manifest.add_run(manifest, run, _API, "123")
+
+        assert result["runs"][0]["pipeline_id"] == "100"
+        assert result["runs"][1]["pipeline_id"] == "abc"
+
+
+# ---------------------------------------------------------------------------
+# _load_current_run
+# ---------------------------------------------------------------------------
+
+
+class TestLoadCurrentRun:
+    def test_loads_valid_json(self, tmp_path):
+        p = tmp_path / "run_metadata.json"
+        p.write_text(json.dumps({"pipeline_id": "100"}), encoding="utf-8")
+
+        assert build_manifest._load_current_run(p) == {"pipeline_id": "100"}
+
+    def test_missing_file_returns_none(self, tmp_path):
+        assert build_manifest._load_current_run(tmp_path / "nope.json") is None
+
+    def test_bad_json_returns_none(self, tmp_path):
+        p = tmp_path / "run_metadata.json"
+        p.write_text("not json", encoding="utf-8")
+
+        assert build_manifest._load_current_run(p) is None

@@ -16,7 +16,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
-import fetch_run  # noqa: E402
+import fetch_run  # noqa: E402  # isort: skip
 
 
 # ---------------------------------------------------------------------------
@@ -40,28 +40,64 @@ def _make_zip_bytes(files: dict[str, bytes]) -> bytes:
 
 class TestResolveLatestVersion:
     @patch("fetch_run.requests.get")
-    def test_returns_latest_version(self, mock_get):
+    def test_returns_latest_version_from_index(self, mock_get):
+        manifest = {"runs": [{"pipeline_id": "5000"}, {"pipeline_id": "4000"}]}
         mock_resp = MagicMock()
-        mock_resp.json.return_value = [{"id": 1, "version": "5000"}]
+        mock_resp.status_code = 200
+        mock_resp.content = json.dumps(manifest).encode()
         mock_resp.raise_for_status = MagicMock()
         mock_get.return_value = mock_resp
 
-        result = fetch_run.resolve_latest_version(
-            "https://gitlab.com/api/v4", "123", {}
-        )
+        result = fetch_run.resolve_latest_version("https://gitlab.com/api/v4", "123", {})
         assert result == "5000"
 
     @patch("fetch_run.requests.get")
-    def test_exits_on_empty_registry(self, mock_get):
+    def test_picks_highest_even_if_unordered(self, mock_get):
+        manifest = {"runs": [{"pipeline_id": "100"}, {"pipeline_id": "900"}, {"pipeline_id": "300"}]}
         mock_resp = MagicMock()
-        mock_resp.json.return_value = []
+        mock_resp.status_code = 200
+        mock_resp.content = json.dumps(manifest).encode()
+        mock_resp.raise_for_status = MagicMock()
+        mock_get.return_value = mock_resp
+
+        result = fetch_run.resolve_latest_version("https://gitlab.com/api/v4", "123", {})
+        assert result == "900"
+
+    @patch("fetch_run.requests.get")
+    def test_reads_index_file_not_package_list(self, mock_get):
+        manifest = {"runs": [{"pipeline_id": "42"}]}
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_resp.content = json.dumps(manifest).encode()
+        mock_resp.raise_for_status = MagicMock()
+        mock_get.return_value = mock_resp
+
+        fetch_run.resolve_latest_version("https://gitlab.com/api/v4", "123", {})
+
+        called_url = mock_get.call_args[0][0]
+        assert called_url.endswith("/packages/generic/test-report-runs/index/runs.json")
+        assert not called_url.endswith("/packages")
+
+    @patch("fetch_run.requests.get")
+    def test_exits_on_missing_index(self, mock_get):
+        mock_resp = MagicMock()
+        mock_resp.status_code = 404
+        mock_get.return_value = mock_resp
+
+        with pytest.raises(SystemExit) as exc_info:
+            fetch_run.resolve_latest_version("https://gitlab.com/api/v4", "123", {})
+        assert exc_info.value.code == 1
+
+    @patch("fetch_run.requests.get")
+    def test_exits_on_empty_runs(self, mock_get):
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_resp.content = json.dumps({"runs": []}).encode()
         mock_resp.raise_for_status = MagicMock()
         mock_get.return_value = mock_resp
 
         with pytest.raises(SystemExit) as exc_info:
-            fetch_run.resolve_latest_version(
-                "https://gitlab.com/api/v4", "123", {}
-            )
+            fetch_run.resolve_latest_version("https://gitlab.com/api/v4", "123", {})
         assert exc_info.value.code == 1
 
 
@@ -79,9 +115,7 @@ class TestDownloadRun:
         mock_resp.raise_for_status = MagicMock()
         mock_get.return_value = mock_resp
 
-        result = fetch_run.download_run(
-            "https://gitlab.com/api/v4", "123", "999", {}
-        )
+        result = fetch_run.download_run("https://gitlab.com/api/v4", "123", "999", {})
         assert result == content
 
     @patch("fetch_run.requests.get")
@@ -91,9 +125,7 @@ class TestDownloadRun:
         mock_resp.raise_for_status = MagicMock()
         mock_get.return_value = mock_resp
 
-        fetch_run.download_run(
-            "https://gitlab.com/api/v4", "456", "777", {"PRIVATE-TOKEN": "tok"}
-        )
+        fetch_run.download_run("https://gitlab.com/api/v4", "456", "777", {"PRIVATE-TOKEN": "tok"})
 
         call_url = mock_get.call_args[0][0]
         assert "projects/456/packages/generic/test-report-runs/777/report.zip" in call_url
@@ -106,11 +138,13 @@ class TestDownloadRun:
 
 class TestExtractRun:
     def test_extracts_files_to_output_dir(self, tmp_path):
-        zip_bytes = _make_zip_bytes({
-            "public/report.html": b"<html>report</html>",
-            "public/all.html": b"<html>all</html>",
-            "public/run_metadata.json": b'{"pipeline_id": "100"}',
-        })
+        zip_bytes = _make_zip_bytes(
+            {
+                "public/report.html": b"<html>report</html>",
+                "public/all.html": b"<html>all</html>",
+                "public/run_metadata.json": b'{"pipeline_id": "100"}',
+            }
+        )
 
         extracted = fetch_run.extract_run(zip_bytes, tmp_path / "out")
 
@@ -120,9 +154,11 @@ class TestExtractRun:
         assert len(extracted) == 3
 
     def test_strips_public_prefix(self, tmp_path):
-        zip_bytes = _make_zip_bytes({
-            "public/logs/test_abc.txt": b"log content",
-        })
+        zip_bytes = _make_zip_bytes(
+            {
+                "public/logs/test_abc.txt": b"log content",
+            }
+        )
 
         extracted = fetch_run.extract_run(zip_bytes, tmp_path / "out")
 
@@ -130,9 +166,11 @@ class TestExtractRun:
         assert "logs/test_abc.txt" in extracted
 
     def test_handles_files_without_public_prefix(self, tmp_path):
-        zip_bytes = _make_zip_bytes({
-            "run_metadata.json": b'{"pipeline_id": "200"}',
-        })
+        zip_bytes = _make_zip_bytes(
+            {
+                "run_metadata.json": b'{"pipeline_id": "200"}',
+            }
+        )
 
         extracted = fetch_run.extract_run(zip_bytes, tmp_path / "out")
 

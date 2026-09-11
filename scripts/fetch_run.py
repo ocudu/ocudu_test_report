@@ -32,6 +32,8 @@ except ImportError:
     sys.exit(2)
 
 _PACKAGE_NAME = "test-report-runs"
+_INDEX_VERSION = "index"
+_INDEX_FILENAME = "runs.json"
 _HTTP_TIMEOUT = 30
 
 
@@ -47,25 +49,44 @@ def resolve_latest_version(
     project_id: str,
     headers: dict[str, str],
 ) -> str:
-    """Find the latest (highest pipeline ID) version in the registry.
+    """Find the latest (highest pipeline ID) run from the runs.json index.
 
-    Returns the version string of the most recent package.
+    Reads the index file that build_manifest.py maintains in the registry
+    rather than listing packages via GET /projects/:id/packages, which the CI
+    job token is not authorised to call. Returns the version string of the
+    most recent run.
     """
-    url = f"{api_url}/projects/{project_id}/packages"
-    params: dict[str, str | int] = {
-        "package_name": _PACKAGE_NAME,
-        "package_type": "generic",
-        "per_page": 1,
-        "order_by": "version",
-        "sort": "desc",
-    }
-    resp = requests.get(url, headers=headers, params=params, timeout=_HTTP_TIMEOUT)
+    url = f"{api_url}/projects/{project_id}/packages/generic" f"/{_PACKAGE_NAME}/{_INDEX_VERSION}/{_INDEX_FILENAME}"
+    resp = requests.get(url, headers=headers, timeout=_HTTP_TIMEOUT)
+    if resp.status_code == 404:
+        print("ERROR: No runs index found in the registry (first run?).", file=sys.stderr)
+        sys.exit(1)
     resp.raise_for_status()
-    packages = resp.json()
-    if not packages:
+
+    try:
+        manifest = json.loads(resp.content)
+    except json.JSONDecodeError:
+        print("ERROR: Runs index is not valid JSON.", file=sys.stderr)
+        sys.exit(1)
+
+    runs = manifest.get("runs", [])
+    if not runs:
         print("ERROR: No archived runs found in the registry.", file=sys.stderr)
         sys.exit(1)
-    return str(packages[0]["version"])
+
+    def _pipeline_id(run: dict) -> int:
+        value = run.get("pipeline_id") or run.get("package_version") or ""
+        try:
+            return int(value)
+        except (TypeError, ValueError):
+            return -1
+
+    latest = max(runs, key=_pipeline_id)
+    version = latest.get("pipeline_id") or latest.get("package_version")
+    if not version:
+        print("ERROR: Latest run in the index has no pipeline_id.", file=sys.stderr)
+        sys.exit(1)
+    return str(version)
 
 
 def download_run(

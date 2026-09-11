@@ -266,6 +266,7 @@ generate-report:
         --project-id "${CI_PROJECT_ID}" \
         --gitlab-url "${CI_SERVER_URL}" \
         --token-type job \
+        --current-run "${CI_PROJECT_DIR}/${OUTPUT}/run_metadata.json" \
         -o "${CI_PROJECT_DIR}/${OUTPUT}/runs.json" || echo "WARNING: Manifest build failed. Report is still valid." >&2
     - |
       echo "Extracting recent runs for inline browsing..."
