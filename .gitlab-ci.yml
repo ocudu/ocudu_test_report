@@ -328,15 +328,19 @@ build-third-party-report:
 
 trigger-report-regen:
   stage: build
-  image: alpine:3.20
+  image: curlimages/curl:8.10.1
   rules:
     - if: $CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"
   script:
-    - apk add --no-cache curl jq
     - |
-      SCHEDULE_ID=$(curl --silent --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
-        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/pipeline_schedules?per_page=100" \
-        | jq -r '.[] | select(.description == "report nightly") | .id')
+      RESPONSE=$(curl --silent --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
+        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/pipeline_schedules?per_page=100")
+      SCHEDULE_ID=$(echo "$RESPONSE" \
+        | sed -E 's/"owner":\{[^}]*\}//g; s/\},\{/}\n{/g' \
+        | grep '"description":"report nightly"' \
+        | grep -o '"id":[0-9]*' \
+        | head -n1 \
+        | cut -d: -f2)
       if [ -z "$SCHEDULE_ID" ]; then
         echo "ERROR: Could not resolve schedule with description 'report nightly'" >&2
         exit 1
