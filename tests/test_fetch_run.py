@@ -78,10 +78,15 @@ class TestResolveLatestVersion:
         assert called_url.endswith("/packages/generic/test-report-runs/index/runs.json")
         assert not called_url.endswith("/packages")
 
+    @pytest.mark.parametrize("status", [401, 403, 404])
     @patch("fetch_run.requests.get")
-    def test_exits_on_missing_index(self, mock_get):
+    def test_exits_on_missing_index(self, mock_get, status):
+        # A missing index reads as 404 with a personal token but 401/403 with
+        # the CI job token (e.g. first run). All must exit cleanly with code 1
+        # rather than raising an uncaught HTTPError.
         mock_resp = MagicMock()
-        mock_resp.status_code = 404
+        mock_resp.status_code = status
+        mock_resp.raise_for_status = MagicMock(side_effect=AssertionError("must not raise; should exit cleanly"))
         mock_get.return_value = mock_resp
 
         with pytest.raises(SystemExit) as exc_info:

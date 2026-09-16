@@ -41,6 +41,14 @@ _INDEX_FILENAME = "runs.json"
 _HTTP_TIMEOUT = 30
 _SCHEMA_VERSION = 1
 
+# GitLab returns 404 for a missing generic-package file when read with a
+# personal access token, but the CI job token gets 401 (and can get 403)
+# for a file that does not exist yet. On the very first run the index has
+# never been uploaded, so all of these mean "no index yet, start empty".
+# The upload (PUT) is authorised for the job token, so the first run still
+# creates the index once we stop treating a missing-index read as fatal.
+_INDEX_ABSENT_STATUSES = (401, 403, 404)
+
 
 def _get_auth_headers(token: str, token_type: str = "private") -> dict[str, str]:
     """Return the appropriate auth header for the given token type."""
@@ -67,8 +75,11 @@ def download_index(
     """Download the existing runs.json index from the registry.
 
     Returns the parsed manifest dict. If the index does not exist yet (the
-    first run, HTTP 404) or cannot be parsed, returns a fresh empty manifest.
-    Only genuine transport errors are raised to the caller.
+    first run) or cannot be parsed, returns a fresh empty manifest. GitLab
+    reports a missing generic-package file as 404 for a personal token but as
+    401/403 for the CI job token, so all of those are treated as "no index
+    yet". Only genuine transport errors are surfaced (and also fall back to an
+    empty manifest so a single flaky read never fails the whole step).
     """
     url = _index_url(api_url, project_id)
     try:
@@ -77,8 +88,11 @@ def download_index(
         print(f"WARNING: Could not reach the registry to read the index: {exc}", file=sys.stderr)
         return _empty_manifest()
 
-    if resp.status_code == 404:
-        print("No existing index found (first run). Starting a new manifest.", file=sys.stderr)
+    if resp.status_code in _INDEX_ABSENT_STATUSES:
+        print(
+            f"No readable index found (HTTP {resp.status_code}); treating as first run and starting fresh.",
+            file=sys.stderr,
+        )
         return _empty_manifest()
 
     resp.raise_for_status()

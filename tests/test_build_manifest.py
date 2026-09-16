@@ -58,6 +58,29 @@ class TestDownloadIndex:
         assert result == {"schema_version": 1, "total_runs": 0, "runs": []}
 
     @patch("build_manifest.requests.get")
+    def test_401_returns_empty_manifest(self, mock_get):
+        # The CI job token gets 401 (not 404) for a generic-package file that
+        # does not exist yet, e.g. on the very first run before any index has
+        # been uploaded. This must be treated as "no index yet", not fatal.
+        resp = MagicMock()
+        resp.status_code = 401
+        resp.raise_for_status = MagicMock(side_effect=AssertionError("must not raise on 401"))
+        mock_get.return_value = resp
+
+        result = build_manifest.download_index(_API, "123", {})
+        assert result == {"schema_version": 1, "total_runs": 0, "runs": []}
+
+    @patch("build_manifest.requests.get")
+    def test_403_returns_empty_manifest(self, mock_get):
+        resp = MagicMock()
+        resp.status_code = 403
+        resp.raise_for_status = MagicMock(side_effect=AssertionError("must not raise on 403"))
+        mock_get.return_value = resp
+
+        result = build_manifest.download_index(_API, "123", {})
+        assert result == {"schema_version": 1, "total_runs": 0, "runs": []}
+
+    @patch("build_manifest.requests.get")
     def test_bad_json_returns_empty_manifest(self, mock_get):
         resp = MagicMock()
         resp.status_code = 200

@@ -36,6 +36,10 @@ _INDEX_VERSION = "index"
 _INDEX_FILENAME = "runs.json"
 _HTTP_TIMEOUT = 30
 
+# A missing generic-package index reads as 404 with a personal token but as
+# 401/403 with the CI job token. All mean "no index yet" (e.g. first run).
+_INDEX_ABSENT_STATUSES = (401, 403, 404)
+
 
 def _get_auth_headers(token: str, token_type: str = "private") -> dict[str, str]:
     """Return the appropriate auth header for the given token type."""
@@ -54,12 +58,18 @@ def resolve_latest_version(
     Reads the index file that build_manifest.py maintains in the registry
     rather than listing packages via GET /projects/:id/packages, which the CI
     job token is not authorised to call. Returns the version string of the
-    most recent run.
+    most recent run. Exits 1 (cleanly) when there is no index yet: GitLab
+    reports a missing generic-package file as 404 for a personal token but as
+    401/403 for the CI job token, so all of those mean "no runs to compare
+    against".
     """
     url = f"{api_url}/projects/{project_id}/packages/generic" f"/{_PACKAGE_NAME}/{_INDEX_VERSION}/{_INDEX_FILENAME}"
     resp = requests.get(url, headers=headers, timeout=_HTTP_TIMEOUT)
-    if resp.status_code == 404:
-        print("ERROR: No runs index found in the registry (first run?).", file=sys.stderr)
+    if resp.status_code in _INDEX_ABSENT_STATUSES:
+        print(
+            f"ERROR: No runs index found in the registry (HTTP {resp.status_code}; first run?).",
+            file=sys.stderr,
+        )
         sys.exit(1)
     resp.raise_for_status()
 
