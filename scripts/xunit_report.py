@@ -235,9 +235,13 @@ def parse_xml(name: str, path: Path) -> Suite:
     else:
         elems = root.findall(".//testcase")
 
+    # if the test framework supports re-runs, it might emit one <testcase> per attempt
+    # Keep only the last attempt per name, which carries the real outcome.
+    by_name: dict[str, TestCase] = {}
     for elem in elems:
-        suite.testcases.append(_parse_testcase(elem))
-    suite.testcases.sort(key=lambda tc: f"{tc.classname}.{tc.name}")
+        tc = _parse_testcase(elem)
+        by_name[f"{tc.classname}.{tc.name}"] = tc
+    suite.testcases = sorted(by_name.values(), key=lambda tc: f"{tc.classname}.{tc.name}")
     return suite
 
 
