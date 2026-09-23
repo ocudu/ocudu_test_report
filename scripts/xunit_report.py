@@ -208,7 +208,7 @@ def _parse_testcase(elem) -> TestCase:
         for prop in props_elem.findall("property"):
             prop_name = prop.get("name", "")
             prop_value = prop.get("value", "")
-            if prop_name in ("cmake_labels", "markers"):
+            if prop_name in ("cmake_labels", "markers", "requirements"):
                 labels.extend(v.strip() for v in prop_value.split(";") if v.strip())
             elif prop_name:
                 properties[prop_name] = prop_value
