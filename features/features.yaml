@@ -2985,3 +2985,12 @@ features:
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
+  - id: RU-OFH-CATB-WDBF
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support Category B O-RUs with weight-based dynamic beamforming (WDBF) over the Fronthaul Interface'
+    short_description: Cat. B in OFH
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type: []
+    comment: ''
