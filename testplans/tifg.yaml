@@ -60,8 +60,8 @@ tests:
       - MVP-FUNC-RACH-16-1
       - MVP-FUNC-BW-17-2
       - MVP-FUNC-SVCS-17-1
-      - MVPC-PERF-ACC-3
-      - MVPC-PERF-ACC-4
+      - MVP-PERF-ACC-3
+      - MVP-PERF-ACC-4
 
   - test_id: "5.4"
     description: "Intra O-DU mobility (connected mode)"

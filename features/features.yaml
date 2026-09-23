@@ -1375,7 +1375,7 @@ features:
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: No TIFG/3GPP definition. For me this is an attach/dettach test
-  - id: MVPC-PERF-ACC-3
+  - id: MVP-PERF-ACC-3
     source: ATIS-MVP
     scope: CU/DU
     description: '5G SA registration success rate: Measure of successfully registering
@@ -1388,7 +1388,7 @@ features:
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: 'This is again the attach-dettach but even simpler: a single UE is attaching, starting UDP traffic and dettaching, repeat loop. We should measure the registration and de-registration time'
-  - id: MVPC-PERF-ACC-4
+  - id: MVP-PERF-ACC-4
     source: ATIS-MVP
     scope: CU/DU
     description: '5G SA deregistration success rate: Measure of successfully registering
