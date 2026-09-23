@@ -2994,3 +2994,285 @@ features:
     release: 26.10 (v2.1)
     primary_test_type: []
     comment: ''
+  - id: DU-NTN-DEP-1-a
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support NR NTN cell operation over a GEO satellite with transparent payload, including cellBarredNTN in SIB1'
+    short_description: NTN cell over GEO transparent payload
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - e2e
+    comment: ''
+  - id: DU-NTN-DEP-1-b
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support NR NTN cell operation over a LEO satellite with transparent payload, including cellBarredNTN in SIB1'
+    short_description: NTN cell over LEO transparent payload
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - e2e
+    comment: ''
+  - id: DU-NTN-DEP-2
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support the feeder link delay in the common timing advance, with the uplink time synchronization reference point at the gateway'
+    short_description: Feeder link in common TA
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+      - e2e
+    comment: ''
+  - id: DU-NTN-DEP-3
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support the FR1 NTN bands n255 and n256'
+    short_description: FR1 NTN bands n255 and n256
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+      - e2e
+    comment: ''
+  - id: DU-NTN-SI-1
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall broadcast the serving cell NTN-Config in SIB19 (ephemeris, epochTime, ntn-UlSyncValidityDuration, ta-Info and its drifts, cellSpecificKoffset, kmac, polarization, referenceLocation, distanceThresh)'
+    short_description: SIB19 serving cell NTN-Config
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+      - e2e
+    comment: ''
+  - id: DU-NTN-SI-2
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall keep SIB19 current: periodic regeneration, immediate SI update and value tag handling'
+    short_description: SIB19 update and scheduling
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+      - e2e
+    comment: ''
+  - id: DU-NTN-SI-3
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall broadcast NTN neighbour cell configuration in SIB19 (ntn-NeighCellConfigList and its extension), including the inheritance rules'
+    short_description: SIB19 NTN neighbour cells
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+    comment: ''
+  - id: DU-NTN-SI-4
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall propagate the satellite orbit from the configured ephemeris (Keplerian, RK4) to derive the NTN assistance information'
+    short_description: Satellite orbit propagation
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+      - e2e
+    comment: ''
+  - id: DU-NTN-TIM-1
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall apply the cell-specific Koffset to every DL-to-UL timing relationship (PUSCH k2, PUCCH k1, RAR/Msg3, aperiodic SRS, HARQ timeout, contention resolution)'
+    short_description: Cell-specific Koffset
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+      - e2e
+    comment: ''
+  - id: DU-NTN-TIM-2
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support UE timing advance reporting in NTN cells: TA report configuration, Timing Advance Report MAC CE and TA-triggered SR'
+    short_description: Timing advance reporting
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+    comment: ''
+  - id: DU-NTN-TIM-3
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall report the DU time to SFN mapping to the CU-CP over F1 (Reference Time Information Report)'
+    short_description: Reference time reporting to the CU-CP
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+      - e2e
+    comment: ''
+  - id: DU-NTN-TIM-4
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall perform random access in NTN cells, delaying the Msg3 and its retransmissions by the cell-specific Koffset'
+    short_description: Random access in NTN cells
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+      - e2e
+    comment: ''
+  - id: DU-NTN-HARQ-1
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support up to 32 HARQ processes in NTN cells'
+    short_description: 32 HARQ processes
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+      - e2e
+    comment: ''
+  - id: DU-NTN-HARQ-2
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support disabling of DL HARQ feedback and UL HARQ retransmission state B in NTN cells'
+    short_description: HARQ feedback disabled / UL HARQ mode B
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+      - e2e
+    comment: ''
+  - id: DU-NTN-CAP-1
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support band-level NTN UE capabilities (uplink pre-compensation, TA report, UE-specific Koffset, number of HARQ processes) with their dependency chain'
+    short_description: NTN band-level UE capabilities
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+    comment: ''
+  - id: DU-NTN-MOB-1
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall place the measurement gaps of NTN UEs taking their timing advance into account, so that the gap does not overlap an uplink occasion'
+    short_description: NTN measurement gap placement
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+      - e2e
+    comment: ''
+  - id: DU-NTN-MOB-2
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall provide the NTN-Config of the target cell in the handover command'
+    short_description: NTN-Config in the handover command
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+    comment: ''
+  - id: DU-NTN-LOC-1
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall broadcast several TACs (trackingAreaList) in SIB1 of an NTN cell'
+    short_description: Multiple TACs in SIB1
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+    comment: ''
+  - id: DU-NTN-OAM-1
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support updating the NTN configuration of a running cell through a remote command'
+    short_description: Runtime NTN config update
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - integration
+    comment: ''
+  - id: CU-NTN-LOC-1
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall report the NR NTN TAI Information (TAC list and UE location derived TAC) to the AMF'
+    short_description: NR NTN TAI information
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+    comment: ''
+  - id: CU-NTN-LOC-2
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support coarse UE location reporting after AS security and derivation of the Mapped Cell ID and UE location derived TAC'
+    short_description: Coarse UE location and Mapped Cell ID
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+    comment: ''
+  - id: CU-NTN-LOC-3
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall page UEs over the TAC list broadcast by NTN cells and their Mapped Cell IDs'
+    short_description: Paging over NTN TAC list and Mapped Cell ID
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+    comment: ''
+  - id: CU-NTN-LOC-4
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall deliver PWS warnings to NTN cells named by their Mapped Cell ID in the warning area'
+    short_description: PWS over NTN Mapped Cell ID
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+    comment: ''
+  - id: CU-NTN-LOC-5
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall signal the satellite RAT type (NR-LEO, NR-MEO, NR-GEO, NR-OTHERSAT) of its NTN tracking areas to the AMF in the RAT Information of the supported tracking areas of the NG Setup Request'
+    short_description: Satellite RAT type in NG Setup
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+    comment: ''
+  - id: CU-NTN-MOB-1
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall include NTN neighbour cell information (ntn-Config, epoch anchored to the DU reference time, polarization) in the measurement configuration'
+    short_description: NTN info in measurement configuration
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+      - e2e
+    comment: ''
+  - id: CU-NTN-MOB-2
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support event D1 (distance from reference locations) for measurement reporting'
+    short_description: Event D1 measurement reporting
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+    comment: ''
+  - id: CU-NTN-MOB-3
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support conditional handover triggered by location (condEventD1) and time (condEventT1)'
+    short_description: CHO with D1/T1 triggers
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+    comment: ''
