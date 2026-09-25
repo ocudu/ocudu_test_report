@@ -2838,7 +2838,7 @@ features:
     description: 'The Open RAN system shall support UE-AMBR'
     short_description: UE-AMBR
     type: Functional
-    release: 26.10 (v2.1)
+    release: 27.04 (v2.2)
     primary_test_type: []
     comment: ''
   - id: DU-QOS-3
@@ -2847,7 +2847,7 @@ features:
     description: 'The Open RAN system shall support packet delay budget and packet error loss rate handling'
     short_description: Packet delay budget and packet error loss rate handling
     type: Functional
-    release: 26.10 (v2.1)
+    release: 27.04 (v2.2)
     primary_test_type: []
     comment: ''
   - id: DU-QOS-4
@@ -2856,7 +2856,7 @@ features:
     description: 'The Open RAN system shall support Diffserv Code Point Marking (DSCP)'
     short_description: Diffserv Code Point Marking (DSCP)
     type: Functional
-    release: 26.10 (v2.1)
+    release: 27.04 (v2.2)
     primary_test_type: []
     comment: ''
   - id: DU-QOS-5
@@ -2865,7 +2865,7 @@ features:
     description: The Open RAN system shall support standardised 5QI 1-9 and mission critical 5QI 65-70
     short_description: Standardised 5QI 1-9 and mission critical 5QI 65-70
     type: Functional
-    release: 26.10 (v2.1)
+    release: 27.04 (v2.2)
     primary_test_type: []
     comment: ''
   - id: CU-GEN-4
