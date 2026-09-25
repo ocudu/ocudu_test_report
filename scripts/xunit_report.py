@@ -235,14 +235,24 @@ def parse_xml(name: str, path: Path) -> Suite:
     else:
         elems = root.findall(".//testcase")
 
-    # if the test framework supports re-runs, it might emit one <testcase> per attempt
-    # Keep only the last attempt per name, which carries the real outcome.
-    by_name: dict[str, TestCase] = {}
     for elem in elems:
-        tc = _parse_testcase(elem)
-        by_name[f"{tc.classname}.{tc.name}"] = tc
-    suite.testcases = sorted(by_name.values(), key=lambda tc: f"{tc.classname}.{tc.name}")
+        suite.testcases.append(_parse_testcase(elem))
+    suite.testcases.sort(key=lambda tc: f"{tc.classname}.{tc.name}")
     return suite
+
+
+def _dedupe_testcases(testcases: list) -> list:
+    """Collapse same-named testcases to their last occurrence, which carries the real outcome.
+
+    A test framework's own reruns (e.g. pytest-rerunfailures emitting one <testcase> per
+    attempt, since pytest's junitxml plugin doesn't recognize its "rerun" outcome) and whole-job
+    CI retries (multiple XML artifacts for the same suite) both produce duplicate <testcase>
+    entries for the same test. In both cases the last one seen reflects what actually happened.
+    """
+    by_name: dict[str, TestCase] = {}
+    for tc in testcases:
+        by_name[f"{tc.classname}.{tc.name}"] = tc
+    return list(by_name.values())
 
 
 def _fmt_duration(seconds: float) -> str:
@@ -739,6 +749,8 @@ def parse_dir(root: Path) -> list:
             for tc in child.testcases:
                 tc.url = job_url
             suite.testcases.extend(child.testcases)
+        suite.testcases = _dedupe_testcases(suite.testcases)
+        suite.testcases.sort(key=lambda tc: f"{tc.classname}.{tc.name}")
         if suite.testcases:
             suites.append(suite)
     return suites
@@ -762,6 +774,8 @@ def parse_third_party_dir(root: Path) -> list:
             continue
         name = " / ".join(xml_path.relative_to(root).with_suffix("").parts)
         suite = parse_xml(name, xml_path)
+        suite.testcases = _dedupe_testcases(suite.testcases)
+        suite.testcases.sort(key=lambda tc: f"{tc.classname}.{tc.name}")
         if suite.testcases:
             suites.append(suite)
 
