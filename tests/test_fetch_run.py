@@ -116,6 +116,7 @@ class TestDownloadRun:
     def test_downloads_and_returns_bytes(self, mock_get):
         content = b"fake zip content"
         mock_resp = MagicMock()
+        mock_resp.status_code = 200
         mock_resp.iter_content.return_value = [content]
         mock_resp.raise_for_status = MagicMock()
         mock_get.return_value = mock_resp
@@ -126,6 +127,7 @@ class TestDownloadRun:
     @patch("fetch_run.requests.get")
     def test_constructs_correct_url(self, mock_get):
         mock_resp = MagicMock()
+        mock_resp.status_code = 200
         mock_resp.iter_content.return_value = [b"data"]
         mock_resp.raise_for_status = MagicMock()
         mock_get.return_value = mock_resp
@@ -134,6 +136,40 @@ class TestDownloadRun:
 
         call_url = mock_get.call_args[0][0]
         assert "projects/456/packages/generic/test-report-runs/777/report.zip" in call_url
+
+    @pytest.mark.parametrize("status", [401, 403, 404])
+    @patch("fetch_run.requests.get")
+    def test_returns_none_on_missing_or_unauthorised(self, mock_get, status):
+        # A run zip that is missing (404) or that the CI job token cannot read
+        # (401/403) must be skipped by returning None, not by raising. This is
+        # what keeps both the comparison and inline-extraction CI steps from
+        # crashing the whole report job.
+        mock_resp = MagicMock()
+        mock_resp.status_code = status
+        mock_resp.raise_for_status = MagicMock(side_effect=AssertionError("must not raise; should return None"))
+        mock_get.return_value = mock_resp
+
+        result = fetch_run.download_run("https://gitlab.com/api/v4", "123", "999", {})
+        assert result is None
+
+    @patch("fetch_run.requests.get")
+    def test_returns_none_on_transport_error(self, mock_get):
+        mock_get.side_effect = fetch_run.requests.RequestException("boom")
+
+        result = fetch_run.download_run("https://gitlab.com/api/v4", "123", "999", {})
+        assert result is None
+
+    @patch("fetch_run.requests.get")
+    def test_still_raises_on_unexpected_server_error(self, mock_get):
+        # A genuine 500 is not an "absent" status, so it should still surface
+        # via raise_for_status rather than being silently swallowed.
+        mock_resp = MagicMock()
+        mock_resp.status_code = 500
+        mock_resp.raise_for_status = MagicMock(side_effect=fetch_run.requests.HTTPError("500"))
+        mock_get.return_value = mock_resp
+
+        with pytest.raises(fetch_run.requests.HTTPError):
+            fetch_run.download_run("https://gitlab.com/api/v4", "123", "999", {})
 
 
 # ---------------------------------------------------------------------------

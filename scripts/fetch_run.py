@@ -104,14 +104,30 @@ def download_run(
     project_id: str,
     version: str,
     headers: dict[str, str],
-) -> bytes:
+) -> bytes | None:
     """Download the report.zip for the given version.
 
-    Returns the raw zip bytes.
+    Returns the raw zip bytes, or None when the run cannot be read. A missing
+    or unauthorised package file (404, or 401/403 with the CI job token) means
+    "no readable run", which callers treat as skip-this-run rather than a hard
+    failure. Transport errors are likewise reported and skipped so a single
+    flaky read never fails the whole report job.
     """
     url = f"{api_url}/projects/{project_id}/packages/generic" f"/{_PACKAGE_NAME}/{version}/report.zip"
     print(f"Downloading test-report-runs/{version}/report.zip...", file=sys.stderr)
-    resp = requests.get(url, headers=headers, timeout=_HTTP_TIMEOUT, stream=True)
+    try:
+        resp = requests.get(url, headers=headers, timeout=_HTTP_TIMEOUT, stream=True)
+    except requests.RequestException as exc:
+        print(f"WARNING: Could not reach the registry to download run {version}: {exc}", file=sys.stderr)
+        return None
+
+    if resp.status_code in _INDEX_ABSENT_STATUSES:
+        print(
+            f"Run {version} is not readable (HTTP {resp.status_code}); skipping.",
+            file=sys.stderr,
+        )
+        return None
+
     resp.raise_for_status()
 
     chunks = []
@@ -199,6 +215,9 @@ def main():
 
     # Download and extract
     zip_bytes = download_run(api_url, args.project_id, version, headers)
+    if zip_bytes is None:
+        print(f"WARNING: Run {version} could not be downloaded. Nothing extracted.", file=sys.stderr)
+        sys.exit(1)
     extracted = extract_run(zip_bytes, args.output_dir)
 
     print(f"Extracted {len(extracted)} files to {args.output_dir}/", file=sys.stderr)
