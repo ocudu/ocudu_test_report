@@ -2904,7 +2904,7 @@ features:
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
-  - id: MVP-GOV-E2-15.1
+  - id: CU-E2-KPM-15.1
     source: OCUDU defined
     scope: CU/DU
     description: 'The Open RAN system shall support E2 KPM for Percentage of RRC connection attempts where a sudden spike may reveal a DoS attack.'
@@ -2913,7 +2913,7 @@ features:
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
-  - id: MVP-GOV-E2-15.2
+  - id: CU-E2-KPM-15.2
     source: OCUDU defined
     scope: CU/DU
     description: 'The Open RAN system shall support E2 KPM for Percentage of RRC connection rejections where a low percentage may reveal network overloading or DoS conditions.'
@@ -2922,7 +2922,7 @@ features:
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
-  - id: MVP-GOV-E2-15.3
+  - id: CU-E2-KPM-15.3
     source: OCUDU defined
     scope: CU/DU
     description: 'The Open RAN system shall support E2 KPM for Number of RRC connection requests rejected by the network. May indicate unauthorized IMSIs or invalid authentication.'
@@ -2931,7 +2931,7 @@ features:
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
-  - id: MVP-GOV-E2-16.1
+  - id: CU-E2-KPM-16.1
     source: OCUDU defined
     scope: CU/DU
     description: 'The Open RAN system shall support E2 KPM for Number of attempts by the UE to establish a UE context. Reveals UE behavior and potential signaling anomalies.'
@@ -2940,7 +2940,7 @@ features:
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
-  - id: MVP-GOV-E2-16.2
+  - id: CU-E2-KPM-16.2
     source: OCUDU defined
     scope: CU/DU
     description: 'The Open RAN system shall support E2 KPM for Number of successful UE context establishments. Used together with UECNTX.ConnEstabAtt to assess success rate and detect anomalies.'
@@ -2949,7 +2949,7 @@ features:
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
-  - id: MVP-GOV-E2-17.1
+  - id: CU-E2-KPM-17.1
     source: OCUDU defined
     scope: CU/DU
     description: 'The Open RAN system shall support E2 KPM for Number of RRC re-establishment attempts used to evaluate radio reliability and failure recovery. A large number of attempts with few successes could indicate signaling storms or malicious UEs.'
@@ -2958,7 +2958,7 @@ features:
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
-  - id: MVP-GOV-E2-17.2
+  - id: CU-E2-KPM-17.2
     source: OCUDU defined
     scope: CU/DU
     description: 'The Open RAN system shall support E2 KPM for Number of successful RRC re-establishments with UE context. Used together with RRC.ReEstabAtt to detect signaling storms or malicious UE behavior.'
@@ -2967,7 +2967,7 @@ features:
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
-  - id: MVP-GOV-E2-4.1
+  - id: CU-E2-KPM-4.1
     source: OCUDU defined
     scope: CU/DU
     description: 'The Open RAN system shall support E2 KPM for Average number of RRC connections maintained in a cell during a measurement interval.'
@@ -2976,7 +2976,7 @@ features:
     release: 26.04 (v1.0)
     primary_test_type: []
     comment: ''
-  - id: MVP-GOV-E2-4.2
+  - id: CU-E2-KPM-4.2
     source: OCUDU defined
     scope: CU/DU
     description: 'The Open RAN system shall support E2 KPM for Peak number of RRC connections observed during a measurement interval.'
