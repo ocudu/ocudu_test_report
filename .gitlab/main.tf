@@ -189,8 +189,6 @@ module "settings" {
         suite_5           = "E2E Performance=https://gitlab.com/api/v4/projects/78028160/pipeline_schedules/4294014",
         suite_6           = "E2E RF=https://gitlab.com/api/v4/projects/78028160/pipeline_schedules/4119330",
         suite_7           = "E2E Interop=https://gitlab.com/api/v4/projects/78028160/pipeline_schedules/4386399",
-        suite_8           = "E2E viavi nightly=https://gitlab.com/api/v4/projects/78028160/pipeline_schedules/4119329",
-        suite_9           = "E2E viavi weekly=https://gitlab.com/api/v4/projects/78028160/pipeline_schedules/4119328",
         filter_scope      = "CU/DU",
         filter_release    = "26.04 (v1.0),26.10 (v2.1)",
         historic_versions = "26.04"
