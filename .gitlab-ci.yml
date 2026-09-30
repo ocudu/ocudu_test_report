@@ -185,23 +185,33 @@ generate-report:
     - cd scripts
     - pip install -r requirements.txt
     - |
-      # Registry auth: prefer a PRIVATE-TOKEN (GITLAB_TOKEN) with package
-      # read/write scope, since the CI job token cannot write the fixed
-      # "index" package version nor read arbitrary run versions back. Fall
-      # back to the job token so the pipeline still works (archive only) when
-      # no GITLAB_TOKEN variable is configured.
+      # Registry auth uses two tokens by design:
+      #
+      #   * ARCHIVE_HEADER (always the CI job token) uploads each run's
+      #     report.zip under a version equal to this pipeline's ID. The job
+      #     token can write its own pipeline's version, and doing so keeps the
+      #     MR/branch/pipeline attribution visible in the package UI.
+      #
+      #   * REG_TOKEN / REG_TOKEN_TYPE (prefer GITLAB_TOKEN as a PRIVATE-TOKEN)
+      #     handle the shared "index" version write and every read-back
+      #     (comparison, historic, inline browsing). The job token cannot write
+      #     the shared index nor read arbitrary versions back (it 401s), so a
+      #     PRIVATE-TOKEN with package read/write scope is required for those.
+      #
+      # If no GITLAB_TOKEN is configured, the index/read-back steps fall back to
+      # the job token: they will not succeed, but they fail soft so the report
+      # still deploys (archive works, history stays empty) rather than breaking.
+      ARCHIVE_HEADER="JOB-TOKEN: ${CI_JOB_TOKEN}"
       if [ -n "${GITLAB_TOKEN}" ]; then
         REG_TOKEN="${GITLAB_TOKEN}"
         REG_TOKEN_TYPE="private"
-        REG_HEADER="PRIVATE-TOKEN: ${GITLAB_TOKEN}"
-        echo "Registry auth: using GITLAB_TOKEN (PRIVATE-TOKEN)."
+        echo "Registry auth: archive uses JOB-TOKEN; index and read-back use GITLAB_TOKEN (PRIVATE-TOKEN)."
       else
         REG_TOKEN="${CI_JOB_TOKEN}"
         REG_TOKEN_TYPE="job"
-        REG_HEADER="JOB-TOKEN: ${CI_JOB_TOKEN}"
-        echo "Registry auth: no GITLAB_TOKEN set, falling back to CI_JOB_TOKEN (JOB-TOKEN). Index write and run read-back will not work with the job token." >&2
+        echo "Registry auth: no GITLAB_TOKEN set. Archive uses JOB-TOKEN; index write and run read-back fall back to the job token and will not work (history stays empty)." >&2
       fi
-      export REG_TOKEN REG_TOKEN_TYPE REG_HEADER
+      export ARCHIVE_HEADER REG_TOKEN REG_TOKEN_TYPE
     - |
       SUITE_ARGS=()
       for s in "$SUITE_0" "$SUITE_1" "$SUITE_2" "$SUITE_3" "$SUITE_4" "$SUITE_5" "$SUITE_6" "$SUITE_7" "$SUITE_8" "$SUITE_9"; do
@@ -225,7 +235,7 @@ generate-report:
         IFS=',' read -ra _hv <<< "$HISTORIC_VERSIONS"
         for version in "${_hv[@]}"; do
           version="${version// /}"
-          if HIST_VERSION="$version" REG_HEADER="$REG_HEADER" python3 -c "import io,os,zipfile,requests as rq;v=os.environ['HIST_VERSION'];hk,hv=os.environ['REG_HEADER'].split(': ',1);url=os.environ['CI_API_V4_URL']+'/projects/'+os.environ['CI_PROJECT_ID']+'/packages/generic/xunits/'+v+'/artifacts.zip';r=rq.get(url,headers={hk:hv});r.raise_for_status();zipfile.ZipFile(io.BytesIO(r.content)).extractall('historic_'+v+'/')"; then
+          if HIST_VERSION="$version" REG_TOKEN="$REG_TOKEN" REG_TOKEN_TYPE="$REG_TOKEN_TYPE" python3 -c "import io,os,zipfile,requests as rq;v=os.environ['HIST_VERSION'];hk='PRIVATE-TOKEN' if os.environ['REG_TOKEN_TYPE']=='private' else 'JOB-TOKEN';url=os.environ['CI_API_V4_URL']+'/projects/'+os.environ['CI_PROJECT_ID']+'/packages/generic/xunits/'+v+'/artifacts.zip';r=rq.get(url,headers={hk:os.environ['REG_TOKEN']});r.raise_for_status();zipfile.ZipFile(io.BytesIO(r.content)).extractall('historic_'+v+'/')"; then
             python3 xunit_report.py \
               --dir "historic_${version}/" \
               -o "${CI_PROJECT_DIR}/${OUTPUT}/historic_${version}" \
@@ -273,7 +283,7 @@ generate-report:
       apt-get update -qq && apt-get install -y -qq zip curl > /dev/null 2>&1
       zip -r report.zip "${OUTPUT}/"
       HTTP_CODE=$(curl --silent --output /dev/null --write-out "%{http_code}" \
-        --header "${REG_HEADER}" \
+        --header "${ARCHIVE_HEADER}" \
         --upload-file report.zip \
         "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/test-report-runs/${CI_PIPELINE_ID}/report.zip")
       if [ "$HTTP_CODE" -eq 201 ]; then
