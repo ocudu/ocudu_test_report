@@ -799,3 +799,11 @@ details.tc-detail[open] > summary.tc-row::before {
     font-size: 0.7em;
   }
 }
+
+/* ── Deep-link flash highlight (from History comparison surfaces) ── */
+@keyframes tcFlash {
+  0%   { background: rgba(56, 189, 248, 0.18); }
+  100% { background: transparent; }
+}
+.tc-flash,
+.tc-flash > .tc-row { animation: tcFlash 1.6s ease-out; border-radius: var(--radius-md, 6px); }

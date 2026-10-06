@@ -89,6 +89,18 @@ def _safe_filename(suite: str, classname: str, name: str, suffix: str = ".txt") 
     return f"{slug}_{short_hash}{suffix}"
 
 
+def _anchor_id(classname: str, name: str) -> str:
+    """Generate a stable HTML anchor id for a test case.
+
+    Keyed on the composite ``classname.name`` (the same key the comparison
+    engine uses), so a comparison surface can deep-link to a test case with
+    ``report.html#tc-<id>`` by computing this from the key alone. Prefixed with
+    ``tc-`` to guarantee a valid id token and avoid clashing with other anchors.
+    """
+    key = f"{classname}.{name}" if classname else name
+    return "tc-" + hashlib.sha256(key.encode()).hexdigest()[:12]
+
+
 class Status(Enum):
     """Test result status."""
 
@@ -308,6 +320,7 @@ def _build_results_json(
             tests.append(
                 {
                     "key": key,
+                    "anchor": _anchor_id(tc.classname, tc.name),
                     "status": tc.status.value,
                     "duration_s": round(tc.duration, 3),
                     "labels": tc.labels,
@@ -469,6 +482,7 @@ def _render_external_log(
 def _render_testcase(tc: TestCase, idx: int, log_mode: str = "inline", log_dir: Path | None = None) -> str:
     parity = "even" if idx % 2 == 0 else "odd"
     display_status = Status.FAILED if tc.status == Status.ERROR else tc.status
+    anchor = _anchor_id(tc.classname, tc.name)
 
     classname_html = f' <span class="tc-classname">— {html.escape(tc.classname)}</span>' if tc.classname else ""
     header = (
@@ -538,13 +552,13 @@ def _render_testcase(tc: TestCase, idx: int, log_mode: str = "inline", log_dir: 
 
     if detail_body:
         return (
-            f'<details class="tc-detail {parity}" data-status="{display_status.value}">'
+            f'<details id="{anchor}" class="tc-detail {parity}" data-status="{display_status.value}">'
             f'<summary class="tc-row {parity}">{header}</summary>'
             f'<div class="tc-detail-body">{detail_body}</div>'
             f"</details>"
         )
 
-    return f'<div class="tc-row {parity}" data-status="{display_status.value}">{header}</div>'
+    return f'<div id="{anchor}" class="tc-row {parity}" data-status="{display_status.value}">{header}</div>'
 
 
 @dataclass

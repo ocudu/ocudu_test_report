@@ -191,5 +191,39 @@
           window.open(link.href, '_blank');
         });
     });
+
+    // Deep-link support: when the URL carries a #tc-... anchor (e.g. from the
+    // History comparison surfaces), reveal the test and scroll to it. The test
+    // rows live inside a hidden suite accordion (.expand-row[hidden]), so we
+    // must open that outer accordion first, then open the test's own <details>,
+    // otherwise the target is not laid out and scrollIntoView is a no-op.
+    function focusAnchor(hash) {
+      if (!hash || hash.indexOf('#tc-') !== 0) return;
+      const id = hash.slice(1);
+      const el = document.getElementById(id);
+      if (!el) return;
+      // Reveal the enclosing suite accordion if the test is inside a hidden one.
+      const expandRow = el.closest('.expand-row');
+      if (expandRow && expandRow.hidden) {
+        expandRow.hidden = false;
+        const trigger = document.querySelector('.suite-row[data-expand="' + expandRow.id + '"]');
+        if (trigger) trigger.classList.add('open');
+      }
+      if (el.tagName === 'DETAILS') el.open = true;
+      // Wait for the browser to lay out the newly revealed accordion before
+      // scrolling. A fixed timeout races the layout; two animation frames
+      // reliably run after layout has happened.
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          el.classList.add('tc-flash');
+          setTimeout(function () { el.classList.remove('tc-flash'); }, 2000);
+        });
+      });
+    }
+    if (location.hash) {
+      setTimeout(function () { focusAnchor(location.hash); }, 60);
+    }
+    window.addEventListener('hashchange', function () { focusAnchor(location.hash); });
   });
 })();

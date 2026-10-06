@@ -184,6 +184,45 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
       window.addEventListener('hashchange', function () {{ activate(parseHash(location.hash)); }});
       activate(parseHash(location.hash));
 
+      /* Deep-link bridge: called by the History comparison surfaces to jump to
+         a specific test case. Stays inside the index navigator (keeps the top
+         nav bar) by switching the frame to the Latest/All Tests view and
+         loading all.html#<anchor> in a single assignment, so all.js sees the
+         hash at load time and runs focusAnchor (reveal, scroll, highlight). We
+         set the tab state directly and keep the top-level hash in sync with
+         replaceState, rather than routing through the hash/activate round-trip
+         which would reset frame.src without the anchor and race the load. */
+      window.ocuduJumpToTest = function (anchor) {{
+        if (!anchor) return;
+        // Reflect the Latest / All Tests selection in the nav chrome.
+        subnav.classList.remove('hidden');
+        vTabs.forEach(function (t) {{ t.classList.toggle('active', t.dataset.version === 'latest'); }});
+        fTabs.forEach(function (t) {{ t.classList.remove('active'); }});
+        sTabs.forEach(function (t) {{ t.classList.toggle('active', t.dataset.sub === 'all'); }});
+        frame.removeAttribute('srcdoc');
+        var target = VERSION_PAGES['latest']['all'] + '#' + anchor;
+        var samePage = false;
+        try {{
+          samePage = frame.contentWindow &&
+            frame.contentWindow.location.pathname.indexOf(VERSION_PAGES['latest']['all']) !== -1;
+        }} catch (e) {{ samePage = false; }}
+        if (samePage) {{
+          // Already on all.html: move the hash (clear first to force a change).
+          try {{
+            frame.contentWindow.location.hash = '';
+            frame.contentWindow.location.hash = anchor;
+          }} catch (e) {{ frame.src = target; }}
+        }} else {{
+          // Single assignment: the hash is present at load so all.js focuses it.
+          frame.src = target;
+        }}
+        // Keep the top-level hash in sync WITHOUT invoking activate (which would
+        // reset frame.src to a hash-less all.html and drop the anchor).
+        if (location.hash !== '#latest/all') {{
+          history.replaceState(null, '', '#latest/all');
+        }}
+      }};
+
       /* ── History tab ─────────────────────────────────────── */
       var FAIL = {{ failed:1, error:1 }};
       var CSS = '*{{box-sizing:border-box;margin:0;padding:0}}'
@@ -237,6 +276,15 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
             var res = inner.getElementById('cmp-result');
             if (!bp || !hp) {{ alert('Select both runs.'); return; }}
             if (bp === hp) {{ alert('Pick two different runs.'); return; }}
+            // Ordering guard: BASE must be the older run and HEAD the newer, or
+            // the diff reports fixes as regressions and vice versa. The run ids
+            // are pipeline ids that increase over time, so if BASE > HEAD the
+            // user picked them backwards. Auto-swap and tell them, so the result
+            // is never silently backwards.
+            var swapped = false;
+            if (parseInt(bp, 10) > parseInt(hp, 10)) {{
+              var tmp = bp; bp = hp; hp = tmp; swapped = true;
+            }}
             res.innerHTML = '<p style="color:#94a3b8">Comparing...</p>';
             Promise.all([
               fetch('runs/' + bp + '/results.json').then(function(r) {{ return r.ok ? r.json() : null; }}),
@@ -248,50 +296,115 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
               var bm = flat(base), hm = flat(head), ak = {{}};
               Object.keys(bm).forEach(function(k) {{ ak[k] = 1; }});
               Object.keys(hm).forEach(function(k) {{ ak[k] = 1; }});
-              var regs=[], fixes=[], nf=[], np=[], rem=[];
+              var regs=[], fixes=[], nf=[], np=[], rem=[], unchanged=0;
               Object.keys(ak).sort().forEach(function(k) {{
                 var b = bm[k], h = hm[k];
                 var sb = b ? b.status : null, sh = h ? h.status : null;
-                if (!b && (sh === 'failed' || sh === 'error')) nf.push({{key:k, head:sh}});
-                else if (!b && sh === 'passed') np.push({{key:k, head:sh}});
-                else if (!h) rem.push({{key:k, base:sb}});
-                else if (sb === sh) return;
-                else if ((sh === 'failed' || sh === 'error') && sb !== 'failed' && sb !== 'error') regs.push({{key:k, base:sb, head:sh}});
-                else if (sh === 'passed' && (sb === 'failed' || sb === 'error')) fixes.push({{key:k, base:sb, head:sh}});
+                var anchor = (h && h.anchor) || (b && b.anchor) || '';
+                if (!b && (sh === 'failed' || sh === 'error')) nf.push({{key:k, head:sh, anchor:anchor}});
+                else if (!b && sh === 'passed') np.push({{key:k, head:sh, anchor:anchor}});
+                else if (!b) np.push({{key:k, head:sh, anchor:anchor}});
+                else if (!h) rem.push({{key:k, base:sb, anchor:''}});
+                else if (sb === sh) {{ unchanged++; }}
+                else if ((sh === 'failed' || sh === 'error') && sb !== 'failed' && sb !== 'error') regs.push({{key:k, base:sb, head:sh, anchor:anchor}});
+                else if (sh === 'passed' && (sb === 'failed' || sb === 'error')) fixes.push({{key:k, base:sb, head:sh, anchor:anchor}});
+                else {{ unchanged++; }}
               }});
               function pill(s) {{
                 var c = (s === 'failed' || s === 'error') ? '#f87171' : s === 'passed' ? '#4ade80' : '#fb923c';
                 return '<span style="color:' + c + ';font-weight:600">' + s + '</span>';
               }}
-              function sect(title, items, color) {{
+              // Deep-link a test name to its row in the Latest report. Clicking
+              // switches the parent frame to the Latest/report tab and targets
+              // the test's anchor (report.js opens + scrolls to it).
+              function keyCell(i) {{
+                var key = i.key.replace(/</g, '&lt;');
+                if (!i.anchor) return '<span style="font-family:monospace;font-size:.85em">' + key + '</span>';
+                return '<a href="#" data-anchor="' + i.anchor + '" class="tc-jump" '
+                  + 'style="font-family:monospace;font-size:.85em;color:#38bdf8;text-decoration:none">' + key + '</a>';
+              }}
+              function sect(cls, title, items, color) {{
                 if (!items.length) return '';
                 var rows = items.map(function(i) {{
-                  var key = i.key.replace(/</g, '&lt;');
                   var detail = (i.base ? pill(i.base) + ' &rarr; ' : '') + (i.head ? pill(i.head) : '<span style="color:#64748b">removed</span>');
-                  return '<tr style="border-top:1px solid #1e293b"><td style="padding:6px 10px;font-family:monospace;font-size:.85em">' + key + '</td><td style="padding:6px 10px">' + detail + '</td></tr>';
+                  return '<tr class="cmp-prow" data-key="' + i.key.toLowerCase().replace(/"/g, '') + '" style="border-top:1px solid #1e293b"><td style="padding:6px 10px">' + keyCell(i) + '</td><td style="padding:6px 10px">' + detail + '</td></tr>';
                 }}).join('');
-                return '<details open style="margin-bottom:12px;background:#1e293b;border:1px solid #334155;border-radius:8px;overflow:hidden">'
+                return '<details open class="cmp-sect" data-sect="' + cls + '" style="margin-bottom:12px;background:#1e293b;border:1px solid #334155;border-radius:8px;overflow:hidden">'
                   + '<summary style="padding:12px 16px;cursor:pointer;font-weight:600;border-left:4px solid ' + color + '">' + title
                   + ' <span style="background:#0f172a;border-radius:12px;padding:2px 10px;font-size:.82em;margin-left:8px">' + items.length + '</span>'
                   + '</summary><table style="width:100%;border-collapse:collapse;font-size:.85em">' + rows + '</table></details>';
               }}
-              function card(count, label, color) {{
-                return '<div class="card"><div class="card-val" style="color:' + (count ? color : '#64748b') + '">' + count + '</div><div class="card-lbl">' + label + '</div></div>';
+              // Clickable filter cards: clicking a card shows only its section.
+              function card(cls, count, label, color) {{
+                var clickable = count > 0;
+                return '<button class="cmp-fcard" data-sect="' + cls + '"'
+                  + (clickable ? '' : ' disabled')
+                  + ' style="background:#1e293b;border:1px solid #334155;border-radius:8px;padding:16px 20px;text-align:center;font-family:inherit;'
+                  + (clickable ? 'cursor:pointer' : 'opacity:.5;cursor:default') + '">'
+                  + '<div class="card-val" style="font-size:2em;font-weight:800;line-height:1.1;color:' + (count ? color : '#64748b') + '">' + count + '</div>'
+                  + '<div class="card-lbl" style="font-size:.75em;color:#94a3b8;text-transform:uppercase;margin-top:4px">' + label + '</div></button>';
               }}
-              var h = '<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px">'
-                + card(regs.length, 'Regressions', '#f87171')
-                + card(fixes.length, 'Fixes', '#4ade80')
-                + card(nf.length, 'New Failures', '#f87171')
-                + card(np.length, 'New Passes', '#4ade80')
-                + card(rem.length, 'Removed', '#fb923c')
+              var noteHtml = swapped
+                ? '<p style="color:#fb923c;font-size:.82em;margin-bottom:10px">Runs were in the wrong order (BASE must be older), so they were swapped automatically.</p>'
+                : '';
+              var h = noteHtml
+                + '<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px">'
+                + card('regs', regs.length, 'Regressions', '#f87171')
+                + card('fixes', fixes.length, 'Fixes', '#4ade80')
+                + card('nf', nf.length, 'New Failures', '#f87171')
+                + card('np', np.length, 'New Passes', '#4ade80')
+                + card('rem', rem.length, 'Removed', '#fb923c')
                 + '</div>'
-                + sect('Regressions', regs, '#f87171') + sect('Fixes', fixes, '#4ade80')
-                + sect('New Failures', nf, '#f87171') + sect('New Passes', np, '#4ade80')
-                + sect('Removed', rem, '#fb923c');
+                + '<input type="text" id="cmp-prow-search" placeholder="Filter tests..." '
+                + 'style="width:100%;max-width:360px;padding:8px 12px;margin-bottom:16px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:6px;font-size:.85em">'
+                + sect('regs', 'Regressions', regs, '#f87171') + sect('fixes', 'Fixes', fixes, '#4ade80')
+                + sect('nf', 'New Failures', nf, '#f87171') + sect('np', 'New Passes', np, '#4ade80')
+                + sect('rem', 'Removed', rem, '#fb923c');
               if (!regs.length && !fixes.length && !nf.length && !np.length && !rem.length) {{
-                h += '<p style="color:#94a3b8;text-align:center;padding:20px">No differences found.</p>';
+                h += '<p style="color:#94a3b8;text-align:center;padding:20px">No differences found. ' + unchanged + ' tests unchanged.</p>';
               }}
               res.innerHTML = '<h4 style="margin-bottom:12px">Pipeline ' + bp + ' &rarr; ' + hp + '</h4>' + h;
+
+              // Wire filter cards.
+              var activeSect = null;
+              var fcards = res.querySelectorAll('.cmp-fcard[data-sect]:not([disabled])');
+              var sects = res.querySelectorAll('.cmp-sect');
+              fcards.forEach(function(c) {{
+                c.addEventListener('click', function() {{
+                  var target = this.getAttribute('data-sect');
+                  if (activeSect === target) {{
+                    activeSect = null;
+                    fcards.forEach(function(x) {{ x.style.outline = ''; }});
+                    sects.forEach(function(s) {{ s.style.display = ''; }});
+                  }} else {{
+                    activeSect = target;
+                    fcards.forEach(function(x) {{ x.style.outline = ''; }});
+                    this.style.outline = '2px solid #38bdf8';
+                    sects.forEach(function(s) {{ s.style.display = (s.getAttribute('data-sect') === target) ? '' : 'none'; }});
+                  }}
+                }});
+              }});
+
+              // Wire search over result rows.
+              var search = res.querySelector('#cmp-prow-search');
+              if (search) {{
+                search.addEventListener('input', function() {{
+                  var q = this.value.toLowerCase();
+                  res.querySelectorAll('.cmp-prow').forEach(function(row) {{
+                    var k = row.getAttribute('data-key') || '';
+                    row.style.display = k.indexOf(q) !== -1 ? '' : 'none';
+                  }});
+                }});
+              }}
+
+              // Wire test-name deep-links: jump to the Latest report tab + anchor.
+              res.querySelectorAll('.tc-jump[data-anchor]').forEach(function(a) {{
+                a.addEventListener('click', function(e) {{
+                  e.preventDefault();
+                  var anchor = this.getAttribute('data-anchor');
+                  if (parent && parent.ocuduJumpToTest) parent.ocuduJumpToTest(anchor);
+                }});
+              }});
             }}).catch(function() {{ res.innerHTML = '<p style="color:#f87171">Comparison failed.</p>'; }});
           }});
         }}, 100);
@@ -365,15 +478,26 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
       /* ── Compare picker ────────────────────────────────── */
       function renderComparePicker(runs) {{
         if (runs.length < 2) return '<p style="color:#64748b;font-size:.9em">Need at least 2 archived runs to compare.</p>';
-        var opts = '<option value="">Select a run...</option>' + runs.map(function(r) {{
-          var pid = r.pipeline_id || r.package_version || '?';
-          var d = r.generated_at ? new Date(r.generated_at).toLocaleDateString('en-GB',{{day:'2-digit',month:'short'}}) : '';
-          return '<option value="'+pid+'">Pipeline '+pid+(d ? ' ('+d+')' : '')+'</option>';
-        }}).join('');
+        // runs is newest-first. Default HEAD = latest (runs[0]), BASE =
+        // previous (runs[1]) so the sensible comparison is pre-selected and the
+        // order is correct out of the box.
+        var sorted = runs.slice().sort(function(a, b) {{
+          return (parseInt(b.pipeline_id||b.package_version||0,10)) - (parseInt(a.pipeline_id||a.package_version||0,10));
+        }});
+        var headDefault = sorted[0].pipeline_id || sorted[0].package_version;
+        var baseDefault = sorted[1].pipeline_id || sorted[1].package_version;
+        function optsFor(selectedPid) {{
+          return '<option value="">Select a run...</option>' + sorted.map(function(r) {{
+            var pid = r.pipeline_id || r.package_version || '?';
+            var d = r.generated_at ? new Date(r.generated_at).toLocaleDateString('en-GB',{{day:'2-digit',month:'short'}}) : '';
+            var sel = (String(pid) === String(selectedPid)) ? ' selected' : '';
+            return '<option value="'+pid+'"'+sel+'>Pipeline '+pid+(d ? ' ('+d+')' : '')+'</option>';
+          }}).join('');
+        }}
         var sel = 'style="width:100%;max-width:300px;padding:8px 10px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:6px;font-size:.85em"';
         return '<div style="display:flex;gap:12px;align-items:end;flex-wrap:wrap;margin-bottom:24px">'
-          + '<div><label style="display:block;font-size:.75em;color:#94a3b8;margin-bottom:4px">BASE (older)</label><select id="cmp-base" '+sel+'>'+opts+'</select></div>'
-          + '<div><label style="display:block;font-size:.75em;color:#94a3b8;margin-bottom:4px">HEAD (newer)</label><select id="cmp-head" '+sel+'>'+opts+'</select></div>'
+          + '<div><label style="display:block;font-size:.75em;color:#94a3b8;margin-bottom:4px">BASE (older)</label><select id="cmp-base" '+sel+'>'+optsFor(baseDefault)+'</select></div>'
+          + '<div><label style="display:block;font-size:.75em;color:#94a3b8;margin-bottom:4px">HEAD (newer)</label><select id="cmp-head" '+sel+'>'+optsFor(headDefault)+'</select></div>'
           + '<button id="cmp-go" style="padding:8px 24px;background:#38bdf8;color:#0f172a;border:none;border-radius:6px;font-weight:700;font-size:.85em;cursor:pointer">Compare</button>'
           + '</div><div id="cmp-result"></div>';
       }}

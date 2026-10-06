@@ -145,11 +145,16 @@ def _render_summary_cards(summary: dict) -> str:
     )
 
 
-def _render_entry_row(entry: dict) -> str:
+def _render_entry_row(entry: dict) -> str:  # pylint: disable=too-many-locals
     """Render a single diff entry as a table row with status pills."""
     key = html.escape(entry.get("key", ""))
+    anchor = entry.get("anchor", "")
     status_base = entry.get("status_base")
     status_head = entry.get("status_head")
+    # A removed test is absent from the latest report, so there is nothing to
+    # deep-link to; drop the anchor and it renders as plain text.
+    if status_head is None:
+        anchor = ""
     dur_base = entry.get("duration_base")
     dur_head = entry.get("duration_head")
     labels = entry.get("labels", [])
@@ -177,9 +182,17 @@ def _render_entry_row(entry: dict) -> str:
             chips += f'<span class="cmp-label cmp-label-more">+{len(labels) - 3}</span>'
         labels_html = f'<div class="cmp-labels">{chips}</div>'
 
+    # Key cell: deep-link to the test in the Latest report when we have an
+    # anchor, otherwise plain text (keeps the exact prior behaviour as fallback).
+    if anchor:
+        link = f'<a href="#" class="cmp-jump" data-anchor="{html.escape(anchor)}">{key}</a>'
+        key_cell = f'<td class="cmp-key" title="{key}">{link}</td>'
+    else:
+        key_cell = f'<td class="cmp-key" title="{key}">{key}</td>'
+
     return (
         f'<tr class="cmp-row">'
-        f'<td class="cmp-key" title="{key}">{key}</td>'
+        f"{key_cell}"
         f'<td class="cmp-status-cell">{_pill(status_base)}</td>'
         f'<td class="cmp-arrow-cell"><span class="cmp-arrow-icon">→</span></td>'
         f'<td class="cmp-status-cell">{_pill(status_head)}</td>'
@@ -317,6 +330,20 @@ _COMPARISON_JS = """<script>
       }
     });
   });
+
+  // Deep-link: click a test name to jump to it in the Latest report. This page
+  // is nested two iframes deep inside index.html, so reach the top frame's
+  // bridge. Falls back to doing nothing if the bridge is absent (e.g. the page
+  // opened standalone), which is the prior behaviour.
+  document.querySelectorAll('.cmp-jump[data-anchor]').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      e.preventDefault();
+      var anchor = this.getAttribute('data-anchor');
+      try {
+        if (window.top && window.top.ocuduJumpToTest) window.top.ocuduJumpToTest(anchor);
+      } catch (err) { /* cross-origin or standalone: no-op */ }
+    });
+  });
 })();
 </script>"""
 
@@ -395,6 +422,8 @@ _COMPARISON_CSS = """
 .section-new-pass .cmp-table tbody tr:hover { box-shadow: inset 3px 0 0 var(--green); }
 .section-removed .cmp-table tbody tr:hover { box-shadow: inset 3px 0 0 var(--orange); }
 .cmp-key { padding: 12px; font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace; font-size: 0.88em; color: var(--text); max-width: 450px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cmp-jump { color: var(--accent); text-decoration: none; cursor: pointer; }
+.cmp-jump:hover { text-decoration: underline; }
 
 /* ── Status pills ────────────────────────────────────────── */
 .cmp-status-cell { padding: 10px 8px; }

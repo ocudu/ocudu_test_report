@@ -42,7 +42,7 @@ _PASS_STATUSES = frozenset({"passed"})
 
 
 @dataclass
-class DiffEntry:
+class DiffEntry:  # pylint: disable=too-many-instance-attributes
     """A single test case that differs between the two runs."""
 
     key: str
@@ -52,6 +52,7 @@ class DiffEntry:
     duration_base: float | None = None
     duration_head: float | None = None
     labels: list[str] = field(default_factory=list)
+    anchor: str = ""
 
 
 @dataclass
@@ -154,6 +155,7 @@ def diff_runs(base: dict, head: dict) -> tuple[list[DiffEntry], DiffSummary]:  #
             duration_base=tc_base.get("duration_s"),
             duration_head=tc_head.get("duration_s"),
             labels=tc_head.get("labels", []),
+            anchor=tc_head.get("anchor", "") or tc_base.get("anchor", ""),
         )
         entries.append(entry)
 
@@ -175,6 +177,7 @@ def diff_runs(base: dict, head: dict) -> tuple[list[DiffEntry], DiffSummary]:  #
             duration_base=None,
             duration_head=tc_head.get("duration_s"),
             labels=tc_head.get("labels", []),
+            anchor=tc_head.get("anchor", ""),
         )
         entries.append(entry)
 
@@ -196,6 +199,7 @@ def diff_runs(base: dict, head: dict) -> tuple[list[DiffEntry], DiffSummary]:  #
             duration_base=tc_base.get("duration_s"),
             duration_head=None,
             labels=tc_base.get("labels", []),
+            anchor=tc_base.get("anchor", ""),
         )
         entries.append(entry)
         summary.removed += 1
