@@ -74,53 +74,63 @@ class TestParseTestcase:
         assert tc.message == ""
 
     def test_failed_test(self):
-        elem = _xml('''
+        elem = _xml(
+            """
             <testcase name="test_div" classname="math_test" time="1.2">
                 <failure message="division by zero"/>
             </testcase>
-        ''')
+        """
+        )
         tc = xunit_report._parse_testcase(elem)
         assert tc.status == xunit_report.Status.FAILED
         assert tc.message == "division by zero"
 
     def test_error_test(self):
-        elem = _xml('''
+        elem = _xml(
+            """
             <testcase name="test_crash" classname="core" time="0">
                 <error message="segfault"/>
             </testcase>
-        ''')
+        """
+        )
         tc = xunit_report._parse_testcase(elem)
         assert tc.status == xunit_report.Status.ERROR
         assert tc.message == "segfault"
 
     def test_skipped_test(self):
-        elem = _xml('''
+        elem = _xml(
+            """
             <testcase name="test_skip" classname="core" time="0">
                 <skipped message="not implemented"/>
             </testcase>
-        ''')
+        """
+        )
         tc = xunit_report._parse_testcase(elem)
         assert tc.status == xunit_report.Status.SKIPPED
 
     def test_cmake_labels_parsed(self):
-        elem = _xml('''
+        elem = _xml(
+            """
             <testcase name="test_phy" classname="phy_test" time="0.1">
                 <properties>
                     <property name="cmake_labels" value="phy;tsan;MVP-ARCH-1"/>
                 </properties>
             </testcase>
-        ''')
+        """
+        )
         tc = xunit_report._parse_testcase(elem)
         assert tc.labels == ["phy", "tsan", "MVP-ARCH-1"]
 
     def test_empty_labels_ignored(self):
-        elem = _xml('''
+        elem = _xml(
+            """
             <testcase name="t" classname="c" time="0">
                 <properties>
                     <property name="cmake_labels" value="a;;b; ;c"/>
                 </properties>
             </testcase>
-        ''')
+        """
+        )
         tc = xunit_report._parse_testcase(elem)
         assert tc.labels == ["a", "b", "c"]
 
@@ -130,21 +140,25 @@ class TestParseTestcase:
         assert tc.duration == 0.0
 
     def test_system_out_captured(self):
-        elem = _xml('''
+        elem = _xml(
+            """
             <testcase name="t" classname="c" time="0">
                 <system-out>hello world</system-out>
             </testcase>
-        ''')
+        """
+        )
         tc = xunit_report._parse_testcase(elem)
         assert "hello world" in tc.system_out
 
     def test_failure_text_as_message(self):
         """When failure has no message attr, use element text."""
-        elem = _xml('''
+        elem = _xml(
+            """
             <testcase name="t" classname="c" time="0">
                 <failure>assertion failed at line 42</failure>
             </testcase>
-        ''')
+        """
+        )
         tc = xunit_report._parse_testcase(elem)
         assert tc.status == xunit_report.Status.FAILED
         assert "assertion failed" in tc.message
@@ -163,13 +177,15 @@ class TestLoadFeatureMap:
         return Path(f.name)
 
     def test_basic_mapping(self):
-        path = self._write_yaml("""
+        path = self._write_yaml(
+            """
 tests:
   - test_id: "5.3"
     ocudu_features: ["MVP-FUNC-1", "MVP-FUNC-2"]
   - test_id: "5.4"
     ocudu_features: ["MVP-FUNC-3"]
-""")
+"""
+        )
         result = xunit_report._load_feature_map(path)
         assert result == {"5.3": ["MVP-FUNC-1", "MVP-FUNC-2"], "5.4": ["MVP-FUNC-3"]}
         path.unlink()
@@ -177,44 +193,52 @@ tests:
     @pytest.mark.xfail(reason="Known bug: null test_id becomes string 'None'. Fixed in fix/misc-corrections.")
     def test_null_test_id_skipped(self):
         """The bug: null test_id should not create a 'None' string key."""
-        path = self._write_yaml("""
+        path = self._write_yaml(
+            """
 tests:
   - test_id: null
     ocudu_features: ["MVP-FUNC-1"]
   - test_id: "5.3"
     ocudu_features: ["MVP-FUNC-2"]
-""")
+"""
+        )
         result = xunit_report._load_feature_map(path)
         assert "None" not in result
         assert result == {"5.3": ["MVP-FUNC-2"]}
         path.unlink()
 
     def test_empty_features_skipped(self):
-        path = self._write_yaml("""
+        path = self._write_yaml(
+            """
 tests:
   - test_id: "5.3"
     ocudu_features: []
-""")
+"""
+        )
         result = xunit_report._load_feature_map(path)
         assert result == {}
         path.unlink()
 
     def test_missing_features_key_skipped(self):
-        path = self._write_yaml("""
+        path = self._write_yaml(
+            """
 tests:
   - test_id: "5.3"
-""")
+"""
+        )
         result = xunit_report._load_feature_map(path)
         assert result == {}
         path.unlink()
 
     def test_numeric_test_id_converted_to_string(self):
         """YAML may parse '5.3' as a float if unquoted."""
-        path = self._write_yaml("""
+        path = self._write_yaml(
+            """
 tests:
   - test_id: 5.3
     ocudu_features: ["MVP-FUNC-1"]
-""")
+"""
+        )
         result = xunit_report._load_feature_map(path)
         assert "5.3" in result
         path.unlink()
@@ -227,9 +251,7 @@ tests:
 
 class TestGroupByFeatures:
     def _make_tc(self, name, labels, status=xunit_report.Status.PASSED):
-        return xunit_report.TestCase(
-            name=name, classname="test", duration=1.0, status=status, labels=labels
-        )
+        return xunit_report.TestCase(name=name, classname="test", duration=1.0, status=status, labels=labels)
 
     def _make_suite(self, name, testcases):
         s = xunit_report.Suite(name=name)
@@ -294,16 +316,15 @@ class TestGroupByFeatures:
 
     def test_pipe_alias_matching(self):
         """Features with pipe-separated aliases match on any alias."""
-        features = {"Display Name": xunit_report.FeatureDef(
-            description="Test", labels={"Display Name", "alias1", "alias2"}
-        )}
+        features = {
+            "Display Name": xunit_report.FeatureDef(description="Test", labels={"Display Name", "alias1", "alias2"})
+        }
         tc = self._make_tc("test_a", ["alias1"])
         suite = self._make_suite("E2E", [tc])
 
         result = xunit_report._group_by_features([suite], features)
 
         assert len(result["Display Name"].suites["E2E"][1]) == 1
-
 
 
 # ---------------------------------------------------------------------------
@@ -578,17 +599,23 @@ class TestBuildRunMetadata:
         """Create a Suite with dummy test cases matching the given counts."""
         tcs = []
         for i in range(passed):
-            tcs.append(xunit_report.TestCase(
-                name=f"pass_{i}", classname="test", duration=1.0, status=xunit_report.Status.PASSED
-            ))
+            tcs.append(
+                xunit_report.TestCase(
+                    name=f"pass_{i}", classname="test", duration=1.0, status=xunit_report.Status.PASSED
+                )
+            )
         for i in range(failed):
-            tcs.append(xunit_report.TestCase(
-                name=f"fail_{i}", classname="test", duration=2.0, status=xunit_report.Status.FAILED
-            ))
+            tcs.append(
+                xunit_report.TestCase(
+                    name=f"fail_{i}", classname="test", duration=2.0, status=xunit_report.Status.FAILED
+                )
+            )
         for i in range(skipped):
-            tcs.append(xunit_report.TestCase(
-                name=f"skip_{i}", classname="test", duration=0.0, status=xunit_report.Status.SKIPPED
-            ))
+            tcs.append(
+                xunit_report.TestCase(
+                    name=f"skip_{i}", classname="test", duration=0.0, status=xunit_report.Status.SKIPPED
+                )
+            )
         s = xunit_report.Suite(name=name)
         s.testcases = tcs
         return s
@@ -604,6 +631,33 @@ class TestBuildRunMetadata:
         assert "generated_at" in result
         assert "suites" in result
         assert "totals" in result
+
+    def test_label_included_when_given(self):
+        """An explicit label is recorded in the metadata."""
+        suites = [self._make_suite("E2E", passed=1)]
+        result = xunit_report._build_run_metadata(suites, pipeline_id="1", label="OCUDU 26.10")
+        assert result["label"] == "OCUDU 26.10"
+
+    def test_label_defaults_empty(self):
+        """The label defaults to an empty string when not provided."""
+        suites = [self._make_suite("E2E", passed=1)]
+        result = xunit_report._build_run_metadata(suites, pipeline_id="1")
+        assert result["label"] == ""
+
+    def test_suite_commits_included(self):
+        """Per-suite ocudu_commit and test_commit are carried into the summary."""
+        s = self._make_suite("E2E", passed=1)
+        s.ocudu_commit = "abc123"
+        s.test_commit = "def456"
+        result = xunit_report._build_run_metadata([s])
+        assert result["suites"][0]["ocudu_commit"] == "abc123"
+        assert result["suites"][0]["test_commit"] == "def456"
+
+    def test_suite_commits_default_empty(self):
+        """Suites without commit properties record empty strings."""
+        result = xunit_report._build_run_metadata([self._make_suite("E2E", passed=1)])
+        assert result["suites"][0]["ocudu_commit"] == ""
+        assert result["suites"][0]["test_commit"] == ""
 
     def test_suite_summaries(self):
         """Each suite has correct per-suite counts."""
@@ -686,16 +740,78 @@ class TestBuildRunMetadata:
 
 
 # ---------------------------------------------------------------------------
+# parse_xml — suite-level commit properties
+# ---------------------------------------------------------------------------
+
+
+class TestParseSuiteCommits:
+    def _write(self, tmp_path, content):
+        path = tmp_path / "suite.xml"
+        path.write_text(content, encoding="utf-8")
+        return path
+
+    def test_reads_commits_from_testsuites_root(self, tmp_path):
+        """Suite-level ocudu_commit/test_commit are read from a testsuites root."""
+        xml = (
+            '<?xml version="1.0"?><testsuites name="pytest tests">'
+            '<testsuite name="phy">'
+            "<properties>"
+            '<property name="ocudu_commit" value="aaa111"/>'
+            '<property name="test_commit" value="bbb222"/>'
+            '<property name="url" value="https://example/job/1"/>'
+            "</properties>"
+            '<testcase classname="c" name="t1" time="1.0"/>'
+            "</testsuite></testsuites>"
+        )
+        suite = xunit_report.parse_xml("E2E", self._write(tmp_path, xml))
+        assert suite.ocudu_commit == "aaa111"
+        assert suite.test_commit == "bbb222"
+
+    def test_reads_commits_from_testsuite_root(self, tmp_path):
+        """Also works when the root element is a single testsuite."""
+        xml = (
+            '<?xml version="1.0"?><testsuite name="phy">'
+            "<properties>"
+            '<property name="ocudu_commit" value="ccc333"/>'
+            '<property name="test_commit" value="ddd444"/>'
+            "</properties>"
+            '<testcase classname="c" name="t1" time="1.0"/>'
+            "</testsuite>"
+        )
+        suite = xunit_report.parse_xml("E2E", self._write(tmp_path, xml))
+        assert suite.ocudu_commit == "ccc333"
+        assert suite.test_commit == "ddd444"
+
+    def test_missing_properties_default_empty(self):
+        """A suite element with no properties yields empty commit strings."""
+        assert xunit_report._parse_suite_commits(None) == ("", "")
+
+    def test_partial_properties_best_effort(self, tmp_path):
+        """Only ocudu_commit present -> test_commit stays empty (best-effort)."""
+        xml = (
+            '<?xml version="1.0"?><testsuite name="phy">'
+            '<properties><property name="ocudu_commit" value="eee555"/></properties>'
+            '<testcase classname="c" name="t1" time="1.0"/>'
+            "</testsuite>"
+        )
+        suite = xunit_report.parse_xml("E2E", self._write(tmp_path, xml))
+        assert suite.ocudu_commit == "eee555"
+        assert suite.test_commit == ""
+
+
+# ---------------------------------------------------------------------------
 # _build_results_json — per-test-case structured output for comparison engine
 # ---------------------------------------------------------------------------
 
 
 class TestBuildResultsJson:
-    def _make_tc(self, name, classname="tests.module", status=xunit_report.Status.PASSED,
-                 duration=1.0, labels=None):
+    def _make_tc(self, name, classname="tests.module", status=xunit_report.Status.PASSED, duration=1.0, labels=None):
         return xunit_report.TestCase(
-            name=name, classname=classname, duration=duration,
-            status=status, labels=labels or [],
+            name=name,
+            classname=classname,
+            duration=duration,
+            status=status,
+            labels=labels or [],
         )
 
     def _make_suite(self, name, testcases):

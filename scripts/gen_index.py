@@ -452,9 +452,10 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
         var rows = data.slice().reverse().map(function(r) {{
           var tt = r.totals, rate = tt.tests ? ((tt.passed/tt.tests)*100).toFixed(1) : '0.0';
           var pid = r.pipeline_id||'?';
+          var lbl = r.label ? ' <span style="background:#334155;color:#38bdf8;border-radius:10px;padding:1px 7px;font-size:.85em">'+r.label.replace(/</g,'&lt;')+'</span>' : '';
           var d = r.generated_at ? new Date(r.generated_at).toLocaleDateString('en-GB',{{day:'2-digit',month:'short'}}) : '';
           var rc = parseFloat(rate)>=95 ? '#4ade80' : parseFloat(rate)>=80 ? '#fb923c' : '#f87171';
-          return '<tr style="border-top:1px solid #1e293b"><td style="padding:6px 12px">'+pid+'</td><td style="padding:6px 12px">'+d+'</td><td style="padding:6px 12px;color:#4ade80">'+tt.passed+'</td><td style="padding:6px 12px;color:#f87171">'+tt.failed+'</td><td style="padding:6px 12px;color:#fb923c">'+tt.skipped+'</td><td style="padding:6px 12px">'+tt.tests+'</td><td style="padding:6px 12px;font-weight:700;color:'+rc+'">'+rate+'%</td></tr>';
+          return '<tr style="border-top:1px solid #1e293b"><td style="padding:6px 12px">'+pid+lbl+'</td><td style="padding:6px 12px">'+d+'</td><td style="padding:6px 12px;color:#4ade80">'+tt.passed+'</td><td style="padding:6px 12px;color:#f87171">'+tt.failed+'</td><td style="padding:6px 12px;color:#fb923c">'+tt.skipped+'</td><td style="padding:6px 12px">'+tt.tests+'</td><td style="padding:6px 12px;font-weight:700;color:'+rc+'">'+rate+'%</td></tr>';
         }}).join('');
         var table = '<table style="width:100%;border-collapse:collapse;font-size:.85em;background:#1e293b;border:1px solid #334155;border-radius:8px;overflow:hidden;margin-bottom:24px">'
           + '<thead><tr style="background:#0f172a"><th style="padding:8px 12px;text-align:left;color:#94a3b8">Pipeline</th><th style="padding:8px 12px;text-align:left;color:#94a3b8">Date</th><th style="padding:8px 12px;text-align:left;color:#94a3b8">Pass</th><th style="padding:8px 12px;text-align:left;color:#94a3b8">Fail</th><th style="padding:8px 12px;text-align:left;color:#94a3b8">Skip</th><th style="padding:8px 12px;text-align:left;color:#94a3b8">Total</th><th style="padding:8px 12px;text-align:left;color:#94a3b8">Rate</th></tr></thead>'
@@ -468,9 +469,10 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
         var items = runs.map(function(run) {{
           var pid = run.pipeline_id || run.package_version || '?';
           var date = run.generated_at ? new Date(run.generated_at).toLocaleDateString('en-GB',{{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}}) : 'Unknown date';
+          var label = run.label ? '<span style="background:#334155;color:#38bdf8;border-radius:10px;padding:1px 8px;font-size:.82em;margin:0 8px">'+run.label.replace(/</g,'&lt;')+'</span>' : '';
           var t = run.totals || {{}};
           var stats = t.tests ? '<span style="color:#4ade80">'+(t.passed||0)+' passed</span>, <span style="color:#f87171">'+(t.failed||0)+' failed</span>, '+(t.skipped||0)+' skipped / '+t.tests+' total' : '';
-          return '<a href="runs/'+pid+'/report.html" target="_blank" style="display:block;padding:10px 14px;text-decoration:none;color:#e2e8f0;font-size:.85em;border-bottom:1px solid #1e293b;transition:background .1s" onmouseover="this.style.background=\\'#334155\\'" onmouseout="this.style.background=\\'\\'"><div style="font-weight:600">Pipeline '+pid+' &mdash; '+date+'</div>'+(stats ? '<div style="color:#94a3b8;font-size:.9em;margin-top:2px">'+stats+'</div>' : '')+'</a>';
+          return '<a href="runs/'+pid+'/report.html" target="_blank" style="display:block;padding:10px 14px;text-decoration:none;color:#e2e8f0;font-size:.85em;border-bottom:1px solid #1e293b;transition:background .1s" onmouseover="this.style.background=\\'#334155\\'" onmouseout="this.style.background=\\'\\'"><div style="font-weight:600">'+date+label+'<span style="color:#94a3b8">#'+pid+'</span></div>'+(stats ? '<div style="color:#94a3b8;font-size:.9em;margin-top:2px">'+stats+'</div>' : '')+'</a>';
         }}).join('');
         return '<div style="background:#1e293b;border:1px solid #334155;border-radius:8px;overflow:hidden;max-height:300px;overflow-y:auto;margin-bottom:24px">' + items + '</div>';
       }}
@@ -491,7 +493,8 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
             var pid = r.pipeline_id || r.package_version || '?';
             var d = r.generated_at ? new Date(r.generated_at).toLocaleDateString('en-GB',{{day:'2-digit',month:'short'}}) : '';
             var sel = (String(pid) === String(selectedPid)) ? ' selected' : '';
-            return '<option value="'+pid+'"'+sel+'>Pipeline '+pid+(d ? ' ('+d+')' : '')+'</option>';
+            var lbl = r.label ? ' ' + r.label : '';
+            return '<option value="'+pid+'"'+sel+'>'+(d ? d : '')+lbl+' #'+pid+'</option>';
           }}).join('');
         }}
         var sel = 'style="width:100%;max-width:300px;padding:8px 10px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:6px;font-size:.85em"';

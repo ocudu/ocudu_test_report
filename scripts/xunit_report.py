@@ -226,6 +226,8 @@ class Suite:
     testcases: list = field(default_factory=list)
     url: str = ""
     kind: str = ""  # inner <testsuite name="..."> value (e.g. "TIFG", "WG11") — identifies the test plan
+    ocudu_commit: str = ""  # main ocudu repo commit the suite tested against (from suite-level properties)
+    test_commit: str = ""  # tests/framework repo commit (infra_srs, matlab, etc.); best-effort, may be empty
 
     @property
     def total(self) -> int:
@@ -258,6 +260,7 @@ def _build_run_metadata(
     *,
     pipeline_id: str = "",
     commit_sha: str = "",
+    label: str = "",
 ) -> dict:
     """Build a metadata dictionary summarising a test run.
 
@@ -274,6 +277,8 @@ def _build_run_metadata(
                 "failed": s.failed,
                 "skipped": s.skipped,
                 "duration_s": round(s.duration, 2),
+                "ocudu_commit": s.ocudu_commit,
+                "test_commit": s.test_commit,
             }
         )
 
@@ -288,6 +293,7 @@ def _build_run_metadata(
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "pipeline_id": pipeline_id,
         "commit_sha": commit_sha,
+        "label": label,
         "suites": suite_summaries,
         "totals": {
             "suites": len(suites),
@@ -392,11 +398,16 @@ def parse_xml(name: str, path: Path) -> Suite:
         testsuite_elems = root.findall("testsuite")
         elems = [tc for ts in testsuite_elems for tc in ts.findall("testcase")]
         suite.kind = testsuite_elems[0].get("name", "") if testsuite_elems else ""
+        props_source = testsuite_elems[0] if testsuite_elems else None
     elif root.tag == "testsuite":
         elems = root.findall("testcase")
         suite.kind = root.get("name", "")
+        props_source = root
     else:
         elems = root.findall(".//testcase")
+        props_source = None
+
+    suite.ocudu_commit, suite.test_commit = _parse_suite_commits(props_source)
 
     for elem in elems:
         tc = _parse_testcase(elem)
@@ -418,6 +429,30 @@ def _dedupe_testcases(testcases: list) -> list:
     for tc in testcases:
         by_name[f"{tc.classname}.{tc.name}"] = tc
     return list(by_name.values())
+
+
+def _parse_suite_commits(testsuite_elem) -> tuple[str, str]:
+    """Read the suite-level ocudu_commit and test_commit from <properties>.
+
+    These properties sit on the <testsuite> element's own <properties> block
+    (not on individual <testcase> elements). ``ocudu_commit`` is the main ocudu
+    repo commit the suite ran against; ``test_commit`` is the tests/framework
+    repo commit. Both are best-effort: not every source repo emits them yet, so
+    a missing property or missing element simply yields an empty string.
+    """
+    if testsuite_elem is None:
+        return "", ""
+    props_elem = testsuite_elem.find("properties")
+    if props_elem is None:
+        return "", ""
+    ocudu_commit = ""
+    test_commit = ""
+    for prop in props_elem.findall("property"):
+        if prop.get("name") == "ocudu_commit":
+            ocudu_commit = prop.get("value", "")
+        elif prop.get("name") == "test_commit":
+            test_commit = prop.get("value", "")
+    return ocudu_commit, test_commit
 
 
 def _fmt_duration(seconds: float) -> str:
@@ -1105,6 +1140,12 @@ def main():  # pylint: disable=too-many-statements
         metavar="SHA",
         help="Git commit SHA to record in run_metadata.json",
     )
+    parser.add_argument(
+        "--label",
+        default="",
+        metavar="LABEL",
+        help="Optional human-readable label for this run (e.g. a release name), shown in the History list",
+    )
     args = parser.parse_args()
 
     if not args.dir and not args.third_party:
@@ -1165,6 +1206,7 @@ def main():  # pylint: disable=too-many-statements
             suites,
             pipeline_id=args.pipeline_id,
             commit_sha=args.commit_sha,
+            label=args.label,
         )
         metadata_path = out_dir / "run_metadata.json"
         metadata_path.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")

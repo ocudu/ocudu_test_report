@@ -151,6 +151,38 @@ def _run_sort_key(run: dict) -> int:
         return -1
 
 
+def _run_fingerprint(run: dict) -> tuple:
+    """Return a comparable fingerprint of a run's test results.
+
+    Captures only the stable result content -- the per-suite names with their
+    pass/fail/skip/total counts, plus the overall totals -- and deliberately
+    ignores volatile fields such as pipeline_id, commit_sha, generated_at,
+    label, and the derived download URL. Two runs with the same fingerprint
+    describe the same test estate in the same state.
+    """
+    suites = run.get("suites", [])
+    suite_prints = tuple(
+        sorted(
+            (
+                str(s.get("name", "")),
+                int(s.get("total", 0) or 0),
+                int(s.get("passed", 0) or 0),
+                int(s.get("failed", 0) or 0),
+                int(s.get("skipped", 0) or 0),
+            )
+            for s in suites
+        )
+    )
+    totals = run.get("totals", {})
+    totals_print = (
+        int(totals.get("tests", 0) or 0),
+        int(totals.get("passed", 0) or 0),
+        int(totals.get("failed", 0) or 0),
+        int(totals.get("skipped", 0) or 0),
+    )
+    return (suite_prints, totals_print)
+
+
 def add_run(
     manifest: dict,
     run_metadata: dict,
@@ -162,15 +194,37 @@ def add_run(
 
     Runs are keyed by pipeline_id. A run with the same pipeline_id as an
     existing entry replaces it, so re-running a pipeline does not create
-    duplicates. Runs are sorted newest-first and capped at max_runs (0 = all).
+    duplicates. In addition, a fresh re-trigger on unchanged data (a new
+    pipeline_id but identical test results to the newest indexed run) is not
+    appended at all -- it would only clutter the history and skew the trends
+    and comparison, which both treat each run as a distinct snapshot. Runs are
+    sorted newest-first and capped at max_runs (0 = all).
     """
     version = str(run_metadata.get("pipeline_id", "")).strip()
+    existing = manifest.get("runs", [])
+
+    # Index-time dedupe: if this run is a new pipeline whose results are
+    # identical to the current newest run, skip it. Runs that share a
+    # pipeline_id are a retry and fall through to the replace path below.
+    # Only runs that actually carry result content are deduped -- an empty
+    # fingerprint (no suites and no totals) is never treated as a match.
+    if existing:
+        newest = max(existing, key=_run_sort_key)
+        newest_version = str(newest.get("pipeline_id", "")).strip()
+        new_print = _run_fingerprint(run_metadata)
+        has_content = new_print != ((), (0, 0, 0, 0))
+        if has_content and version != newest_version and new_print == _run_fingerprint(newest):
+            return {
+                "schema_version": _SCHEMA_VERSION,
+                "total_runs": len(existing),
+                "runs": existing,
+            }
+
     entry = dict(run_metadata)
     if version:
         entry["package_version"] = version
         entry["download_url"] = _run_download_url(api_url, project_id, version)
 
-    existing = manifest.get("runs", [])
     kept = [r for r in existing if str(r.get("pipeline_id", "")).strip() != version or not version]
     kept.append(entry)
     kept.sort(key=_run_sort_key, reverse=True)

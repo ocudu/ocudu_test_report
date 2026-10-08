@@ -76,6 +76,10 @@ spec:
       type: string
       default: ""
       description: "Comma-separated release versions to include as Historic tabs (e.g. '26.04,26.03'). Each version must have an artifacts.zip published to the e2e-xunits generic package."
+    report_label:
+      type: string
+      default: ""
+      description: "Optional label for this run, shown in the History list (e.g. a release name like 'OCUDU 26.10'). Leave empty for routine runs."
 ---
 include:
   - project: $[[ inputs.ocudu_path ]]
@@ -180,6 +184,7 @@ generate-report:
     FILTER_TYPE: "$[[ inputs.filter_type ]]"
     FILTER_RELEASE: "$[[ inputs.filter_release ]]"
     HISTORIC_VERSIONS: "$[[ inputs.historic_versions ]]"
+    REPORT_LABEL: "$[[ inputs.report_label ]]"
     OUTPUT: public
   script:
     - cd scripts
@@ -228,7 +233,7 @@ generate-report:
     - python3 render_report.py --data ../features/features.yaml --output ${CI_PROJECT_DIR}/${OUTPUT}/feature_list.html
     - python3 test_plan_report.py --data ../testplans/tifg.yaml --output "${CI_PROJECT_DIR}/${OUTPUT}/tifg_report.html"
     - python3 test_plan_report.py --data ../testplans/wg11.yaml --output "${CI_PROJECT_DIR}/${OUTPUT}/wg11_report.html"
-    - python3 xunit_report.py --dir artifacts/ --third-party ../test_reports/third_party -o "${CI_PROJECT_DIR}/${OUTPUT}" --log-output-strategy external --pipeline-id "${CI_PIPELINE_ID}" --commit-sha "${CI_COMMIT_SHA}" "${FILTER_ARGS[@]}"
+    - python3 xunit_report.py --dir artifacts/ --third-party ../test_reports/third_party -o "${CI_PROJECT_DIR}/${OUTPUT}" --log-output-strategy external --pipeline-id "${CI_PIPELINE_ID}" --commit-sha "${CI_COMMIT_SHA}" --label "${REPORT_LABEL}" "${FILTER_ARGS[@]}"
     - |
       HISTORIC_LIST=()
       if [ -n "$HISTORIC_VERSIONS" ]; then
