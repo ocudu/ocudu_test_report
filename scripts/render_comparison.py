@@ -2,7 +2,6 @@
 
 # SPDX-FileCopyrightText: Copyright (C) 2021-2026 Software Radio Systems Limited
 # SPDX-FileCopyrightText: Copyright (C) 2026 OCUDU contributors
-# SPDX-FileCopyrightText: Copyright (C) 2026 OpenInfra Foundation Europe. All rights reserved.
 # SPDX-License-Identifier: BSD-3-Clause-Open-MPI
 
 """Render a comparison HTML page from diff.json output.
@@ -93,26 +92,88 @@ def _fmt_duration(seconds: float | None) -> str:
 
 
 def _render_meta(diff: dict) -> str:
-    """Render run metadata as a two-column dashboard card."""
+    """Render run metadata as a two-column dashboard card with pass-rate rings."""
     base = diff.get("base", {})
     head = diff.get("head", {})
     summary = diff.get("summary", {})
+
+    def _pass_ring(passed: int, total: int, size: int = 56) -> str:
+        """SVG donut ring showing pass rate."""
+        if total == 0:
+            pct = 0.0
+        else:
+            pct = passed / total * 100
+        r = size / 2 - 4
+        c = 3.14159 * 2 * r
+        filled = c * pct / 100
+        gap = c - filled
+        cx = cy = size / 2
+        color = "#6bcb77" if pct >= 80 else "#fb923c" if pct >= 50 else "#ef4444"
+        return (
+            f'<svg width="{size}" height="{size}" viewBox="0 0 {size} {size}" class="cmp-ring">'
+            f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="var(--border)" stroke-width="5" opacity="0.4"/>'
+            f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="{color}" stroke-width="5" '
+            f'stroke-dasharray="{filled:.1f} {gap:.1f}" stroke-linecap="round" '
+            f'transform="rotate(-90 {cx} {cy})"/>'
+            f'<text x="{cx}" y="{cy}" text-anchor="middle" dominant-baseline="central" '
+            f'fill="{color}" font-size="{size * 0.22:.0f}" font-weight="800">{pct:.0f}%</text>'
+            f'</svg>'
+        )
 
     def _run_col(data: dict, label: str, total_key: str, css_mod: str) -> str:
         pid = data.get("pipeline_id", "unknown")
         sha = data.get("commit_sha", "")[:8]
         date = data.get("generated_at", "")[:10]
         total = summary.get(total_key, 0)
+        # Compute passed count from the data
+        suites = data.get("suites", {})
+        passed = sum(s.get("passed", 0) for s in suites.values()) if isinstance(suites, dict) else 0
+        # Fall back: estimate from totals if available
+        if passed == 0 and total > 0:
+            totals = data.get("totals", {})
+            passed = totals.get("passed", 0)
+        ring = _pass_ring(passed, total)
         return (
             f'<div class="cmp-meta-run {css_mod}">'
             f'<div class="cmp-meta-badge">{label}</div>'
+            f'<div class="cmp-meta-row">'
+            f'{ring}'
+            f'<div class="cmp-meta-info">'
             f'<div class="cmp-meta-pipeline">Pipeline {html.escape(str(pid))}</div>'
             f'<div class="cmp-meta-details">'
             f'<span class="cmp-meta-sha">{html.escape(sha)}</span>'
             f'<span class="cmp-meta-date">{html.escape(date)}</span>'
             f'<span class="cmp-meta-tests">{total} tests</span>'
-            f"</div></div>"
+            f"</div></div></div></div>"
         )
+
+    # Delta bar — overall health shift
+    total_base = summary.get("total_base", 0)
+    total_head = summary.get("total_head", 0)
+    regs = summary.get("regressions", 0)
+    fixes = summary.get("fixes", 0)
+    net = fixes - regs
+    if net > 0:
+        delta_color = "var(--green)"
+        delta_icon = "▲"
+        delta_text = f"+{net} net improvement"
+    elif net < 0:
+        delta_color = "var(--red)"
+        delta_icon = "▼"
+        delta_text = f"{net} net regression"
+    else:
+        delta_color = "var(--text-muted)"
+        delta_icon = "—"
+        delta_text = "No net change"
+
+    delta_bar = (
+        f'<div class="cmp-delta-bar">'
+        f'<span class="cmp-delta-icon" style="color:{delta_color}">{delta_icon}</span>'
+        f'<span class="cmp-delta-text" style="color:{delta_color}">{delta_text}</span>'
+        f'<span class="cmp-delta-detail">{regs} regressions · {fixes} fixes · '
+        f'{summary.get("unchanged", 0)} unchanged</span>'
+        f'</div>'
+    )
 
     return (
         f'<div class="cmp-meta">'
@@ -120,6 +181,7 @@ def _render_meta(diff: dict) -> str:
         f'<div class="cmp-meta-divider"><div class="cmp-meta-arrow">→</div></div>'
         f'{_run_col(head, "HEAD", "total_head", "cmp-meta-head")}'
         f"</div>"
+        f"{delta_bar}"
     )
 
 
@@ -128,20 +190,21 @@ def _render_summary_cards(summary: dict) -> str:
     parts = []
     for label, key, css_class, filter_target in _CARDS:
         count = summary.get(key, 0)
-        active = " active" if count > 0 and css_class != "unchanged" else ""
         data_attr = f' data-filter="{filter_target}"' if filter_target else ""
-        clickable = " clickable" if filter_target else ""
+        disabled = " disabled" if not filter_target else ""
         parts.append(
-            f'<button class="cmp-card {css_class}{active}{clickable}"{data_attr}>'
-            f'<div class="cmp-card-value">{count}</div>'
-            f'<div class="cmp-card-label">{label}</div>'
+            f'<button class="cmp-hero-stat {css_class}"{data_attr}{disabled}>'
+            f'<span class="stat-val">{count}</span>'
+            f'<span class="stat-lbl">{label}</span>'
             f"</button>"
         )
 
     return (
-        f'<div class="cmp-cards">{"".join(parts)}</div>'
+        f'<div class="cmp-hero">'
+        f'<div class="cmp-hero-stats">{"".join(parts)}</div>'
         f'<div class="cmp-search-wrap">'
         f'<input type="text" class="cmp-search" placeholder="Filter tests..." id="cmp-search">'
+        f"</div>"
         f"</div>"
     )
 
@@ -309,21 +372,21 @@ _COMPARISON_JS = """<script>
     });
   }
 
-  // Card filter: click a card to show only its section
-  var cards = document.querySelectorAll('.cmp-card[data-filter]');
+  // Hero stat filter: click a stat to show only its section
+  var stats = document.querySelectorAll('.cmp-hero-stat[data-filter]');
   var sections = document.querySelectorAll('.cmp-section');
   var activeFilter = null;
 
-  cards.forEach(function(card) {
-    card.addEventListener('click', function() {
+  stats.forEach(function(stat) {
+    stat.addEventListener('click', function() {
       var target = this.dataset.filter;
       if (activeFilter === target) {
         activeFilter = null;
-        cards.forEach(function(c) { c.classList.remove('selected'); });
+        stats.forEach(function(s) { s.classList.remove('selected'); });
         sections.forEach(function(s) { s.style.display = ''; });
       } else {
         activeFilter = target;
-        cards.forEach(function(c) { c.classList.remove('selected'); });
+        stats.forEach(function(s) { s.classList.remove('selected'); });
         this.classList.add('selected');
         sections.forEach(function(s) {
           s.style.display = s.classList.contains(target) ? '' : 'none';
@@ -355,45 +418,51 @@ _COMPARISON_JS = """<script>
 
 _COMPARISON_CSS = """
 /* ── Run metadata ────────────────────────────────────────── */
-.cmp-meta { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; margin-bottom: 24px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px 24px; box-shadow: var(--shadow); }
+.cmp-meta { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; margin-bottom: 0; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-lg) var(--radius-lg) 0 0; padding: 20px 24px; box-shadow: var(--shadow); }
 .cmp-meta-run { display: flex; flex-direction: column; gap: 6px; }
+.cmp-meta-row { display: flex; align-items: center; gap: 14px; }
+.cmp-meta-info { display: flex; flex-direction: column; gap: 4px; }
+.cmp-ring { flex-shrink: 0; }
 .cmp-meta-divider { display: flex; align-items: center; justify-content: center; padding: 0 24px; }
 .cmp-meta-arrow { font-size: 1.4em; color: var(--accent); font-weight: 700; opacity: 0.8; }
-.cmp-meta-badge { font-size: 0.65em; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 800; background: var(--bg-raised); border-radius: 4px; padding: 2px 8px; display: inline-block; width: fit-content; color: var(--text-dim); }
+.cmp-meta-badge { font-size: 0.65em; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 800; background: var(--bg-raised); border-radius: 4px; padding: 2px 8px; display: inline-block; width: fit-content; color: var(--text-dim); margin-bottom: 4px; }
 .cmp-meta-base .cmp-meta-badge { color: var(--text-muted); }
-.cmp-meta-head .cmp-meta-badge { color: var(--accent); background: rgba(56, 189, 248, 0.1); }
-.cmp-meta-pipeline { font-size: 1.15em; font-weight: 700; color: var(--text); }
+.cmp-meta-head .cmp-meta-badge { color: var(--accent); background: rgba(224, 168, 46, 0.1); }
+.cmp-meta-pipeline { font-size: 1.05em; font-weight: 700; color: var(--text); }
 .cmp-meta-details { display: flex; gap: 12px; font-size: 0.82em; color: var(--text-muted); }
 .cmp-meta-sha { font-family: "JetBrains Mono", "Fira Code", monospace; color: var(--text-sub); }
 
-/* ── Summary cards ───────────────────────────────────────── */
-.cmp-cards { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 24px; }
-.cmp-card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px 16px; text-align: center; transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s; font-family: inherit; font-size: inherit; outline: none; -webkit-appearance: none; appearance: none; }
-.cmp-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
-.cmp-card.clickable { cursor: pointer; }
-.cmp-card.clickable.selected { outline: 2px solid var(--accent); outline-offset: -2px; background: rgba(56, 189, 248, 0.06); }
-.cmp-card-value { font-size: 2.5em; font-weight: 800; color: var(--text-dim); line-height: 1.1; transition: color 0.2s; }
-.cmp-card-label { font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-top: 8px; font-weight: 600; }
-.cmp-card.regression.active { border-color: var(--red); box-shadow: 0 0 12px rgba(239,68,68,0.15); }
-.cmp-card.regression.active .cmp-card-value { color: var(--red); }
-.cmp-card.new-failure.active { border-color: var(--red); box-shadow: 0 0 12px rgba(239,68,68,0.1); }
-.cmp-card.new-failure.active .cmp-card-value { color: var(--red); }
-.cmp-card.fix.active { border-color: var(--green); box-shadow: 0 0 12px rgba(107,203,119,0.15); }
-.cmp-card.fix.active .cmp-card-value { color: var(--green); }
-.cmp-card.new-pass.active { border-color: var(--green); box-shadow: 0 0 10px rgba(107,203,119,0.1); }
-.cmp-card.new-pass.active .cmp-card-value { color: var(--green); }
-.cmp-card.removed-stat.active { border-color: var(--orange); }
-.cmp-card.removed-stat.active .cmp-card-value { color: var(--orange); }
-.cmp-card.unchanged .cmp-card-value { color: var(--text-dim); }
+/* ── Delta bar (net health shift) ────────────────────────── */
+.cmp-delta-bar { display: flex; align-items: center; gap: 10px; padding: 12px 24px; background: var(--bg-sunken); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius-lg) var(--radius-lg); margin-bottom: 24px; }
+.cmp-delta-icon { font-size: 1.1em; font-weight: 800; }
+.cmp-delta-text { font-weight: 700; font-size: 0.9em; }
+.cmp-delta-detail { font-size: 0.82em; color: var(--text-dim); margin-left: auto; }
+
+/* ── Hero summary panel ──────────────────────────────────── */
+.cmp-hero { background: var(--bg-surface); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: var(--radius-lg); padding: 24px 28px; margin-bottom: 24px; }
+.cmp-hero-stats { display: flex; gap: 32px; flex-wrap: wrap; align-items: baseline; margin-bottom: 16px; }
+.cmp-hero-stat { background: none; border: none; padding: 0; font-family: inherit; cursor: pointer; text-align: left; border-radius: 4px; }
+.cmp-hero-stat .stat-val { font-size: 1.8em; font-weight: 800; line-height: 1; }
+.cmp-hero-stat .stat-lbl { font-size: 0.72em; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); display: block; margin-top: 2px; }
+.cmp-hero-stat.selected { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
+.cmp-hero-stat[disabled] { opacity: 0.4; cursor: default; }
+
+/* Hero stat colours */
+.cmp-hero-stat.regression .stat-val { color: var(--red); }
+.cmp-hero-stat.new-failure .stat-val { color: var(--red); }
+.cmp-hero-stat.fix .stat-val { color: var(--green); }
+.cmp-hero-stat.new-pass .stat-val { color: var(--green); }
+.cmp-hero-stat.removed-stat .stat-val { color: var(--orange); }
+.cmp-hero-stat.unchanged .stat-val { color: var(--text-dim); }
 
 /* ── Search ──────────────────────────────────────────────── */
-.cmp-search-wrap { margin-bottom: 20px; }
+.cmp-search-wrap { margin-top: 4px; }
 .cmp-search { width: 100%; max-width: 400px; padding: 10px 16px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md); color: var(--text); font-size: 0.9em; font-family: inherit; outline: none; transition: border-color 0.15s, box-shadow 0.15s; }
-.cmp-search:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(56,189,248,0.1); }
+.cmp-search:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(224, 168, 46, 0.1); }
 .cmp-search::placeholder { color: var(--text-dim); }
 
 /* ── Sections ────────────────────────────────────────────── */
-.cmp-section { margin-bottom: 12px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; animation: fadeSlideIn 0.3s ease-out; }
+.cmp-section { margin-bottom: 12px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
 .cmp-section-header { display: flex; align-items: center; gap: 12px; padding: 14px 20px; cursor: pointer; user-select: none; font-weight: 600; transition: background 0.12s; }
 .cmp-section-header:hover { background: var(--bg-raised); }
 .cmp-section-header::marker { color: var(--text-dim); }
@@ -453,25 +522,20 @@ _COMPARISON_CSS = """
 .cmp-empty-icon { font-size: 3em; margin-bottom: 16px; opacity: 0.7; }
 .cmp-empty p { margin-bottom: 8px; font-size: 1.1em; }
 
-/* ── Animations ──────────────────────────────────────────── */
-@keyframes fadeSlideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-.cmp-section:nth-child(1) { animation-delay: 0s; }
-.cmp-section:nth-child(2) { animation-delay: 0.05s; }
-.cmp-section:nth-child(3) { animation-delay: 0.1s; }
-.cmp-section:nth-child(4) { animation-delay: 0.15s; }
-.cmp-section:nth-child(5) { animation-delay: 0.2s; }
-
 /* ── Responsive ──────────────────────────────────────────── */
-@media (max-width: 1100px) { .cmp-cards { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 768px) {
   .cmp-meta { grid-template-columns: 1fr; gap: 12px; }
   .cmp-meta-divider { padding: 8px 0; }
   .cmp-meta-arrow { transform: rotate(90deg); }
-  .cmp-cards { grid-template-columns: repeat(2, 1fr); }
+  .cmp-hero { padding: 16px 18px; }
+  .cmp-hero-stats { gap: 18px; }
   .cmp-table { font-size: 0.78em; }
   .cmp-key { max-width: 200px; }
   .cmp-th-dur, .cmp-dur { display: none; }
   .cmp-th-labels, .cmp-labels-cell { display: none; }
+  .cmp-delta-bar { flex-wrap: wrap; padding: 10px 16px; }
+  .cmp-delta-detail { margin-left: 0; width: 100%; margin-top: 4px; }
+  .cmp-ring { width: 40px; height: 40px; }
 }
 """
 

@@ -16,7 +16,9 @@
   --text-sub:    #cbd5e1;   /* slate-300 */
   --text-muted:  #94a3b8;   /* slate-400 */
   --text-dim:    #64748b;   /* slate-500 */
-  --accent:      #38bdf8;   /* sky-400 */
+  --accent:      #e0a82e;   /* warm amber/gold */
+  --accent-dim:  #b8860b;
+  --accent-glow: rgba(224, 168, 46, 0.12);
   --green:       #6bcb77;
   --red:         #ef4444;
   --orange:      #fb923c;   /* orange-400 */
@@ -39,6 +41,7 @@ body {
   padding: 32px 24px;
   line-height: 1.5;
   scrollbar-gutter: stable;
+  min-height: 100vh;
 }
 
 /* ── Report header ─────────────────────────────────────────── */
@@ -802,8 +805,28 @@ details.tc-detail[open] > summary.tc-row::before {
 
 /* ── Deep-link flash highlight (from History comparison surfaces) ── */
 @keyframes tcFlash {
-  0%   { background: rgba(56, 189, 248, 0.18); }
+  0%   { background: rgba(224, 168, 46, 0.22); }
   100% { background: transparent; }
 }
 .tc-flash,
 .tc-flash > .tc-row { animation: tcFlash 1.6s ease-out; border-radius: var(--radius-md, 6px); }
+
+/* ── Experiment: background texture ──────── */
+body {
+  background: linear-gradient(180deg, #0f172a 0%, #0c1220 100%);
+}
+
+/* ── Experiment: page-tab active underline glow ── */
+.page-tab.active {
+  background: rgba(224, 168, 46, 0.08);
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 2px 8px rgba(224, 168, 46, 0.12);
+}
+
+/* ── Experiment: label chip accent update ── */
+.label-chip {
+  background: rgba(224, 168, 46, 0.08);
+  color: var(--accent);
+  border-color: rgba(224, 168, 46, 0.2);
+}
