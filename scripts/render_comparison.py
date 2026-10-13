@@ -117,7 +117,7 @@ def _render_meta(diff: dict) -> str:
             f'transform="rotate(-90 {cx} {cy})"/>'
             f'<text x="{cx}" y="{cy}" text-anchor="middle" dominant-baseline="central" '
             f'fill="{color}" font-size="{size * 0.22:.0f}" font-weight="800">{pct:.0f}%</text>'
-            f'</svg>'
+            f"</svg>"
         )
 
     def _run_col(data: dict, label: str, total_key: str, css_mod: str) -> str:
@@ -137,7 +137,7 @@ def _render_meta(diff: dict) -> str:
             f'<div class="cmp-meta-run {css_mod}">'
             f'<div class="cmp-meta-badge">{label}</div>'
             f'<div class="cmp-meta-row">'
-            f'{ring}'
+            f"{ring}"
             f'<div class="cmp-meta-info">'
             f'<div class="cmp-meta-pipeline">Pipeline {html.escape(str(pid))}</div>'
             f'<div class="cmp-meta-details">'
@@ -148,8 +148,6 @@ def _render_meta(diff: dict) -> str:
         )
 
     # Delta bar — overall health shift
-    total_base = summary.get("total_base", 0)
-    total_head = summary.get("total_head", 0)
     regs = summary.get("regressions", 0)
     fixes = summary.get("fixes", 0)
     net = fixes - regs
@@ -172,7 +170,7 @@ def _render_meta(diff: dict) -> str:
         f'<span class="cmp-delta-text" style="color:{delta_color}">{delta_text}</span>'
         f'<span class="cmp-delta-detail">{regs} regressions · {fixes} fixes · '
         f'{summary.get("unchanged", 0)} unchanged</span>'
-        f'</div>'
+        f"</div>"
     )
 
     return (

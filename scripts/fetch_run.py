@@ -147,7 +147,7 @@ def extract_run(zip_bytes: bytes, output_dir: Path, only: list[str] | None = Non
     paths (relative to output_dir).
     """
     output_dir.mkdir(parents=True, exist_ok=True)
-    only_set = set(only) if only else None
+    only_set = set(only) if only else set()
     extracted = []
     with zipfile.ZipFile(io.BytesIO(zip_bytes)) as zf:
         for member in zf.namelist():
@@ -158,7 +158,7 @@ def extract_run(zip_bytes: bytes, output_dir: Path, only: list[str] | None = Non
             relative = member
             if relative.startswith("public/"):
                 relative = relative[len("public/") :]
-            if only_set is not None and relative not in only_set:
+            if only_set and relative not in only_set:
                 continue
             target = output_dir / relative
             target.parent.mkdir(parents=True, exist_ok=True)
