@@ -227,6 +227,43 @@ class TestExtractRun:
 
         assert (output / "index.html").exists()
 
+    def test_only_extracts_named_files(self, tmp_path):
+        zip_bytes = _make_zip_bytes(
+            {
+                "public/report.html": b"<html>report</html>",
+                "public/results.json": b'{"suites": []}',
+                "public/run_metadata.json": b'{"pipeline_id": "300"}',
+                "public/logs/test_abc.html": b"log content",
+            }
+        )
+
+        extracted = fetch_run.extract_run(
+            zip_bytes, tmp_path / "out", only=["results.json", "run_metadata.json"]
+        )
+
+        # Only the named files land on disk.
+        assert (tmp_path / "out" / "results.json").exists()
+        assert (tmp_path / "out" / "run_metadata.json").exists()
+        # The heavy report and logs are skipped.
+        assert not (tmp_path / "out" / "report.html").exists()
+        assert not (tmp_path / "out" / "logs" / "test_abc.html").exists()
+        assert sorted(extracted) == ["results.json", "run_metadata.json"]
+
+    def test_only_matches_after_public_prefix_strip(self, tmp_path):
+        # The filter is applied to the path after any leading public/ is removed.
+        zip_bytes = _make_zip_bytes(
+            {
+                "public/results.json": b'{"suites": []}',
+                "public/report.html": b"<html/>",
+            }
+        )
+
+        extracted = fetch_run.extract_run(zip_bytes, tmp_path / "out", only=["results.json"])
+
+        assert extracted == ["results.json"]
+        assert (tmp_path / "out" / "results.json").exists()
+        assert not (tmp_path / "out" / "report.html").exists()
+
     def test_skips_directory_entries(self, tmp_path):
         buf = io.BytesIO()
         with zipfile.ZipFile(buf, "w") as zf:

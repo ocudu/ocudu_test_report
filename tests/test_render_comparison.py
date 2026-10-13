@@ -120,7 +120,7 @@ class TestRenderSummaryCards:
         summary = {"regressions": 3, "fixes": 2, "new_failures": 1, "new_passes": 5, "removed": 1, "unchanged": 100}
         html = render_comparison._render_summary_cards(summary)
 
-        assert "cmp-cards" in html
+        assert "cmp-hero" in html
         assert ">3<" in html  # regressions count
         assert ">2<" in html  # fixes count
         assert "Regressions" in html
@@ -265,7 +265,7 @@ class TestRenderComparisonHtml:
         assert "--bg:" in html
         assert "slate" in html or "#0f172a" in html
         # Should include comparison-specific styles
-        assert ".cmp-cards" in html
+        assert ".cmp-hero" in html
         assert ".cmp-section" in html
 
     def test_favicon_included(self):
