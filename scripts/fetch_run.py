@@ -137,12 +137,17 @@ def download_run(
     return b"".join(chunks)
 
 
-def extract_run(zip_bytes: bytes, output_dir: Path) -> list[str]:
+def extract_run(zip_bytes: bytes, output_dir: Path, only: list[str] | None = None) -> list[str]:
     """Extract the report zip to the output directory.
 
-    Returns a list of extracted file paths (relative to output_dir).
+    When ``only`` is given, extract just the named files (matched on the
+    path after any leading ``public/`` is stripped, e.g. ``results.json``).
+    This lets callers pull the small comparison inputs for every run without
+    unpacking the full report and its logs. Returns a list of extracted file
+    paths (relative to output_dir).
     """
     output_dir.mkdir(parents=True, exist_ok=True)
+    only_set = set(only) if only else None
     extracted = []
     with zipfile.ZipFile(io.BytesIO(zip_bytes)) as zf:
         for member in zf.namelist():
@@ -153,6 +158,8 @@ def extract_run(zip_bytes: bytes, output_dir: Path) -> list[str]:
             relative = member
             if relative.startswith("public/"):
                 relative = relative[len("public/") :]
+            if only_set is not None and relative not in only_set:
+                continue
             target = output_dir / relative
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(zf.read(member))
@@ -197,6 +204,15 @@ def main():
         default=Path("run_output"),
         help="Directory to extract the run into (default: ./run_output)",
     )
+    parser.add_argument(
+        "--only",
+        nargs="+",
+        default=None,
+        metavar="FILE",
+        help="Extract only these files from the run (e.g. --only results.json run_metadata.json). "
+        "Paths are matched after stripping any leading 'public/'. Lets you pull the small "
+        "comparison inputs for every run without unpacking the full report and logs.",
+    )
     args = parser.parse_args()
 
     # Resolve token from args or environment
@@ -219,7 +235,7 @@ def main():
     if zip_bytes is None:
         print(f"WARNING: Run {version} could not be downloaded. Nothing extracted.", file=sys.stderr)
         sys.exit(1)
-    extracted = extract_run(zip_bytes, args.output_dir)
+    extracted = extract_run(zip_bytes, args.output_dir, only=args.only)
 
     print(f"Extracted {len(extracted)} files to {args.output_dir}/", file=sys.stderr)
 

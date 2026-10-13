@@ -309,29 +309,55 @@ generate-report:
     - |
       # Inline run extraction is best-effort: never let it fail the report job.
       set +e
-      echo "Extracting recent runs for inline browsing..."
       cd "${CI_PROJECT_DIR}/scripts"
-      MAX_RUNS=5
+      # Full reports (report.html + logs) are heavy, so only the most recent
+      # FULL_RUNS are unpacked for inline browsing. The comparison picker only
+      # needs results.json, which is tiny, so that is extracted for EVERY run
+      # in the manifest. This decouples "compare any two runs" from the
+      # expensive full-report unpack and keeps the Pages artifact small.
+      FULL_RUNS=5
       RUNS_DIR="${CI_PROJECT_DIR}/${OUTPUT}/runs"
       mkdir -p "${RUNS_DIR}"
       if [ -f "${CI_PROJECT_DIR}/${OUTPUT}/runs.json" ]; then
-        PIPELINE_IDS=$(python3 -c "import json,sys;[print(r.get('pipeline_id') or r.get('package_version','')) for r in json.load(open(sys.argv[1])).get('runs',[])[:${MAX_RUNS}] if r.get('pipeline_id') or r.get('package_version')]" "${CI_PROJECT_DIR}/${OUTPUT}/runs.json" 2>/dev/null)
-        for pid in $PIPELINE_IDS; do
-          echo "  Extracting run ${pid}..."
-          if python3 fetch_run.py \
-               --project-id "${CI_PROJECT_ID}" \
-               --gitlab-url "${CI_SERVER_URL}" \
-               --run "${pid}" \
-               --token "${REG_TOKEN}" \
-               --token-type "${REG_TOKEN_TYPE}" \
-               -o "${RUNS_DIR}/${pid}" 2>&1; then
-            echo "  Run ${pid} extracted."
+        ALL_IDS=$(python3 -c "import json,sys;[print(r.get('pipeline_id') or r.get('package_version','')) for r in json.load(open(sys.argv[1])).get('runs',[]) if r.get('pipeline_id') or r.get('package_version')]" "${CI_PROJECT_DIR}/${OUTPUT}/runs.json" 2>/dev/null)
+        echo "Extracting results.json for all archived runs (comparison data)..."
+        IDX=0
+        for pid in $ALL_IDS; do
+          IDX=$((IDX+1))
+          if [ "$IDX" -le "$FULL_RUNS" ]; then
+            # Recent run: unpack the full report for inline browsing.
+            echo "  Extracting full run ${pid}..."
+            if python3 fetch_run.py \
+                 --project-id "${CI_PROJECT_ID}" \
+                 --gitlab-url "${CI_SERVER_URL}" \
+                 --run "${pid}" \
+                 --token "${REG_TOKEN}" \
+                 --token-type "${REG_TOKEN_TYPE}" \
+                 -o "${RUNS_DIR}/${pid}" 2>&1; then
+              echo "  Run ${pid} fully extracted."
+            else
+              echo "  WARNING: Could not extract run ${pid}. Skipping." >&2
+            fi
           else
-            echo "  WARNING: Could not extract run ${pid}. Skipping." >&2
+            # Older run: pull only the small comparison inputs.
+            echo "  Extracting comparison data for ${pid}..."
+            if python3 fetch_run.py \
+                 --project-id "${CI_PROJECT_ID}" \
+                 --gitlab-url "${CI_SERVER_URL}" \
+                 --run "${pid}" \
+                 --token "${REG_TOKEN}" \
+                 --token-type "${REG_TOKEN_TYPE}" \
+                 --only results.json run_metadata.json \
+                 -o "${RUNS_DIR}/${pid}" 2>&1; then
+              echo "  Run ${pid} comparison data extracted."
+            else
+              echo "  WARNING: Could not extract comparison data for ${pid}. Skipping." >&2
+            fi
           fi
         done
-        EXTRACTED=$(ls -d "${RUNS_DIR}"/*/ 2>/dev/null | wc -l)
-        echo "Extracted ${EXTRACTED} of ${MAX_RUNS} recent runs."
+        FULL=$(find "${RUNS_DIR}" -name report.html 2>/dev/null | wc -l)
+        CMP=$(find "${RUNS_DIR}" -name results.json 2>/dev/null | wc -l)
+        echo "Extracted ${FULL} full reports and ${CMP} runs of comparison data."
       else
         echo "WARNING: runs.json not found. Skipping run extraction." >&2
       fi
