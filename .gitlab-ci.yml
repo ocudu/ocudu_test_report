@@ -271,7 +271,8 @@ generate-report:
                --summary && \
              python3 render_comparison.py \
                "${CI_PROJECT_DIR}/_diff.json" \
-               -o "${CI_PROJECT_DIR}/${OUTPUT}/comparison.html"; then
+               -o "${CI_PROJECT_DIR}/${OUTPUT}/comparison.html" \
+               --embedded; then
             echo "Comparison generated successfully."
           else
             echo "WARNING: Comparison generation failed. Report is still valid." >&2

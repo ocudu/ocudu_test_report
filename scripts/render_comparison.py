@@ -125,13 +125,15 @@ def _render_meta(diff: dict) -> str:
         sha = data.get("commit_sha", "")[:8]
         date = data.get("generated_at", "")[:10]
         total = summary.get(total_key, 0)
-        # Compute passed count from the data
-        suites = data.get("suites", {})
-        passed = sum(s.get("passed", 0) for s in suites.values()) if isinstance(suites, dict) else 0
-        # Fall back: estimate from totals if available
-        if passed == 0 and total > 0:
-            totals = data.get("totals", {})
-            passed = totals.get("passed", 0)
+        # Passed count is provided directly by diff_runs.py in the base/head
+        # metadata. Fall back to older diff formats that stored per-suite data.
+        passed = data.get("passed")
+        if passed is None:
+            suites = data.get("suites", {})
+            if isinstance(suites, dict):
+                passed = sum(s.get("passed", 0) for s in suites.values())
+            else:
+                passed = data.get("totals", {}).get("passed", 0)
         ring = _pass_ring(passed, total)
         return (
             f'<div class="cmp-meta-run {css_mod}">'
@@ -292,12 +294,16 @@ def _render_section(title: str, entries: list[dict], css_class: str) -> str:
 # ---------------------------------------------------------------------------
 
 
-def render_comparison_html(diff: dict, favicon: str = _FAVICON_DEFAULT) -> str:
+def render_comparison_html(diff: dict, favicon: str = _FAVICON_DEFAULT, embedded: bool = False) -> str:
     """Render a complete comparison HTML page from a diff dict.
 
     Args:
         diff: Parsed diff.json structure (from build_diff_output).
         favicon: URL for the page favicon.
+        embedded: When True, omit the standalone page-header banner (logo and
+            "Run Comparison" title). The History tab embeds this page in an
+            iframe under its own "Latest vs Previous" heading, so the banner is
+            redundant duplication there.
 
     Returns:
         Complete self-contained HTML string.
@@ -324,6 +330,20 @@ def render_comparison_html(diff: dict, favicon: str = _FAVICON_DEFAULT) -> str:
     css = _read_asset("style.css")
     favicon_tag = f"<link rel='icon' href='{html.escape(favicon)}'>" if favicon else ""
 
+    header_html = (
+        ""
+        if embedded
+        else (
+            '<div class="report-header">\n'
+            '  <div class="header-logo"></div>\n'
+            '  <div class="header-title">\n'
+            "    <h1>Run Comparison</h1>\n"
+            '    <div class="header-link">Comparing two test runs</div>\n'
+            "  </div>\n"
+            "</div>"
+        )
+    )
+
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -337,13 +357,7 @@ def render_comparison_html(diff: dict, favicon: str = _FAVICON_DEFAULT) -> str:
 </style>
 </head>
 <body>
-<div class="report-header">
-  <div class="header-logo"></div>
-  <div class="header-title">
-    <h1>Run Comparison</h1>
-    <div class="header-link">Comparing two test runs</div>
-  </div>
-</div>
+{header_html}
 {meta_html}
 {cards_html}
 {sections_html}
@@ -555,6 +569,11 @@ def main():
         help="Output HTML file path (default: comparison.html)",
     )
     parser.add_argument("--favicon", default=_FAVICON_DEFAULT, metavar="URL", help="Favicon URL")
+    parser.add_argument(
+        "--embedded",
+        action="store_true",
+        help="Omit the standalone page-header banner (for embedding in the History tab)",
+    )
     args = parser.parse_args()
 
     if not args.diff.exists():
@@ -562,7 +581,7 @@ def main():
         sys.exit(1)
 
     diff = json.loads(args.diff.read_text(encoding="utf-8"))
-    html_output = render_comparison_html(diff, favicon=args.favicon)
+    html_output = render_comparison_html(diff, favicon=args.favicon, embedded=args.embedded)
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(html_output, encoding="utf-8")

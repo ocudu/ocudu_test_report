@@ -219,6 +219,12 @@ def build_diff_output(
     """
     entries, summary = diff_runs(base, head)
 
+    # Passed-test counts for each side, used by the comparison UI to render
+    # pass-rate rings. Computed from the flattened results so the renderer does
+    # not need the full per-suite data.
+    base_passed = sum(1 for t in _flatten_results(base).values() if t.get("status") == "passed")
+    head_passed = sum(1 for t in _flatten_results(head).values() if t.get("status") == "passed")
+
     # Group entries by diff class for the output
     grouped: dict[str, list[dict]] = {
         "regressions": [],
@@ -251,11 +257,13 @@ def build_diff_output(
             "pipeline_id": base.get("pipeline_id", ""),
             "commit_sha": base.get("commit_sha", ""),
             "generated_at": base.get("generated_at", ""),
+            "passed": base_passed,
         },
         "head": {
             "pipeline_id": head.get("pipeline_id", ""),
             "commit_sha": head.get("commit_sha", ""),
             "generated_at": head.get("generated_at", ""),
+            "passed": head_passed,
         },
         "summary": asdict(summary),
         **grouped,

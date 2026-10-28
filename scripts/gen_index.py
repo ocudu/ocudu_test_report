@@ -85,12 +85,12 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     <div class="nav-left">
 {nav_version_tabs}
 {third_party_tab_html}
+      <a class="tab" data-fixed="history" href="#">History</a>
     </div>
     <div class="nav-right">
       <a class="tab" data-fixed="features" href="#">Features</a>
       <a class="tab" data-fixed="tifg" href="#">TIFG Test Plan</a>
       <a class="tab" data-fixed="wg11" href="#">WG11 Test Plan</a>
-      <a class="tab" data-fixed="history" href="#">History</a>
     </div>
   </nav>
   <div class="subnav hidden" id="subnav">
@@ -235,7 +235,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
         + '.tl-dot{{position:absolute;left:-24px;top:12px;width:10px;height:10px;border-radius:50%;background:#334155;border:2px solid #0f172a}}'
         + '.tl-dot.latest{{background:#e0a82e}}'
         + '.tl-content{{padding:6px 12px;border-radius:6px;transition:background .12s}}'
-        + '.tl-date{{font-weight:700;color:#e2e8f0}}'
+        + '.tl-date{{font-weight:700;color:#e2e8f0;margin-right:8px}}'
         + '.tl-pid{{color:#64748b;font-family:"JetBrains Mono","Fira Code",monospace;font-size:.88em;margin-left:8px}}'
         + '.tl-label{{background:#334155;color:#e0a82e;border-radius:10px;padding:1px 8px;font-size:.82em;margin-left:8px}}'
         + '.tl-stats{{color:#94a3b8;font-size:.88em;margin-top:2px}}'
@@ -554,11 +554,24 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
           + 'if(!r.ok)throw new Error(r.status);return r.text()}}).then(function(t){{'
           + 'var s=document.getElementById("comparison-slot");'
           + 'var f=document.createElement("iframe");'
-          + 'f.style.cssText="width:100%;border:1px solid #334155;border-radius:8px;min-height:500px";'
+          + 'f.style.cssText="width:100%;border:none;display:block";'
+          + 'f.scrolling="no";'
+          + 'f.onload=function(){{try{{'
+          + 'var d=f.contentDocument;'
+          + 'if(d&&d.body){{d.body.style.margin="0";d.body.style.minHeight="0";'
+          + 'if(d.documentElement){{d.documentElement.style.minHeight="0";}}'
+          + 'var resize=function(){{f.style.height=(d.body.scrollHeight+2)+"px";}};'
+          + 'resize();setTimeout(resize,100);'
+          + 'if(window.ResizeObserver){{new ResizeObserver(resize).observe(d.body);}}'
+          + '}}}}catch(e){{f.style.minHeight="500px";}}}};'
           + 'f.srcdoc=t;s.innerHTML="";s.appendChild(f)'
           + '}}).catch(function(){{'
-          + 'document.getElementById("comparison-slot").innerHTML='
-          + '"<p style=\\"color:#64748b;font-size:.9em\\">No comparison available yet (generated after the second run).</p>"'
+          + 'var s=document.getElementById("comparison-slot");'
+          + 'if(s){{s.innerHTML="";'
+          + 'var p=document.createElement("p");'
+          + 'p.style.color="#64748b";p.style.fontSize=".9em";'
+          + 'p.textContent="No comparison available yet (generated after the second run).";'
+          + 's.appendChild(p);}}'
           + '}});';
       }}
 
