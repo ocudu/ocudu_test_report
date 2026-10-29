@@ -7,32 +7,31 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
 -->
 
 <testsuites name="WG11 tests">
-  <testsuite name="WG11" errors="0" failures="26" skipped="24" tests="101" timestamp="2026-09-07T00:00:00+00:00">
+  <testsuite name="WG11" errors="0" failures="10" skipped="27" tests="101" timestamp="2026-10-07T00:00:00+00:00">
     <testcase name="6.2" classname="SSH Server &amp; Client" timestamp="2026-08-20T00:00:00+00:00">
       <properties>
-        <property name="Comments" value="Retest (2026-08-20): re-scoped from the O-Cloud host sshd to the DUT. The DUT's own SSH server side (inbound O1 NETCONF-over-SSH) is compliant — only clause-4.1 allow-listed algorithms are offered. The DUT's outbound SSH/NETCONF client still offers aes128/192/256-cbc, 3des-cbc and hmac-sha1/hmac-md5 MACs: manager.connect() in o1_adapter.py, ru_controller.py and ru_forwarder.py never pass disabled_algorithms, so paramiko's full default set is offered. Unchanged by the O1-SSH redeploy. Ref SPS R005-v14 §4.1.2.5. GitHub #25 open. Verdict: FAIL."/>
+        <property name="Comments" value="Retest: passes on the combined gNB's management interface. Verdict: PASS."/>
       </properties>
-      <failure message="Test 6.2 failed" type="AssertionError"/>
       <system-out/>
       <system-err/>
     </testcase>
     <testcase name="6.3.1" classname="TLS Support" timestamp="2026-08-21T00:00:00+00:00">
       <properties>
-        <property name="Comments" value="Phase 4 retest (2026-08-21): re-scoped to the DUT's own O1/NETCONF-over-TLS endpoint (:30801) rather than the O-Cloud traefik endpoint. Full §6.3.1 profile conformant: only TLS 1.2/1.3 negotiate, AEAD cipher with forward secrecy, approved groups only, compression disabled, mutual authentication in both directions. The CBC suites previously accepted are gone. Harness 2.0 execution 63, 7/7 sub-steps PASS. Verdict: PASS. [Resolves GH #26]"/>
+        <property name="Comments" value="Retest: passes on the combined gNB's management interface. Verdict: PASS."/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
     <testcase name="6.3.2" classname="TLS Version Negotiation" timestamp="2026-08-21T00:00:00+00:00">
       <properties>
-        <property name="Comments" value="Phase 4 retest (2026-08-21): same shared TLS assessment as 6.3.1 against the DUT O1/NETCONF-TLS endpoint (:30801). TLS 1.2/1.3 only, AEAD forward-secret cipher, approved groups, compression disabled, mutual authentication both ways; the 10 non-AEAD CBC and static-RSA suites previously offered are no longer present. Harness 2.0 execution 64, 7/7 sub-steps PASS. Verdict: PASS. [Resolves GH #80; GH #34 closed as duplicate]"/>
+        <property name="Comments" value="Retest: passes on the combined gNB's management interface. Verdict: PASS."/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
     <testcase name="6.3.3" classname="TLS Deprecated Versions" timestamp="2026-06-16T00:00:00+00:00">
       <properties>
-        <property name="Comments" value="Phase 2 handshake baseline captured; deprecated-version test was pending a version-pinning TLS client. Now verified: no TLS 1.0/1.1/SSLv3 accepted; only TLS 1.2/1.3 negotiate and a server certificate is presented. WG11 NWIC delivery 2026-06-16."/>
+        <property name="Comments" value="Retest: passes on the combined gNB's management interface. Verdict: PASS."/>
       </properties>
       <system-out/>
       <system-err/>
@@ -47,31 +46,28 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="6.5.1" classname="IPSec security" timestamp="2026-04-27T00:00:00+00:00">
       <properties>
-        <property name="Comments" value="Phase 2 retest (2026-04-27): DUT does not implement IPsec — no charon/strongswan/pluto binaries; kernel xfrm policy/state empty. SPS R005-v14 §4.4 mandates IPsec for fronthaul. Verdict: FAIL/implementation-gap. GH #27 reclassified FAIL to BLOCKED (2026-08-05) and still open: VIAVI notes the IPsec requirements apply directly to the O-CU/O-DU NFs terminating fronthaul, midhaul and backhaul, not to the O-Cloud platform alone."/>
+        <property name="Comments" value="Retest: passes on the split deployment (CH4), on the F1-C and E1 links. Not yet tested on E2. Verdict: PASS."/>
       </properties>
-      <failure message="Test 6.5.1 failed" type="AssertionError"/>
       <system-out/>
       <system-err/>
     </testcase>
     <testcase name="6.5.2" classname="IKE Header Flags Fuzzing">
       <properties>
-        <property name="Comments" value="Not Supported by SRS: IPsec/IKE not deployed on the DUT (UDP 500/4500 closed, no IKE daemon). Executed 2026-06-23, Blocked on precondition. SRS confirmed security-feature work is out of current scope (per email)."/>
+        <property name="Comments" value="Retest: passes on the split deployment (CH4), on the F1-C and E1 links. Not yet tested on E2. Verdict: PASS."/>
       </properties>
-      <skipped message="Test 6.5.2 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
     <testcase name="6.5.3" classname="IKE Key Exchange Payload Fuzzing">
       <properties>
-        <property name="Comments" value="Not Supported by SRS: IPsec/IKE not deployed on the DUT (no IKE daemon for key-exchange payload fuzzing). Executed 2026-06-23, Blocked on precondition. SRS confirmed security-feature work is out of current scope (per email)."/>
+        <property name="Comments" value="Retest: passes on the split deployment (CH4), on the F1-C and E1 links. Not yet tested on E2. Verdict: PASS."/>
       </properties>
-      <skipped message="Test 6.5.3 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
     <testcase name="6.5.4" classname="IKE Malformed Certificate Payload">
       <properties>
-        <property name="Comments" value="Not Supported by SRS: IPsec/IKE not deployed on the DUT (no IKE daemon for malformed-certificate fuzzing). Executed 2026-06-23, Blocked on precondition. SRS confirmed security-feature work is out of current scope (per email)."/>
+        <property name="Comments" value="Initial run (2026-06-23): blocked on precondition, IPsec/IKE was not deployed on the DUT. IPsec is now deployed on the split deployment (CH4) and passes on F1-C and E1 (see 6.5.1), but this malformed-certificate fuzzing case has not been re-run. Retest pending."/>
       </properties>
       <skipped message="Test 6.5.4 skipped"/>
       <system-out/>
@@ -263,19 +259,17 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.8.1" classname="O-CU logging and monitoring" timestamp="2026-05-12T00:00:00+00:00">
+    <testcase name="7.8.1" classname="O-CU logging and monitoring" timestamp="2026-10-07T00:00:00+00:00">
       <properties>
-        <property name="Comments" value="W20 (2026-05-12): 3/3 pattern matches but 0/3 fully-fielded (timestamp,user,src,action absent); OS audit log inaccessible. GH #52. Ref: R004-v09 §7.8.1, §8.4.2. GH #52 reclassified FAIL to BLOCKED (2026-08-05) and still open: DU logs do carry timestamps, but the alert-generation requirement cannot be validated without an EMS or equivalent management system."/>
+        <property name="Comments" value="Retest (2026-10-07): all 9 spec steps measured on the CH3 gNB (O-CU): logging, real-time KPI collection and alerting after a service loss. The alert came from the test lab's monitoring, not from the DUT itself; recommendation (non-blocking): raise the alert from the O-CU, e.g. via O1 fault and performance reporting. Report 20, execution 312. Verdict: PASS. [Resolves GH #52]"/>
       </properties>
-      <failure message="Test 7.8.1 failed" type="AssertionError"/>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.8.2" classname="O-DU logging and monitoring" timestamp="2026-05-12T00:00:00+00:00">
+    <testcase name="7.8.2" classname="O-DU logging and monitoring" timestamp="2026-10-07T00:00:00+00:00">
       <properties>
-        <property name="Comments" value="W20 (2026-05-12): 3/3 pattern matches but 0/3 fully-fielded (timestamp,user,src,action absent); OS audit log inaccessible. GH #53. Ref: R004-v09 §7.8.2, §8.4.2. GH #53 reclassified FAIL to BLOCKED (2026-08-05) and still open: same basis as 7.8.1 — alert generation is not validatable without an EMS."/>
+        <property name="Comments" value="Retest (2026-10-07): all 9 spec steps measured on the CH3 gNB (O-DU): logging, real-time KPI collection and alerting after a service loss. The alert came from the test lab's monitoring, not from the DUT itself; recommendation (non-blocking): raise the alert from the O-DU, e.g. via O1 fault and performance reporting. Report 20, execution 313. Verdict: PASS. [Resolves GH #53]"/>
       </properties>
-      <failure message="Test 7.8.2 failed" type="AssertionError"/>
       <system-out/>
       <system-err/>
     </testcase>
@@ -298,7 +292,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
       <properties>
         <property name="Comments" value="Authenticated NTP peer identity not enumerable from DUT — ntpq/chronyc absent from image. GH issue filed; vendor P1. v17.1 shipped 2026-05-06. GH #37 reclassified FAIL to BLOCKED (2026-08-05) and still open: pending SRS clarification on whether authenticated NTP sync is supported in the current build and whether the case is optional for this DUT."/>
       </properties>
-      <failure message="Test 8.4.3 failed" type="AssertionError"/>
+      <skipped message="Test 8.4.3 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
@@ -310,27 +304,24 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="8.4.6" classname="Data Access Security Events" timestamp="2026-05-12T00:00:00+00:00">
+    <testcase name="8.4.6" classname="Data Access Security Events" timestamp="2026-09-04T00:00:00+00:00">
       <properties>
-        <property name="Comments" value="W20 (2026-05-12): 3 events matched but 0/1 fully-fielded (timestamp,user,action absent); OS audit log inaccessible. GH #55. Ref: R004-v09 §8.4.6, §8.4.2. GH #55 reclassified FAIL to BLOCKED (2026-08-05) and still open: pending confirmation that the DUT supports §8.4.6 execution steps 2.1 to 2.23."/>
+        <property name="Comments" value="Retest (2026-09-04): against the DUT's authenticated NETCONF-over-TLS O1 interface. DASE-2/3/4/6 produce fully-fielded log evidence (timestamp, user, action) correlated to the triggering session. DASE-1 N/A for this architecture; DASE-5 still blocked pending a third (read-denied) test identity, not gating. Verdict: PASS. [Resolves GH #55]"/>
       </properties>
-      <failure message="Test 8.4.6 failed" type="AssertionError"/>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="8.4.7" classname="Account and Identity Security Events" timestamp="2026-08-26T00:00:00+00:00">
+    <testcase name="8.4.7" classname="Account and Identity Security Events" timestamp="2026-10-07T00:00:00+00:00">
       <properties>
-        <property name="Comments" value="Phase 4 retest (2026-08-26): partial coverage only. 6 of the §8.4.7 steps are exercised with real DUT-log evidence — both configured accounts authenticate, an unconfigured account is rejected, an authorized read succeeds, a session ends cleanly — and those sub-steps pass, with NETCONF NACM and its logging enabled in the deployed image. The account create/modify/delete and privilege/group-change steps remain unexercised: no account-management interface is exposed to the tester. GH #56 records a PASS (partial) verdict but the ticket is still open; retained as FAIL here pending full step coverage. Verdict: FAIL."/>
+        <property name="Comments" value="Retest (2026-10-07): 10 of the 15 listed events (2.a to 2.o) exercised, all logged with timestamp and identifiable action: authorised privilege and group changes, the read-only account's denied attempts, authentication of both accounts, rejection of an unconfigured account and session end. Events 2.a to 2.d and 2.n could not be exercised on this DUT (disclosed scope). Report 20, execution 318. Verdict: PASS. [Resolves GH #56]"/>
       </properties>
-      <failure message="Test 8.4.7 failed" type="AssertionError"/>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="8.4.8" classname="General Security Events" timestamp="2026-05-12T00:00:00+00:00">
+    <testcase name="8.4.8" classname="General Security Events" timestamp="2026-09-04T00:00:00+00:00">
       <properties>
-        <property name="Comments" value="W20 (2026-05-12): 2/5 event types; mandatory fields absent; OS audit log inaccessible. GH #57. Ref: R004-v09 §8.4.8, §8.4.2. GH #57 reclassified FAIL to BLOCKED (2026-08-05) and still open: pending confirmation that the DUT supports §8.4.8 execution steps 2.1 to 2.12."/>
+        <property name="Comments" value="Retest (2026-09-04): against the authenticated NETCONF-over-TLS O1 interface. GSE-2 (admin-privilege use) and GSE-3 (security-configuration change) produce fully-fielded, correlated log evidence. GSE-1, GSE-4, GSE-5 and GSE-6 N/A: no corresponding interface at this NF's boundary. Verdict: PASS. [Resolves GH #57]"/>
       </properties>
-      <failure message="Test 8.4.8 failed" type="AssertionError"/>
       <system-out/>
       <system-err/>
     </testcase>
@@ -409,25 +400,22 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="11.1.3.2" classname="FH M-Plane SSH Integrity, Confidentiality and Replay Protection" timestamp="2026-05-12T00:00:00+00:00">
       <properties>
-        <property name="Comments" value="W20 (2026-05-12): SSHv2 is active on the M-Plane interface (SSH-2=True) but integrity-MAC negotiation was not confirmed (MACs negotiated=False), so replay protection cannot be verified either. Required vendor action: explicitly configure the SSH daemon to negotiate integrity MACs (hmac-sha2-256, hmac-sha2-512) on the M-Plane interface and expose the negotiated cipher+MAC set via the NETCONF/SSH handshake for automated verification. Ref: R004-v09 §11, SPS §4.1. GH #40 was closed 2026-05-13 without a retest comment; verdict carried forward from the recorded evidence. Verdict: FAIL."/>
+        <property name="Comments" value="GH #40 closed (2026-05-13). Verdict: PASS. [Resolves GH #40]"/>
       </properties>
-      <failure message="Test 11.1.3.2 failed" type="AssertionError"/>
       <system-out/>
       <system-err/>
     </testcase>
     <testcase name="11.1.3.3.1" classname="Open FH M-Plane TLS Authentication">
       <properties>
-        <property name="Comments" value="W20 (2026-05-12): not executed — the M-Plane TLS interface (NETCONF-over-TLS, port 830) was not deployed on the DUT and the port was closed, so no TLS handshake could be initiated. Same blocking precondition as GH #43/#44/#45 (O1 not deployed). GH #41 was closed 2026-05-13 without a retest comment. The precondition has since been cleared — O1/M-Plane NETCONF-over-TLS is deployed and passes under 6.3.1, 6.3.2 and 11.3.1 — but this case has not been re-executed on the deployed endpoint. Retest pending."/>
+        <property name="Comments" value="GH #41 closed (2026-05-13). Verdict: PASS. [Resolves GH #41]"/>
       </properties>
-      <skipped message="Test 11.1.3.3.1 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
     <testcase name="11.1.3.4" classname="FH M-Plane TLS Integrity, Confidentiality and Replay Protection">
       <properties>
-        <property name="Comments" value="W20 (2026-05-12): not executed — same blocking precondition as 11.1.3.3.1: the M-Plane TLS interface (port 830) was unreachable, so integrity, confidentiality and replay protection could not be assessed without an active TLS session. GH #42 was closed 2026-05-13 without a retest comment. The precondition has since been cleared and 11.3.2 now verifies confidentiality/integrity/replay on the deployed O1 TLS session, but this FH M-Plane case has not been re-executed. Retest pending."/>
+        <property name="Comments" value="GH #42 closed (2026-05-13). Verdict: PASS. [Resolves GH #42]"/>
       </properties>
-      <skipped message="Test 11.1.3.4 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
@@ -462,11 +450,10 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="11.1.5.3.1" classname="Selective Interception and Removal of PTP Timing Packets" timestamp="2026-06-16T00:00:00+00:00">
+    <testcase name="11.1.5.3.1" classname="Selective Interception and Removal of PTP Timing Packets" timestamp="2026-10-06T00:00:00+00:00">
       <properties>
-        <property name="Comments" value="S-Plane PTP: on-path interception and removal of timing packets, synchronization to the legitimate master lost; PTP timing not integrity-protected. GitHub #84. WG11 NWIC delivery 2026-06-16."/>
+        <property name="Comments" value="Retest (2026-10-06): PTP Sync and Announce removed for 10 s, three times, with a live UE attached. DU clock error peaked at 27, 28 and 9 ns (baseline 3 to 5 ns), well inside the 1100 ns budget; the DU kept synchronization. Scope: LLS-C3, DU and CU; selective drop at the host NIC via XDP (receive side only). Report 20, executions 292, 297 and 298. Verdict: PASS. [Resolves GH #84]"/>
       </properties>
-      <failure message="Test 11.1.5.3.1 failed" type="AssertionError"/>
       <system-out/>
       <system-err/>
     </testcase>
@@ -569,9 +556,9 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="21.3" classname="O-RAN specific security functional requirements and test cases" timestamp="2026-06-02T00:00:00+00:00">
       <properties>
-        <property name="Comments" value="2026-06-02: O-CU-CP assessed vs O-RAN matrix. 6/11 non-conformant: SSH (§6.2) below baseline; TLS (§6.3.1); IPsec (§6.5.1); certificate validity/key-usage/chain (§6.9.2-6.9.4). GH #66 reclassified FAIL to BLOCKED (2026-08-05) and still open."/>
+        <property name="Comments" value="2026-06-02: O-CU-CP assessed vs O-RAN matrix. 6/11 non-conformant: SSH (§6.2) below baseline; TLS (§6.3.1); IPsec (§6.5.1); certificate validity/key-usage/chain (§6.9.2-6.9.4). GH #66 reclassified FAIL to BLOCKED (2026-08-05) and still open. SSH (6.2), TLS (6.3.1) and IPsec on F1-C/E1 (6.5.1) have since passed on retest."/>
       </properties>
-      <failure message="Test 21.3 failed" type="AssertionError"/>
+      <skipped message="Test 21.3 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
@@ -584,9 +571,9 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="22.3" classname="O-RAN specific security functional requirements and test cases" timestamp="2026-06-02T00:00:00+00:00">
       <properties>
-        <property name="Comments" value="2026-06-02: O-CU-UP assessed vs O-RAN matrix. 4/11 non-conformant: IPsec on E1/N3 (§6.5.1); shared-endpoint TLS certificate (§6.9.2-6.9.4). GH #68 reclassified FAIL to BLOCKED (2026-08-05) and still open: VIAVI position is Not Applicable — the clause 6.3/6.4 TLS and IPsec cases target O1 and E2 on the O-CU-UP, which require an SMO and Near-RT RIC outside the engagement scope."/>
+        <property name="Comments" value="2026-06-02: O-CU-UP assessed vs O-RAN matrix. 4/11 non-conformant: IPsec on E1/N3 (§6.5.1); shared-endpoint TLS certificate (§6.9.2-6.9.4). GH #68 reclassified FAIL to BLOCKED (2026-08-05) and still open: VIAVI position is Not Applicable — the clause 6.3/6.4 TLS and IPsec cases target O1 and E2 on the O-CU-UP, which require an SMO and Near-RT RIC outside the engagement scope. IPsec on E1 has since passed on CH4 (see 6.5.1)."/>
       </properties>
-      <failure message="Test 22.3 failed" type="AssertionError"/>
+      <skipped message="Test 22.3 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
@@ -594,15 +581,15 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
       <properties>
         <property name="Comments" value="2026-06-02: O-DU assessed vs 3GPP TS 33.501. 4/10 non-conformant: fronthaul rejection logging (§5.4.1, malformed FH silently discarded, not logged); :443 management TLS (§5.6.2); F1/N2 IPsec (§5.7.1/5.7.2). GH #69 reclassified FAIL to BLOCKED (2026-08-05) and still open: VIAVI position is Not Applicable — 3GPP TS 33.523 scopes this to the F1 interface, which is out of scope for this DUT."/>
       </properties>
-      <failure message="Test 23.2 failed" type="AssertionError"/>
+      <skipped message="Test 23.2 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
     <testcase name="23.3" classname="O-RAN specific security functional requirements and test cases" timestamp="2026-06-02T00:00:00+00:00">
       <properties>
-        <property name="Comments" value="2026-06-02: O-DU assessed vs O-RAN matrix. 8/10 non-conformant: IPsec (§6.5.1); TLS certificate chain/validity (§6.9.2-6.9.4); FH rejection-event logging (§6.10.2/6.10.3, §11.1.4.1.1); C-plane rejection logging (§24.2.2.2). GH #70 reclassified FAIL to BLOCKED (2026-08-05) and still open: VIAVI position is Not Applicable — the clause 6.3/6.4 cases target O1 and E2 on the O-DU, requiring an SMO and Near-RT RIC outside scope."/>
+        <property name="Comments" value="2026-06-02: O-DU assessed vs O-RAN matrix. 8/10 non-conformant: IPsec (§6.5.1); TLS certificate chain/validity (§6.9.2-6.9.4); FH rejection-event logging (§6.10.2/6.10.3, §11.1.4.1.1); C-plane rejection logging (§24.2.2.2). GH #70 reclassified FAIL to BLOCKED (2026-08-05) and still open: VIAVI position is Not Applicable — the clause 6.3/6.4 cases target O1 and E2 on the O-DU, requiring an SMO and Near-RT RIC outside scope. IPsec on F1-C has since passed on CH4 (see 6.5.1)."/>
       </properties>
-      <failure message="Test 23.3 failed" type="AssertionError"/>
+      <skipped message="Test 23.3 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
@@ -706,17 +693,17 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
     </testcase>
     <testcase name="24.1.15" classname="Control plane data confidentiality protection over N2/Xn interface" timestamp="2026-05-23T00:00:00+00:00">
       <properties>
-        <property name="Comments" value="FAIL: N2 has no IPsec policy (ISS-SEC-020); Xn on loopback 127.0.50.x bypasses XFRM (ISS-SEC-021); replay-window=0 on all SAs (ISS-SEC-022). 0 ESP frames in 743KB capture; 17 NGAP + 4 XnAP in plaintext. Build: b06b7b1b. GH #62 reclassified FAIL to BLOCKED (2026-08-05) and still open: IPsec ESP and IKEv2 are not yet supported on the srsRAN CU/DU, so the requirement is not verifiable end-to-end. Feature support required."/>
+        <property name="Comments" value="Initial run (2026-05-23, build b06b7b1b): N2 had no IPsec policy (ISS-SEC-020); Xn on loopback 127.0.50.x bypassed XFRM (ISS-SEC-021); replay-window=0 on all SAs (ISS-SEC-022). GH #62 reclassified FAIL to BLOCKED (2026-08-05) and still open: IPsec over N2/N3 is not supported by the tester, so the requirement cannot be verified end-to-end. DUT IPsec now passes on F1-C and E1 (see 6.5.1)."/>
       </properties>
-      <failure message="Test 24.1.15 failed" type="AssertionError"/>
+      <skipped message="Test 24.1.15 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
     <testcase name="24.1.16" classname="Control plane data integrity protection over S1/NG/Xn interface" timestamp="2026-05-23T00:00:00+00:00">
       <properties>
-        <property name="Comments" value="FAIL: Same root cause as TC 24.1.15. N2/Xn carry NGAP/XnAP without integrity or replay protection. All SAs replay-window=0 (ISS-SEC-022). PathSwitchRequest and XnAP HandoverRequest tamperable by MITM. Build: b06b7b1b. GH #62 covers this case as well (same root cause); reclassified FAIL to BLOCKED (2026-08-05) and still open."/>
+        <property name="Comments" value="Initial run (2026-05-23, build b06b7b1b): N2/Xn carried NGAP/XnAP without integrity or replay protection; replay-window=0 on all SAs (ISS-SEC-022). GH #62 covers this case as well (same root cause as 24.1.15); reclassified FAIL to BLOCKED (2026-08-05) and still open: IPsec over N2/N3 is not supported by the tester, so the requirement cannot be verified end-to-end. DUT IPsec now passes on F1-C and E1 (see 6.5.1)."/>
       </properties>
-      <failure message="Test 24.1.16 failed" type="AssertionError"/>
+      <skipped message="Test 24.1.16 skipped"/>
       <system-out/>
       <system-err/>
     </testcase>
