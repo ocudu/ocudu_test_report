@@ -3123,6 +3123,17 @@ features:
       - unit
       - e2e
     comment: ''
+  - id: DU-NTN-TIM-5
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support a UE-specific Koffset signalled with the Differential Koffset MAC CE, derived from the UE reported timing advance'
+    short_description: UE-specific Koffset
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+      - e2e
+    comment: ''
   - id: DU-NTN-HARQ-1
     source: OCUDU defined
     scope: CU/DU
@@ -3144,6 +3155,16 @@ features:
     primary_test_type:
       - unit
       - e2e
+    comment: ''
+  - id: DU-NTN-HARQ-3
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support the allowedHARQ-mode restriction of logical channels to HARQ processes of a given mode'
+    short_description: allowedHARQ-mode LCH restriction
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
     comment: ''
   - id: DU-NTN-CAP-1
     source: OCUDU defined
