@@ -7,7 +7,7 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
 -->
 
 <testsuites name="WG11 tests">
-  <testsuite name="WG11" errors="0" failures="10" skipped="27" tests="101" timestamp="2026-10-07T00:00:00+00:00">
+  <testsuite name="WG11" errors="0" failures="10" skipped="27" tests="101" timestamp="2026-11-04T00:00:00+00:00">
     <testcase name="6.2" classname="SSH Server &amp; Client" timestamp="2026-08-20T00:00:00+00:00">
       <properties>
         <property name="Comments" value="Retest: passes on the combined gNB's management interface. Verdict: PASS."/>
@@ -22,16 +22,16 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="6.3.2" classname="TLS Version Negotiation" timestamp="2026-08-21T00:00:00+00:00">
+    <testcase name="6.3.2" classname="TLS Version Negotiation" timestamp="2026-11-04T00:00:00+00:00">
       <properties>
-        <property name="Comments" value="Retest: passes on the combined gNB's management interface. Verdict: PASS."/>
+        <property name="Comments" value="Retest (2026-11-04): the combined CH3 gNB's O1 NETCONF-over-TLS endpoint (:30801). TLS 1.2 and TLS 1.3 both negotiate with a valid client certificate and reject an invalid one; nothing else is offered. 6 cipher suites, all AEAD with forward secrecy; curves secp256r1 and x25519; compression off. Other TLS endpoints not tested. Report 23, execution 397. Verdict: PASS. [Resolves GH #80; GH #34 closed as duplicate]"/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="6.3.3" classname="TLS Deprecated Versions" timestamp="2026-06-16T00:00:00+00:00">
+    <testcase name="6.3.3" classname="TLS Deprecated Versions" timestamp="2026-11-04T00:00:00+00:00">
       <properties>
-        <property name="Comments" value="Retest: passes on the combined gNB's management interface. Verdict: PASS."/>
+        <property name="Comments" value="Retest (2026-11-04): the combined CH3 gNB's O1 NETCONF-over-TLS endpoint (:30801). SSL 2.0, SSL 3.0, TLS 1.0 and TLS 1.1 all refused; only TLS 1.2 and TLS 1.3 accepted, with mutual authentication on both. Other TLS endpoints not tested. Report 23, execution 398. Verdict: PASS."/>
       </properties>
       <system-out/>
       <system-err/>
@@ -51,16 +51,16 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="6.5.2" classname="IKE Header Flags Fuzzing">
+    <testcase name="6.5.2" classname="IKE Header Flags Fuzzing" timestamp="2026-11-04T00:00:00+00:00">
       <properties>
-        <property name="Comments" value="Retest: passes on the split deployment (CH4), on the F1-C and E1 links. Not yet tested on E2. Verdict: PASS."/>
+        <property name="Comments" value="Retest (2026-11-04): the O-CU-CP's IKEv2 responder (UDP 500) on the split CH4 deployment, with F1-C and E1 protected by IPsec. Four malformed header-flag messages (0x00, 0x10, 0x20, 0x38) were silently dropped; the responder kept answering, no pod restarted and both tunnels stayed up. The O-CU-UP and O-DU responders and E2 are not covered. Report 23, execution 399. Verdict: PASS."/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="6.5.3" classname="IKE Key Exchange Payload Fuzzing">
+    <testcase name="6.5.3" classname="IKE Key Exchange Payload Fuzzing" timestamp="2026-11-04T00:00:00+00:00">
       <properties>
-        <property name="Comments" value="Retest: passes on the split deployment (CH4), on the F1-C and E1 links. Not yet tested on E2. Verdict: PASS."/>
+        <property name="Comments" value="Retest (2026-11-04): the O-CU-CP's IKEv2 responder (UDP 500) on the split CH4 deployment, with F1-C and E1 protected by IPsec. All 30 malformed key exchange payloads (10 wrong length, 10 random bytes, 5 unsupported DH group, 5 empty) were rejected; the responder kept answering, no pod restarted and both tunnels stayed up. The O-CU-UP and O-DU responders and E2 are not covered. Report 23, execution 400. Verdict: PASS."/>
       </properties>
       <system-out/>
       <system-err/>
@@ -259,16 +259,16 @@ SPDX-License-Identifier: BSD-3-Clause-Open-MPI
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.8.1" classname="O-CU logging and monitoring" timestamp="2026-10-07T00:00:00+00:00">
+    <testcase name="7.8.1" classname="O-CU logging and monitoring" timestamp="2026-11-03T00:00:00+00:00">
       <properties>
-        <property name="Comments" value="Retest (2026-10-07): all 9 spec steps measured on the CH3 gNB (O-CU): logging, real-time KPI collection and alerting after a service loss. The alert came from the test lab's monitoring, not from the DUT itself; recommendation (non-blocking): raise the alert from the O-CU, e.g. via O1 fault and performance reporting. Report 20, execution 312. Verdict: PASS. [Resolves GH #52]"/>
+        <property name="Comments" value="Retest (2026-11-03): the combined CH4 gNB (O-CU function). A rejected NETCONF login is logged with a timestamp, and KPIs are collected in real time. Under UE load up to the 240 UE cell limit, the gNB raised its own alarms on the SMO fault topic (2005 UE_CAPACITY_NEAR_LIMIT, 2006 RRC_ESTABLISHMENT_FAILURES) within about 5 minutes. Limits: overload only, not a reduction of resources; alarms are not split between O-CU and O-DU; KPI accuracy not checked. Report 23, execution 389. Verdict: PASS. [Resolves GH #52]"/>
       </properties>
       <system-out/>
       <system-err/>
     </testcase>
-    <testcase name="7.8.2" classname="O-DU logging and monitoring" timestamp="2026-10-07T00:00:00+00:00">
+    <testcase name="7.8.2" classname="O-DU logging and monitoring" timestamp="2026-11-03T00:00:00+00:00">
       <properties>
-        <property name="Comments" value="Retest (2026-10-07): all 9 spec steps measured on the CH3 gNB (O-DU): logging, real-time KPI collection and alerting after a service loss. The alert came from the test lab's monitoring, not from the DUT itself; recommendation (non-blocking): raise the alert from the O-DU, e.g. via O1 fault and performance reporting. Report 20, execution 313. Verdict: PASS. [Resolves GH #53]"/>
+        <property name="Comments" value="Retest (2026-11-03): the combined CH4 gNB (O-DU function). A rejected NETCONF login is logged with a timestamp, and KPIs are collected in real time. Under UE load up to the 240 UE cell limit, the gNB raised its own alarms on the SMO fault topic (2005 UE_CAPACITY_NEAR_LIMIT, 2006 RRC_ESTABLISHMENT_FAILURES) within about 5 minutes. Limits: overload only, not a reduction of resources; alarms are not split between O-CU and O-DU; KPI accuracy not checked. Report 23, execution 390. Verdict: PASS. [Resolves GH #53]"/>
       </properties>
       <system-out/>
       <system-err/>
