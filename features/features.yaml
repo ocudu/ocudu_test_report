@@ -3134,6 +3134,16 @@ features:
       - unit
       - e2e
     comment: ''
+  - id: DU-NTN-TIM-6
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support K_mac'
+    short_description: K_mac uplink slot offset
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+    comment: ''
   - id: DU-NTN-HARQ-1
     source: OCUDU defined
     scope: CU/DU
