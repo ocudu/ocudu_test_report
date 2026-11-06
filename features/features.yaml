@@ -3308,3 +3308,206 @@ features:
     primary_test_type:
       - unit
     comment: ''
+  - id: CU-GEN-8
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support PDU sessions of type Ethernet in addition to IPv4, IPv6 and IPv4v6'
+    short_description: Ethernet PDU sessions
+    type: Functional
+    release: 26.04 (v1.0)
+    primary_test_type:
+      - unit
+    comment: ''
+  - id: CU-GEN-9
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support PDCP out-of-order delivery (outOfOrderDelivery) of received PDCP SDUs to upper layers'
+    short_description: PDCP out-of-order delivery
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+    comment: ''
+  - id: CU-AMF-1
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support the NAS Node Selection Function to select an AMF from a pool of connected AMFs for a UE'
+    short_description: AMF selection (NAS Node Selection Function)
+    type: Functional
+    release: 27.04 (v2.2)
+    primary_test_type:
+      - unit
+    comment: ''
+  - id: CU-AMF-2
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support the NGAP Reroute NAS Request procedure to forward an initial NAS message to another AMF'
+    short_description: NGAP Reroute NAS Request
+    type: Functional
+    release: 27.04 (v2.2)
+    primary_test_type:
+      - unit
+    comment: ''
+  - id: CU-AMF-3
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support the NGAP AMF Status Indication procedure and stop selecting an AMF that reported its GUAMIs as unavailable'
+    short_description: NGAP AMF Status Indication
+    type: Functional
+    release: 27.04 (v2.2)
+    primary_test_type:
+      - unit
+    comment: ''
+  - id: CU-AMF-4
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support the NGAP AMF Configuration Update procedure'
+    short_description: NGAP AMF Configuration Update
+    type: Functional
+    release: 27.04 (v2.2)
+    primary_test_type:
+      - unit
+    comment: ''
+  - id: CU-AMF-5
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support the NGAP Overload Start and Overload Stop procedures, including the slice-specific overload, and reject or reduce signalling towards an overloaded AMF accordingly'
+    short_description: NGAP Overload Start/Stop
+    type: Functional
+    release: 27.04 (v2.2)
+    primary_test_type:
+      - unit
+    comment: ''
+  - id: DU-PHY-11
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support 1024QAM modulation in the DL (PDSCH) including the Rel-17 1024QAM MCS table'
+    short_description: 1024QAM DL
+    type: Functional
+    release: unspecified
+    primary_test_type:
+      - unit
+    comment: 'Only the PHY and the MCS table are implemented; the DU-high cannot configure or schedule 1024QAM yet'
+  - id: DU-DIFI-1
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support the DIFI v1.2.1 (IEEE-ISTO Std 4900) Basic Data Plane Information Class 0x0000 by transmitting and receiving Standard Flow Signal Data packets (Packet Class 0x0000) with the DIFI prologue: packet type 0x1, class ID with the DIFI OUI 0x6A621E and the Information/Packet Class codes, per-stream mod-16 sequence number, and link-efficient complex Cartesian signed integer payload'
+    short_description: DIFI Standard Flow Signal Data packets
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+    comment: ''
+  - id: DU-DIFI-2-a
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support DIFI v1.2.1 (IEEE-ISTO Std 4900) signal data with 8-bit and 16-bit I/Q sample components'
+    short_description: DIFI 8-bit and 16-bit samples
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+    comment: 'An odd number of 8-bit samples per packet is padded to a 32-bit word, which DIFI does not permit in Information Class 0x0000'
+  - id: DU-DIFI-2-b
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support every DIFI v1.2.1 (IEEE-ISTO Std 4900) signal data sample depth from 4 to 16 bits per I/Q component, with link-efficient packing and no bit padding in Information Class 0x0000'
+    short_description: DIFI 4 to 16-bit samples
+    type: Functional
+    release: unspecified
+    primary_test_type: []
+    comment: 'Not implemented, only 8 and 16 bits are supported'
+  - id: DU-DIFI-3
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall timestamp DIFI v1.2.1 (IEEE-ISTO Std 4900) packets with a UTC, GPS or POSIX integer-seconds timestamp and a real time (picoseconds) fractional-seconds timestamp marking the first sample of the payload, and place received samples on the timeline by their timestamp'
+    short_description: DIFI real time timestamps
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+    comment: 'Only the UTC TSI is supported'
+  - id: DU-DIFI-4
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall transmit DIFI v1.2.1 (IEEE-ISTO Std 4900) Standard Flow Signal Context packets (Packet Class 0x0001, 27 words) paired by Stream ID with the data stream, carrying CIF 0, reference point, bandwidth, IF and RF reference frequency, IF band offset, reference level, sample rate, timestamp adjustment, timestamp calibration time, state and event indicators and data packet payload format, upon any context change and periodically at no more than 20 packets per second'
+    short_description: DIFI signal context packet transmission
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+    comment: 'Deviations: the periodic context packet is sent every 100 data packets, which exceeds 20 packets/s at NR sample rates; the CIF 0 change bit is always set; the reference level is not populated'
+  - id: DU-DIFI-5
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall decode received DIFI v1.2.1 (IEEE-ISTO Std 4900) Standard Flow Signal Context packets and check or apply the announced stream parameters (sample rate, bit depth, frequency)'
+    short_description: DIFI signal context packet reception
+    type: Functional
+    release: unspecified
+    primary_test_type: []
+    comment: 'Received context packets are currently skipped'
+  - id: DU-DIFI-6
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support several simultaneous DIFI v1.2.1 (IEEE-ISTO Std 4900) Information Streams, one per antenna port, each identified by its own Stream ID'
+    short_description: DIFI multiple information streams
+    type: Functional
+    release: 27.04 (v2.2)
+    primary_test_type:
+      - unit
+    comment: ''
+  - id: DU-DIFI-7-a
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall transport DIFI v1.2.1 (IEEE-ISTO Std 4900) packets in UDP datagrams over IPv4 with an Ethernet frame payload between 128 and 9000 octets, without IPv4 fragmentation at the source'
+    short_description: DIFI over UDP/IPv4, frames up to 9000 octets
+    type: Functional
+    release: 26.10 (v2.1)
+    primary_test_type:
+      - unit
+    comment: 'The configurable packet size allows packets up to the largest UDP payload, beyond the 9000 octets limit'
+  - id: DU-DIFI-7-b
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall transport DIFI v1.2.1 (IEEE-ISTO Std 4900) packets in UDP datagrams over IPv6, including packets carrying IPv6 extension headers'
+    short_description: DIFI over UDP/IPv6
+    type: Functional
+    release: unspecified
+    primary_test_type: []
+    comment: 'Not implemented, only IPv4 is supported'
+  - id: DU-DIFI-8
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support the DIFI v1.2.1 (IEEE-ISTO Std 4900) Version Flow Information Class 0x0001, emitting and interpreting Version Flow Signal Context packets (Packet Class 0x0004) that carry the VITA 49 and DIFI ICD version'
+    short_description: DIFI Version Flow (Information Class 0x0001)
+    type: Functional
+    release: unspecified
+    primary_test_type: []
+    comment: 'Not implemented'
+  - id: DU-DIFI-9
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support the DIFI v1.2.1 (IEEE-ISTO Std 4900) Basic Data Plane Sample Count TSF Information Class 0x0004, using the Sample Count Signal Data (0x0002) and Sample Count Signal Context (0x0003) Packet Classes'
+    short_description: DIFI Basic Data Plane Sample Count TSF (Information Class 0x0004)
+    type: Functional
+    release: unspecified
+    primary_test_type: []
+    comment: 'Not implemented'
+  - id: DU-DIFI-10
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support the DIFI v1.2.1 (IEEE-ISTO Std 4900) Data Plane plus Flow Control Information Class 0x0002, synchronizing the stream source to the sink with Sample Count Timing Flow Control command packets (Packet Class 0x0005) carrying the sink buffer level and status'
+    short_description: DIFI Data Plane plus Flow Control (Information Class 0x0002)
+    type: Functional
+    release: unspecified
+    primary_test_type: []
+    comment: 'Not implemented'
+  - id: DU-DIFI-11
+    source: OCUDU defined
+    scope: CU/DU
+    description: 'The Open RAN system shall support the DIFI v1.2.1 (IEEE-ISTO Std 4900) Data Plane plus Flow Control, Real Time TSF Information Class 0x0003, synchronizing the stream source to the sink with Real Time TSF Timing Flow Control command packets (Packet Class 0x0006) carrying the sink buffer level and status'
+    short_description: DIFI Data Plane plus Flow Control, Real Time TSF (Information Class 0x0003)
+    type: Functional
+    release: unspecified
+    primary_test_type: []
+    comment: 'Not implemented'
