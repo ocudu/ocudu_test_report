@@ -373,6 +373,22 @@ generate-report:
       - ${OUTPUT}
     when: always
 
+# Status of the group's scheduled pipelines and their AI triage, on top of the wiki page "CI status".
+ci status:
+  stage: build
+  image: python:3.12-slim
+  variables:
+    GIT_DEPTH: 1
+  script:
+    - python3 .gitlab/ci/ci_status.py --hours 24 > ci_status.md
+    - cat ci_status.md
+  artifacts:
+    paths:
+      - ci_status.md
+    when: always
+  rules:
+    - if: $CI_PIPELINE_SCHEDULE_DESCRIPTION =~ /report/ && $GITLAB_TOKEN
+
 pages:
   extends: generate-report
   stage: build
