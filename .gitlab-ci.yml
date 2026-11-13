@@ -382,6 +382,7 @@ ci status:
   script:
     - python3 .gitlab/ci/ci_status.py --hours 24 > ci_status.md
     - cat ci_status.md
+    - python3 .gitlab/ci/ci_status_wiki.py ci_status.md --days 30
   artifacts:
     paths:
       - ci_status.md
