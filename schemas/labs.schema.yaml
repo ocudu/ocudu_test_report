@@ -1,0 +1,44 @@
+# SPDX-FileCopyrightText: Copyright (C) 2021-2026 Software Radio Systems Limited
+# SPDX-FileCopyrightText: Copyright (C) 2026 OCUDU contributors
+# SPDX-License-Identifier: BSD-3-Clause-Open-MPI
+
+$schema: "http://json-schema.org/draft-07/schema#"
+title: OCUDU test labs
+description: Labs allowed to publish test results to the OCUDU test report
+type: object
+required:
+  - labs
+additionalProperties: false
+properties:
+  labs:
+    type: array
+    minItems: 1
+    items:
+      type: object
+      required:
+        - id
+        - name
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: >-
+            Lab identifier. Used in result files and in the registry package
+            name (results-<id>), so it is restricted to lowercase letters,
+            digits and hyphens.
+          pattern: "^[a-z0-9]+(-[a-z0-9]+)*$"
+          maxLength: 64
+        name:
+          type: string
+          description: Human-readable lab name shown in the report
+          minLength: 1
+        url:
+          type: string
+          description: Optional link to the lab or its CI
+          pattern: "^https?://"
+        public_key:
+          type: string
+          description: >-
+            SSH public key file used to verify the lab's signed uploads,
+            relative to the labs/ directory (e.g. valor.pub).
+          pattern: "^[a-z0-9]+(-[a-z0-9]+)*\\.pub$"

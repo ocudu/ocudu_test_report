@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: Copyright (C) 2021-2026 Software Radio Systems Limited
+# SPDX-FileCopyrightText: Copyright (C) 2026 OCUDU contributors
+# SPDX-License-Identifier: BSD-3-Clause-Open-MPI
+
+# Labs allowed to publish test results to the report.
+#
+# Every result file names its lab in a <testsuite> property; the name must be
+# an `id` listed here. Results from unknown labs are rejected. Adding a lab is
+# an MR to this file (plus its public key under labs/<id>.pub once signing is
+# enabled), so every new source of results gets reviewed.
+labs:
+  - id: ocudu-ci
+    name: OCUDU CI
+    url: https://gitlab.com/ocudu/ocudu
+  - id: valor
+    name: VALOR
+  - id: niwc
+    name: NIWC

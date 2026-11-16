@@ -1,0 +1,112 @@
+# SPDX-FileCopyrightText: Copyright (C) 2021-2026 Software Radio Systems Limited
+# SPDX-FileCopyrightText: Copyright (C) 2026 OCUDU contributors
+# SPDX-License-Identifier: BSD-3-Clause-Open-MPI
+
+# Schema for JUnit XML result files pushed to the report by any lab.
+#
+# XSD cannot require a <property> with a given name, so validate_results.py
+# first turns the XML into the dict shape below and then checks it here:
+#
+#   testsuites:
+#     - name: TIFG
+#       timestamp: "2026-11-10T02:00:00Z"
+#       properties: {schema_version: "1", lab: valor, ocudu_commit: <sha>, ...}
+#       testcases:
+#         - {name: "5.3", classname: "...", time: 1.5, status: passed}
+#
+# Property values are always strings because XML attributes are strings.
+
+$schema: "http://json-schema.org/draft-07/schema#"
+title: OCUDU test results upload
+description: A JUnit XML result file, as converted by validate_results.py
+type: object
+required:
+  - testsuites
+additionalProperties: false
+properties:
+  testsuites:
+    type: array
+    minItems: 1
+    items:
+      $ref: "#/definitions/testsuite"
+
+definitions:
+  testsuite:
+    type: object
+    required:
+      - name
+      - properties
+      - testcases
+    additionalProperties: false
+    properties:
+      name:
+        type: string
+        description: >-
+          Test plan or suite name (e.g. TIFG, WG11). Used to pick the test
+          plan that maps test IDs to features.
+        minLength: 1
+      timestamp:
+        type: string
+        minLength: 1
+      properties:
+        type: object
+        required:
+          - schema_version
+          - lab
+          - ocudu_commit
+        # Labs may add their own properties (CI already adds url, test_commit).
+        additionalProperties:
+          type: string
+        properties:
+          schema_version:
+            type: string
+            description: Version of this upload format the file was written for
+            pattern: "^[1-9][0-9]*$"
+          lab:
+            type: string
+            description: Lab id; must exist in labs/labs.yaml
+            pattern: "^[a-z0-9]+(-[a-z0-9]+)*$"
+          ocudu_commit:
+            type: string
+            description: Full 40-character SHA of the OCUDU commit under test
+            pattern: "^[0-9a-f]{40}$"
+          ocudu_ref:
+            type: string
+            description: Optional branch or tag name the commit was taken from
+            minLength: 1
+          run_url:
+            type: string
+            description: Optional link to the run, e.g. for full logs
+            pattern: "^https?://"
+          dut:
+            type: string
+            description: Optional device under test (e.g. O-CU/O-DU)
+            minLength: 1
+      testcases:
+        type: array
+        minItems: 1
+        items:
+          $ref: "#/definitions/testcase"
+
+  testcase:
+    type: object
+    required:
+      - name
+      - status
+    additionalProperties: false
+    properties:
+      name:
+        type: string
+        minLength: 1
+      classname:
+        type: string
+      time:
+        type: number
+        minimum: 0
+      status:
+        type: string
+        enum:
+          - passed
+          - failed
+          - error
+          - skipped

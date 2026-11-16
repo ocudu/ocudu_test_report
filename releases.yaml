@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: Copyright (C) 2021-2026 Software Radio Systems Limited
+# SPDX-FileCopyrightText: Copyright (C) 2026 OCUDU contributors
+# SPDX-License-Identifier: BSD-3-Clause-Open-MPI
+
+# Tagged OCUDU releases that are always shown in the report, whatever their age.
+#
+# `name` matches the release names used in features/features.yaml, `tag` is the
+# git tag in ocudu/ocudu, and `ocudu_commit` is the full SHA that tag points to.
+# Results whose ocudu_commit matches one of these are grouped under the release.
+releases:
+  - name: "26.04 (v1.0)"
+    tag: release_26_04
+    ocudu_commit: 050a2bb72e1d794cd60570d809987c1fcda3e54b
+  - name: "26.10 (v2.1)"
+    tag: release_26_10
+    ocudu_commit: e0db566aac6e6376ddd60e83c84f58698fcc4d70

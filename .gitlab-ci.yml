@@ -160,6 +160,15 @@ validate-wg11-test-plan:
     - pip install --quiet pyyaml jsonschema
     - python3 scripts/validate_test_plan.py --data testplans/wg11.yaml --schema testplans/testplan.schema
 
+validate-labs-and-releases:
+  stage: static
+  image: python:3.11-slim
+  rules:
+    - if: $ON_MR
+  script:
+    - pip install --quiet pyyaml jsonschema
+    - python3 scripts/validate_labs.py
+
 generate-report:
   stage: build
   image: python:3.14-slim
