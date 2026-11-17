@@ -8,7 +8,7 @@
 Status of the scheduled pipelines of a GitLab group over the last hours, from what the AI triage wrote to issues.
 
 Usage:
-    ci_status.py [--hours 24] [--group ocudu] [--ignore PROJECT[:SCHEDULE]]...
+    ci_status.py [--hours 24] [--group ocudu] [--ignore PROJECT[:SCHEDULE]]... [--wait MINUTES]
 
 Per schedule, its latest pipeline that finished in the window, linked (IGNORE lists the schedules left out), with
 the open issues the triage found for it:
@@ -34,6 +34,7 @@ import json
 import os
 import re
 import sys
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -41,11 +42,12 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
 
 FINISHED = {"success", "failed", "canceled"}
-RUNNING = {"running", "pending"}   # also a finished pipeline with jobs being retried
+RUNNING = {"created", "waiting_for_resource", "preparing", "pending", "running"}   # also jobs being retried
 SCRIPT_REASONS = {None, "script_failure"}
 ACTION_EMOJI = {"new": ":new:", "reopen": ":recycle:", "reply": ":repeat:"}
 ACTION_ORDER = ["new", "reopen", "reply"]
 # Schedules left out: "project" for all of a project's, or "project:schedule" for one.
+POLL_SECONDS = 300
 IGNORE = ["ocudu/ocudu_test_report"]
 
 
@@ -238,12 +240,24 @@ def main() -> None:
     parser.add_argument("--base-url", default="https://gitlab.com")
     parser.add_argument("--token", default=os.environ.get("GITLAB_TOKEN", ""),
                         help="GitLab access token (default: $GITLAB_TOKEN)")
+    parser.add_argument("--wait", type=float, default=0, metavar="MINUTES",
+                        help="Wait up to this long for running scheduled pipelines to finish (default 0)")
     args = parser.parse_args()
     client = Client(args.base_url, args.token)
     since = datetime.now(timezone.utc) - timedelta(hours=args.hours)
+    deadline = time.monotonic() + args.wait * 60
 
     try:
-        results = scheduled_pipelines(client, args.group, since, IGNORE + args.ignore)
+        while True:
+            results = scheduled_pipelines(client, args.group, since, IGNORE + args.ignore)
+            running = [r for r in results if r["pipeline"]["status"] in RUNNING]
+            left = deadline - time.monotonic()
+            if not running or left <= 0:
+                break
+            names = ", ".join(f"{r['project']['path']} {r['schedule']}" for r in running)
+            print(f"Waiting for {len(running)} running pipelines ({names}); {left / 60:.0f} min left",
+                  file=sys.stderr)
+            time.sleep(min(POLL_SECONDS, left))
         failed = [r for r in results if r["pipeline"]["status"] in {"failed"} | RUNNING]
         replies = triage_replies(client, args.group, since - timedelta(days=1),
                                  {r["pipeline"]["id"] for r in failed})

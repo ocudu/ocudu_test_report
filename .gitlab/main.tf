@@ -195,6 +195,13 @@ module "settings" {
         historic_versions = "26.10,26.04"
       }
     }
+    ci_status = {
+      description = "ci status nightly"
+      cron        = "00 08 * * 1-5"
+      timezone    = "Europe/Madrid"
+      ref         = "refs/heads/main"
+      active      = true
+    }
   }
 
 }

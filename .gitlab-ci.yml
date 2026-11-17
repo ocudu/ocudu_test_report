@@ -396,10 +396,13 @@ generate-report:
 ci status:
   stage: build
   image: python:3.12-slim
+  timeout: 1h 15m  # --wait 60
   variables:
     GIT_DEPTH: 1
   script:
-    - python3 .gitlab/ci/ci_status.py --hours 24 > ci_status.md
+    # Mondays also cover the weekend.
+    - hours=$([ "$(date +%u)" = 1 ] && echo 72 || echo 24)
+    - python3 .gitlab/ci/ci_status.py --hours "$hours" --wait 60 > ci_status.md
     - cat ci_status.md
     - python3 .gitlab/ci/ci_status_wiki.py ci_status.md --days 30
     - if [ -n "$SLACK_WEBHOOK_URL" ]; then
@@ -410,7 +413,7 @@ ci status:
       - ci_status.md
     when: always
   rules:
-    - if: $CI_PIPELINE_SCHEDULE_DESCRIPTION =~ /report/ && $GITLAB_TOKEN
+    - if: $CI_PIPELINE_SCHEDULE_DESCRIPTION =~ /^ci status/ && $GITLAB_TOKEN
 
 pages:
   extends: generate-report
