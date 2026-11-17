@@ -128,6 +128,10 @@ tox:
     - if: $ON_MR
       changes:
         - scripts/**/*
+        - schemas/**/*
+        - labs/**/*
+        - releases.yaml
+        - tests/**/*
   variables:
     PY_DIR: scripts
   before_script:
@@ -165,6 +169,12 @@ validate-labs-and-releases:
   image: python:3.11-slim
   rules:
     - if: $ON_MR
+      changes:
+        - labs/**/*
+        - releases.yaml
+        - schemas/labs.schema.yaml
+        - schemas/releases.schema.yaml
+        - scripts/validate_labs.py
   script:
     - pip install --quiet pyyaml jsonschema
     - python3 scripts/validate_labs.py

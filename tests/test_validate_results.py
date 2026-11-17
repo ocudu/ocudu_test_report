@@ -64,6 +64,7 @@ class TestValid:
         assert _errors(data) == []
 
     def test_optional_and_extra_properties_allowed(self):
+        # ocudu_ref is not part of the contract, but labs may still send it as an extra property.
         props = _props(ocudu_ref="release_26_10", run_url="https://example.org/run/1", dut="O-CU/O-DU")
         props = props.replace("</properties>", '<property name="test_commit" value="abc"/></properties>')
         assert _errors(_xml(_suite(props=props))) == []
