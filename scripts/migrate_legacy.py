@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 
-# SPDX-FileCopyrightText: Copyright (C) 2021-2026 Software Radio Systems Limited
-# SPDX-FileCopyrightText: Copyright (C) 2026 OCUDU contributors
-# SPDX-License-Identifier: BSD-3-Clause-Open-MPI
-
 """Add the results-contract properties to existing JUnit XML files.
 
 Results published before the lab results contract (schemas/results.schema.yaml)
@@ -64,7 +60,7 @@ class FileReport:
     """What happened to one XML file."""
 
     path: Path
-    # How each <testsuite>'s commit was handled: filled, matched, kept or overwritten.
+    # How many suites had their commit filled, matched, expanded, kept or overwritten.
     commits: Counter = field(default_factory=Counter)
     error: str = ""
     validation_errors: list[str] = field(default_factory=list)
@@ -188,8 +184,9 @@ def migrate_bytes(
     return f"<?xml version='1.0' encoding='utf-8'?>\n{prolog}{body}".encode("utf-8"), actions
 
 
-# Comments and processing instructions between the XML declaration and the root
-# element. ElementTree drops these, but they carry the SPDX header in some files.
+# Anything between the XML declaration and the root element, i.e. comments and
+# processing instructions. ElementTree throws these away, and some files keep
+# their licence header there.
 _PROLOG_RE = re.compile(rb"^\s*(?:<\?xml[^>]*\?>)?((?:\s|<!--.*?-->|<\?.*?\?>)*)", re.DOTALL)
 
 

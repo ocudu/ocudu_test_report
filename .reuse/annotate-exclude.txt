@@ -2,3 +2,5 @@
 \.reuse/
 REUSE\.toml$
 \.md$
+^scripts/migrate_legacy\.py$
+^tests/test_migrate_legacy\.py$

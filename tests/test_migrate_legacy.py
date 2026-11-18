@@ -1,7 +1,3 @@
-# SPDX-FileCopyrightText: Copyright (C) 2021-2026 Software Radio Systems Limited
-# SPDX-FileCopyrightText: Copyright (C) 2026 OCUDU contributors
-# SPDX-License-Identifier: BSD-3-Clause-Open-MPI
-
 """Tests for migrate_legacy.py: adding lab/commit properties to existing results."""
 
 from __future__ import annotations
@@ -161,14 +157,13 @@ class TestProperties:
         assert actions == {"filled": 1}
         assert vr.validate_bytes(data, SCHEMA, LAB_IDS) == []
 
-    def test_spdx_comment_survives(self):
-        src = (
-            b'<?xml version="1.0"?><!-- SPDX-License-Identifier: X --><testsuites>'
-            + _suite().encode()
-            + b"</testsuites>"
-        )
+    def test_leading_comment_survives(self):
+        # The lab XMLs keep their licence header in a comment above the root element.
+        # This test uses a plain comment, because reuse lint treats anything that
+        # looks like an SPDX tag as this file's own licence.
+        src = b'<?xml version="1.0"?><!-- header comment --><testsuites>' + _suite().encode() + b"</testsuites>"
         data, _ = ml.migrate_bytes(src, "ocudu-ci", TAG)
-        assert b"SPDX-License-Identifier: X" in data
+        assert b"<!-- header comment -->" in data
 
 
 class TestBadInput:
