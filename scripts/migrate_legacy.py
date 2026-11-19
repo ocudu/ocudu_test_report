@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: Copyright (C) 2026 OCUDU contributors
+# SPDX-License-Identifier: BSD-3-Clause-Open-MPI
+
 """Add the results-contract properties to existing JUnit XML files.
 
 Results published before the lab results contract (schemas/results.schema.yaml)

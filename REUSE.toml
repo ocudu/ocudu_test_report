@@ -8,14 +8,3 @@ path = [
   "**/*.mdx",
   "test_reports/**/*.txt",
 ]
-
-# These files don't have a copyright header. Their copyright and licence are
-# set here instead. Any path added here also has to go in
-# .reuse/annotate-exclude.txt, otherwise the headers job puts a header back.
-[[annotations]]
-SPDX-FileCopyrightText = "Copyright (C) 2026 OCUDU contributors"
-SPDX-License-Identifier = "BSD-3-Clause-Open-MPI"
-path = [
-  "scripts/migrate_legacy.py",
-  "tests/test_migrate_legacy.py",
-]

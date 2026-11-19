@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: Copyright (C) 2026 OCUDU contributors
+# SPDX-License-Identifier: BSD-3-Clause-Open-MPI
+
 """Tests for migrate_legacy.py: adding lab/commit properties to existing results."""
 
 from __future__ import annotations
